@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+.Rproj.user/
+.Rhistory
+.RData
+.Renviron
+aou_raw_data/
+processed_data/
+results/

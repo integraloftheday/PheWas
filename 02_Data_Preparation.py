@@ -218,6 +218,34 @@ df_clean = (
         month = pl.col("sleep_date").cast(pl.Date).dt.strftime("%m"),
         person_id = pl.col("person_id").cast(pl.String).cast(pl.Categorical),
         sex_concept = pl.col("sex_concept").cast(pl.String).cast(pl.Categorical),
+        zip3 = (
+            pl.when(pl.col("zip_code").cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() == 0)
+            .then(None)
+            # Already a ZIP3 (or ZIP3 with dropped leading zeros): keep as 3-digit
+            .when(pl.col("zip_code").cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() <= 3)
+            .then(
+                pl.col("zip_code")
+                .cast(pl.Utf8)
+                .str.replace_all(r"[^0-9]", "")
+                .str.zfill(3)
+            )
+            # Possible ZIP5 with one dropped leading zero (length 4): restore then take prefix
+            .when(pl.col("zip_code").cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() == 4)
+            .then(
+                pl.col("zip_code")
+                .cast(pl.Utf8)
+                .str.replace_all(r"[^0-9]", "")
+                .str.zfill(5)
+                .str.slice(0, 3)
+            )
+            # ZIP5 or longer: take first 3 digits
+            .otherwise(
+                pl.col("zip_code")
+                .cast(pl.Utf8)
+                .str.replace_all(r"[^0-9]", "")
+                .str.slice(0, 3)
+            )
+        ),
         is_weekend = pl.col("is_weekend_or_holiday").cast(pl.Boolean),
         
         # --- Create Linearized Variables ---
@@ -247,7 +275,7 @@ df_clean = (
         "offset_sin", "offset_cos", 
         "onset_linear", "offset_linear", "midpoint_linear",
         "daily_sleep_window_mins", "is_postmenopausal",
-        "person_id", "sex_concept", "age_at_sleep", "month", "is_weekend", "employment_status"
+        "person_id", "sex_concept", "age_at_sleep", "month", "is_weekend", "employment_status", "zip3"
     ])
 )
 
@@ -386,7 +414,5 @@ plt.show()
 
 
 # In[ ]:
-
-
 
 

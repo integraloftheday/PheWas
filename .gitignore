@@ -12,3 +12,5 @@ Thumbs.db
 aou_raw_data/
 processed_data/
 results/
+venv/
+.venv/

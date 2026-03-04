@@ -5,6 +5,8 @@ After each implementation add a breif implementation results section below the g
 
 Note the data included in the processed_data is just randomly generated for testing DO NOT expect to see any signal. 
 
+Operational note: Production analyses and model runs are executed remotely in the All of Us secure platform. Local workspace files are for development/reference only and should not be used as the source of truth for remote run completion status.
+
 This guide outlines the full execution plan, from raw data to genetic phenotypes, using a **hybrid Python/R notebook workflow**.
 
 ## **Project Setup & Environment**

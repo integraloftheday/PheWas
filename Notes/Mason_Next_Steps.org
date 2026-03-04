@@ -1,0 +1,38 @@
+#+title: Mason's Plan and Next Steps
+#+date: <2026-01-21 Wed>
+
+* Overview
+This plan outlines the technical next steps for Mason based on the meeting notes from <2026-01-20 Tue> and the current state of the codebase (~04_LLM_Regression.r~ and ~05_LMM_Results.r~).
+
+* Phase 1: Clarification & Communication
+- [ ] *Document Model Specs for Diego:* Summarize the current LMM architecture:
+  - Linear Mixed Models using ~lme4~.
+  - Fixed Effects: ~sex_concept~, ~month~, ~age_at_sleep~, ~is_weekend~, ~employment_status~.
+  - Random Effects: ~(1 | person_id)~.
+  - Note that models are currently *pooled* with covariates rather than *stratified*.
+- [ ] *Confirm Plot Scales:* Clarify the y-axis scaling for linearized onset/offset/midpoint vs. raw clock time with the team.
+
+* Phase 2: Technical Implementation (Next Steps)
+** 1. Sleep Regularity Index (SRI)
+- [ ] *Feature Engineering:* Develop logic to calculate SRI.
+- [ ] *Aggregation:* Summarize SRI into two-week bins as requested by the team.
+- [ ] *Integration:* Add SRI columns to the primary analysis dataset in ~processed_data/~.
+
+** 2. "Unadjusted" Data Exploration
+- [ ] *Raw Trend Analysis:* Create scripts/plots showing raw means (unadjusted for covariates) for:
+  - Sleep duration vs. Month (Seasonal).
+  - Sleep duration vs. Age.
+  - Social jetlag (Weekday vs. Weekend) grouped by employment status.
+- [ ] *Comparison:* Prepare side-by-side visuals of adjusted (LMM) vs. unadjusted (Raw) trends to verify model behavior.
+
+** 3. Modeling Refinements
+- [ ] *Age-Trend Investigation:* Investigate why the expected "inverted J-shape" for age vs. duration is appearing linear.
+  - Test Natural Splines (~splines::ns()~) as an alternative to ~poly(x, 2)~.
+- [ ] *Stratification:* Refactor ~04_LLM_Regression.r~ to support running models separately for specific subgroups (e.g., sex-stratified or employment-stratified) as suggested by Angus.
+- [ ] *DST Analysis:* Explore feasibility of state-specific analysis for Arizona (no DST) vs. others to address Angus's point on daylight saving impacts.
+
+** 4. Data Quality & Filtering
+- [ ] *Longitudinal Filter:* Test restricting the analysis to individuals with 6+ months of data to see if seasonal effects become cleaner.
+
+* Phase 3: Coordination
+- [ ] *Pre-Meeting Prep:* Prepare updated figures for the February 3rd meeting between Yue and Angus.

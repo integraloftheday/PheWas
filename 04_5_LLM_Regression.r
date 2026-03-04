@@ -19,6 +19,11 @@ set.seed(123)
 TEST_MODE <- FALSE
 N_TEST_IDS <- 25
 FIT_ALL_REML <- TRUE
+# Restrict DST refits to selected outcomes only.
+# Valid values: "onset", "offset", "midpoint", "duration"
+DST_TARGET_OUTCOMES <- c("onset", "offset")
+# Resume-friendly behavior: skip fitting if target .rds already exists.
+SKIP_EXISTING_MODELS <- TRUE
 
 INPUT_PARQUET <- "processed_data/LMM_analysis.parquet"
 MODEL_DIR <- "models_04_5"
@@ -102,48 +107,64 @@ gc()
 fit_save_summarize <- function(formula_obj, model_name, description, df, run_reml = FALSE) {
   message(paste0("Processing: ", model_name, " (", description, ")"))
 
+  ml_path <- file.path(MODEL_DIR, paste0(model_name, "_ML.rds"))
+  reml_path <- file.path(MODEL_DIR, paste0(model_name, "_REML.rds"))
+
   current_aic <- NA_real_
   current_bic <- NA_real_
   status_msg <- "Success"
+  fit_ml <- NULL
 
-  fit_ml_result <- tryCatch({
-    fit_obj <- lmer(
-      formula_obj,
-      data = df,
-      REML = FALSE,
-      control = lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5))
-    )
-
-    saveRDS(fit_obj, file.path(MODEL_DIR, paste0(model_name, "_ML.rds")), compress = "xz")
-
-    sink(file.path(SUMMARY_DIR, paste0(model_name, "_ML_summary.txt")))
-    print(paste("Model:", model_name))
-    print("Method: ML (for model comparison)")
-    print(formula_obj)
-    print(summary(fit_obj))
-    sink()
-
-    list(success = TRUE, fit = fit_obj)
-  }, error = function(e) {
-    if (sink.number() > 0) sink()
-    message(paste("ML fit failed:", e$message))
-    list(success = FALSE, error = e$message)
-  })
-
-  if (!fit_ml_result$success) {
-    gc()
-    return(data.frame(
-      Model_Name = model_name,
-      Formula_Description = description,
-      Formula = deparse(formula_obj),
-      AIC = NA_real_,
-      BIC = NA_real_,
-      Status = paste("FAILED (ML):", fit_ml_result$error),
-      stringsAsFactors = FALSE
-    ))
+  if (SKIP_EXISTING_MODELS && file.exists(ml_path)) {
+    message(paste("ML exists, skipping fit:", ml_path))
+    fit_ml <- tryCatch(readRDS(ml_path), error = function(e) NULL)
+    if (is.null(fit_ml)) {
+      message("Existing ML model could not be read. Re-fitting ML.")
+    } else {
+      status_msg <- "Success (ML reused)"
+    }
   }
 
-  fit_ml <- fit_ml_result$fit
+  if (is.null(fit_ml)) {
+    fit_ml_result <- tryCatch({
+      fit_obj <- lmer(
+        formula_obj,
+        data = df,
+        REML = FALSE,
+        control = lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5))
+      )
+
+      saveRDS(fit_obj, ml_path, compress = "xz")
+
+      sink(file.path(SUMMARY_DIR, paste0(model_name, "_ML_summary.txt")))
+      print(paste("Model:", model_name))
+      print("Method: ML (for model comparison)")
+      print(formula_obj)
+      print(summary(fit_obj))
+      sink()
+
+      list(success = TRUE, fit = fit_obj)
+    }, error = function(e) {
+      if (sink.number() > 0) sink()
+      message(paste("ML fit failed:", e$message))
+      list(success = FALSE, error = e$message)
+    })
+
+    if (!fit_ml_result$success) {
+      gc()
+      return(data.frame(
+        Model_Name = model_name,
+        Formula_Description = description,
+        Formula = deparse(formula_obj),
+        AIC = NA_real_,
+        BIC = NA_real_,
+        Status = paste("FAILED (ML):", fit_ml_result$error),
+        stringsAsFactors = FALSE
+      ))
+    }
+    fit_ml <- fit_ml_result$fit
+  }
+
   current_aic <- AIC(fit_ml)
   current_bic <- BIC(fit_ml)
 
@@ -151,29 +172,38 @@ fit_save_summarize <- function(formula_obj, model_name, description, df, run_rem
     rm(fit_ml)
     gc()
 
-    tryCatch({
-      fit_reml <- lmer(
-        formula_obj,
-        data = df,
-        REML = TRUE,
-        control = lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5))
-      )
+    if (SKIP_EXISTING_MODELS && file.exists(reml_path)) {
+      message(paste("REML exists, skipping fit:", reml_path))
+      if (status_msg == "Success") {
+        status_msg <- "Success (REML reused)"
+      } else {
+        status_msg <- paste(status_msg, "+ REML reused")
+      }
+    } else {
+      tryCatch({
+        fit_reml <- lmer(
+          formula_obj,
+          data = df,
+          REML = TRUE,
+          control = lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5))
+        )
 
-      saveRDS(fit_reml, file.path(MODEL_DIR, paste0(model_name, "_REML.rds")), compress = "xz")
+        saveRDS(fit_reml, reml_path, compress = "xz")
 
-      sink(file.path(SUMMARY_DIR, paste0(model_name, "_REML_summary.txt")))
-      print(paste("Model:", model_name))
-      print("Method: REML (for coefficient interpretation)")
-      print(formula_obj)
-      print(summary(fit_reml))
-      sink()
+        sink(file.path(SUMMARY_DIR, paste0(model_name, "_REML_summary.txt")))
+        print(paste("Model:", model_name))
+        print("Method: REML (for coefficient interpretation)")
+        print(formula_obj)
+        print(summary(fit_reml))
+        sink()
 
-      rm(fit_reml)
-    }, error = function(e) {
-      if (sink.number() > 0) sink()
-      message(paste("REML fit failed:", e$message))
-      status_msg <<- paste("Partial Success (REML Failed:", e$message, ")")
-    })
+        rm(fit_reml)
+      }, error = function(e) {
+        if (sink.number() > 0) sink()
+        message(paste("REML fit failed:", e$message))
+        status_msg <<- paste("Partial Success (REML Failed:", e$message, ")")
+      })
+    }
   } else {
     rm(fit_ml)
   }
@@ -236,10 +266,10 @@ build_formula <- function(outcome_name, include_dst = FALSE) {
 # Run models
 # -------------------------------------------------------------------
 model_specs <- list(
-  list(name = "onset_poly_interact_04_5", outcome = "onset_linear"),
-  list(name = "offset_poly_interact_04_5", outcome = "offset_linear"),
-  list(name = "midpoint_poly_interact_04_5", outcome = "midpoint_linear"),
-  list(name = "duration_poly_interact_04_5", outcome = "duration_hours")
+  list(key = "onset", name = "onset_poly_interact_04_5", outcome = "onset_linear"),
+  list(key = "offset", name = "offset_poly_interact_04_5", outcome = "offset_linear"),
+  list(key = "midpoint", name = "midpoint_poly_interact_04_5", outcome = "midpoint_linear"),
+  list(key = "duration", name = "duration_poly_interact_04_5", outcome = "duration_hours")
 )
 
 model_performance <- data.frame(
@@ -275,6 +305,11 @@ dst_levels_present <- n_distinct(df_dst$dst_observes)
 if (nrow(df_dst) > 0 && dst_levels_present >= 2) {
   message("Running DST-encoded model batch...")
   for (m in model_specs) {
+    if (!m$key %in% DST_TARGET_OUTCOMES) {
+      message(paste("Skipping DST model for outcome:", m$key))
+      next
+    }
+
     fml <- build_formula(m$outcome, include_dst = TRUE)
     desc <- "Poly age + weekend/employment interactions + month seasonality + DST encoding"
 

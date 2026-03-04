@@ -1,0 +1,26 @@
+2026-02-26 18:31:04 Configuration loaded.
+2026-02-26 18:31:04 MODEL_DIR: models_04_5
+2026-02-26 18:31:04 OUTPUT_DIR: results_05_5
+2026-02-26 18:31:04 METHOD_PRIORITY: REML -> ML
+2026-02-26 18:31:04 Age sequence: 18, 85, 1
+2026-02-26 18:31:04 NOTEBOOK_INLINE: TRUE
+2026-02-26 18:31:04 Models found: 0 of 8
+2026-02-26 18:31:04 Skipping missing model: models_04_5/duration_poly_interact_04_5_REML.rds
+2026-02-26 18:31:04 Skipping missing model: models_04_5/duration_poly_interact_04_5_dst_REML.rds
+2026-02-26 18:31:04 Skipping missing model: models_04_5/midpoint_poly_interact_04_5_REML.rds
+2026-02-26 18:31:04 Skipping missing model: models_04_5/midpoint_poly_interact_04_5_dst_REML.rds
+2026-02-26 18:31:04 Skipping missing model: models_04_5/offset_poly_interact_04_5_REML.rds
+2026-02-26 18:31:04 Skipping missing model: models_04_5/offset_poly_interact_04_5_dst_REML.rds
+2026-02-26 18:31:04 Skipping missing model: models_04_5/onset_poly_interact_04_5_REML.rds
+2026-02-26 18:31:04 Skipping missing model: models_04_5/onset_poly_interact_04_5_dst_REML.rds
+2026-02-26 18:31:04 No rows produced for: marginal_means_all_05_5.csv
+2026-02-26 18:31:04 No rows produced for: dst_controlled_means_05_5.csv
+2026-02-26 18:31:04 No rows produced for: dst_weekend_contrasts_05_5.csv
+2026-02-26 18:31:04 No duration DST model available. Skipping duration DST age section.
+2026-02-26 18:31:04 No rows produced for: duration_age_dst_05_5.csv
+2026-02-26 18:31:04 Skipping derived section for base - onset/offset model missing.
+2026-02-26 18:31:04 Skipping derived section for dst - onset/offset model missing.
+2026-02-26 18:31:04 No rows produced for: derived_midpoint_duration_means_05_5.csv
+2026-02-26 18:31:04 No rows produced for: derived_midpoint_duration_age_05_5.csv
+2026-02-26 18:31:04 No rows produced for: derived_vs_direct_comparison_05_5.csv
+2026-02-26 18:31:04 No duration age_main predictions available for global duration-vs-age plot.

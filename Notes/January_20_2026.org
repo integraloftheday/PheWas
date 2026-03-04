@@ -1,0 +1,41 @@
+#+title: January 20 Meeting Notes (AI Summary)
+#+date: <2026-01-20 Tue>
+
+* Meeting assets for All of Us Fitbit Analysis Discussion and Paper Outline are ready!
+
+* Meeting summary
+
+** Quick recap
+The team discussed upcoming conferences and a grant submission that is under review. They analyzed sleep data from Fitbit devices, examining seasonal patterns, demographic effects, and the relationship between sleep duration and onset timing. The group explored various metrics for analyzing sleep regularity and discussed potential follow-up studies, including a genetic analysis involving Korean data and plans for a paper outline.
+
+** Next steps
+- TODO Diego: Reach out to Mason to clarify modeling choices, scales, and analysis details (e.g., y-axis, model specifications, covariate adjustments) for the sleep data results.
+- TODO Diego: Write up an outline for the paper and share with the group.
+- TODO Diego: Review with Mason the calculation and inclusion of a sleep regularity index (e.g., SRI) summarized on a two-week basis.
+- TODO Yue and Angus: Meet on <2026-02-03 Tue> to coordinate on ongoing work (rescheduled regular meeting).
+
+* Summary
+
+** Conferences and Grant Review Updates
+The team discussed upcoming conferences, with Diego sharing his invitation to give an invited lecture at the Sleep meeting in June and Angus mentioning his invited talk at SRBL. They also talked about a grant submission that is expected to be reviewed this week. The group agreed to review results from Mason and consider themes for a paper to support grant submission efforts.
+
+** Fitbit Sleep Patterns Analysis
+The team discussed analyzing sleep data from Fitbit devices, comparing it to a previous study published in Nature Medicine. Diego explained the analysis included linear and quadratic interaction models for sleep onset, offset, midpoint, and duration, with predictors like age, employment status, sex, and seasonal effects. They identified a pattern of earlier sleep midpoints in spring and fall, and later midpoints in winter, though Angus noted this was unadjusted and suggested exploring daylight saving time impacts. The team considered studying the effects of daylight saving time changes across different US states, particularly in Arizona where time remains constant year-round.
+
+** Sleep Patterns and Seasonal Trends
+Diego and Angus discussed the analysis of sleep patterns, noting inconsistencies in the y-axis and the use of splines across different models, which made it challenging to compare results. They observed that sleep onset and offset trends were more aligned with the sleep midpoint, with people tending to wake up later in the winter and earlier in the summer. Angus highlighted the study's strength of being longitudinal within individuals, suggesting the potential to restrict data to individuals with 6 months or more of consistent data to better analyze seasonal effects. They also discussed the relationship between sleep duration and age, noting an inverted J-shaped pattern, with older adults tending to sleep more, though this could be influenced by selection bias due to mortality.
+
+** Sleep Regularity Index Analysis
+The team discussed metrics for analyzing sleep regularity, with Angus suggesting the use of Sleep Regularity Index (SRI) and other variants like standard deviation in sleep duration and midpoint. They explored the possibility of calculating SRI in two-week bins to capture medium-scale patterns, as annual data might be less reliable. Diego and Angus noted that variability metrics could be incorporated into their models, while preserving the longitudinal relationships of measurements.
+
+** Sleep Data Analysis Insights
+The team discussed analyzing sleep data from wearable devices, focusing on seasonal and occupational effects. They examined how different demographic factors, such as sex and employment status, affect sleep duration, onset, and midpoint. Diego noted that women tend to have earlier sleep onset and longer sleep duration, while students have the longest sleep duration. The team agreed to ask Mason about whether the models were run separately or together, as Angus suggested separate models for better interpretation. They also discussed the social jet lag effects and the need for unadjusted plots to better understand the data.
+
+** Social Jet Lag and Employment
+Diego and Angus discussed the analysis of social jet lag and sleep patterns across different employment statuses, noting that employed individuals and students exhibit the largest discrepancies between weekday and weekend sleep schedules. They observed that retired individuals and homemakers show smaller gaps, while unemployed individuals with less than a year of unemployment resemble students in their patterns. Angus suggested exploring a 2x2 analysis to examine the relationship between social jet lag and compensatory sleep duration, though they debated how to define cutoffs for such an analysis. Shea raised the possibility that the sleep patterns of homemakers might be influenced by the number of children they have, which Diego acknowledged as a potential factor.
+
+** Seasonal Sleep Duration Patterns
+The team discussed seasonal patterns in sleep timing, noting that while sleep onset was relatively non-seasonal, sleep duration was primarily driven by onset timing except during December. They observed that November and February showed similar patterns, possibly due to the winter break, while December stood out with a different pattern. The group agreed that the figure showing estimated means from the adjusted model was the most informative, highlighting the relationship between sleep duration and onset timing.
+
+** Sleep Patterns and Genetic Study
+The team discussed sleep duration and chronotype patterns across different age groups, noting an unexpected linear decrease in sleep duration with age that they need to investigate further with Mason. They agreed to include the sleep regularity index and summarize data on a two-week basis. The group also touched on a potential genetic study involving Korean data from the COGIS study, which Angus is leading. Diego will follow up with Mason about the modeling choices and write an outline for the paper, which he will share with the team. The conversation ended with Yue and Angus scheduling a follow-up meeting for <2026-02-03 Tue>.

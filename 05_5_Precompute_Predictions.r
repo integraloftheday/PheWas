@@ -13,7 +13,7 @@
 # ---
 
 # %% [markdown]
-# # 05_7_Precompute_Predictions.r
+# # 05_5_Precompute_Predictions.r
 # Precompute and cache marginal predictions for fast re-plotting.
 # - Resolves available 04_5 models (base + dst)
 # - Generates common prediction grids per model
@@ -34,7 +34,7 @@ if (length(missing_packages) > 0) {
     paste0(
       "Missing required packages: ",
       paste(missing_packages, collapse = ", "),
-      ". Install them before running 05_7_Precompute_Predictions.r."
+      ". Install them before running 05_5_Precompute_Predictions.r."
     )
   )
 }
@@ -55,21 +55,21 @@ set.seed(123)
 
 # %%
 MODEL_DIR <- Sys.getenv("MODEL_DIR_04_5", "models_04_5")
-OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR_05_7", "results_05_7")
+OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR_05_5", Sys.getenv("OUTPUT_DIR_05_7", "results_05_5"))
 TABLE_DIR <- file.path(OUTPUT_DIR, "tables")
 
-PREFERRED_METHOD <- toupper(Sys.getenv("MODEL_METHOD_05_7", "REML"))
+PREFERRED_METHOD <- toupper(Sys.getenv("MODEL_METHOD_05_5", Sys.getenv("MODEL_METHOD_05_7", "REML")))
 SUPPORTED_METHODS <- c("REML", "ML")
 METHOD_PRIORITY <- unique(c(PREFERRED_METHOD, setdiff(SUPPORTED_METHODS, PREFERRED_METHOD)))
 
-AGE_MIN <- as.numeric(Sys.getenv("AGE_MIN_05_7", "18"))
-AGE_MAX <- as.numeric(Sys.getenv("AGE_MAX_05_7", "85"))
-AGE_BY <- as.numeric(Sys.getenv("AGE_BY_05_7", "1"))
+AGE_MIN <- as.numeric(Sys.getenv("AGE_MIN_05_5", Sys.getenv("AGE_MIN_05_7", "18")))
+AGE_MAX <- as.numeric(Sys.getenv("AGE_MAX_05_5", Sys.getenv("AGE_MAX_05_7", "85")))
+AGE_BY <- as.numeric(Sys.getenv("AGE_BY_05_5", Sys.getenv("AGE_BY_05_7", "1")))
 
 # all | base | dst
-PRED_SCOPE <- tolower(Sys.getenv("PRED_SCOPE_05_7", "all"))
+PRED_SCOPE <- tolower(Sys.getenv("PRED_SCOPE_05_5", Sys.getenv("PRED_SCOPE_05_7", "all")))
 if (!PRED_SCOPE %in% c("all", "base", "dst")) {
-  stop("PRED_SCOPE_05_7 must be one of: all, base, dst")
+  stop("PRED_SCOPE_05_5 (or legacy PRED_SCOPE_05_7) must be one of: all, base, dst")
 }
 
 if (!dir.exists(OUTPUT_DIR)) dir.create(OUTPUT_DIR, recursive = TRUE)
@@ -160,6 +160,32 @@ has_vars <- function(model, vars) {
   }
   meta_names <- if (!is.null(meta$vars) && !is.null(names(meta$vars))) names(meta$vars) else character()
   all(vars %in% unique(c(frm_names, meta_names)))
+}
+
+ordered_intersection <- function(a, b) {
+  if (is.null(a) || is.null(b)) return(NULL)
+  a <- as.character(a)
+  b <- as.character(b)
+  out <- a[a %in% b]
+  unique(out)
+}
+
+normalize_weekend_level <- function(x) {
+  sx <- tolower(gsub("[^a-z0-9]+", "", as.character(x)))
+  out <- rep(NA_character_, length(sx))
+  out[grepl("weekend", sx) | sx %in% c("true", "t", "1", "yes", "y")] <- "Weekend"
+  out[grepl("weekday", sx) | sx %in% c("false", "f", "0", "no", "n")] <- "Weekday"
+  out
+}
+
+normalize_dst_level <- function(x) {
+  sx <- tolower(gsub("[^a-z0-9]+", "", as.character(x)))
+  out <- rep(NA_character_, length(sx))
+  out[grepl("^no", sx) & grepl("dst", sx)] <- "NoDST"
+  out[sx %in% c("nodst", "nost", "no", "0", "false", "f")] <- "NoDST"
+  out[is.na(out) & grepl("dst", sx)] <- "DST"
+  out[sx %in% c("dst", "yes", "y", "1", "true", "t")] <- "DST"
+  out
 }
 
 safe_predictions <- function(model, grid_args, keep_cols, analysis_name) {
@@ -288,6 +314,33 @@ find_model_row <- function(registry, outcome_name, batch_name) {
     slice(1)
 }
 
+compute_two_level_difference <- function(df, group_cols, level_col, normalize_fn, high_level, low_level, diff_col) {
+  if (nrow(df) == 0) return(tibble())
+  if (!level_col %in% names(df)) return(tibble())
+
+  tmp <- df %>%
+    mutate(.level = normalize_fn(.data[[level_col]])) %>%
+    filter(!is.na(.level))
+
+  if (nrow(tmp) == 0) return(tibble())
+
+  tmp <- tmp %>%
+    group_by(across(all_of(c(group_cols, ".level")))) %>%
+    summarize(estimate = mean(estimate, na.rm = TRUE), .groups = "drop") %>%
+    tidyr::pivot_wider(
+      names_from = .level,
+      values_from = estimate,
+      names_prefix = "estimate_"
+    )
+
+  high_col <- paste0("estimate_", high_level)
+  low_col <- paste0("estimate_", low_level)
+  if (!all(c(high_col, low_col) %in% names(tmp))) return(tibble())
+
+  tmp[[diff_col]] <- tmp[[high_col]] - tmp[[low_col]]
+  tmp
+}
+
 # %% [markdown]
 # ## Model Inventory
 
@@ -320,11 +373,11 @@ if (PRED_SCOPE != "all") {
   model_registry <- model_registry %>% filter(batch == PRED_SCOPE)
 }
 
-write_table(model_registry, "model_inventory_05_7.csv")
+write_table(model_registry, "model_inventory_05_5.csv")
 log_msg(paste("Models found:", sum(model_registry$exists), "of", nrow(model_registry)))
 
 if (sum(model_registry$exists) == 0) {
-  stop("No models available for requested PRED_SCOPE_05_7.")
+  stop("No models available for requested PRED_SCOPE_05_5.")
 }
 
 # %% [markdown]
@@ -346,6 +399,12 @@ for (i in seq_len(nrow(model_registry))) {
   model <- safe_read_model(reg_row$model_path)
   if (is.null(model)) next
 
+  append_pred <- function(pred_obj) {
+    if (nrow(pred_obj) == 0) return(invisible(NULL))
+    all_predictions[[idx]] <<- add_meta(pred_obj, reg_row)
+    idx <<- idx + 1L
+  }
+
   # Employment x Weekend
   if (has_vars(model, c("employment_status", "is_weekend_factor"))) {
     pred_emp_wk <- safe_predictions(
@@ -357,8 +416,18 @@ for (i in seq_len(nrow(model_registry))) {
       keep_cols = c("employment_status", "is_weekend_factor"),
       analysis_name = "employment_x_weekend"
     )
-    all_predictions[[idx]] <- add_meta(pred_emp_wk, reg_row)
-    idx <- idx + 1
+    append_pred(pred_emp_wk)
+  }
+
+  # Weekend main effect
+  if (has_vars(model, c("is_weekend_factor"))) {
+    pred_weekend <- safe_predictions(
+      model = model,
+      grid_args = list(is_weekend_factor = get_model_values(model, "is_weekend_factor")),
+      keep_cols = c("is_weekend_factor"),
+      analysis_name = "weekend_main"
+    )
+    append_pred(pred_weekend)
   }
 
   # Sex
@@ -369,8 +438,7 @@ for (i in seq_len(nrow(model_registry))) {
       keep_cols = c("sex_concept"),
       analysis_name = "sex_main"
     )
-    all_predictions[[idx]] <- add_meta(pred_sex, reg_row)
-    idx <- idx + 1
+    append_pred(pred_sex)
   }
 
   # Month
@@ -381,8 +449,21 @@ for (i in seq_len(nrow(model_registry))) {
       keep_cols = c("month"),
       analysis_name = "month_main"
     )
-    all_predictions[[idx]] <- add_meta(pred_month, reg_row)
-    idx <- idx + 1
+    append_pred(pred_month)
+  }
+
+  # Month x Weekend
+  if (has_vars(model, c("month", "is_weekend_factor"))) {
+    pred_month_wk <- safe_predictions(
+      model = model,
+      grid_args = list(
+        month = get_model_values(model, "month"),
+        is_weekend_factor = get_model_values(model, "is_weekend_factor")
+      ),
+      keep_cols = c("month", "is_weekend_factor"),
+      analysis_name = "month_x_weekend"
+    )
+    append_pred(pred_month_wk)
   }
 
   # DST main
@@ -393,8 +474,7 @@ for (i in seq_len(nrow(model_registry))) {
       keep_cols = c("dst_observes"),
       analysis_name = "dst_main"
     )
-    all_predictions[[idx]] <- add_meta(pred_dst, reg_row)
-    idx <- idx + 1
+    append_pred(pred_dst)
   }
 
   # Month x DST (useful for onset/offset DST month plots)
@@ -408,8 +488,7 @@ for (i in seq_len(nrow(model_registry))) {
       keep_cols = c("month", "dst_observes"),
       analysis_name = "month_x_dst"
     )
-    all_predictions[[idx]] <- add_meta(pred_month_dst, reg_row)
-    idx <- idx + 1
+    append_pred(pred_month_dst)
   }
 
   # DST x Weekend
@@ -423,8 +502,7 @@ for (i in seq_len(nrow(model_registry))) {
       keep_cols = c("dst_observes", "is_weekend_factor"),
       analysis_name = "dst_x_weekend"
     )
-    all_predictions[[idx]] <- add_meta(pred_dst_wk, reg_row)
-    idx <- idx + 1
+    append_pred(pred_dst_wk)
   }
 
   # Age
@@ -435,8 +513,49 @@ for (i in seq_len(nrow(model_registry))) {
       keep_cols = c("age_at_sleep"),
       analysis_name = "age_main"
     )
-    all_predictions[[idx]] <- add_meta(pred_age, reg_row)
-    idx <- idx + 1
+    append_pred(pred_age)
+  }
+
+  # Age x Employment
+  if (has_vars(model, c("age_at_sleep", "employment_status"))) {
+    pred_age_emp <- safe_predictions(
+      model = model,
+      grid_args = list(
+        age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY),
+        employment_status = get_model_values(model, "employment_status")
+      ),
+      keep_cols = c("age_at_sleep", "employment_status"),
+      analysis_name = "age_x_employment"
+    )
+    append_pred(pred_age_emp)
+  }
+
+  # Age x Weekend
+  if (has_vars(model, c("age_at_sleep", "is_weekend_factor"))) {
+    pred_age_wk <- safe_predictions(
+      model = model,
+      grid_args = list(
+        age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY),
+        is_weekend_factor = get_model_values(model, "is_weekend_factor")
+      ),
+      keep_cols = c("age_at_sleep", "is_weekend_factor"),
+      analysis_name = "age_x_weekend"
+    )
+    append_pred(pred_age_wk)
+  }
+
+  # Age x DST for onset/offset (DST-focused diagnostic)
+  if (reg_row$outcome %in% c("onset", "offset") && has_vars(model, c("age_at_sleep", "dst_observes"))) {
+    pred_age_dst <- safe_predictions(
+      model = model,
+      grid_args = list(
+        age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY),
+        dst_observes = get_model_values(model, "dst_observes")
+      ),
+      keep_cols = c("age_at_sleep", "dst_observes"),
+      analysis_name = "age_x_dst"
+    )
+    append_pred(pred_age_dst)
   }
 
   rm(model)
@@ -444,16 +563,21 @@ for (i in seq_len(nrow(model_registry))) {
 }
 
 predictions_all <- if (length(all_predictions) == 0) tibble() else bind_rows(all_predictions)
-write_table(predictions_all, "predictions_all_05_7.csv")
+write_table(predictions_all, "predictions_all_05_5.csv")
 
 # %% [markdown]
 # ## Section 2: Derived Predictions (Onset + Offset)
 
 # %%
+derived_main_list <- list()
+derived_main_compare_list <- list()
+idx_main <- 1
+idx_main_cmp <- 1
+
 derived_age_list <- list()
-derived_compare_list <- list()
+derived_age_compare_list <- list()
 idx_age <- 1
-idx_cmp <- 1
+idx_age_cmp <- 1
 
 available_batches <- unique(model_registry$batch)
 
@@ -475,22 +599,132 @@ for (b in available_batches) {
     next
   }
 
-  grid_age <- list(age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY))
-  key_age <- c("age_at_sleep")
-
-  shared_weekend <- intersect(
+  shared_emp <- ordered_intersection(
+    get_model_values(onset_model, "employment_status"),
+    get_model_values(offset_model, "employment_status")
+  )
+  shared_weekend <- ordered_intersection(
     get_model_values(onset_model, "is_weekend_factor"),
     get_model_values(offset_model, "is_weekend_factor")
   )
+  shared_dst <- ordered_intersection(
+    get_model_values(onset_model, "dst_observes"),
+    get_model_values(offset_model, "dst_observes")
+  )
+
+  # 2A. Derived main-grid predictions (employment/weekend and optional DST)
+  grid_main <- list()
+  key_main <- character()
+  if (!is.null(shared_emp) && length(shared_emp) > 0) {
+    grid_main$employment_status <- shared_emp
+    key_main <- c(key_main, "employment_status")
+  }
+  if (!is.null(shared_weekend) && length(shared_weekend) > 0) {
+    grid_main$is_weekend_factor <- shared_weekend
+    key_main <- c(key_main, "is_weekend_factor")
+  }
+  if (!is.null(shared_dst) && length(shared_dst) > 0) {
+    grid_main$dst_observes <- shared_dst
+    key_main <- c(key_main, "dst_observes")
+  }
+
+  duration_row <- find_model_row(model_registry, "duration", b)
+  midpoint_row <- find_model_row(model_registry, "midpoint", b)
+
+  if (length(grid_main) > 0) {
+    onset_main <- safe_predictions(
+      model = onset_model,
+      grid_args = grid_main,
+      keep_cols = key_main,
+      analysis_name = "onset_main_for_derived"
+    ) %>%
+      rename(onset_estimate = estimate)
+
+    offset_main <- safe_predictions(
+      model = offset_model,
+      grid_args = grid_main,
+      keep_cols = key_main,
+      analysis_name = "offset_main_for_derived"
+    ) %>%
+      rename(offset_estimate = estimate)
+
+    if (nrow(onset_main) > 0 && nrow(offset_main) > 0) {
+      derived_main <- onset_main %>%
+        select(all_of(c(key_main, "onset_estimate"))) %>%
+        inner_join(offset_main %>% select(all_of(c(key_main, "offset_estimate"))), by = key_main) %>%
+        mutate(
+          batch = b,
+          analysis = "derived_duration_midpoint_main_grid",
+          derived_duration_hours = (offset_estimate - onset_estimate) %% 24,
+          derived_midpoint_linear = (onset_estimate + derived_duration_hours / 2) %% 24
+        ) %>%
+        relocate(batch, analysis, .before = 1)
+
+      derived_main_list[[idx_main]] <- derived_main
+      idx_main <- idx_main + 1
+
+      compare_main <- derived_main
+
+      if (nrow(duration_row) == 1) {
+        duration_model <- safe_read_model(duration_row$model_path)
+        if (!is.null(duration_model)) {
+          duration_main <- safe_predictions(
+            model = duration_model,
+            grid_args = grid_main,
+            keep_cols = key_main,
+            analysis_name = "duration_main_direct"
+          ) %>%
+            rename(duration_direct_estimate = estimate)
+
+          if (nrow(duration_main) > 0) {
+            compare_main <- compare_main %>%
+              left_join(duration_main %>% select(all_of(c(key_main, "duration_direct_estimate"))), by = key_main) %>%
+              mutate(duration_direct_minus_derived = duration_direct_estimate - derived_duration_hours)
+          }
+        }
+        rm(duration_model)
+        run_gc(paste("duration main compare cleanup for", b))
+      }
+
+      if (nrow(midpoint_row) == 1) {
+        midpoint_model <- safe_read_model(midpoint_row$model_path)
+        if (!is.null(midpoint_model)) {
+          midpoint_main <- safe_predictions(
+            model = midpoint_model,
+            grid_args = grid_main,
+            keep_cols = key_main,
+            analysis_name = "midpoint_main_direct"
+          ) %>%
+            rename(midpoint_direct_estimate = estimate)
+
+          if (nrow(midpoint_main) > 0) {
+            compare_main <- compare_main %>%
+              left_join(midpoint_main %>% select(all_of(c(key_main, "midpoint_direct_estimate"))), by = key_main) %>%
+              mutate(midpoint_direct_minus_derived = clock_diff_shortest(midpoint_direct_estimate, derived_midpoint_linear))
+          }
+        }
+        rm(midpoint_model)
+        run_gc(paste("midpoint main compare cleanup for", b))
+      }
+
+      derived_main_compare_list[[idx_main_cmp]] <- compare_main
+      idx_main_cmp <- idx_main_cmp + 1
+    } else {
+      log_msg(paste("No onset/offset main-grid predictions for derived section in", b))
+    }
+  } else {
+    log_msg(paste("No shared categorical grid for derived main section in", b))
+  }
+
+  # 2B. Derived age-based predictions
+  grid_age <- list(age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY))
+  key_age <- c("age_at_sleep")
+
   if (!is.null(shared_weekend) && length(shared_weekend) > 0) {
     grid_age$is_weekend_factor <- shared_weekend
     key_age <- c(key_age, "is_weekend_factor")
   }
 
-  shared_dst <- intersect(
-    get_model_values(onset_model, "dst_observes"),
-    get_model_values(offset_model, "dst_observes")
-  )
   if (!is.null(shared_dst) && length(shared_dst) > 0) {
     grid_age$dst_observes <- shared_dst
     key_age <- c(key_age, "dst_observes")
@@ -527,10 +761,7 @@ for (b in available_batches) {
     derived_age_list[[idx_age]] <- derived_age
     idx_age <- idx_age + 1
 
-    # Optional comparison to direct models if available
-    duration_row <- find_model_row(model_registry, "duration", b)
-    midpoint_row <- find_model_row(model_registry, "midpoint", b)
-    compare_df <- derived_age
+    compare_age <- derived_age
 
     if (nrow(duration_row) == 1) {
       duration_model <- safe_read_model(duration_row$model_path)
@@ -544,7 +775,7 @@ for (b in available_batches) {
           rename(duration_direct_estimate = estimate)
 
         if (nrow(duration_age) > 0) {
-          compare_df <- compare_df %>%
+          compare_age <- compare_age %>%
             left_join(duration_age %>% select(all_of(c(key_age, "duration_direct_estimate"))), by = key_age) %>%
             mutate(duration_direct_minus_derived = duration_direct_estimate - derived_duration_hours)
         }
@@ -565,7 +796,7 @@ for (b in available_batches) {
           rename(midpoint_direct_estimate = estimate)
 
         if (nrow(midpoint_age) > 0) {
-          compare_df <- compare_df %>%
+          compare_age <- compare_age %>%
             left_join(midpoint_age %>% select(all_of(c(key_age, "midpoint_direct_estimate"))), by = key_age) %>%
             mutate(midpoint_direct_minus_derived = clock_diff_shortest(midpoint_direct_estimate, derived_midpoint_linear))
         }
@@ -574,8 +805,8 @@ for (b in available_batches) {
       run_gc(paste("midpoint compare cleanup for", b))
     }
 
-    derived_compare_list[[idx_cmp]] <- compare_df
-    idx_cmp <- idx_cmp + 1
+    derived_age_compare_list[[idx_age_cmp]] <- compare_age
+    idx_age_cmp <- idx_age_cmp + 1
   } else {
     log_msg(paste("No onset/offset age predictions for derived section in", b))
   }
@@ -584,16 +815,93 @@ for (b in available_batches) {
   run_gc(paste("derived section finished for", b))
 }
 
+derived_main_tbl <- if (length(derived_main_list) == 0) tibble() else bind_rows(derived_main_list)
+derived_main_compare_tbl <- if (length(derived_main_compare_list) == 0) tibble() else bind_rows(derived_main_compare_list)
 derived_age_tbl <- if (length(derived_age_list) == 0) tibble() else bind_rows(derived_age_list)
-derived_compare_tbl <- if (length(derived_compare_list) == 0) tibble() else bind_rows(derived_compare_list)
+derived_age_compare_tbl <- if (length(derived_age_compare_list) == 0) tibble() else bind_rows(derived_age_compare_list)
 
-write_table(derived_age_tbl, "derived_duration_midpoint_age_05_7.csv")
-write_table(derived_compare_tbl, "derived_vs_direct_age_05_7.csv")
+write_table(derived_main_tbl, "derived_duration_midpoint_main_grid_05_5.csv")
+write_table(derived_main_compare_tbl, "derived_vs_direct_main_grid_05_5.csv")
+
+write_table(derived_age_tbl, "derived_duration_midpoint_age_05_5.csv")
+write_table(derived_age_compare_tbl, "derived_vs_direct_age_05_5.csv")
+
+# %% [markdown]
+# ## Section 3: Contrast Summaries
+
+# %%
+base_keys <- c("outcome", "outcome_type", "batch", "model_method", "model_file")
+
+weekend_overall <- predictions_all %>%
+  filter(analysis == "weekend_main") %>%
+  compute_two_level_difference(
+    group_cols = base_keys,
+    level_col = "is_weekend_factor",
+    normalize_fn = normalize_weekend_level,
+    high_level = "Weekend",
+    low_level = "Weekday",
+    diff_col = "weekend_minus_weekday"
+  ) %>%
+  mutate(contrast_scope = "overall")
+
+weekend_by_employment <- predictions_all %>%
+  filter(analysis == "employment_x_weekend") %>%
+  compute_two_level_difference(
+    group_cols = c(base_keys, "employment_status"),
+    level_col = "is_weekend_factor",
+    normalize_fn = normalize_weekend_level,
+    high_level = "Weekend",
+    low_level = "Weekday",
+    diff_col = "weekend_minus_weekday"
+  ) %>%
+  mutate(contrast_scope = "by_employment")
+
+weekend_contrasts <- bind_rows(weekend_overall, weekend_by_employment)
+write_table(weekend_contrasts, "weekend_contrasts_05_5.csv")
+
+dst_overall <- predictions_all %>%
+  filter(analysis == "dst_main") %>%
+  compute_two_level_difference(
+    group_cols = base_keys,
+    level_col = "dst_observes",
+    normalize_fn = normalize_dst_level,
+    high_level = "NoDST",
+    low_level = "DST",
+    diff_col = "nodst_minus_dst"
+  ) %>%
+  mutate(contrast_scope = "overall")
+
+dst_by_weekend <- predictions_all %>%
+  filter(analysis == "dst_x_weekend") %>%
+  compute_two_level_difference(
+    group_cols = c(base_keys, "is_weekend_factor"),
+    level_col = "dst_observes",
+    normalize_fn = normalize_dst_level,
+    high_level = "NoDST",
+    low_level = "DST",
+    diff_col = "nodst_minus_dst"
+  ) %>%
+  mutate(contrast_scope = "by_weekend")
+
+dst_by_month <- predictions_all %>%
+  filter(analysis == "month_x_dst") %>%
+  compute_two_level_difference(
+    group_cols = c(base_keys, "month"),
+    level_col = "dst_observes",
+    normalize_fn = normalize_dst_level,
+    high_level = "NoDST",
+    low_level = "DST",
+    diff_col = "nodst_minus_dst"
+  ) %>%
+  mutate(contrast_scope = "by_month")
+
+dst_contrasts <- bind_rows(dst_overall, dst_by_weekend, dst_by_month)
+write_table(dst_contrasts, "dst_contrasts_05_5.csv")
 
 # %% [markdown]
 # ## Final Export
 
 # %%
-writeLines(analysis_log, con = file.path(OUTPUT_DIR, "run_log_05_7.txt"))
+writeLines(analysis_log, con = file.path(OUTPUT_DIR, "run_log_05_5.txt"))
 log_msg("Done.")
 log_msg(paste("Tables:", TABLE_DIR))

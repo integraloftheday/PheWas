@@ -21,7 +21,7 @@ N_TEST_IDS <- 25
 FIT_ALL_REML <- TRUE
 # Restrict DST refits to selected outcomes only.
 # Valid values: "onset", "offset", "midpoint", "duration"
-DST_TARGET_OUTCOMES <- c("onset", "offset")
+DST_TARGET_OUTCOMES <- c("onset", "offset", "midpoint", "duration")
 # Resume-friendly behavior: skip fitting if target .rds already exists.
 SKIP_EXISTING_MODELS <- TRUE
 

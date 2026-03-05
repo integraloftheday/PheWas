@@ -14,3 +14,17 @@ processed_data/
 results/
 venv/
 .venv/
+
+# Local R package library (do not commit binaries)
+.r_libs/
+
+# Generated model artifacts and reports
+models_04_5/
+model_summaries_04_5/
+results_05_5/
+results_05_6/
+model_comparison_aic_04_5.md
+Rplots.pdf
+
+# Python cache
+__pycache__/

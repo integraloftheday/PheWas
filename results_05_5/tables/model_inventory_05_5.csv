@@ -1,9 +1,0 @@
-outcome,outcome_type,batch,stem_with_suffix,model_path,model_method,exists
-duration,Duration,base,duration_poly_interact_04_5,models_04_5/duration_poly_interact_04_5_REML.rds,REML,TRUE
-duration,Duration,dst,duration_poly_interact_04_5_dst,models_04_5/duration_poly_interact_04_5_dst_REML.rds,NA,FALSE
-midpoint,ClockTime,base,midpoint_poly_interact_04_5,models_04_5/midpoint_poly_interact_04_5_REML.rds,REML,TRUE
-midpoint,ClockTime,dst,midpoint_poly_interact_04_5_dst,models_04_5/midpoint_poly_interact_04_5_dst_REML.rds,NA,FALSE
-offset,ClockTime,base,offset_poly_interact_04_5,models_04_5/offset_poly_interact_04_5_REML.rds,REML,TRUE
-offset,ClockTime,dst,offset_poly_interact_04_5_dst,models_04_5/offset_poly_interact_04_5_dst_REML.rds,NA,FALSE
-onset,ClockTime,base,onset_poly_interact_04_5,models_04_5/onset_poly_interact_04_5_REML.rds,REML,TRUE
-onset,ClockTime,dst,onset_poly_interact_04_5_dst,models_04_5/onset_poly_interact_04_5_dst_REML.rds,NA,FALSE

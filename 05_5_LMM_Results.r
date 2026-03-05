@@ -155,9 +155,24 @@ safe_read_model <- function(path) {
 }
 
 get_model_values <- function(model, var_name) {
-  frm <- model@frame
-  if (!var_name %in% names(frm)) return(NULL)
+  meta <- NULL
+  if (inherits(model, "phewas_marginal_model")) {
+    meta <- model$grid_meta
+  } else {
+    meta <- attr(model, "phewas_grid_meta", exact = TRUE)
+  }
+  if (!is.null(meta$vars) && var_name %in% names(meta$vars)) {
+    var_info <- meta$vars[[var_name]]
+    if (!is.null(var_info$values) && length(var_info$values) > 0) {
+      return(var_info$values)
+    }
+    if (!is.null(var_info$min) && !is.null(var_info$max)) {
+      return(sort(unique(c(var_info$min, var_info$max))))
+    }
+  }
 
+  frm <- tryCatch(model@frame, error = function(e) NULL)
+  if (is.null(frm) || !var_name %in% names(frm)) return(NULL)
   x <- frm[[var_name]]
   if (is.factor(x)) return(levels(x))
   if (is.character(x)) return(sort(unique(x)))
@@ -171,19 +186,96 @@ ordered_intersection <- function(a, b) {
 }
 
 has_vars <- function(model, vars) {
-  all(vars %in% names(model@frame))
+  frm_names <- character()
+  if (!inherits(model, "phewas_marginal_model")) {
+    frm_names <- tryCatch(names(model@frame), error = function(e) character())
+  }
+  meta <- NULL
+  if (inherits(model, "phewas_marginal_model")) {
+    meta <- model$grid_meta
+  } else {
+    meta <- attr(model, "phewas_grid_meta", exact = TRUE)
+  }
+  meta_names <- if (!is.null(meta$vars) && !is.null(names(meta$vars))) names(meta$vars) else character()
+  all(vars %in% unique(c(frm_names, meta_names)))
 }
 
 safe_predictions <- function(model, grid_args, keep_cols, analysis_name) {
   tryCatch({
-    newdata <- do.call(datagrid, c(list(model = model), grid_args))
-    pred <- predictions(
-      model,
-      newdata = newdata,
-      re.form = NA,
-      allow.new.levels = TRUE
-    ) %>%
-      as_tibble()
+    if (inherits(model, "phewas_marginal_model")) {
+      if (length(grid_args) == 0) return(tibble())
+      grid_df <- do.call(
+        expand.grid,
+        c(
+          lapply(grid_args, function(x) {
+            if (is.factor(x)) as.character(x) else x
+          }),
+          list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+        )
+      )
+      if (nrow(grid_df) == 0) return(tibble())
+
+      defaults <- model$default_row
+      if (is.null(defaults) || !is.data.frame(defaults) || nrow(defaults) == 0) return(tibble())
+      newdata <- defaults[rep(1, nrow(grid_df)), , drop = FALSE]
+      for (nm in names(grid_df)) newdata[[nm]] <- grid_df[[nm]]
+
+      meta_vars <- model$grid_meta$vars
+      for (nm in names(newdata)) {
+        if (!is.null(meta_vars[[nm]])) {
+          info <- meta_vars[[nm]]
+          typ <- if (!is.null(info$type)) info$type else ""
+          if (typ == "factor" && !is.null(info$values)) {
+            newdata[[nm]] <- factor(as.character(newdata[[nm]]), levels = as.character(info$values))
+          } else if (typ == "logical") {
+            newdata[[nm]] <- as.logical(newdata[[nm]])
+          } else if (typ == "integer") {
+            newdata[[nm]] <- as.integer(round(as.numeric(newdata[[nm]])))
+          } else if (typ == "numeric") {
+            newdata[[nm]] <- as.numeric(newdata[[nm]])
+          } else if (typ == "character") {
+            newdata[[nm]] <- as.character(newdata[[nm]])
+          }
+        }
+      }
+
+      mf <- model.frame(model$fixed_terms, data = newdata, xlev = model$xlevels, na.action = na.pass)
+      X <- model.matrix(model$fixed_terms, data = mf)
+
+      beta <- model$coefficients
+      needed <- names(beta)
+      missing_cols <- setdiff(needed, colnames(X))
+      if (length(missing_cols) > 0) {
+        X <- cbind(X, matrix(0, nrow = nrow(X), ncol = length(missing_cols), dimnames = list(NULL, missing_cols)))
+      }
+      X <- X[, needed, drop = FALSE]
+
+      est <- as.numeric(X %*% beta)
+      vc <- model$vcov_beta
+      if (!is.null(vc) && all(needed %in% rownames(vc)) && all(needed %in% colnames(vc))) {
+        vc <- vc[needed, needed, drop = FALSE]
+        se <- sqrt(pmax(rowSums((X %*% vc) * X), 0))
+      } else {
+        se <- rep(0, length(est))
+      }
+      z <- qnorm(0.975)
+
+      pred <- tibble::as_tibble(grid_df) %>%
+        mutate(
+          estimate = est,
+          conf.low = estimate - z * se,
+          conf.high = estimate + z * se
+        )
+    } else {
+      newdata <- do.call(datagrid, c(list(model = model), grid_args))
+      pred <- predictions(
+        model,
+        newdata = newdata,
+        re.form = NA,
+        allow.new.levels = TRUE
+      ) %>%
+        as_tibble()
+    }
 
     cols <- unique(c(keep_cols, "estimate", "conf.low", "conf.high"))
     cols <- cols[cols %in% names(pred)]

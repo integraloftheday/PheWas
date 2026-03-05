@@ -64,6 +64,26 @@ format_time_axis <- function(x) {
   sprintf("%02d:%02d", hrs, mins)
 }
 
+get_model_values <- function(model, var_name) {
+  meta <- attr(model, "phewas_grid_meta", exact = TRUE)
+  if (!is.null(meta$vars) && var_name %in% names(meta$vars)) {
+    var_info <- meta$vars[[var_name]]
+    if (!is.null(var_info$values) && length(var_info$values) > 0) {
+      return(var_info$values)
+    }
+    if (!is.null(var_info$min) && !is.null(var_info$max)) {
+      return(sort(unique(c(var_info$min, var_info$max))))
+    }
+  }
+  frm <- tryCatch(model@frame, error = function(e) NULL)
+  if (is.null(frm) || !var_name %in% names(frm)) return(NULL)
+  x <- frm[[var_name]]
+  if (is.factor(x)) return(levels(x))
+  if (is.character(x)) return(sort(unique(x)))
+  if (is.logical(x)) return(sort(unique(x)))
+  sort(unique(x))
+}
+
 # --- 3. PROCESS: Batch Load & Predict ---
 # Define the specific files/outcomes you want
 outcomes <- c("onset", "midpoint", "offset", "duration")
@@ -93,7 +113,7 @@ all_predictions <- map_dfr(outcomes, function(outcome_name) {
   preds <- predictions(
     model,
     newdata = datagrid(
-      employment_status = unique(model@frame$employment_status),
+      employment_status = get_model_values(model, "employment_status"),
       is_weekend = c(TRUE, FALSE)
     )
   )
@@ -332,7 +352,7 @@ all_main_effects <- map_dfr(outcomes, function(outcome_name) {
   # Vary Employment, hold others at mean/mode
   p_emp <- predictions(
     model, 
-    newdata = datagrid(employment_status = unique(model@frame$employment_status))
+    newdata = datagrid(employment_status = get_model_values(model, "employment_status"))
   ) %>% clean_pred("employment_status", "Employment", outcome_name)
 
   # --- PREDICTION 2: DEMOGRAPHICS (SEX) ---
@@ -340,7 +360,7 @@ all_main_effects <- map_dfr(outcomes, function(outcome_name) {
   # Note: Adjust 'sex_concept' if your variable name is different
   p_sex <- predictions(
     model, 
-    newdata = datagrid(sex_concept = unique(model@frame$sex_concept))
+    newdata = datagrid(sex_concept = get_model_values(model, "sex_concept"))
   ) %>% clean_pred("sex_concept", "Demographics", outcome_name)
 
   # --- PREDICTION 3: WEEKEND EFFECT ---
@@ -459,7 +479,7 @@ all_seasonality_means <- map_dfr(outcomes, function(outcome_name) {
   # This is much faster than emmeans
   p_month <- predictions(
     model, 
-    newdata = datagrid(month = unique(model@frame$month)) 
+    newdata = datagrid(month = get_model_values(model, "month")) 
   ) %>%
     clean_predictions("month", "Seasonality", outcome_name)
   
@@ -743,5 +763,4 @@ saveRDS(
     object = all_age_preds, 
     file = "results/Age_Effect_Quadratic_Predictions.rds"
 )
-
 

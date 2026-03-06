@@ -57,6 +57,7 @@ set.seed(123)
 MODEL_DIR <- Sys.getenv("MODEL_DIR_04_5", "models_04_5")
 OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR_05_5", Sys.getenv("OUTPUT_DIR_05_7", "results_05_5"))
 TABLE_DIR <- file.path(OUTPUT_DIR, "tables")
+CHECKPOINT_DIR <- file.path(TABLE_DIR, "_checkpoints")
 
 PREFERRED_METHOD <- toupper(Sys.getenv("MODEL_METHOD_05_5", Sys.getenv("MODEL_METHOD_05_7", "REML")))
 SUPPORTED_METHODS <- c("REML", "ML")
@@ -77,6 +78,7 @@ MEM_DIAGNOSTICS <- tolower(Sys.getenv("MEM_DIAGNOSTICS_05_5", "true")) %in% c("t
 
 if (!dir.exists(OUTPUT_DIR)) dir.create(OUTPUT_DIR, recursive = TRUE)
 if (!dir.exists(TABLE_DIR)) dir.create(TABLE_DIR, recursive = TRUE)
+if (!dir.exists(CHECKPOINT_DIR)) dir.create(CHECKPOINT_DIR, recursive = TRUE)
 
 analysis_log <- character()
 log_msg <- function(txt) {
@@ -131,6 +133,13 @@ log_memory <- function(label) {
       " | MemAvail=", fmt_mb_from_kb(avail_kb)
     )
   )
+}
+
+rm_if_exists <- function(...) {
+  objs <- as.character(substitute(list(...)))[-1L]
+  objs <- objs[objs %in% ls(envir = parent.frame(), all.names = TRUE)]
+  if (length(objs) > 0) rm(list = objs, envir = parent.frame())
+  invisible(NULL)
 }
 
 resolve_model_file <- function(stem_with_suffix) {
@@ -224,6 +233,11 @@ normalize_dst_level <- function(x) {
   out
 }
 
+compact_tibble <- function(df) {
+  if (is.null(df) || nrow(df) == 0) return(tibble())
+  tibble::as_tibble(as.data.frame(df, stringsAsFactors = FALSE))
+}
+
 safe_predictions <- function(model, grid_args, keep_cols, analysis_name) {
   tryCatch({
     if (inherits(model, "phewas_marginal_model")) {
@@ -306,7 +320,8 @@ safe_predictions <- function(model, grid_args, keep_cols, analysis_name) {
 
     pred %>%
       select(all_of(cols)) %>%
-      mutate(analysis = analysis_name, .before = 1)
+      mutate(analysis = analysis_name, .before = 1) %>%
+      compact_tibble()
   }, error = function(e) {
     log_msg(paste("Prediction failed for", analysis_name, "|", e$message))
     tibble()
@@ -323,7 +338,8 @@ add_meta <- function(df, reg_row) {
       model_method = reg_row$model_method,
       model_file = basename(reg_row$model_path),
       .before = 1
-    )
+    ) %>%
+    compact_tibble()
 }
 
 clock_diff_shortest <- function(a, b) {
@@ -354,6 +370,27 @@ reset_table_files <- function(csv_name) {
   for (p in targets) {
     if (file.exists(p)) file.remove(p)
   }
+}
+
+checkpoint_marker_path <- function(kind, key) {
+  safe_key <- gsub("[^A-Za-z0-9._-]+", "_", key)
+  file.path(CHECKPOINT_DIR, paste0(kind, "__", safe_key, ".done"))
+}
+
+checkpoint_is_complete <- function(kind, key) {
+  file.exists(checkpoint_marker_path(kind, key))
+}
+
+mark_checkpoint_complete <- function(kind, key) {
+  p <- checkpoint_marker_path(kind, key)
+  writeLines(format(Sys.time(), "%Y-%m-%d %H:%M:%S"), p)
+  log_msg(paste("Checkpoint complete:", basename(p)))
+}
+
+reset_checkpoints <- function(kind = NULL) {
+  pat <- if (is.null(kind)) "\\.done$" else paste0("^", kind, "__.*\\.done$")
+  files <- list.files(CHECKPOINT_DIR, pattern = pat, full.names = TRUE)
+  if (length(files) > 0) file.remove(files)
 }
 
 append_checkpoint <- function(df, csv_name) {
@@ -451,14 +488,22 @@ if (sum(model_registry$exists) == 0) {
 
 # %%
 predictions_csv <- "predictions_all_05_5.csv"
-if (!RESUME_CHECKPOINTS) reset_table_files(predictions_csv)
+if (!RESUME_CHECKPOINTS) {
+  reset_table_files(predictions_csv)
+  reset_checkpoints("model")
+}
 pred_rows_written <- 0L
 
 for (i in seq_len(nrow(model_registry))) {
   reg_row <- model_registry[i, ]
+  model_key <- paste(reg_row$stem_with_suffix, reg_row$model_method, sep = "__")
 
   if (!reg_row$exists) {
     log_msg(paste("Skipping missing model:", reg_row$model_path))
+    next
+  }
+  if (RESUME_CHECKPOINTS && checkpoint_is_complete("model", model_key)) {
+    log_msg(paste("Skipping completed model:", reg_row$stem_with_suffix, "[", reg_row$model_method, "]"))
     next
   }
 
@@ -640,6 +685,7 @@ for (i in seq_len(nrow(model_registry))) {
   rm(model)
   run_gc(paste("finished", basename(reg_row$model_path)))
   log_memory(paste("after_model", basename(reg_row$model_path)))
+  mark_checkpoint_complete("model", model_key)
 }
 
 log_msg(paste("Total prediction rows checkpointed:", pred_rows_written))
@@ -662,11 +708,16 @@ if (!RESUME_CHECKPOINTS) {
   reset_table_files(derived_main_compare_csv)
   reset_table_files(derived_age_csv)
   reset_table_files(derived_age_compare_csv)
+  reset_checkpoints("derived")
 }
 
 available_batches <- unique(model_registry$batch)
 
 for (b in available_batches) {
+  if (RESUME_CHECKPOINTS && checkpoint_is_complete("derived", b)) {
+    log_msg(paste("Skipping completed derived batch:", b))
+    next
+  }
   onset_row <- find_model_row(model_registry, "onset", b)
   offset_row <- find_model_row(model_registry, "offset", b)
 
@@ -749,56 +800,15 @@ for (b in available_batches) {
 
       append_checkpoint(derived_main, derived_main_csv)
 
-      compare_main <- derived_main
-
-      if (nrow(duration_row) == 1) {
-        duration_model <- safe_read_model(duration_row$model_path)
-        if (!is.null(duration_model)) {
-          duration_main <- safe_predictions(
-            model = duration_model,
-            grid_args = grid_main,
-            keep_cols = key_main,
-            analysis_name = "duration_main_direct"
-          ) %>%
-            rename(duration_direct_estimate = estimate)
-
-          if (nrow(duration_main) > 0) {
-            compare_main <- compare_main %>%
-              left_join(duration_main %>% select(all_of(c(key_main, "duration_direct_estimate"))), by = key_main) %>%
-              mutate(duration_direct_minus_derived = duration_direct_estimate - derived_duration_hours)
-          }
-        }
-        rm(duration_model)
-        run_gc(paste("duration main compare cleanup for", b))
-      }
-
-      if (nrow(midpoint_row) == 1) {
-        midpoint_model <- safe_read_model(midpoint_row$model_path)
-        if (!is.null(midpoint_model)) {
-          midpoint_main <- safe_predictions(
-            model = midpoint_model,
-            grid_args = grid_main,
-            keep_cols = key_main,
-            analysis_name = "midpoint_main_direct"
-          ) %>%
-            rename(midpoint_direct_estimate = estimate)
-
-          if (nrow(midpoint_main) > 0) {
-            compare_main <- compare_main %>%
-              left_join(midpoint_main %>% select(all_of(c(key_main, "midpoint_direct_estimate"))), by = key_main) %>%
-              mutate(midpoint_direct_minus_derived = clock_diff_shortest(midpoint_direct_estimate, derived_midpoint_linear))
-          }
-        }
-        rm(midpoint_model)
-        run_gc(paste("midpoint main compare cleanup for", b))
-      }
-
-      append_checkpoint(compare_main, derived_main_compare_csv)
+      compare_main <- compact_tibble(derived_main)
+      rm(derived_main)
     } else {
       log_msg(paste("No onset/offset main-grid predictions for derived section in", b))
+      compare_main <- tibble()
     }
   } else {
     log_msg(paste("No shared categorical grid for derived main section in", b))
+    compare_main <- tibble()
   }
 
   # 2B. Derived age-based predictions
@@ -845,11 +855,36 @@ for (b in available_batches) {
 
     append_checkpoint(derived_age, derived_age_csv)
 
-    compare_age <- derived_age
+    compare_age <- compact_tibble(derived_age)
+    rm(derived_age)
+  } else {
+    log_msg(paste("No onset/offset age predictions for derived section in", b))
+    compare_age <- tibble()
+  }
 
-    if (nrow(duration_row) == 1) {
-      duration_model <- safe_read_model(duration_row$model_path)
-      if (!is.null(duration_model)) {
+  rm_if_exists(onset_main, offset_main, onset_age, offset_age, onset_model, offset_model)
+  run_gc(paste("released onset/offset models for", b))
+  log_memory(paste("after_releasing_onoff", b))
+
+  if (nrow(duration_row) == 1 && (nrow(compare_main) > 0 || nrow(compare_age) > 0)) {
+    duration_model <- safe_read_model(duration_row$model_path)
+    if (!is.null(duration_model)) {
+      if (nrow(compare_main) > 0 && length(grid_main) > 0) {
+        duration_main <- safe_predictions(
+          model = duration_model,
+          grid_args = grid_main,
+          keep_cols = key_main,
+          analysis_name = "duration_main_direct"
+        ) %>%
+          rename(duration_direct_estimate = estimate)
+        if (nrow(duration_main) > 0) {
+          compare_main <- compare_main %>%
+            left_join(duration_main %>% select(all_of(c(key_main, "duration_direct_estimate"))), by = key_main) %>%
+            mutate(duration_direct_minus_derived = duration_direct_estimate - derived_duration_hours) %>%
+            compact_tibble()
+        }
+      }
+      if (nrow(compare_age) > 0) {
         duration_age <- safe_predictions(
           model = duration_model,
           grid_args = grid_age,
@@ -857,20 +892,38 @@ for (b in available_batches) {
           analysis_name = "duration_age_direct"
         ) %>%
           rename(duration_direct_estimate = estimate)
-
         if (nrow(duration_age) > 0) {
           compare_age <- compare_age %>%
             left_join(duration_age %>% select(all_of(c(key_age, "duration_direct_estimate"))), by = key_age) %>%
-            mutate(duration_direct_minus_derived = duration_direct_estimate - derived_duration_hours)
+            mutate(duration_direct_minus_derived = duration_direct_estimate - derived_duration_hours) %>%
+            compact_tibble()
         }
       }
-      rm(duration_model)
-      run_gc(paste("duration compare cleanup for", b))
     }
+    rm_if_exists(duration_main, duration_age, duration_model)
+    run_gc(paste("duration compare cleanup for", b))
+    log_memory(paste("after_duration_compare", b))
+  }
 
-    if (nrow(midpoint_row) == 1) {
-      midpoint_model <- safe_read_model(midpoint_row$model_path)
-      if (!is.null(midpoint_model)) {
+  if (nrow(midpoint_row) == 1 && (nrow(compare_main) > 0 || nrow(compare_age) > 0)) {
+    midpoint_model <- safe_read_model(midpoint_row$model_path)
+    if (!is.null(midpoint_model)) {
+      if (nrow(compare_main) > 0 && length(grid_main) > 0) {
+        midpoint_main <- safe_predictions(
+          model = midpoint_model,
+          grid_args = grid_main,
+          keep_cols = key_main,
+          analysis_name = "midpoint_main_direct"
+        ) %>%
+          rename(midpoint_direct_estimate = estimate)
+        if (nrow(midpoint_main) > 0) {
+          compare_main <- compare_main %>%
+            left_join(midpoint_main %>% select(all_of(c(key_main, "midpoint_direct_estimate"))), by = key_main) %>%
+            mutate(midpoint_direct_minus_derived = clock_diff_shortest(midpoint_direct_estimate, derived_midpoint_linear)) %>%
+            compact_tibble()
+        }
+      }
+      if (nrow(compare_age) > 0) {
         midpoint_age <- safe_predictions(
           model = midpoint_model,
           grid_args = grid_age,
@@ -878,25 +931,26 @@ for (b in available_batches) {
           analysis_name = "midpoint_age_direct"
         ) %>%
           rename(midpoint_direct_estimate = estimate)
-
         if (nrow(midpoint_age) > 0) {
           compare_age <- compare_age %>%
             left_join(midpoint_age %>% select(all_of(c(key_age, "midpoint_direct_estimate"))), by = key_age) %>%
-            mutate(midpoint_direct_minus_derived = clock_diff_shortest(midpoint_direct_estimate, derived_midpoint_linear))
+            mutate(midpoint_direct_minus_derived = clock_diff_shortest(midpoint_direct_estimate, derived_midpoint_linear)) %>%
+            compact_tibble()
         }
       }
-      rm(midpoint_model)
-      run_gc(paste("midpoint compare cleanup for", b))
     }
-
-    append_checkpoint(compare_age, derived_age_compare_csv)
-  } else {
-    log_msg(paste("No onset/offset age predictions for derived section in", b))
+    rm_if_exists(midpoint_main, midpoint_age, midpoint_model)
+    run_gc(paste("midpoint compare cleanup for", b))
+    log_memory(paste("after_midpoint_compare", b))
   }
 
-  rm(onset_model, offset_model)
+  if (nrow(compare_main) > 0) append_checkpoint(compare_main, derived_main_compare_csv)
+  if (nrow(compare_age) > 0) append_checkpoint(compare_age, derived_age_compare_csv)
+
+  rm_if_exists(compare_main, compare_age)
   run_gc(paste("derived section finished for", b))
   log_memory(paste("after_derived_batch", b))
+  mark_checkpoint_complete("derived", b)
 }
 
 derived_main_tbl <- read_checkpoint(derived_main_csv)

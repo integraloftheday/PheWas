@@ -72,6 +72,9 @@ if (!PRED_SCOPE %in% c("all", "base", "dst")) {
   stop("PRED_SCOPE_05_5 (or legacy PRED_SCOPE_05_7) must be one of: all, base, dst")
 }
 
+RESUME_CHECKPOINTS <- tolower(Sys.getenv("RESUME_CHECKPOINTS_05_5", "false")) %in% c("true", "1", "yes")
+MEM_DIAGNOSTICS <- tolower(Sys.getenv("MEM_DIAGNOSTICS_05_5", "true")) %in% c("true", "1", "yes")
+
 if (!dir.exists(OUTPUT_DIR)) dir.create(OUTPUT_DIR, recursive = TRUE)
 if (!dir.exists(TABLE_DIR)) dir.create(TABLE_DIR, recursive = TRUE)
 
@@ -87,6 +90,8 @@ log_msg(paste("OUTPUT_DIR:", OUTPUT_DIR))
 log_msg(paste("METHOD_PRIORITY:", paste(METHOD_PRIORITY, collapse = " -> ")))
 log_msg(paste("Age sequence:", paste(c(AGE_MIN, AGE_MAX, AGE_BY), collapse = ", ")))
 log_msg(paste("PRED_SCOPE:", PRED_SCOPE))
+log_msg(paste("RESUME_CHECKPOINTS:", RESUME_CHECKPOINTS))
+log_msg(paste("MEM_DIAGNOSTICS:", MEM_DIAGNOSTICS))
 
 # %% [markdown]
 # ## Helpers
@@ -95,6 +100,37 @@ log_msg(paste("PRED_SCOPE:", PRED_SCOPE))
 run_gc <- function(label = NULL) {
   invisible(gc(verbose = FALSE))
   if (!is.null(label)) log_msg(paste("Memory cleanup:", label))
+}
+
+read_proc_kb <- function(path, field) {
+  if (!file.exists(path)) return(NA_real_)
+  lines <- tryCatch(readLines(path, warn = FALSE), error = function(e) character())
+  hit <- grep(paste0("^", field, ":"), lines, value = TRUE)
+  if (length(hit) == 0) return(NA_real_)
+  as.numeric(gsub("[^0-9]", "", hit[[1]]))
+}
+
+fmt_mb_from_kb <- function(x) {
+  if (is.na(x)) return("NA")
+  sprintf("%.1fMB", x / 1024)
+}
+
+log_memory <- function(label) {
+  if (!MEM_DIAGNOSTICS) return(invisible(NULL))
+  gc_tbl <- gc(verbose = FALSE)
+  r_used_mb <- sum(gc_tbl[, "used"], na.rm = TRUE)
+  vmrss_kb <- read_proc_kb("/proc/self/status", "VmRSS")
+  vmhwm_kb <- read_proc_kb("/proc/self/status", "VmHWM")
+  avail_kb <- read_proc_kb("/proc/meminfo", "MemAvailable")
+  log_msg(
+    paste0(
+      "MEM [", label, "] ",
+      "R_used=", sprintf("%.1fMB", r_used_mb),
+      " | VmRSS=", fmt_mb_from_kb(vmrss_kb),
+      " | VmHWM=", fmt_mb_from_kb(vmhwm_kb),
+      " | MemAvail=", fmt_mb_from_kb(avail_kb)
+    )
+  )
 }
 
 resolve_model_file <- function(stem_with_suffix) {
@@ -308,6 +344,36 @@ write_table <- function(df, csv_name) {
   log_msg(paste("Wrote:", csv_path))
 }
 
+reset_table_files <- function(csv_name) {
+  csv_path <- file.path(TABLE_DIR, csv_name)
+  targets <- c(
+    csv_path,
+    sub("\\.csv$", ".rds", csv_path),
+    sub("\\.csv$", ".parquet", csv_path)
+  )
+  for (p in targets) {
+    if (file.exists(p)) file.remove(p)
+  }
+}
+
+append_checkpoint <- function(df, csv_name) {
+  if (nrow(df) == 0) return(invisible(0L))
+  csv_path <- file.path(TABLE_DIR, csv_name)
+  if (file.exists(csv_path)) {
+    readr::write_csv(df, csv_path, append = TRUE)
+  } else {
+    readr::write_csv(df, csv_path)
+  }
+  log_msg(paste("Checkpoint append:", csv_path, "| rows:", nrow(df)))
+  invisible(nrow(df))
+}
+
+read_checkpoint <- function(csv_name) {
+  csv_path <- file.path(TABLE_DIR, csv_name)
+  if (!file.exists(csv_path)) return(tibble())
+  readr::read_csv(csv_path, show_col_types = FALSE)
+}
+
 find_model_row <- function(registry, outcome_name, batch_name) {
   registry %>%
     filter(outcome == outcome_name, batch == batch_name, exists) %>%
@@ -384,8 +450,9 @@ if (sum(model_registry$exists) == 0) {
 # ## Section 1: Per-model Marginal Predictions
 
 # %%
-all_predictions <- list()
-idx <- 1
+predictions_csv <- "predictions_all_05_5.csv"
+if (!RESUME_CHECKPOINTS) reset_table_files(predictions_csv)
+pred_rows_written <- 0L
 
 for (i in seq_len(nrow(model_registry))) {
   reg_row <- model_registry[i, ]
@@ -396,13 +463,25 @@ for (i in seq_len(nrow(model_registry))) {
   }
 
   log_msg(paste("Precomputing:", reg_row$stem_with_suffix, "[", reg_row$model_method, "]"))
+  log_memory(paste("before_load", basename(reg_row$model_path)))
   model <- safe_read_model(reg_row$model_path)
   if (is.null(model)) next
+  log_memory(paste("after_load", basename(reg_row$model_path)))
 
   append_pred <- function(pred_obj) {
     if (nrow(pred_obj) == 0) return(invisible(NULL))
-    all_predictions[[idx]] <<- add_meta(pred_obj, reg_row)
-    idx <<- idx + 1L
+    pred_out <- add_meta(pred_obj, reg_row)
+    pred_size_mb <- as.numeric(object.size(pred_out)) / 1024^2
+    log_msg(
+      paste0(
+        "Prediction chunk: analysis=", unique(pred_out$analysis)[1],
+        " | rows=", nrow(pred_out),
+        " | size=", sprintf("%.2fMB", pred_size_mb)
+      )
+    )
+    pred_rows_written <<- pred_rows_written + append_checkpoint(pred_out, predictions_csv)
+    rm(pred_out)
+    run_gc(paste("after checkpoint append", reg_row$stem_with_suffix))
   }
 
   # Employment x Weekend
@@ -560,24 +639,30 @@ for (i in seq_len(nrow(model_registry))) {
 
   rm(model)
   run_gc(paste("finished", basename(reg_row$model_path)))
+  log_memory(paste("after_model", basename(reg_row$model_path)))
 }
 
-predictions_all <- if (length(all_predictions) == 0) tibble() else bind_rows(all_predictions)
+log_msg(paste("Total prediction rows checkpointed:", pred_rows_written))
+predictions_all <- read_checkpoint(predictions_csv)
+log_msg(paste("Predictions loaded from checkpoint rows:", nrow(predictions_all)))
+log_memory("after_predictions_reload")
 write_table(predictions_all, "predictions_all_05_5.csv")
 
 # %% [markdown]
 # ## Section 2: Derived Predictions (Onset + Offset)
 
 # %%
-derived_main_list <- list()
-derived_main_compare_list <- list()
-idx_main <- 1
-idx_main_cmp <- 1
+derived_main_csv <- "derived_duration_midpoint_main_grid_05_5.csv"
+derived_main_compare_csv <- "derived_vs_direct_main_grid_05_5.csv"
+derived_age_csv <- "derived_duration_midpoint_age_05_5.csv"
+derived_age_compare_csv <- "derived_vs_direct_age_05_5.csv"
 
-derived_age_list <- list()
-derived_age_compare_list <- list()
-idx_age <- 1
-idx_age_cmp <- 1
+if (!RESUME_CHECKPOINTS) {
+  reset_table_files(derived_main_csv)
+  reset_table_files(derived_main_compare_csv)
+  reset_table_files(derived_age_csv)
+  reset_table_files(derived_age_compare_csv)
+}
 
 available_batches <- unique(model_registry$batch)
 
@@ -590,8 +675,10 @@ for (b in available_batches) {
     next
   }
 
+  log_memory(paste("before_derived_load", b))
   onset_model <- safe_read_model(onset_row$model_path)
   offset_model <- safe_read_model(offset_row$model_path)
+  log_memory(paste("after_derived_load", b))
   if (is.null(onset_model) || is.null(offset_model)) {
     log_msg(paste("Skipping derived predictions for", b, "- failed to load onset/offset."))
     rm(onset_model, offset_model)
@@ -660,8 +747,7 @@ for (b in available_batches) {
         ) %>%
         relocate(batch, analysis, .before = 1)
 
-      derived_main_list[[idx_main]] <- derived_main
-      idx_main <- idx_main + 1
+      append_checkpoint(derived_main, derived_main_csv)
 
       compare_main <- derived_main
 
@@ -707,8 +793,7 @@ for (b in available_batches) {
         run_gc(paste("midpoint main compare cleanup for", b))
       }
 
-      derived_main_compare_list[[idx_main_cmp]] <- compare_main
-      idx_main_cmp <- idx_main_cmp + 1
+      append_checkpoint(compare_main, derived_main_compare_csv)
     } else {
       log_msg(paste("No onset/offset main-grid predictions for derived section in", b))
     }
@@ -758,8 +843,7 @@ for (b in available_batches) {
       ) %>%
       relocate(batch, analysis, .before = 1)
 
-    derived_age_list[[idx_age]] <- derived_age
-    idx_age <- idx_age + 1
+    append_checkpoint(derived_age, derived_age_csv)
 
     compare_age <- derived_age
 
@@ -805,20 +889,20 @@ for (b in available_batches) {
       run_gc(paste("midpoint compare cleanup for", b))
     }
 
-    derived_age_compare_list[[idx_age_cmp]] <- compare_age
-    idx_age_cmp <- idx_age_cmp + 1
+    append_checkpoint(compare_age, derived_age_compare_csv)
   } else {
     log_msg(paste("No onset/offset age predictions for derived section in", b))
   }
 
   rm(onset_model, offset_model)
   run_gc(paste("derived section finished for", b))
+  log_memory(paste("after_derived_batch", b))
 }
 
-derived_main_tbl <- if (length(derived_main_list) == 0) tibble() else bind_rows(derived_main_list)
-derived_main_compare_tbl <- if (length(derived_main_compare_list) == 0) tibble() else bind_rows(derived_main_compare_list)
-derived_age_tbl <- if (length(derived_age_list) == 0) tibble() else bind_rows(derived_age_list)
-derived_age_compare_tbl <- if (length(derived_age_compare_list) == 0) tibble() else bind_rows(derived_age_compare_list)
+derived_main_tbl <- read_checkpoint(derived_main_csv)
+derived_main_compare_tbl <- read_checkpoint(derived_main_compare_csv)
+derived_age_tbl <- read_checkpoint(derived_age_csv)
+derived_age_compare_tbl <- read_checkpoint(derived_age_compare_csv)
 
 write_table(derived_main_tbl, "derived_duration_midpoint_main_grid_05_5.csv")
 write_table(derived_main_compare_tbl, "derived_vs_direct_main_grid_05_5.csv")

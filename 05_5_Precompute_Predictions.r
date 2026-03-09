@@ -197,6 +197,7 @@ has_vars <- function(model, vars) {
   if (!inherits(model, "phewas_marginal_model")) {
     frm_names <- tryCatch(names(model@frame), error = function(e) character())
   }
+  formula_vars <- tryCatch(all.vars(formula(model)), error = function(e) character())
   meta <- NULL
   if (inherits(model, "phewas_marginal_model")) {
     meta <- model$grid_meta
@@ -204,7 +205,7 @@ has_vars <- function(model, vars) {
     meta <- attr(model, "phewas_grid_meta", exact = TRUE)
   }
   meta_names <- if (!is.null(meta$vars) && !is.null(names(meta$vars))) names(meta$vars) else character()
-  all(vars %in% unique(c(frm_names, meta_names)))
+  all(vars %in% unique(c(frm_names, formula_vars, meta_names)))
 }
 
 ordered_intersection <- function(a, b) {
@@ -216,7 +217,7 @@ ordered_intersection <- function(a, b) {
 }
 
 normalize_weekend_level <- function(x) {
-  sx <- tolower(gsub("[^a-z0-9]+", "", as.character(x)))
+  sx <- gsub("[^a-z0-9]+", "", tolower(as.character(x)))
   out <- rep(NA_character_, length(sx))
   out[grepl("weekend", sx) | sx %in% c("true", "t", "1", "yes", "y")] <- "Weekend"
   out[grepl("weekday", sx) | sx %in% c("false", "f", "0", "no", "n")] <- "Weekday"
@@ -224,7 +225,7 @@ normalize_weekend_level <- function(x) {
 }
 
 normalize_dst_level <- function(x) {
-  sx <- tolower(gsub("[^a-z0-9]+", "", as.character(x)))
+  sx <- gsub("[^a-z0-9]+", "", tolower(as.character(x)))
   out <- rep(NA_character_, length(sx))
   out[grepl("^no", sx) & grepl("dst", sx)] <- "NoDST"
   out[sx %in% c("nodst", "nost", "no", "0", "false", "f")] <- "NoDST"
@@ -360,6 +361,53 @@ write_table <- function(df, csv_name) {
   log_msg(paste("Wrote:", csv_path))
 }
 
+checkpoint_schemas <- list(
+  predictions_all_05_5.csv = c(
+    "outcome", "outcome_type", "batch", "model_method", "model_file",
+    "analysis",
+    "employment_status", "is_weekend_factor", "sex_concept", "month", "dst_observes", "age_at_sleep",
+    "estimate", "conf.low", "conf.high"
+  ),
+  derived_duration_midpoint_main_grid_05_5.csv = c(
+    "batch", "analysis", "employment_status", "is_weekend_factor", "dst_observes",
+    "onset_estimate", "offset_estimate", "derived_duration_hours", "derived_midpoint_linear"
+  ),
+  derived_vs_direct_main_grid_05_5.csv = c(
+    "batch", "analysis", "employment_status", "is_weekend_factor", "dst_observes",
+    "onset_estimate", "offset_estimate", "derived_duration_hours", "derived_midpoint_linear",
+    "duration_direct_estimate", "duration_direct_minus_derived",
+    "midpoint_direct_estimate", "midpoint_direct_minus_derived"
+  ),
+  derived_duration_midpoint_age_05_5.csv = c(
+    "batch", "analysis", "age_at_sleep", "is_weekend_factor", "dst_observes",
+    "onset_estimate", "offset_estimate", "derived_duration_hours", "derived_midpoint_linear"
+  ),
+  derived_vs_direct_age_05_5.csv = c(
+    "batch", "analysis", "age_at_sleep", "is_weekend_factor", "dst_observes",
+    "onset_estimate", "offset_estimate", "derived_duration_hours", "derived_midpoint_linear",
+    "duration_direct_estimate", "duration_direct_minus_derived",
+    "midpoint_direct_estimate", "midpoint_direct_minus_derived"
+  )
+)
+
+align_checkpoint_schema <- function(df, csv_name) {
+  schema <- checkpoint_schemas[[csv_name]]
+  if (is.null(schema) || nrow(df) == 0) return(df)
+
+  extra_cols <- setdiff(names(df), schema)
+  if (length(extra_cols) > 0) {
+    log_msg(paste("Checkpoint schema has unexpected columns for", csv_name, ":", paste(extra_cols, collapse = ", ")))
+    schema <- c(schema, extra_cols)
+  }
+
+  missing_cols <- setdiff(schema, names(df))
+  for (nm in missing_cols) df[[nm]] <- NA
+
+  df %>%
+    select(all_of(schema)) %>%
+    compact_tibble()
+}
+
 reset_table_files <- function(csv_name) {
   csv_path <- file.path(TABLE_DIR, csv_name)
   targets <- c(
@@ -395,6 +443,7 @@ reset_checkpoints <- function(kind = NULL) {
 
 append_checkpoint <- function(df, csv_name) {
   if (nrow(df) == 0) return(invisible(0L))
+  df <- align_checkpoint_schema(df, csv_name)
   csv_path <- file.path(TABLE_DIR, csv_name)
   if (file.exists(csv_path)) {
     readr::write_csv(df, csv_path, append = TRUE)

@@ -16,19 +16,19 @@ set.seed(123)
 # -------------------------------------------------------------------
 # Configuration
 # -------------------------------------------------------------------
-TEST_MODE <- FALSE
-N_TEST_IDS <- 25
-FIT_ALL_REML <- TRUE
+TEST_MODE <- tolower(Sys.getenv("TEST_MODE_04_5", "false")) %in% c("true", "1", "yes")
+N_TEST_IDS <- as.integer(Sys.getenv("N_TEST_IDS_04_5", "25"))
+FIT_ALL_REML <- tolower(Sys.getenv("FIT_ALL_REML_04_5", "true")) %in% c("true", "1", "yes")
 # Restrict DST refits to selected outcomes only.
 # Valid values: "onset", "offset", "midpoint", "duration"
 DST_TARGET_OUTCOMES <- c("onset", "offset", "midpoint", "duration")
 # Resume-friendly behavior: skip fitting if target .rds already exists.
-SKIP_EXISTING_MODELS <- TRUE
+SKIP_EXISTING_MODELS <- tolower(Sys.getenv("SKIP_EXISTING_MODELS_04_5", "true")) %in% c("true", "1", "yes")
 
-INPUT_PARQUET <- "processed_data/LMM_analysis.parquet"
-MODEL_DIR <- "models_04_5"
-SUMMARY_DIR <- "model_summaries_04_5"
-AIC_REPORT_FILE <- "model_comparison_aic_04_5.md"
+INPUT_PARQUET <- Sys.getenv("INPUT_PARQUET_04_5", "processed_data/LMM_analysis.parquet")
+MODEL_DIR <- Sys.getenv("MODEL_DIR_04_5", "models_04_5")
+SUMMARY_DIR <- Sys.getenv("SUMMARY_DIR_04_5", "model_summaries_04_5")
+AIC_REPORT_FILE <- Sys.getenv("AIC_REPORT_FILE_04_5", "model_comparison_aic_04_5.md")
 
 if (!dir.exists(MODEL_DIR)) dir.create(MODEL_DIR)
 if (!dir.exists(SUMMARY_DIR)) dir.create(SUMMARY_DIR)

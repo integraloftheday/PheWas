@@ -59,6 +59,10 @@ TEST_SAMPLE_N = 250_000
 # Example: DST_MAX_MODEL_ROWS=2000000
 DST_MAX_MODEL_ROWS = int(str(os.getenv("DST_MAX_MODEL_ROWS", "2000000")).strip() or "0")
 
+# Low-memory mode: simple mean-based event-study DiD (no FE regression).
+# Example: DST_LOW_MEMORY_DID=1
+DST_LOW_MEMORY_DID = str(os.getenv("DST_LOW_MEMORY_DID", "1")).strip() == "1"
+
 # Arizona (most regions), Hawaii, and territories used as non-DST controls.
 NO_DST_ZIP3 = [f"{i:03d}" for i in range(850, 866)] + ["967", "968", "006", "007", "008", "009", "969"]
 
@@ -245,6 +249,198 @@ class EventStudyResult:
     pretrend_df: pd.DataFrame
 
 
+def _normal_approx_two_sided_p_from_z(z: np.ndarray) -> np.ndarray:
+    from math import erf, sqrt
+
+    return np.array([
+        2.0 * (1.0 - 0.5 * (1.0 + erf(abs(val) / sqrt(2.0)))) if np.isfinite(val) else np.nan
+        for val in z
+    ])
+
+
+def to_noon_linear_expr(expr: pl.Expr) -> pl.Expr:
+    """Map clock-hour [0,24) to noon-linearized scale [12,36)."""
+    return pl.when(expr < 12).then(expr + 24).otherwise(expr)
+
+
+def wrap_noon_linear_array(arr: np.ndarray) -> np.ndarray:
+    """Wrap any hour values to noon-linearized scale [12,36)."""
+    return ((arr - 12.0) % 24.0) + 12.0
+
+
+def linear_to_clock_array(arr: np.ndarray) -> np.ndarray:
+    """Map noon-linearized [12,36) hours back to 0-24 clock hours."""
+    return np.mod(arr, 24.0)
+
+
+def save_chronotype_midpoint_figures(
+    base_lf: pl.LazyFrame,
+    onset_col: str,
+    duration_col_mins: str,
+) -> None:
+    """
+    Save low-memory chronotype midpoint summaries:
+    - MSW: midpoint of sleep on workdays
+    - MSF: midpoint of sleep on free days
+    - MSFsc: sleep-corrected midpoint (MCTQ style)
+    """
+    print("Building chronotype midpoint summaries (MSW, MSF, MSFsc)...")
+
+    # Person-level means by day type, keeping processing in Polars.
+    person_daytype = (
+        base_lf
+        .select([
+            "person_id",
+            "is_work_day",
+            to_noon_linear_expr(pl.col(onset_col)).alias("onset_linear_use"),
+            (pl.col(duration_col_mins) / 60.0).alias("duration_hours"),
+        ])
+        .drop_nulls(["person_id", "is_work_day", "onset_linear_use", "duration_hours"])
+        .group_by(["person_id", "is_work_day"])
+        .agg([
+            pl.col("onset_linear_use").mean().alias("mean_onset_linear"),
+            pl.col("duration_hours").mean().alias("mean_duration_hours"),
+            pl.len().alias("n_nights"),
+        ])
+        .collect(engine="streaming")
+    )
+
+    daytype_diag = person_daytype.to_pandas() if person_daytype.height > 0 else pd.DataFrame(columns=["person_id", "is_work_day", "mean_onset_linear", "mean_duration_hours", "n_nights"])
+    if not daytype_diag.empty:
+        summary = (
+            daytype_diag.groupby("is_work_day", as_index=False)
+            .agg(n_people=("person_id", "nunique"), n_person_daytype_rows=("person_id", "size"), n_nights=("n_nights", "sum"))
+            .sort_values("is_work_day")
+        )
+    else:
+        summary = pd.DataFrame(columns=["is_work_day", "n_people", "n_person_daytype_rows", "n_nights"])
+    summary.to_csv(TABLE_DIR / "04_chronotype_daytype_diagnostics.csv", index=False)
+
+    if person_daytype.height == 0:
+        fig = plt.figure(figsize=(9, 4.8))
+        plt.text(0.5, 0.5, "No data available to compute MSW/MSF/MSFsc.", ha="center", va="center")
+        plt.axis("off")
+        plt.title("Chronotype midpoint distributions (not available)")
+        plt.tight_layout()
+        plt.savefig(PLOT_DIR / "chronotype_midpoints_distribution.png", dpi=300, bbox_inches="tight")
+        plt.close(fig)
+
+        fig2 = plt.figure(figsize=(9, 4.8))
+        plt.text(0.5, 0.5, "Insufficient work/free-day data for chronotype relationship plots.", ha="center", va="center")
+        plt.axis("off")
+        plt.title("Chronotype midpoint relationships (not available)")
+        plt.tight_layout()
+        plt.savefig(PLOT_DIR / "chronotype_midpoints_relationships.png", dpi=300, bbox_inches="tight")
+        plt.close(fig2)
+        return
+
+    pd_day = person_daytype.to_pandas()
+    work = pd_day[pd_day["is_work_day"] == 1].copy().rename(
+        columns={
+            "mean_onset_linear": "SO_w",
+            "mean_duration_hours": "SD_w",
+            "n_nights": "n_work_nights",
+        }
+    )
+    free = pd_day[pd_day["is_work_day"] == 0].copy().rename(
+        columns={
+            "mean_onset_linear": "SO_f",
+            "mean_duration_hours": "SD_f",
+            "n_nights": "n_free_nights",
+        }
+    )
+
+    ms = work[["person_id", "SO_w", "SD_w", "n_work_nights"]].merge(
+        free[["person_id", "SO_f", "SD_f", "n_free_nights"]],
+        on="person_id",
+        how="inner",
+    )
+    if ms.empty:
+        fig = plt.figure(figsize=(9, 4.8))
+        plt.text(0.5, 0.5, "No overlapping persons with both work-day and free-day sleep.", ha="center", va="center")
+        plt.axis("off")
+        plt.title("Chronotype midpoint distributions (not available)")
+        plt.tight_layout()
+        plt.savefig(PLOT_DIR / "chronotype_midpoints_distribution.png", dpi=300, bbox_inches="tight")
+        plt.close(fig)
+
+        fig2 = plt.figure(figsize=(9, 4.8))
+        plt.text(0.5, 0.5, "Cannot compute MSFsc without both work and free-day means.", ha="center", va="center")
+        plt.axis("off")
+        plt.title("Chronotype midpoint relationships (not available)")
+        plt.tight_layout()
+        plt.savefig(PLOT_DIR / "chronotype_midpoints_relationships.png", dpi=300, bbox_inches="tight")
+        plt.close(fig2)
+        return
+
+    # Midpoints on noon-linearized scale.
+    ms["MSW_linear"] = wrap_noon_linear_array(ms["SO_w"].to_numpy(dtype=float) + (ms["SD_w"].to_numpy(dtype=float) / 2.0))
+    ms["MSF_linear"] = wrap_noon_linear_array(ms["SO_f"].to_numpy(dtype=float) + (ms["SD_f"].to_numpy(dtype=float) / 2.0))
+    ms["SD_week"] = ((ms["SD_w"] * 5.0) + (ms["SD_f"] * 2.0)) / 7.0
+
+    msf_sc = np.where(
+        ms["SD_f"].to_numpy(dtype=float) > ms["SD_w"].to_numpy(dtype=float),
+        ms["SO_f"].to_numpy(dtype=float) + (ms["SD_week"].to_numpy(dtype=float) / 2.0),
+        ms["MSF_linear"].to_numpy(dtype=float),
+    )
+    ms["MSFsc_linear"] = wrap_noon_linear_array(msf_sc)
+
+    # Clock-hour versions for readability.
+    ms["MSW_clock"] = linear_to_clock_array(ms["MSW_linear"].to_numpy(dtype=float))
+    ms["MSF_clock"] = linear_to_clock_array(ms["MSF_linear"].to_numpy(dtype=float))
+    ms["MSFsc_clock"] = linear_to_clock_array(ms["MSFsc_linear"].to_numpy(dtype=float))
+
+    ms.to_csv(TABLE_DIR / "04_chronotype_midpoints_person_level.csv", index=False)
+
+    # Figure 1: distribution overlays of MSW/MSF/MSFsc
+    fig, ax = plt.subplots(figsize=(10.5, 6.5))
+    bins = np.arange(0.0, 24.25, 0.25)
+    ax.hist(ms["MSW_clock"], bins=bins, alpha=0.45, label="MSW (workday midpoint)", density=True)
+    ax.hist(ms["MSF_clock"], bins=bins, alpha=0.45, label="MSF (free-day midpoint)", density=True)
+    ax.hist(ms["MSFsc_clock"], bins=bins, alpha=0.45, label="MSFsc (sleep-corrected midpoint)", density=True)
+    ax.set_xlabel("Clock hour")
+    ax.set_ylabel("Density")
+    ax.set_title(
+        "Chronotype midpoint distributions (person-level): MSW vs MSF vs MSFsc\n"
+        "MSW = SO_w + SD_w/2; MSF = SO_f + SD_f/2; MSFsc adjusted for free-day oversleep"
+    )
+    ax.legend(loc="best")
+    ax.grid(alpha=0.25)
+    plt.tight_layout()
+    plt.savefig(PLOT_DIR / "chronotype_midpoints_distribution.png", dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+    # Figure 2: paired comparison scatter
+    fig2, axes = plt.subplots(1, 2, figsize=(13.5, 5.8), sharex=False, sharey=False)
+
+    axes[0].scatter(ms["MSW_clock"], ms["MSF_clock"], s=8, alpha=0.2, color="#1f77b4", edgecolors="none")
+    lo0 = min(ms["MSW_clock"].min(), ms["MSF_clock"].min())
+    hi0 = max(ms["MSW_clock"].max(), ms["MSF_clock"].max())
+    axes[0].plot([lo0, hi0], [lo0, hi0], linestyle="--", color="black", linewidth=1)
+    axes[0].set_xlabel("MSW (clock hour)")
+    axes[0].set_ylabel("MSF (clock hour)")
+    axes[0].set_title("Workday midpoint vs free-day midpoint")
+    axes[0].grid(alpha=0.25)
+
+    axes[1].scatter(ms["MSF_clock"], ms["MSFsc_clock"], s=8, alpha=0.2, color="#d62728", edgecolors="none")
+    lo1 = min(ms["MSF_clock"].min(), ms["MSFsc_clock"].min())
+    hi1 = max(ms["MSF_clock"].max(), ms["MSFsc_clock"].max())
+    axes[1].plot([lo1, hi1], [lo1, hi1], linestyle="--", color="black", linewidth=1)
+    axes[1].set_xlabel("MSF (clock hour)")
+    axes[1].set_ylabel("MSFsc (clock hour)")
+    axes[1].set_title("Free-day midpoint vs sleep-corrected midpoint")
+    axes[1].grid(alpha=0.25)
+
+    fig2.suptitle(
+        "Chronotype midpoint relationships (person-level)\n"
+        "MSFsc correction applied when SD_f > SD_w",
+        y=1.02,
+    )
+    plt.tight_layout()
+    plt.savefig(PLOT_DIR / "chronotype_midpoints_relationships.png", dpi=300, bbox_inches="tight")
+    plt.close(fig2)
+
+
 def run_event_study(
     df: pd.DataFrame,
     transition_name: str,
@@ -374,6 +570,168 @@ def run_event_study(
     return EventStudyResult(coef_df=coef_df, pretrend_df=pretrend_df)
 
 
+def run_low_memory_mean_did(
+    metric_lf: pl.LazyFrame,
+    transition_name: str,
+    metric_name: str,
+    metric_label: str,
+    units: str,
+    daytype_name: str,
+    daytype_filter: bool | None,
+    metric_col: str,
+) -> EventStudyResult:
+    """
+    Low-memory DiD using daily group means:
+    1) mean metric by (dst_state, event_day)
+    2) center each group by pre-period mean (-14..-7)
+    3) DiD_k = centered_DST_k - centered_NoDST_k
+    """
+    lf = metric_lf
+    if daytype_filter is True:
+        lf = lf.filter(pl.col("is_work_day") == 1)
+    elif daytype_filter is False:
+        lf = lf.filter(pl.col("is_work_day") == 0)
+
+    n_rows = int(lf.select(pl.len().alias("n")).collect(engine="streaming").item())
+    if n_rows == 0:
+        return EventStudyResult(pd.DataFrame(), pd.DataFrame())
+
+    people_df = lf.select(pl.col("person_id").n_unique().alias("n_people")).collect(engine="streaming")
+    n_people = int(people_df["n_people"][0]) if people_df.height > 0 else 0
+    dates_df = lf.select(pl.col("sleep_date").n_unique().alias("n_dates")).collect(engine="streaming")
+    n_dates = int(dates_df["n_dates"][0]) if dates_df.height > 0 else 0
+
+    agg = (
+        lf.group_by(["dst_state", "event_day"])
+        .agg([
+            pl.col(metric_col).mean().alias("mean_metric"),
+            pl.col(metric_col).std().alias("sd_metric"),
+            pl.len().alias("n"),
+        ])
+        .with_columns((pl.col("sd_metric") / pl.col("n").cast(pl.Float64).sqrt()).alias("se_metric"))
+        .collect(engine="streaming")
+    )
+    if agg.height == 0:
+        return EventStudyResult(pd.DataFrame(), pd.DataFrame())
+
+    ap = agg.to_pandas()
+
+    # Group baselines over pre window
+    base = (
+        ap[(ap["event_day"] >= BASELINE_START) & (ap["event_day"] <= BASELINE_END)]
+        .groupby("dst_state", as_index=False)["mean_metric"]
+        .mean()
+        .rename(columns={"mean_metric": "baseline_group_mean"})
+    )
+    ap = ap.merge(base, on="dst_state", how="left")
+    ap["centered_mean"] = ap["mean_metric"] - ap["baseline_group_mean"]
+
+    dst = ap[ap["dst_state"] == 1][["event_day", "centered_mean", "se_metric", "n"]].rename(
+        columns={
+            "centered_mean": "centered_dst",
+            "se_metric": "se_dst",
+            "n": "n_dst",
+        }
+    )
+    nodst = ap[ap["dst_state"] == 0][["event_day", "centered_mean", "se_metric", "n"]].rename(
+        columns={
+            "centered_mean": "centered_nodst",
+            "se_metric": "se_nodst",
+            "n": "n_nodst",
+        }
+    )
+
+    wide = dst.merge(nodst, on="event_day", how="inner")
+    if wide.empty:
+        return EventStudyResult(pd.DataFrame(), pd.DataFrame())
+
+    wide = wide[(wide["event_day"] >= -WINDOW) & (wide["event_day"] <= WINDOW)].copy()
+    wide = wide.sort_values("event_day")
+    wide = wide[wide["event_day"] != REFERENCE_K].copy()
+    if wide.empty:
+        return EventStudyResult(pd.DataFrame(), pd.DataFrame())
+
+    wide["beta"] = wide["centered_dst"] - wide["centered_nodst"]
+    wide["se"] = np.sqrt(np.square(wide["se_dst"].astype(float)) + np.square(wide["se_nodst"].astype(float)))
+    wide["ci95_low"] = wide["beta"] - 1.96 * wide["se"]
+    wide["ci95_high"] = wide["beta"] + 1.96 * wide["se"]
+    z = np.divide(wide["beta"].to_numpy(dtype=float), wide["se"].to_numpy(dtype=float), out=np.full(wide.shape[0], np.nan), where=wide["se"].to_numpy(dtype=float) > 0)
+
+    try:
+        from scipy.stats import norm  # type: ignore
+
+        pvals = 2.0 * norm.sf(np.abs(z))
+    except Exception:
+        pvals = _normal_approx_two_sided_p_from_z(z)
+
+    coef_df = pd.DataFrame(
+        {
+            "transition": transition_name,
+            "metric": metric_name,
+            "metric_label": metric_label,
+            "units": units,
+            "day_type": daytype_name,
+            "event_day": wide["event_day"].to_numpy(dtype=int),
+            "beta": wide["beta"].to_numpy(dtype=float),
+            "se": wide["se"].to_numpy(dtype=float),
+            "ci95_low": wide["ci95_low"].to_numpy(dtype=float),
+            "ci95_high": wide["ci95_high"].to_numpy(dtype=float),
+            "p_value": pvals,
+            "n_rows": int(n_rows),
+            "n_people": int(n_people),
+            "n_dates": int(n_dates),
+            "n_clusters_person": np.nan,
+            "model_type": "low_memory_mean_did",
+            "n_dst_day_mean": wide["n_dst"].to_numpy(dtype=float),
+            "n_nodst_day_mean": wide["n_nodst"].to_numpy(dtype=float),
+        }
+    ).sort_values("event_day")
+
+    pre = coef_df[coef_df["event_day"] < 0]
+    if len(pre) >= 2 and np.isfinite(pre["beta"]).all():
+        pre_mean = float(pre["beta"].mean())
+        pre_sd = float(pre["beta"].std(ddof=1))
+        pre_se = pre_sd / np.sqrt(len(pre)) if len(pre) > 1 else np.nan
+        pre_z = pre_mean / pre_se if (np.isfinite(pre_se) and pre_se > 0) else np.nan
+        try:
+            from scipy.stats import norm  # type: ignore
+
+            pre_p = float(2.0 * norm.sf(abs(pre_z))) if np.isfinite(pre_z) else np.nan
+        except Exception:
+            pre_p = float(_normal_approx_two_sided_p_from_z(np.array([pre_z]))[0]) if np.isfinite(pre_z) else np.nan
+        pre_note = "Pretrend check uses mean(pre-event betas) ≈ 0 test (normal approximation)."
+    else:
+        pre_mean = np.nan
+        pre_se = np.nan
+        pre_z = np.nan
+        pre_p = np.nan
+        pre_note = "Insufficient pre-event points for pretrend check."
+
+    pretrend_df = pd.DataFrame(
+        [
+            {
+                "transition": transition_name,
+                "metric": metric_name,
+                "metric_label": metric_label,
+                "units": units,
+                "day_type": daytype_name,
+                "pretrend_wald_stat": np.nan,
+                "pretrend_df": len(pre),
+                "pretrend_p_value": pre_p,
+                "pretrend_z": pre_z,
+                "pretrend_beta_mean": pre_mean,
+                "pretrend_beta_se": pre_se,
+                "pretrend_note": pre_note,
+                "n_rows": int(n_rows),
+                "n_people": int(n_people),
+                "model_type": "low_memory_mean_did",
+            }
+        ]
+    )
+
+    return EventStudyResult(coef_df=coef_df, pretrend_df=pretrend_df)
+
+
 def maybe_downsample_by_person_hash(lf: pl.LazyFrame, target_rows: int) -> pl.LazyFrame:
     """
     Reduce rows by selecting a deterministic subset of persons using hash modulo.
@@ -435,9 +793,10 @@ def plot_metric_panels(coef_all: pd.DataFrame, transition: str, metric_name: str
         ax.grid(alpha=0.25)
 
     axes[0].set_ylabel(f"DiD effect on {metric_label} ({units})")
+    model_desc = "Low-memory mean-based DiD" if ("model_type" in subset.columns and (subset["model_type"] == "low_memory_mean_did").all()) else "TWFE event-study DiD"
     fig.suptitle(
         f"Event-study DiD: {metric_label} around {transition.title()} DST transition\n"
-        f"Model: person FE + calendar-date FE + DST_state × event-day indicators (reference day = -1)",
+        f"Model: {model_desc} (reference day = -1)",
         fontsize=12,
         y=1.02,
     )
@@ -478,9 +837,11 @@ def plot_transition_overview(coef_all: pd.DataFrame, transition: str, metric_met
         ax.set_ylabel("DiD effect")
         ax.grid(alpha=0.25)
 
+    tsub = coef_all[coef_all["transition"] == transition].copy()
+    model_desc = "Low-memory mean-based DiD" if ("model_type" in tsub.columns and not tsub.empty and (tsub["model_type"] == "low_memory_mean_did").all()) else "TWFE event-study DiD"
     fig.suptitle(
         f"DST event-study DiD overview ({transition.title()} transition, all days)\n"
-        f"Person FE + calendar-date FE; baseline-centered on days {BASELINE_START} to {BASELINE_END}",
+        f"{model_desc}; baseline-centered on days {BASELINE_START} to {BASELINE_END}",
         fontsize=13,
         y=1.01,
     )
@@ -507,7 +868,8 @@ def main() -> None:
     elif "is_weekend" in schema_cols:
         weekend_expr = pl.col("is_weekend").cast(pl.Boolean)
     else:
-        weekend_expr = pl.lit(None, dtype=pl.Boolean)
+        # Fallback: derive weekend from date (Saturday/Sunday).
+        weekend_expr = (pl.col("sleep_date").cast(pl.Date).dt.weekday() >= 5)
 
     # Build transition lookup table
     years = range(2009, 2025)
@@ -568,6 +930,16 @@ def main() -> None:
         pl.col("dst_state").is_not_null()
     )
 
+    # Chronotype midpoint figures (independent of DST event-study fitting mode).
+    try:
+        save_chronotype_midpoint_figures(
+            base_lf=base,
+            onset_col=metric_meta["onset"]["col"],
+            duration_col_mins=metric_meta["duration"]["col"],
+        )
+    except Exception as exc:
+        print(f"Skipping chronotype midpoint figures due to error: {exc}")
+
     coef_parts: List[pd.DataFrame] = []
     pretrend_parts: List[pd.DataFrame] = []
     total_rows_used = 0
@@ -609,37 +981,61 @@ def main() -> None:
             elif DST_MAX_MODEL_ROWS > 0:
                 metric_lf = maybe_downsample_by_person_hash(metric_lf, DST_MAX_MODEL_ROWS)
 
-            metric_df = metric_lf.collect(engine="streaming")
-            if metric_df.height == 0:
+            metric_n_rows = int(metric_lf.select(pl.len().alias("n")).collect(engine="streaming").item())
+            if metric_n_rows == 0:
                 continue
 
-            tdf = metric_df.to_pandas()
-            tdf["event_day"] = pd.to_numeric(tdf["event_day"], errors="coerce").astype("Int64")
-            tdf = tdf.dropna(subset=["event_day"]).copy()
-            if tdf.empty:
-                continue
-            tdf["event_day"] = tdf["event_day"].astype(int)
-            tdf["transition"] = transition
+            metric_n_people_df = metric_lf.select(pl.col("person_id").n_unique().alias("n_people")).collect(engine="streaming")
+            metric_n_dates_df = metric_lf.select(pl.col("sleep_date").n_unique().alias("n_dates")).collect(engine="streaming")
 
-            total_rows_used += int(tdf.shape[0])
-            total_people += int(tdf["person_id"].nunique())
-            total_dates += int(tdf["sleep_date"].nunique())
+            total_rows_used += int(metric_n_rows)
+            total_people += int(metric_n_people_df["n_people"][0]) if metric_n_people_df.height > 0 else 0
+            total_dates += int(metric_n_dates_df["n_dates"][0]) if metric_n_dates_df.height > 0 else 0
 
-            for daytype_name, daytype_filter in DAYTYPE_SPECS:
-                res = run_event_study(
-                    df=tdf,
-                    transition_name=transition,
-                    metric_name=metric_name,
-                    metric_col=metric_col,
-                    metric_label=meta["label"],
-                    units=meta["units"],
-                    daytype_name=daytype_name,
-                    daytype_filter=daytype_filter,
-                )
-                if not res.coef_df.empty:
-                    coef_parts.append(res.coef_df)
-                if not res.pretrend_df.empty:
-                    pretrend_parts.append(res.pretrend_df)
+            if DST_LOW_MEMORY_DID:
+                for daytype_name, daytype_filter in DAYTYPE_SPECS:
+                    res = run_low_memory_mean_did(
+                        metric_lf=metric_lf,
+                        transition_name=transition,
+                        metric_name=metric_name,
+                        metric_label=meta["label"],
+                        units=meta["units"],
+                        daytype_name=daytype_name,
+                        daytype_filter=daytype_filter,
+                        metric_col=metric_col,
+                    )
+                    if not res.coef_df.empty:
+                        coef_parts.append(res.coef_df)
+                    if not res.pretrend_df.empty:
+                        pretrend_parts.append(res.pretrend_df)
+            else:
+                metric_df = metric_lf.collect(engine="streaming")
+                if metric_df.height == 0:
+                    continue
+
+                tdf = metric_df.to_pandas()
+                tdf["event_day"] = pd.to_numeric(tdf["event_day"], errors="coerce").astype("Int64")
+                tdf = tdf.dropna(subset=["event_day"]).copy()
+                if tdf.empty:
+                    continue
+                tdf["event_day"] = tdf["event_day"].astype(int)
+                tdf["transition"] = transition
+
+                for daytype_name, daytype_filter in DAYTYPE_SPECS:
+                    res = run_event_study(
+                        df=tdf,
+                        transition_name=transition,
+                        metric_name=metric_name,
+                        metric_col=metric_col,
+                        metric_label=meta["label"],
+                        units=meta["units"],
+                        daytype_name=daytype_name,
+                        daytype_filter=daytype_filter,
+                    )
+                    if not res.coef_df.empty:
+                        coef_parts.append(res.coef_df)
+                    if not res.pretrend_df.empty:
+                        pretrend_parts.append(res.pretrend_df)
 
     if coef_parts:
         coef_all = pd.concat(coef_parts, ignore_index=True)
@@ -681,6 +1077,7 @@ def main() -> None:
     run_meta = {
         "input_parquet": str(INPUT_PARQUET),
         "test_mode": TEST_MODE,
+        "dst_low_memory_did": DST_LOW_MEMORY_DID,
         "dst_max_model_rows": DST_MAX_MODEL_ROWS,
         "window_days": WINDOW,
         "baseline_window_start": BASELINE_START,

@@ -31,6 +31,7 @@ input_path <- config$data_paths[[dataset_type]]
 subset_size <- config$subset_size
 balance_vars <- config$subset_balance_vars
 subset_seed <- config$subset_seed %||% 42
+subset_include_other_unknown_sex <- config$subset_include_other_unknown_sex %||% FALSE
 
 default_no_dst_zip3 <- unique(c(
   sprintf("%03d", 850:865),
@@ -160,6 +161,17 @@ person_df <- df %>%
       TRUE ~ 1
     )
   )
+
+if (!isTRUE(subset_include_other_unknown_sex)) {
+  n_before <- nrow(person_df)
+  person_df <- person_df %>%
+    filter(sex_binary %in% c("Female", "Male"))
+  n_removed <- n_before - nrow(person_df)
+  cat(sprintf(
+    "Filtered out %d participants with sex_binary == 'Other/Unknown'.\n",
+    n_removed
+  ))
+}
 
 normalize_balance_var <- function(v) {
   if (v %in% c("sex", "sex_concept", "sex_binary")) return("sex_binary")

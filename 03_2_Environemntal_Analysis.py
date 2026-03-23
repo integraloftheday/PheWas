@@ -61,6 +61,7 @@ ENV_CANDIDATES = [
 MIN_GROUP_ROWS = 80
 SCATTER_SAMPLE_N = 120_000
 BINS = 16
+MAX_ROWS_PER_PAIR = 400_000
 
 sns.set_style("whitegrid")
 
@@ -252,8 +253,21 @@ with (TABLE_DIR / "00_environmental_diagnostics_notes.txt").open("w", encoding="
 # Merge sleep with environmental data
 # -----------------------------
 print("Merging sleep + environmental data...")
+sleep_base_lf = sleep_lf.select(
+    [
+        "person_id",
+        "sleep_date",
+        "employment_status",
+        "daily_midpoint_hour",
+        "daily_start_hour",
+        "daily_end_hour",
+        "daily_duration_mins",
+        "zip3" if "zip3" in sleep_cols else "zip_code",
+    ]
+)
+
 sleep_env_lf = (
-    sleep_lf
+    sleep_base_lf
     .with_columns(
         [
             zip_expr.alias("ZIP3"),
@@ -277,15 +291,8 @@ coverage = sleep_env_lf.select(
         pl.col("PhotoPeriod").is_not_null().mean().alias("frac_photo_matched"),
         pl.col("ZIP3").is_not_null().mean().alias("frac_zip3_valid"),
     ]
-).collect().to_pandas()
+).collect(engine="streaming").to_pandas()
 coverage.to_csv(TABLE_DIR / "01_sleep_environment_coverage.csv", index=False)
-
-sleep_env = sleep_env_lf.collect()
-sleep_env.write_parquet(OUTPUT_DIR / "sleep_environment_merged.parquet")
-
-env_vars = [c for c in ENV_CANDIDATES if c in sleep_env.columns]
-if not env_vars:
-    raise RuntimeError("No environmental variables available after merge.")
 
 # If key matching is near-zero (e.g., synthetic ZIP strings), stop after diagnostics.
 if float(coverage.loc[0, "frac_weather_matched"]) < 0.01 and float(coverage.loc[0, "frac_photo_matched"]) < 0.01:
@@ -294,7 +301,44 @@ if float(coverage.loc[0, "frac_weather_matched"]) < 0.01 and float(coverage.loc[
         "(synthetic/non-numeric ZIPs will prevent matches). Diagnostics were written to results/environmental_analysis/tables/."
     )
 
-pdf = sleep_env.to_pandas()
+# Write merged table in streaming mode (lower memory than collect->write).
+MERGED_PATH = OUTPUT_DIR / "sleep_environment_merged.parquet"
+sleep_env_lf.sink_parquet(MERGED_PATH)
+
+# Re-scan merged table and process one variable pair at a time.
+merged_lf = pl.scan_parquet(MERGED_PATH)
+merged_cols = set(merged_lf.collect_schema().names())
+env_vars = [c for c in ENV_CANDIDATES if c in merged_cols]
+if not env_vars:
+    raise RuntimeError("No environmental variables available after merge.")
+
+emp_counts_df = (
+    merged_lf
+    .select("employment_status")
+    .group_by("employment_status")
+    .agg(pl.len().alias("n"))
+    .collect(engine="streaming")
+    .to_pandas()
+)
+emp_counts_df = emp_counts_df.sort_values("n", ascending=False)
+employment_groups = emp_counts_df.loc[emp_counts_df["n"] >= MIN_GROUP_ROWS, "employment_status"].tolist()
+if not employment_groups:
+    employment_groups = emp_counts_df["employment_status"].head(6).tolist()
+
+
+def collect_pair_df(outcome: str, env: str) -> tuple[pd.DataFrame, int]:
+    pair_lf = merged_lf.select(["person_id", "employment_status", outcome, env]).drop_nulls()
+    n_full = int(pair_lf.select(pl.len().alias("n")).collect(engine="streaming").item())
+
+    if n_full == 0:
+        return pd.DataFrame(columns=[outcome, env, "employment_status"]), 0
+
+    if n_full > MAX_ROWS_PER_PAIR:
+        mod = int(np.ceil(n_full / MAX_ROWS_PER_PAIR))
+        pair_lf = pair_lf.filter((pl.col("person_id").cast(pl.Utf8).hash(seed=2026) % mod) == 0)
+
+    pdf = pair_lf.select([outcome, env, "employment_status"]).collect(engine="streaming").to_pandas()
+    return pdf, n_full
 
 # -----------------------------
 # Plotting + GAM
@@ -303,18 +347,12 @@ print("Generating plots and GAM models...")
 
 summary_rows: List[Dict[str, object]] = []
 
-# Top employment groups for cleaner panels
-emp_counts = pdf["employment_status"].value_counts(dropna=False)
-employment_groups = emp_counts[emp_counts >= MIN_GROUP_ROWS].index.tolist()
-if not employment_groups:
-    employment_groups = emp_counts.index.tolist()[:6]
-
 for outcome, y_label in OUTCOMES.items():
-    if outcome not in pdf.columns:
+    if outcome not in merged_cols:
         continue
 
     for env in env_vars:
-        d = pdf[[outcome, env, "employment_status"]].dropna().copy()
+        d, n_full = collect_pair_df(outcome, env)
         if d.empty:
             continue
 
@@ -405,7 +443,7 @@ for outcome, y_label in OUTCOMES.items():
                     "scope": "overall",
                     "outcome": outcome,
                     "environment_var": env,
-                    "n": int(len(d)),
+                    "n": int(n_full),
                     "edof": float(stats.get("edof", np.nan)),
                     "AIC": float(stats.get("AIC", np.nan)),
                     "GCV": float(stats.get("GCV", np.nan)),

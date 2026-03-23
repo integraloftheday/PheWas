@@ -499,7 +499,7 @@ def plot_dst_zip3_map(lf):
 
     cmap = plt.cm.viridis.copy()
     cmap.set_under("#440154")
-    norm = mcolors.Normalize(vmin=vmin, vmax=vmax, clip=False)
+    norm = mcolors.LogNorm(vmin=vmin, vmax=vmax, clip=False)
 
     def draw_count_region(ax, region_df, xlim, ylim):
         region_df.plot(ax=ax, color="#f0f0f0", edgecolor="#d0d0d0", linewidth=0.2, aspect="auto")
@@ -545,11 +545,91 @@ def plot_dst_zip3_map(lf):
     sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
     sm.set_array([])
     cb = fig2.colorbar(sm, cax=cax, orientation="horizontal")
-    cb.set_label("Unique participants per ZIP3 (all values < 20 use same color)")
+    cb.set_label("Unique participants per ZIP3 (log scale; all values < 20 use same color)")
 
     fig2.suptitle("Participant Count by ZIP3 (Continental US + Hawaii)", y=0.98, fontsize=14)
     plt.savefig(OUTPUT_DIR / "11_zip3_participant_count_map.png", dpi=300)
     plt.close(fig2)
+
+    # --- Bubble map: participant count at ZIP3 representative points ---
+    fig3 = plt.figure(figsize=(14, 9))
+    ax3_main = fig3.add_axes([0.04, 0.12, 0.76, 0.82])
+    ax3_hi = fig3.add_axes([0.78, 0.18, 0.2, 0.24])
+    cax3 = fig3.add_axes([0.12, 0.05, 0.58, 0.03])
+
+    def draw_bubble_region(ax, region_df, xlim, ylim):
+        region_df.plot(ax=ax, color="#f0f0f0", edgecolor="#d0d0d0", linewidth=0.2, aspect="auto")
+
+        points_df = region_df[region_df["n_people"] > 0].copy()
+        if not points_df.empty:
+            points_df["n_people_clipped"] = points_df["n_people"].clip(lower=20)
+            rep_points = points_df.geometry.representative_point()
+            points_df["lon"] = rep_points.x
+            points_df["lat"] = rep_points.y
+
+            scale = np.log10(points_df["n_people_clipped"]) - np.log10(vmin)
+            denom = max(np.log10(vmax) - np.log10(vmin), 1e-6)
+            scale = scale / denom
+            sizes = 20 + 220 * scale
+
+            ax.scatter(
+                points_df["lon"],
+                points_df["lat"],
+                c=points_df["n_people_clipped"],
+                s=sizes,
+                cmap=cmap,
+                norm=norm,
+                alpha=0.8,
+                edgecolors="#1f1f1f",
+                linewidths=0.25,
+            )
+
+        ax.set_xlim(*xlim)
+        ax.set_ylim(*ylim)
+        ax.set_axis_off()
+        ax.set_aspect("auto")
+
+    draw_bubble_region(ax3_main, contig_count, xlim=(-125, -66), ylim=(24, 50))
+    draw_bubble_region(ax3_hi, hawaii_count, xlim=(-161, -154), ylim=(18, 23))
+    ax3_hi.set_title("Hawaii", fontsize=10)
+
+    if count_df.empty:
+        ax3_main.text(
+            0.5,
+            0.5,
+            "No observed ZIP3 with participants\nin continental US + Hawaii",
+            ha="center",
+            va="center",
+            transform=ax3_main.transAxes,
+            fontsize=11,
+            color="#333333",
+            bbox=dict(facecolor="white", alpha=0.85, edgecolor="#999999"),
+        )
+
+    sm3 = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+    sm3.set_array([])
+    cb3 = fig3.colorbar(sm3, cax=cax3, orientation="horizontal")
+    cb3.set_label("Unique participants per ZIP3 (log scale)")
+
+    # Bubble size legend
+    size_breaks = [20, 50, 100, 200, 500]
+    size_breaks = [v for v in size_breaks if v <= vmax]
+    if not size_breaks:
+        size_breaks = [20]
+    legend_sizes = []
+    for v in size_breaks:
+        v_clip = max(v, vmin)
+        s = 20 + 220 * ((np.log10(v_clip) - np.log10(vmin)) / max(np.log10(vmax) - np.log10(vmin), 1e-6))
+        legend_sizes.append(s)
+    size_handles = [
+        Line2D([0], [0], marker='o', color='none', markerfacecolor='#666666', markeredgecolor='#1f1f1f', markersize=np.sqrt(s))
+        for s in legend_sizes
+    ]
+    ax3_main.legend(size_handles, [str(v) for v in size_breaks], title="Participants", loc="lower left", frameon=True)
+
+    fig3.suptitle("Participant Count Bubble Map by ZIP3 (Continental US + Hawaii)", y=0.98, fontsize=14)
+    plt.savefig(OUTPUT_DIR / "12_zip3_participant_bubble_map.png", dpi=300)
+    plt.close(fig3)
 
 plot_dst_zip3_map(lf)
 

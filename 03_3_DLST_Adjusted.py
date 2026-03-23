@@ -27,6 +27,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Tuple
+import os
 
 import numpy as np
 import pandas as pd
@@ -51,8 +52,12 @@ REFERENCE_K = -1
 PLOT_WINDOW = 7
 
 # Set TEST_MODE=1 for quick development runs.
-TEST_MODE = str(__import__("os").getenv("TEST_MODE", "0")).strip() == "1"
+TEST_MODE = str(os.getenv("TEST_MODE", "0")).strip() == "1"
 TEST_SAMPLE_N = 250_000
+
+# Optional memory guard for model fitting. If >0, downsample persons when needed.
+# Example: DST_MAX_MODEL_ROWS=2000000
+DST_MAX_MODEL_ROWS = int(str(os.getenv("DST_MAX_MODEL_ROWS", "2000000")).strip() or "0")
 
 # Arizona (most regions), Hawaii, and territories used as non-DST controls.
 NO_DST_ZIP3 = [f"{i:03d}" for i in range(850, 866)] + ["967", "968", "006", "007", "008", "009", "969"]
@@ -369,6 +374,23 @@ def run_event_study(
     return EventStudyResult(coef_df=coef_df, pretrend_df=pretrend_df)
 
 
+def maybe_downsample_by_person_hash(lf: pl.LazyFrame, target_rows: int) -> pl.LazyFrame:
+    """
+    Reduce rows by selecting a deterministic subset of persons using hash modulo.
+    Keeps full within-person series for selected persons (better for panel structure).
+    """
+    if target_rows <= 0:
+        return lf
+
+    n_rows = int(lf.select(pl.len().alias("n")).collect(engine="streaming").item())
+    if n_rows <= target_rows:
+        return lf
+
+    mod = int(np.ceil(n_rows / target_rows))
+    print(f"Applying person-hash downsampling: rows={n_rows:,} -> target≈{target_rows:,} (mod={mod})")
+    return lf.filter((pl.col("person_id").cast(pl.Utf8).hash(seed=2026) % mod) == 0)
+
+
 # -----------------------------
 # Plotting
 # -----------------------------
@@ -546,38 +568,63 @@ def main() -> None:
         pl.col("dst_state").is_not_null()
     )
 
-    if TEST_MODE:
-        print(f"TEST_MODE=1 active: sampling up to {TEST_SAMPLE_N:,} rows for quick run.")
-        base_df = base.collect(engine="streaming")
-        if base_df.height > TEST_SAMPLE_N:
-            base_df = base_df.sample(n=TEST_SAMPLE_N, seed=42)
-        pdf_all = base_df.to_pandas()
-    else:
-        pdf_all = base.collect(engine="streaming").to_pandas()
-
-    if pdf_all.empty:
-        raise RuntimeError("No rows available after preprocessing.")
-
-    # Build two transition-specific long frames
-    spring_df = pdf_all.copy()
-    spring_df["transition"] = "spring"
-    spring_df["event_day"] = pd.to_numeric(spring_df["days_to_spring"], errors="coerce")
-
-    fall_df = pdf_all.copy()
-    fall_df["transition"] = "fall"
-    fall_df["event_day"] = pd.to_numeric(fall_df["days_to_fall"], errors="coerce")
-
-    all_transition_df = pd.concat([spring_df, fall_df], ignore_index=True)
-    all_transition_df = all_transition_df.dropna(subset=["event_day"]) 
-    all_transition_df["event_day"] = all_transition_df["event_day"].astype(int)
-
     coef_parts: List[pd.DataFrame] = []
     pretrend_parts: List[pd.DataFrame] = []
+    total_rows_used = 0
+    total_people = 0
+    total_dates = 0
 
     for transition in ["spring", "fall"]:
-        tdf = all_transition_df[all_transition_df["transition"] == transition].copy()
+        transition_day_col = "days_to_spring" if transition == "spring" else "days_to_fall"
+
         for metric_name, meta in metric_meta.items():
             metric_col = meta["col"]
+
+            metric_lf = (
+                base
+                .with_columns(pl.col(transition_day_col).cast(pl.Int32).alias("event_day"))
+                .filter(pl.col("event_day").is_between(-WINDOW, WINDOW))
+                .select([
+                    "person_id",
+                    "sleep_date",
+                    "year",
+                    "dst_state",
+                    "is_work_day",
+                    "event_day",
+                    metric_col,
+                ])
+                .drop_nulls([
+                    "person_id",
+                    "sleep_date",
+                    "year",
+                    "dst_state",
+                    "is_work_day",
+                    "event_day",
+                    metric_col,
+                ])
+            )
+
+            if TEST_MODE:
+                metric_lf = maybe_downsample_by_person_hash(metric_lf, TEST_SAMPLE_N)
+            elif DST_MAX_MODEL_ROWS > 0:
+                metric_lf = maybe_downsample_by_person_hash(metric_lf, DST_MAX_MODEL_ROWS)
+
+            metric_df = metric_lf.collect(engine="streaming")
+            if metric_df.height == 0:
+                continue
+
+            tdf = metric_df.to_pandas()
+            tdf["event_day"] = pd.to_numeric(tdf["event_day"], errors="coerce").astype("Int64")
+            tdf = tdf.dropna(subset=["event_day"]).copy()
+            if tdf.empty:
+                continue
+            tdf["event_day"] = tdf["event_day"].astype(int)
+            tdf["transition"] = transition
+
+            total_rows_used += int(tdf.shape[0])
+            total_people += int(tdf["person_id"].nunique())
+            total_dates += int(tdf["sleep_date"].nunique())
+
             for daytype_name, daytype_filter in DAYTYPE_SPECS:
                 res = run_event_study(
                     df=tdf,
@@ -634,14 +681,15 @@ def main() -> None:
     run_meta = {
         "input_parquet": str(INPUT_PARQUET),
         "test_mode": TEST_MODE,
+        "dst_max_model_rows": DST_MAX_MODEL_ROWS,
         "window_days": WINDOW,
         "baseline_window_start": BASELINE_START,
         "baseline_window_end": BASELINE_END,
         "reference_day": REFERENCE_K,
         "plot_window": PLOT_WINDOW,
-        "n_rows_input_after_prep": int(all_transition_df.shape[0]),
-        "n_people": int(all_transition_df["person_id"].nunique()),
-        "n_dates": int(all_transition_df["sleep_date"].nunique()),
+        "n_rows_used_across_transition_metric_runs": int(total_rows_used),
+        "n_people_summed_across_runs": int(total_people),
+        "n_dates_summed_across_runs": int(total_dates),
     }
     pd.DataFrame([run_meta]).to_csv(TABLE_DIR / "00_run_metadata.csv", index=False)
 

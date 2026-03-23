@@ -38,8 +38,18 @@ DST_DATES = {year: get_dst_dates(year) for year in YEARS}
 print(f"Loading {INPUT_PARQUET}...")
 lf = pl.scan_parquet(INPUT_PARQUET)
 
+schema_cols = set(lf.collect_schema().names())
+if "zip3" in schema_cols:
+    zip3_expr = pl.col("zip3").cast(pl.Utf8).str.slice(0, 3)
+elif "zip_code" in schema_cols:
+    zip3_expr = pl.col("zip_code").cast(pl.Utf8).str.slice(0, 3)
+else:
+    raise ValueError(
+        "Input parquet must contain either 'zip3' or 'zip_code' to derive DST grouping."
+    )
+
 lf = lf.with_columns([
-    pl.col("zip_code").cast(pl.Utf8).str.slice(0, 3).alias("zip3")
+    zip3_expr.alias("zip3")
 ])
 
 # For mock data/small samples, we ensure at least some are NoDST for visualization.

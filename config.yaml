@@ -12,9 +12,12 @@ data_paths:
 # Subsetting for fast testing
 use_subset: true
 subset_size: 500
+subset_seed: 42
 subset_balance_vars:
-  - "sex_concept"
-  - "employment_status"
+  - "sex"
+  - "age_bin"
+  - "race"
+  - "dst_observed"
 
 # Output configuration
 # A new folder will be created inside this base directory (e.g., results/run_YYYYMMDD_HHMMSS)

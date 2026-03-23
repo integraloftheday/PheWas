@@ -96,6 +96,7 @@ person_df <- df %>%
     .groups = "drop"
   ) %>%
   mutate(
+    age_raw = if_else(is.nan(age_raw), as.numeric(NA), age_raw),
     sex_binary = case_when(
       str_detect(str_to_lower(sex_raw), "female|woman|girl") ~ "Female",
       str_detect(str_to_lower(sex_raw), "male|man|boy") ~ "Male",

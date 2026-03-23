@@ -130,6 +130,53 @@ normalize_outcome_variant <- function(x) {
   sx
 }
 
+robust_limits <- function(
+  x,
+  lower_q = 0.01,
+  upper_q = 0.99,
+  pad_frac = 0.05,
+  hard_min = NA_real_,
+  hard_max = NA_real_
+) {
+  vals <- as.numeric(x)
+  vals <- vals[is.finite(vals)]
+  if (length(vals) == 0) {
+    return(c(ifelse(is.finite(hard_min), hard_min, 0), ifelse(is.finite(hard_max), hard_max, 1)))
+  }
+
+  q <- suppressWarnings(stats::quantile(vals, probs = c(lower_q, upper_q), na.rm = TRUE, names = FALSE))
+  lo <- q[[1]]
+  hi <- q[[2]]
+
+  if (!is.finite(lo) || !is.finite(hi)) {
+    lo <- min(vals, na.rm = TRUE)
+    hi <- max(vals, na.rm = TRUE)
+  }
+
+  if (!is.finite(lo) || !is.finite(hi)) {
+    lo <- 0
+    hi <- 1
+  }
+
+  if (lo == hi) {
+    lo <- lo - 0.5
+    hi <- hi + 0.5
+  }
+
+  pad <- (hi - lo) * pad_frac
+  lims <- c(lo - pad, hi + pad)
+
+  if (is.finite(hard_min)) lims[[1]] <- max(lims[[1]], hard_min)
+  if (is.finite(hard_max)) lims[[2]] <- min(lims[[2]], hard_max)
+
+  if (!is.finite(lims[[1]]) || !is.finite(lims[[2]]) || lims[[1]] >= lims[[2]]) {
+    lims <- c(min(vals, na.rm = TRUE), max(vals, na.rm = TRUE))
+    if (lims[[1]] == lims[[2]]) lims <- lims + c(-0.5, 0.5)
+  }
+
+  lims
+}
+
 safe_read_csv <- function(names, required = FALSE) {
   names <- as.character(names)
   candidates <- file.path(PRECOMP_TABLE_DIR, names)
@@ -658,16 +705,25 @@ if (nrow(derived_age_compare) > 0) {
 
       write_table(derived_age_duration, "derived_vs_direct_duration_age_plot_data.csv")
 
+      duration_ylim <- robust_limits(
+        derived_age_duration$estimate,
+        lower_q = 0.01,
+        upper_q = 0.99,
+        hard_min = 2,
+        hard_max = 14
+      )
+
       p_derived_age_duration <- ggplot(
         derived_age_duration,
         aes(x = age_at_sleep, y = estimate, color = series, group = interaction(series, batch, facet_key, drop = TRUE))
       ) +
         geom_line(linewidth = 1.0) +
         facet_grid(batch ~ facet_key, scales = "free_y") +
+        coord_cartesian(ylim = duration_ylim) +
         scale_y_continuous(labels = format_duration_axis) +
         labs(
           title = "Duration: Derived vs Direct Models",
-          subtitle = "Age-grid comparison including midpoint-adjusted sensitivity model",
+          subtitle = "Age-grid comparison including midpoint-adjusted sensitivity model (y-axis robustly clipped)",
           x = "Age (years)",
           y = "Predicted Sleep Duration",
           color = NULL
@@ -720,16 +776,25 @@ if (nrow(derived_age_compare) > 0) {
 
       write_table(derived_age_midpoint, "derived_vs_direct_midpoint_age_plot_data.csv")
 
+      midpoint_ylim <- robust_limits(
+        derived_age_midpoint$estimate,
+        lower_q = 0.01,
+        upper_q = 0.99,
+        hard_min = 12,
+        hard_max = 36
+      )
+
       p_derived_age_midpoint <- ggplot(
         derived_age_midpoint,
         aes(x = age_at_sleep, y = estimate, color = series, group = interaction(series, batch, facet_key, drop = TRUE))
       ) +
         geom_line(linewidth = 1.0) +
         facet_grid(batch ~ facet_key, scales = "free_y") +
+        coord_cartesian(ylim = midpoint_ylim) +
         scale_y_continuous(labels = format_time_axis) +
         labs(
           title = "Midpoint: Derived vs Direct Models",
-          subtitle = "Age-grid comparison including duration-adjusted sensitivity model",
+          subtitle = "Age-grid comparison including duration-adjusted sensitivity model (y-axis robustly clipped)",
           x = "Age (years)",
           y = "Predicted Clock Time",
           color = NULL
@@ -776,13 +841,22 @@ if (nrow(derived_main_compare) > 0 && require_cols(derived_main_compare, c("batc
 
     write_table(duration_main_diff, "derived_vs_direct_duration_main_grid_plot_data.csv")
 
+    duration_diff_xlim <- robust_limits(
+      duration_main_diff$difference,
+      lower_q = 0.01,
+      upper_q = 0.99,
+      hard_min = -4,
+      hard_max = 4
+    )
+
     p_main_duration_diff <- ggplot(duration_main_diff, aes(x = difference, y = reorder(strata, difference), color = series)) +
       geom_vline(xintercept = 0, linetype = "dashed", color = "gray60") +
       geom_point(size = 2.3) +
       facet_wrap(~ batch, ncol = 1, scales = "free_y") +
+      coord_cartesian(xlim = duration_diff_xlim) +
       labs(
         title = "Duration Models minus Derived Duration (Main Grid)",
-        x = "Hours (Model - Derived)",
+        x = "Hours (Model - Derived; robustly clipped)",
         y = NULL,
         color = NULL
       ) +
@@ -810,14 +884,23 @@ if (nrow(derived_main_compare) > 0 && require_cols(derived_main_compare, c("batc
 
     write_table(midpoint_main_diff, "derived_vs_direct_midpoint_main_grid_plot_data.csv")
 
+    midpoint_diff_xlim <- robust_limits(
+      midpoint_main_diff$difference,
+      lower_q = 0.01,
+      upper_q = 0.99,
+      hard_min = -4,
+      hard_max = 4
+    )
+
     p_main_midpoint_diff <- ggplot(midpoint_main_diff, aes(x = difference, y = reorder(strata, difference), color = series)) +
       geom_vline(xintercept = 0, linetype = "dashed", color = "gray60") +
       geom_point(size = 2.3) +
       facet_wrap(~ batch, ncol = 1, scales = "free_y") +
+      coord_cartesian(xlim = midpoint_diff_xlim) +
       scale_x_continuous(labels = function(x) sprintf("%.2fh", x)) +
       labs(
         title = "Midpoint Models minus Derived Midpoint (Main Grid)",
-        x = "Hours (Model - Derived)",
+        x = "Hours (Model - Derived; robustly clipped)",
         y = NULL,
         color = NULL
       ) +
@@ -827,6 +910,94 @@ if (nrow(derived_main_compare) > 0 && require_cols(derived_main_compare, c("batc
   }
 
   write_table(derived_main_compare, "derived_vs_direct_main_grid.csv")
+
+  if (require_cols(derived_main_compare, c("batch", "derived_midpoint_linear"), "derived_main_compare_duration_vs_midpoint")) {
+    duration_y_cols <- intersect(c("duration_direct_estimate", "duration_adjusted_estimate"), names(derived_main_compare))
+    if (length(duration_y_cols) > 0) {
+      duration_vs_midpoint <- derived_main_compare %>%
+        select(any_of(c("batch", "derived_midpoint_linear", duration_y_cols))) %>%
+        pivot_longer(cols = all_of(duration_y_cols), names_to = "series", values_to = "duration_estimate") %>%
+        filter(!is.na(derived_midpoint_linear), !is.na(duration_estimate)) %>%
+        mutate(
+          series = recode(
+            series,
+            duration_direct_estimate = "Direct Duration Model",
+            duration_adjusted_estimate = "Duration Model Adjusted for Midpoint"
+          ),
+          batch = factor(batch, levels = c("base", "dst"))
+        )
+
+      write_table(duration_vs_midpoint, "duration_vs_midpoint_plot_data.csv")
+
+      x_mid_lims <- robust_limits(duration_vs_midpoint$derived_midpoint_linear, hard_min = 12, hard_max = 36)
+      y_dur_lims <- robust_limits(duration_vs_midpoint$duration_estimate, hard_min = 2, hard_max = 14)
+
+      p_duration_vs_midpoint <- ggplot(
+        duration_vs_midpoint,
+        aes(x = derived_midpoint_linear, y = duration_estimate, color = series)
+      ) +
+        geom_point(alpha = 0.30, size = 1.2) +
+        geom_smooth(method = "loess", se = FALSE, linewidth = 1.1) +
+        facet_wrap(~ batch, ncol = 1) +
+        coord_cartesian(xlim = x_mid_lims, ylim = y_dur_lims) +
+        scale_x_continuous(labels = format_time_axis) +
+        scale_y_continuous(labels = format_duration_axis) +
+        labs(
+          title = "Duration ~ Midpoint",
+          subtitle = "Main-grid predictions from direct and midpoint-adjusted duration models (robustly clipped axes)",
+          x = "Midpoint (derived from onset+offset)",
+          y = "Predicted Sleep Duration",
+          color = NULL
+        ) +
+        theme_classic(base_size = 12)
+
+      save_plot(p_duration_vs_midpoint, "duration_vs_midpoint.png", width = 12, height = 8)
+    }
+  }
+
+  if (require_cols(derived_main_compare, c("batch", "derived_duration_hours"), "derived_main_compare_midpoint_vs_duration")) {
+    midpoint_y_cols <- intersect(c("midpoint_direct_estimate", "midpoint_adjusted_estimate"), names(derived_main_compare))
+    if (length(midpoint_y_cols) > 0) {
+      midpoint_vs_duration <- derived_main_compare %>%
+        select(any_of(c("batch", "derived_duration_hours", midpoint_y_cols))) %>%
+        pivot_longer(cols = all_of(midpoint_y_cols), names_to = "series", values_to = "midpoint_estimate") %>%
+        filter(!is.na(derived_duration_hours), !is.na(midpoint_estimate)) %>%
+        mutate(
+          series = recode(
+            series,
+            midpoint_direct_estimate = "Direct Midpoint Model",
+            midpoint_adjusted_estimate = "Midpoint Model Adjusted for Duration"
+          ),
+          batch = factor(batch, levels = c("base", "dst"))
+        )
+
+      write_table(midpoint_vs_duration, "midpoint_vs_duration_plot_data.csv")
+
+      x_dur_lims <- robust_limits(midpoint_vs_duration$derived_duration_hours, hard_min = 2, hard_max = 14)
+      y_mid_lims <- robust_limits(midpoint_vs_duration$midpoint_estimate, hard_min = 12, hard_max = 36)
+
+      p_midpoint_vs_duration <- ggplot(
+        midpoint_vs_duration,
+        aes(x = derived_duration_hours, y = midpoint_estimate, color = series)
+      ) +
+        geom_point(alpha = 0.30, size = 1.2) +
+        geom_smooth(method = "loess", se = FALSE, linewidth = 1.1) +
+        facet_wrap(~ batch, ncol = 1) +
+        coord_cartesian(xlim = x_dur_lims, ylim = y_mid_lims) +
+        scale_x_continuous(labels = format_duration_axis) +
+        scale_y_continuous(labels = format_time_axis) +
+        labs(
+          title = "Midpoint ~ Duration",
+          subtitle = "Main-grid predictions from direct and duration-adjusted midpoint models (robustly clipped axes)",
+          x = "Duration (derived from onset+offset)",
+          y = "Predicted Midpoint",
+          color = NULL
+        ) +
+        theme_classic(base_size = 12)
+
+      save_plot(p_midpoint_vs_duration, "midpoint_vs_duration.png", width = 12, height = 8)
+    }
+  }
 }
 
 if (nrow(derived_main) > 0) write_table(derived_main, "derived_midpoint_duration_main_grid.csv")

@@ -195,15 +195,19 @@ print("Processing and save complete.")
 # In[ ]:
 
 
-df.show_graph()
-# This is pretty cool
+try:
+    df.show_graph()
+    # This is pretty cool
+except Exception as e:
+    print(f"Skipping graph visualization: {e}")
 
 
 # In[ ]:
 
 
 q = pl.scan_parquet("processed_data/ready_for_analysis.parquet")
-print(q.columns)
+q_schema_names = q.collect_schema().names()
+print(q_schema_names)
 
 
 # ## Make subset for LMM modeling
@@ -214,6 +218,21 @@ print(q.columns)
 import polars as pl
 
 q = pl.scan_parquet("processed_data/ready_for_analysis.parquet")
+q_schema_names = q.collect_schema().names()
+
+if "zip3" in q_schema_names:
+    zip_source_expr = pl.col("zip3")
+elif "zip_code" in q_schema_names:
+    zip_source_expr = pl.col("zip_code")
+else:
+    raise ValueError("ready_for_analysis.parquet must contain either 'zip3' or 'zip_code'.")
+
+if "daily_sleep_window_mins" in q_schema_names:
+    sleep_window_expr = pl.col("daily_sleep_window_mins")
+elif "daily_duration_mins" in q_schema_names:
+    sleep_window_expr = pl.col("daily_duration_mins")
+else:
+    raise ValueError("ready_for_analysis.parquet must contain either 'daily_sleep_window_mins' or 'daily_duration_mins'.")
 
 # 2. Process (Filter, Clean, Linearize & Select)
 df_clean = (
@@ -226,20 +245,20 @@ df_clean = (
         person_id = pl.col("person_id").cast(pl.String).cast(pl.Categorical),
         sex_concept = pl.col("sex_concept").cast(pl.String).cast(pl.Categorical),
         zip3 = (
-            pl.when(pl.col("zip_code").cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() == 0)
+            pl.when(zip_source_expr.cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() == 0)
             .then(None)
             # Already a ZIP3 (or ZIP3 with dropped leading zeros): keep as 3-digit
-            .when(pl.col("zip_code").cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() <= 3)
+            .when(zip_source_expr.cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() <= 3)
             .then(
-                pl.col("zip_code")
+                zip_source_expr
                 .cast(pl.Utf8)
                 .str.replace_all(r"[^0-9]", "")
                 .str.zfill(3)
             )
             # Possible ZIP5 with one dropped leading zero (length 4): restore then take prefix
-            .when(pl.col("zip_code").cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() == 4)
+            .when(zip_source_expr.cast(pl.Utf8).str.replace_all(r"[^0-9]", "").str.len_chars() == 4)
             .then(
-                pl.col("zip_code")
+                zip_source_expr
                 .cast(pl.Utf8)
                 .str.replace_all(r"[^0-9]", "")
                 .str.zfill(5)
@@ -247,7 +266,7 @@ df_clean = (
             )
             # ZIP5 or longer: take first 3 digits
             .otherwise(
-                pl.col("zip_code")
+                zip_source_expr
                 .cast(pl.Utf8)
                 .str.replace_all(r"[^0-9]", "")
                 .str.slice(0, 3)
@@ -273,7 +292,8 @@ df_clean = (
         # 3. Offset
         offset_linear = pl.when(pl.col("daily_end_hour") < 12)
                   .then(pl.col("daily_end_hour") + 24)
-                          .otherwise(pl.col("daily_end_hour"))
+                  .otherwise(pl.col("daily_end_hour")),
+        daily_sleep_window_mins = sleep_window_expr
     )
     .select([
         "midpoint_sin", "midpoint_cos", 

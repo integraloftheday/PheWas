@@ -57,6 +57,9 @@ print(
     f"onset={ONSET_COL}, midpoint={MIDPOINT_COL}, offset={OFFSET_COL}"
 )
 
+TIME_AXIS_LABEL = "Sleep timing (hours; linearized/noon-to-noon scale when applicable)"
+DURATION_AXIS_LABEL = "Sleep duration (hours/night)"
+
 lf = lf.with_columns([
     zip3_expr.alias("zip3")
 ])
@@ -109,7 +112,7 @@ weekly_lf = agg_with_se(lf, ["dst_group", "day_of_year"],
                         [MIDPOINT_COL, ONSET_COL, OFFSET_COL, "daily_duration_hours"])
 weekly_df = weekly_lf.collect().to_pandas().sort_values(["dst_group", "day_of_year"])
 
-def plot_weekly(df, y_base, title, filename):
+def plot_weekly(df, y_base, title, filename, y_label):
     plt.figure(figsize=(12, 7))
     colors = {"DST": "#e41a1c", "NoDST": "#377eb8"}
     
@@ -128,18 +131,42 @@ def plot_weekly(df, y_base, title, filename):
                  linestyle="--", linewidth=2.5, label=f"{group} Trend (7d smooth)")
     
     plt.title(title)
-    plt.xlabel("Day of Year")
-    plt.ylabel("Hour / Duration")
+    plt.xlabel("Day of year (1-366)")
+    plt.ylabel(y_label)
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / filename, dpi=300)
     plt.close()
 
-plot_weekly(weekly_df, MIDPOINT_COL, "Weekly Midpoint: DST vs No-DST", "01_weekly_midpoint.png")
-plot_weekly(weekly_df, ONSET_COL, "Weekly Onset: DST vs No-DST", "02_weekly_onset.png")
-plot_weekly(weekly_df, OFFSET_COL, "Weekly Offset: DST vs No-DST", "03_weekly_offset.png")
-plot_weekly(weekly_df, "daily_duration_hours", "Weekly Duration: DST vs No-DST", "04_weekly_duration.png")
+plot_weekly(
+    weekly_df,
+    MIDPOINT_COL,
+    "Weekly sleep midpoint by DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
+    "01_weekly_midpoint.png",
+    TIME_AXIS_LABEL,
+)
+plot_weekly(
+    weekly_df,
+    ONSET_COL,
+    "Weekly sleep onset by DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
+    "02_weekly_onset.png",
+    TIME_AXIS_LABEL,
+)
+plot_weekly(
+    weekly_df,
+    OFFSET_COL,
+    "Weekly sleep offset by DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
+    "03_weekly_offset.png",
+    TIME_AXIS_LABEL,
+)
+plot_weekly(
+    weekly_df,
+    "daily_duration_hours",
+    "Weekly sleep duration by DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
+    "04_weekly_duration.png",
+    DURATION_AXIS_LABEL,
+)
 
 # --- 2. Weekly Faceted by Employment ---
 print("Computing weekly trends by employment...")
@@ -150,7 +177,7 @@ emp_weekly_lf = agg_with_se(
 )
 emp_weekly_df = emp_weekly_lf.collect().to_pandas().sort_values(["employment_status", "dst_group", "day_of_year"])
 
-def plot_faceted_weekly(df, y_base, title, filename, y_label="Hour / Duration"):
+def plot_faceted_weekly(df, y_base, title, filename, y_label="Value"):
     employments = df["employment_status"].unique()
     n_rows = (len(employments) + 2) // 3
     fig, axes = plt.subplots(n_rows, 3, figsize=(18, 5 * n_rows), sharex=True)
@@ -180,7 +207,7 @@ def plot_faceted_weekly(df, y_base, title, filename, y_label="Hour / Duration"):
         axes[j].axis("off")
 
     plt.suptitle(title, y=1.02, fontsize=16)
-    fig.supxlabel("Day of Year")
+    fig.supxlabel("Day of year (1-366)")
     fig.supylabel(y_label)
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / filename, dpi=300)
@@ -189,30 +216,30 @@ def plot_faceted_weekly(df, y_base, title, filename, y_label="Hour / Duration"):
 plot_faceted_weekly(
     emp_weekly_df,
     MIDPOINT_COL,
-    "Weekly Midpoint by Employment Status (Dashed Trends + 95% CI Bars)",
+    "Weekly sleep midpoint by employment status and DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
     "05_weekly_midpoint_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_weekly(
     emp_weekly_df,
     ONSET_COL,
-    "Weekly Onset by Employment Status (Dashed Trends + 95% CI Bars)",
+    "Weekly sleep onset by employment status and DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
     "05b_weekly_onset_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_weekly(
     emp_weekly_df,
     OFFSET_COL,
-    "Weekly Offset by Employment Status (Dashed Trends + 95% CI Bars)",
+    "Weekly sleep offset by employment status and DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
     "05c_weekly_offset_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_weekly(
     emp_weekly_df,
     "daily_duration_hours",
-    "Weekly Duration by Employment Status (Dashed Trends + 95% CI Bars)",
+    "Weekly sleep duration by employment status and DST-observing status (points=day mean ±95% CI, dashed line=7-day smoothed trend)",
     "05d_weekly_duration_by_employment.png",
-    "Hours"
+    DURATION_AXIS_LABEL
 )
 
 # --- 3. Daily Transitions ---
@@ -227,10 +254,10 @@ def process_transition_with_errors(lf, day_col, title_prefix, file_prefix):
     
     colors = {"DST": "#e41a1c", "NoDST": "#377eb8"}
     metric_specs = [
-        ("midpoint", MIDPOINT_COL, "Hour"),
-        ("start", ONSET_COL, "Hour"),
-        ("end", OFFSET_COL, "Hour"),
-        ("duration", "daily_duration_hours", "Hours"),
+        ("sleep midpoint", MIDPOINT_COL, TIME_AXIS_LABEL),
+        ("sleep onset", ONSET_COL, TIME_AXIS_LABEL),
+        ("sleep offset", OFFSET_COL, TIME_AXIS_LABEL),
+        ("sleep duration", "daily_duration_hours", DURATION_AXIS_LABEL),
     ]
     for var, col_name, y_label in metric_specs:
         plt.figure(figsize=(10, 6))
@@ -242,8 +269,10 @@ def process_transition_with_errors(lf, day_col, title_prefix, file_prefix):
                      linestyle="--", linewidth=2, label=group)
             
         plt.axvline(0, color="black", linestyle="-", linewidth=1.5, label="Transition Day")
-        plt.title(f"{title_prefix} {var.capitalize()} Transition (+/- 14 days)")
-        plt.xlabel("Days from Transition")
+        plt.title(
+            f"{title_prefix} transition effect on {var} (±14 days around transition date; points=day mean ±95% CI, dashed line=trend)"
+        )
+        plt.xlabel("Days from DST transition date")
         plt.ylabel(y_label)
         plt.legend()
         plt.grid(True, alpha=0.3)
@@ -255,7 +284,7 @@ process_transition_with_errors(lf, "days_to_fall", "Fall DST", "07_fall")
 
 # --- 4. Transition Faceted by Employment ---
 print("Computing faceted transitions...")
-def plot_faceted_transition_with_errors(lf, day_col, y_base, title, filename, y_label="Hour"):
+def plot_faceted_transition_with_errors(lf, day_col, y_base, title, filename, y_label="Value"):
     trans_lf = agg_with_se(lf.filter(pl.col(day_col).abs() <= transition_window),
                            ["dst_group", "employment_status", day_col], 
                            [y_base])
@@ -287,7 +316,7 @@ def plot_faceted_transition_with_errors(lf, day_col, y_base, title, filename, y_
         axes[j].axis("off")
 
     plt.suptitle(title, y=1.02, fontsize=16)
-    fig.supxlabel("Days from Transition")
+    fig.supxlabel("Days from DST transition date")
     fig.supylabel(y_label)
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / filename, dpi=300)
@@ -297,65 +326,65 @@ plot_faceted_transition_with_errors(
     lf,
     "days_to_spring",
     MIDPOINT_COL,
-    "Spring Transition: Midpoint by Employment",
+    "Spring DST transition effect on sleep midpoint by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "08_spring_midpoint_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_transition_with_errors(
     lf,
     "days_to_fall",
     MIDPOINT_COL,
-    "Fall Transition: Midpoint by Employment",
+    "Fall DST transition effect on sleep midpoint by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "09_fall_midpoint_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_transition_with_errors(
     lf,
     "days_to_spring",
     ONSET_COL,
-    "Spring Transition: Onset by Employment",
+    "Spring DST transition effect on sleep onset by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "08b_spring_onset_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_transition_with_errors(
     lf,
     "days_to_fall",
     ONSET_COL,
-    "Fall Transition: Onset by Employment",
+    "Fall DST transition effect on sleep onset by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "09b_fall_onset_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_transition_with_errors(
     lf,
     "days_to_spring",
     OFFSET_COL,
-    "Spring Transition: Offset by Employment",
+    "Spring DST transition effect on sleep offset by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "08c_spring_offset_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_transition_with_errors(
     lf,
     "days_to_fall",
     OFFSET_COL,
-    "Fall Transition: Offset by Employment",
+    "Fall DST transition effect on sleep offset by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "09c_fall_offset_by_employment.png",
-    "Hour"
+    TIME_AXIS_LABEL
 )
 plot_faceted_transition_with_errors(
     lf,
     "days_to_spring",
     "daily_duration_hours",
-    "Spring Transition: Duration by Employment",
+    "Spring DST transition effect on sleep duration by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "08d_spring_duration_by_employment.png",
-    "Hours"
+    DURATION_AXIS_LABEL
 )
 plot_faceted_transition_with_errors(
     lf,
     "days_to_fall",
     "daily_duration_hours",
-    "Fall Transition: Duration by Employment",
+    "Fall DST transition effect on sleep duration by employment and DST-observing status (±14 days; points=day mean ±95% CI, dashed line=trend)",
     "09d_fall_duration_by_employment.png",
-    "Hours"
+    DURATION_AXIS_LABEL
 )
 
 # --- 5. ZIP3 Map of DST Filtering ---

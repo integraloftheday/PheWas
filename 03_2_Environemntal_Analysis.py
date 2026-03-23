@@ -82,6 +82,8 @@ MIN_GROUP_ROWS = 80
 SCATTER_SAMPLE_N = 120_000
 BINS = 16
 MAX_ROWS_PER_PAIR = 400_000
+X_INTERVAL_Q_LO = 0.10
+X_INTERVAL_Q_HI = 0.90
 
 # Plot controls
 # Default keeps only essential figures for speed.
@@ -113,6 +115,24 @@ def unlinearize_clock(values: np.ndarray | pd.Series) -> np.ndarray:
     """Map linearized hour back to 0-24 clock-hour for plotting."""
     arr = np.asarray(values, dtype=float)
     return np.mod(arr, 24.0)
+
+
+def is_unknown_employment(value: object) -> bool:
+    if value is None or (isinstance(value, float) and np.isnan(value)):
+        return True
+    s = str(value).strip().lower()
+    if s == "":
+        return True
+    unknown_tokens = ["unknown", "prefer not", "skip", "dont know", "don't know", "not known", "na", "n/a"]
+    return any(tok in s for tok in unknown_tokens)
+
+
+def standalone_title(scope: str, outcome_label: str, env: str, n: int, x_lo: float, x_hi: float) -> str:
+    return (
+        f"{scope}: {outcome_label} vs {env} | N={n:,} | "
+        f"vertical lines = {int(X_INTERVAL_Q_LO*100)}th/{int(X_INTERVAL_Q_HI*100)}th percentile of {env} "
+        f"({x_lo:.2f}, {x_hi:.2f})"
+    )
 
 
 def qcut_labels(values: pd.Series, bins: int = BINS) -> pd.Series:
@@ -334,7 +354,20 @@ sleep_env_lf = (
             offset_linear_expr.alias("offset_linear_use"),
             pl.when(pl.col("employment_status").is_null() | (pl.col("employment_status") == ""))
             .then(pl.lit("Unknown"))
-            .otherwise(pl.col("employment_status"))
+            .otherwise(pl.col("employment_status").cast(pl.Utf8).str.strip_chars())
+            .alias("employment_status_raw"),
+        ]
+    )
+    .with_columns(
+        [
+            pl.when(
+                pl.col("employment_status_raw")
+                .cast(pl.Utf8)
+                .str.to_lowercase()
+                .str.contains("out of work less|out of work one or more|out of work one")
+            )
+            .then(pl.lit("Out of Work"))
+            .otherwise(pl.col("employment_status_raw"))
             .alias("employment_status"),
         ]
     )
@@ -379,6 +412,7 @@ emp_counts_df = (
     .to_pandas()
 )
 emp_counts_df = emp_counts_df.sort_values("n", ascending=False)
+emp_counts_df = emp_counts_df[~emp_counts_df["employment_status"].map(is_unknown_employment)].copy()
 employment_groups = emp_counts_df.loc[emp_counts_df["n"] >= MIN_GROUP_ROWS, "employment_status"].tolist()
 if not employment_groups:
     employment_groups = emp_counts_df["employment_status"].head(6).tolist()
@@ -425,6 +459,10 @@ for spec in OUTCOME_SPECS:
         else:
             d_plot["y_plot"] = d_plot[outcome_col].to_numpy(dtype=float)
 
+        x_vals = d[env].to_numpy(dtype=float)
+        x_lo = float(np.nanquantile(x_vals, X_INTERVAL_Q_LO))
+        x_hi = float(np.nanquantile(x_vals, X_INTERVAL_Q_HI))
+
         # -------- Raw scatter (overall/by employment) [optional] --------
         n_sample = min(SCATTER_SAMPLE_N, len(d_plot))
         d_sample = d_plot.sample(n=n_sample, random_state=2026) if len(d_plot) > n_sample else d_plot
@@ -456,15 +494,60 @@ for spec in OUTCOME_SPECS:
                 g.savefig(PLOT_DIR / f"raw_by_employment__{outcome_name}__{env}.png", dpi=200)
                 plt.close(g.fig)
 
-        # -------- Average + error bars (overall) [essential] --------
+        # -------- Average + error bars (overall) --------
         avg = mean_se_table(d, x_col=env, y_col=outcome_col)
-        if not avg.empty:
+
+        # -------- GAM overall --------
+        x = d[env].to_numpy(dtype=float)
+        y = d[outcome_col].to_numpy(dtype=float)
+        gam = fit_gam_1d(x, y)
+
+        if not ENABLE_ALL_PLOTS:
+            # Essential mode: overlay mean ± CI and GAM in one stand-alone figure.
+            if (not avg.empty) or (gam is not None):
+                plt.figure(figsize=(10, 6.5))
+
+                if not avg.empty:
+                    y_mean = unlinearize_clock(avg["y_mean"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else avg["y_mean"].to_numpy(dtype=float)
+                    plt.errorbar(
+                        avg["x_mean"],
+                        y_mean,
+                        yerr=avg["ci95"],
+                        fmt="o",
+                        capsize=3,
+                        alpha=0.95,
+                        color="#1f77b4",
+                        label="Binned mean ±95% CI",
+                    )
+
+                if gam is not None:
+                    curve = gam_curve(gam, np.nanpercentile(x, 1), np.nanpercentile(x, 99))
+                    yhat_plot = unlinearize_clock(curve["yhat"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["yhat"].to_numpy(dtype=float)
+                    lo_plot = unlinearize_clock(curve["lo"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["lo"].to_numpy(dtype=float)
+                    hi_plot = unlinearize_clock(curve["hi"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["hi"].to_numpy(dtype=float)
+                    plt.plot(curve["x"], yhat_plot, color="#d62728", linewidth=2.3, label="GAM smooth")
+                    plt.fill_between(curve["x"], lo_plot, hi_plot, color="#d62728", alpha=0.18, label="GAM 95% CI")
+
+                plt.axvline(x_lo, color="#555555", linestyle="--", linewidth=1.6, label=f"{int(X_INTERVAL_Q_LO*100)}th pct x")
+                plt.axvline(x_hi, color="#555555", linestyle="--", linewidth=1.6, label=f"{int(X_INTERVAL_Q_HI*100)}th pct x")
+                plt.xlabel(env)
+                plt.ylabel(y_label)
+                plt.title(standalone_title("Overall", y_label, env, n_full, x_lo, x_hi))
+                plt.legend(loc="best", fontsize=8)
+                plt.tight_layout()
+                plt.savefig(PLOT_DIR / f"combined_overall__{outcome_name}__{env}.png", dpi=220)
+                plt.close()
+
+        # Full mode keeps separate mean and GAM overall plots.
+        if ENABLE_ALL_PLOTS and not avg.empty:
             y_mean = unlinearize_clock(avg["y_mean"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else avg["y_mean"].to_numpy(dtype=float)
             plt.figure(figsize=(9, 6))
             plt.errorbar(avg["x_mean"], y_mean, yerr=avg["ci95"], fmt="o-", capsize=3, alpha=0.9)
+            plt.axvline(x_lo, color="#555555", linestyle="--", linewidth=1.4)
+            plt.axvline(x_hi, color="#555555", linestyle="--", linewidth=1.4)
             plt.xlabel(env)
             plt.ylabel(y_label)
-            plt.title(f"Binned mean ±95% CI: {outcome_name} ~ {env} (overall)")
+            plt.title(standalone_title("Overall binned means", y_label, env, n_full, x_lo, x_hi))
             plt.tight_layout()
             plt.savefig(PLOT_DIR / f"avg_overall__{outcome_name}__{env}.png", dpi=220)
             plt.close()
@@ -481,36 +564,46 @@ for spec in OUTCOME_SPECS:
             for grp, gdf in avg_emp.groupby("employment_status"):
                 y_grp = unlinearize_clock(gdf["y_mean"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else gdf["y_mean"].to_numpy(dtype=float)
                 plt.errorbar(gdf["x_mean"], y_grp, yerr=gdf["ci95"], fmt="o-", capsize=2, alpha=0.8, label=grp)
+            plt.axvline(x_lo, color="#555555", linestyle="--", linewidth=1.4)
+            plt.axvline(x_hi, color="#555555", linestyle="--", linewidth=1.4)
             plt.xlabel(env)
             plt.ylabel(y_label)
-            plt.title(f"Binned mean ±95% CI by employment: {outcome_name} ~ {env}")
+            plt.title(
+                standalone_title(
+                    "By employment (Unknown excluded; Out-of-Work merged)",
+                    y_label,
+                    env,
+                    int(len(d[d["employment_status"].isin(employment_groups)])),
+                    x_lo,
+                    x_hi,
+                )
+            )
             plt.legend(loc="best", fontsize=8)
             plt.tight_layout()
             plt.savefig(PLOT_DIR / f"avg_by_employment__{outcome_name}__{env}.png", dpi=220)
             plt.close()
 
-        # -------- GAM overall [essential] --------
-        x = d[env].to_numpy(dtype=float)
-        y = d[outcome_col].to_numpy(dtype=float)
-        gam = fit_gam_1d(x, y)
+        # -------- GAM overall --------
         if gam is not None:
             curve = gam_curve(gam, np.nanpercentile(x, 1), np.nanpercentile(x, 99))
             yhat_plot = unlinearize_clock(curve["yhat"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["yhat"].to_numpy(dtype=float)
             lo_plot = unlinearize_clock(curve["lo"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["lo"].to_numpy(dtype=float)
             hi_plot = unlinearize_clock(curve["hi"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["hi"].to_numpy(dtype=float)
 
-            plt.figure(figsize=(9, 6))
             if ENABLE_ALL_PLOTS:
+                plt.figure(figsize=(9, 6))
                 plt.scatter(d_sample[env], d_sample["y_plot"], s=8, alpha=0.08, color="gray", edgecolor="none")
-            plt.plot(curve["x"], yhat_plot, color="#d62728", linewidth=2.3, label="GAM smooth")
-            plt.fill_between(curve["x"], lo_plot, hi_plot, color="#d62728", alpha=0.2, label="95% CI")
-            plt.xlabel(env)
-            plt.ylabel(y_label)
-            plt.title(f"GAM: {outcome_name} ~ s({env}) (overall)")
-            plt.legend()
-            plt.tight_layout()
-            plt.savefig(PLOT_DIR / f"gam_overall__{outcome_name}__{env}.png", dpi=220)
-            plt.close()
+                plt.plot(curve["x"], yhat_plot, color="#d62728", linewidth=2.3, label="GAM smooth")
+                plt.fill_between(curve["x"], lo_plot, hi_plot, color="#d62728", alpha=0.2, label="95% CI")
+                plt.axvline(x_lo, color="#555555", linestyle="--", linewidth=1.4)
+                plt.axvline(x_hi, color="#555555", linestyle="--", linewidth=1.4)
+                plt.xlabel(env)
+                plt.ylabel(y_label)
+                plt.title(standalone_title("Overall GAM", y_label, env, n_full, x_lo, x_hi))
+                plt.legend()
+                plt.tight_layout()
+                plt.savefig(PLOT_DIR / f"gam_overall__{outcome_name}__{env}.png", dpi=220)
+                plt.close()
 
             stats = gam.statistics_
             summary_rows.append(

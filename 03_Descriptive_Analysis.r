@@ -10,6 +10,26 @@ library(gtsummary)
 # Load data
 df <- arrow::read_parquet("processed_data/ready_for_analysis.parquet")
 
+# Use linearized timing columns consistently for downstream analyses/plots.
+# Fallback to noon-to-noon linearization if *_linear columns are missing.
+if ("onset_linear" %in% names(df)) {
+  df <- df %>% mutate(daily_start_hour = onset_linear)
+} else {
+  df <- df %>% mutate(daily_start_hour = ifelse(daily_start_hour < 12, daily_start_hour + 24, daily_start_hour))
+}
+
+if ("midpoint_linear" %in% names(df)) {
+  df <- df %>% mutate(daily_midpoint_hour = midpoint_linear)
+} else {
+  df <- df %>% mutate(daily_midpoint_hour = ifelse(daily_midpoint_hour < 12, daily_midpoint_hour + 24, daily_midpoint_hour))
+}
+
+if ("offset_linear" %in% names(df)) {
+  df <- df %>% mutate(daily_end_hour = offset_linear)
+} else {
+  df <- df %>% mutate(daily_end_hour = ifelse(daily_end_hour < 12, daily_end_hour + 24, daily_end_hour))
+}
+
 # Preview
 #head(df)
 

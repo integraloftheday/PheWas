@@ -256,24 +256,23 @@ df_clean = (
         is_weekend = pl.col("is_weekend_or_holiday").cast(pl.Boolean),
         
         # --- Create Linearized Variables ---
-        
-        # 1. Onset: Center around midnight (0.0)
-        # > 12 becomes negative (e.g., 23:00 -> -1.0)
-        onset_linear = pl.when(pl.col("daily_start_hour") > 12)
-                         .then(pl.col("daily_start_hour") - 24)
+        # Standardized Noon-to-Noon transform used across the project.
+        # Logic: if clock hour < 12, add 24; otherwise keep as-is.
+        # Resulting domain is approximately [12, 36).
+
+        # 1. Onset
+        onset_linear = pl.when(pl.col("daily_start_hour") < 12)
+                 .then(pl.col("daily_start_hour") + 24)
                          .otherwise(pl.col("daily_start_hour")),
 
-        # 2. Midpoint: Center around midnight
-        # Cutoff at 18 (6 PM) to handle outliers
-        midpoint_linear = pl.when(pl.col("daily_midpoint_hour") > 18) 
-                            .then(pl.col("daily_midpoint_hour") - 24)
+        # 2. Midpoint
+        midpoint_linear = pl.when(pl.col("daily_midpoint_hour") < 12)
+                    .then(pl.col("daily_midpoint_hour") + 24)
                             .otherwise(pl.col("daily_midpoint_hour")),
         
-        # 3. Offset (FIXED): Center around midnight
-        # Although rare, if someone wakes up at 23:00, it should be -1.0, not 23.0
-        # This fixes the 23.98 vs 0.01 gap.
-        offset_linear = pl.when(pl.col("daily_end_hour") > 16) # Using 16 (4 PM) as safe cutoff for wake times
-                          .then(pl.col("daily_end_hour") - 24)
+        # 3. Offset
+        offset_linear = pl.when(pl.col("daily_end_hour") < 12)
+                  .then(pl.col("daily_end_hour") + 24)
                           .otherwise(pl.col("daily_end_hour"))
     )
     .select([
@@ -309,37 +308,37 @@ print("\n--- 2. Logic Check: Raw vs Linear (Midnight Crossover) ---")
 # (since we didn't save the raw columns in the final file, we reconstruct logic for display)
 
 # We define a helper to reverse-engineer the display for verification
-# If linear is negative, it means raw was (linear + 24). If positive, raw was same.
+# If linear >= 24, it means raw was (linear - 24). If linear < 24, raw was same.
 check_df = df.select([
     "onset_linear",
     "midpoint_linear",
     "offset_linear"
 ]).with_columns(
-    inferred_raw_onset = pl.when(pl.col("onset_linear") < 0)
-                           .then(pl.col("onset_linear") + 24)
+    inferred_raw_onset = pl.when(pl.col("onset_linear") >= 24)
+                           .then(pl.col("onset_linear") - 24)
                            .otherwise(pl.col("onset_linear")),
-    label = pl.when(pl.col("onset_linear") < 0).then(pl.lit("Pre-Midnight"))
-              .otherwise(pl.lit("Post-Midnight"))
+    label = pl.when(pl.col("onset_linear") >= 24).then(pl.lit("Post-Midnight (shifted +24)"))
+              .otherwise(pl.lit("Evening/Pre-Midnight"))
 )
 
-# Show examples of Pre-Midnight (e.g., 23:00) vs Post-Midnight (e.g., 01:00)
-print("\nSample of Pre-Midnight Onsets (Should be negative linear values):")
-print(check_df.filter(pl.col("onset_linear") < 0).head(5))
+# Show examples of evening vs post-midnight rows in noon-to-noon encoding.
+print("\nSample of Post-Midnight Onsets (Shifted to >=24):")
+print(check_df.filter(pl.col("onset_linear") >= 24).head(5))
 
-print("\nSample of Post-Midnight Onsets (Should be positive linear values):")
-print(check_df.filter(pl.col("onset_linear") > 0).head(5))
+print("\nSample of Evening Onsets (<24):")
+print(check_df.filter(pl.col("onset_linear") < 24).head(5))
 
 print("\n--- 3. Range Sanity Check ---")
-# Check for strange outliers (e.g., onset at 2 PM being treated incorrectly)
+# Check for strange outliers for noon-to-noon representation
 outliers = df.filter(
-    (pl.col("onset_linear") < -12) | (pl.col("onset_linear") > 12)
+    (pl.col("onset_linear") < 12) | (pl.col("onset_linear") > 36)
 )
 
 if outliers.height > 0:
-    print(f"WARNING: Found {outliers.height} rows with potentially weird linear values outside +/- 12 hours from midnight.")
+    print(f"WARNING: Found {outliers.height} rows with potentially weird linear values outside [12, 36].")
     print(outliers.select(["person_id", "onset_linear", "midpoint_linear"]).head())
 else:
-    print("SUCCESS: All onset_linear values are within +/- 12 hours of midnight.")
+    print("SUCCESS: All onset_linear values are within [12, 36] for noon-to-noon encoding.")
 
 
 # In[ ]:
@@ -368,25 +367,25 @@ else:
 fig, axes = plt.subplots(1, 3, figsize=(18, 6))
 
 # Define the columns and their "Cutoff" points (where we wrapped the data)
-# We want to check that the density is NEAR ZERO at these cutoffs.
+# We want to check the wrap boundary near 12/36 and continuity near midnight (24).
 variables = [
     {
         "col": "onset_linear", 
         "title": "Sleep Onset (Linearized)", 
-        "cutoff_low": -12, # 12 PM previous day
-        "cutoff_high": 12  # 12 PM current day
+        "cutoff_low": 12,
+        "cutoff_high": 36
     },
     {
         "col": "midpoint_linear", 
         "title": "Sleep Midpoint (Linearized)", 
-        "cutoff_low": -6,  # 6 PM previous day
-        "cutoff_high": 18  # 6 PM current day
+        "cutoff_low": 12,
+        "cutoff_high": 36
     },
     {
         "col": "offset_linear", 
         "title": "Wake Up / Offset (Linearized)", 
-        "cutoff_low": -8,  # 4 PM previous day (16 - 24)
-        "cutoff_high": 16  # 4 PM current day
+        "cutoff_low": 12,
+        "cutoff_high": 36
     }
 ]
 
@@ -399,8 +398,8 @@ for i, var in enumerate(variables):
     # FIXED: Changed 'slatebytes' (typo) to 'black'
     ax.hist(data, bins=100, color='skyblue', edgecolor='black', alpha=0.7)
     
-    # Add Midnight Reference Line (0.0)
-    ax.axvline(0, color='red', linestyle='--', linewidth=1.5, label='Midnight (0.0)')
+    # Add Midnight Reference Line (24.0 in noon-to-noon scale)
+    ax.axvline(24, color='red', linestyle='--', linewidth=1.5, label='Midnight (24.0)')
     
     # Add Cutoff Lines (Where the wrap-around logic happens)
     # Ideally, the bars should be empty/flat near these green lines.
@@ -409,7 +408,7 @@ for i, var in enumerate(variables):
     
     # Formatting
     ax.set_title(var["title"], fontsize=12, fontweight='bold')
-    ax.set_xlabel("Hours from Midnight")
+    ax.set_xlabel("Linearized Hour (Noon-to-Noon)")
     ax.set_ylabel("Frequency (Sampled)")
     
     if i == 0:

@@ -161,16 +161,17 @@ person_df <- df %>%
     )
   )
 
-requested_vars <- dplyr::case_match(
-  balance_vars,
-  c("sex", "sex_concept", "sex_binary") ~ "sex_binary",
-  c("age", "age_at_sleep", "age_bin") ~ "age_bin",
-  c("race", "race_collapsed") ~ "race_collapsed",
-  c("dst_observed", "dst_observes", "dst_group") ~ "dst_observed",
-  c("recording_span", "recording_span_bin", "longitudinal_bin") ~ "recording_span_bin",
-  c("nights", "nights_bin", "nights_recorded_bin") ~ "nights_bin",
-  .default = balance_vars
-)
+normalize_balance_var <- function(v) {
+  if (v %in% c("sex", "sex_concept", "sex_binary")) return("sex_binary")
+  if (v %in% c("age", "age_at_sleep", "age_bin")) return("age_bin")
+  if (v %in% c("race", "race_collapsed")) return("race_collapsed")
+  if (v %in% c("dst_observed", "dst_observes", "dst_group")) return("dst_observed")
+  if (v %in% c("recording_span", "recording_span_bin", "longitudinal_bin")) return("recording_span_bin")
+  if (v %in% c("nights", "nights_bin", "nights_recorded_bin")) return("nights_bin")
+  v
+}
+
+requested_vars <- vapply(balance_vars, normalize_balance_var, FUN.VALUE = character(1), USE.NAMES = FALSE)
 
 missing_balance_vars <- setdiff(requested_vars, names(person_df))
 if (length(missing_balance_vars) > 0) {
@@ -200,16 +201,18 @@ num_groups <- nrow(group_counts)
 target_per_group <- ceiling(subset_size / num_groups)
 
 # Sample persons
-sampled_persons <- person_df %>%
+sampled_person_df <- person_df %>%
   group_by(across(all_of(requested_vars))) %>%
-  slice_sample(n = min(n(), target_per_group), weight_by = longitudinal_weight) %>%
-  ungroup() %>%
-  pull(person_id)
+  group_modify(~ {
+    n_take <- min(nrow(.x), target_per_group)
+    if (n_take <= 0) return(.x[0, , drop = FALSE])
+    dplyr::slice_sample(.x, n = n_take, weight_by = longitudinal_weight)
+  }) %>%
+  ungroup()
+
+sampled_persons <- sampled_person_df$person_id
 
 cat(sprintf("Selected %d unique persons.\n", length(sampled_persons)))
-
-sampled_person_df <- person_df %>%
-  filter(person_id %in% sampled_persons)
 
 # Write person-level profile table for sampled participants.
 person_profile_path <- file.path(run_dir, "subset_person_profile.csv")

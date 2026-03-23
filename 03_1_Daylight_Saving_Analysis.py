@@ -52,15 +52,11 @@ lf = lf.with_columns([
     zip3_expr.alias("zip3")
 ])
 
-# For mock data/small samples, we ensure at least some are NoDST for visualization.
+# Assign DST group from known non-DST ZIP3 prefixes.
 lf = lf.with_columns([
     pl.when(pl.col("zip3").is_in(NO_DST_ZIP3))
     .then(pl.lit("NoDST"))
-    .otherwise(
-        pl.when(pl.col("zip3").hash() % 20 == 0)
-        .then(pl.lit("NoDST"))
-        .otherwise(pl.lit("DST"))
-    )
+    .otherwise(pl.lit("DST"))
     .alias("dst_group")
 ])
 
@@ -138,15 +134,21 @@ plot_weekly(weekly_df, "daily_duration_hours", "Weekly Duration: DST vs No-DST",
 
 # --- 2. Weekly Faceted by Employment ---
 print("Computing weekly trends by employment...")
-emp_weekly_lf = agg_with_se(lf, ["dst_group", "employment_status", "day_of_year"], ["daily_midpoint_hour"])
+emp_weekly_lf = agg_with_se(
+    lf,
+    ["dst_group", "employment_status", "day_of_year"],
+    ["daily_midpoint_hour", "daily_start_hour", "daily_end_hour", "daily_duration_hours"]
+)
 emp_weekly_df = emp_weekly_lf.collect().to_pandas().sort_values(["employment_status", "dst_group", "day_of_year"])
 
-def plot_faceted_weekly(df, filename):
+def plot_faceted_weekly(df, y_base, title, filename, y_label="Hour / Duration"):
     employments = df["employment_status"].unique()
     n_rows = (len(employments) + 2) // 3
     fig, axes = plt.subplots(n_rows, 3, figsize=(18, 5 * n_rows), sharex=True)
     axes = axes.flatten()
     colors = {"DST": "#e41a1c", "NoDST": "#377eb8"}
+    mean_col = f"mean_{y_base}"
+    se_col = f"se_{y_base}"
 
     for i, emp in enumerate(employments):
         ax = axes[i]
@@ -154,23 +156,55 @@ def plot_faceted_weekly(df, filename):
         for group in edf["dst_group"].unique():
             gdf = edf[edf["dst_group"] == group]
             # Error bars
-            ax.errorbar(gdf["day_of_year"], gdf["mean_daily_midpoint_hour"], 
-                         yerr=1.96*gdf["se_daily_midpoint_hour"].fillna(0),
+            ax.errorbar(gdf["day_of_year"], gdf[mean_col], 
+                         yerr=1.96*gdf[se_col].fillna(0),
                          fmt='o', color=colors.get(group), alpha=0.3, markersize=3)
             # Dashed Trend
-            smooth_y = gdf["mean_daily_midpoint_hour"].rolling(7, center=True, min_periods=1).mean()
+            smooth_y = gdf[mean_col].rolling(7, center=True, min_periods=1).mean()
             ax.plot(gdf["day_of_year"], smooth_y, color=colors.get(group), 
                     linestyle="--", linewidth=2, label=group)
         ax.set_title(f"Emp: {emp}")
         ax.grid(True, alpha=0.2)
         if i == 0: ax.legend()
 
-    plt.suptitle("Weekly Midpoint by Employment Status (Dashed Trends + 95% CI Bars)", y=1.02, fontsize=16)
+    for j in range(len(employments), len(axes)):
+        axes[j].axis("off")
+
+    plt.suptitle(title, y=1.02, fontsize=16)
+    fig.supxlabel("Day of Year")
+    fig.supylabel(y_label)
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / filename, dpi=300)
     plt.close()
 
-plot_faceted_weekly(emp_weekly_df, "05_weekly_midpoint_by_employment.png")
+plot_faceted_weekly(
+    emp_weekly_df,
+    "daily_midpoint_hour",
+    "Weekly Midpoint by Employment Status (Dashed Trends + 95% CI Bars)",
+    "05_weekly_midpoint_by_employment.png",
+    "Hour"
+)
+plot_faceted_weekly(
+    emp_weekly_df,
+    "daily_start_hour",
+    "Weekly Onset by Employment Status (Dashed Trends + 95% CI Bars)",
+    "05b_weekly_onset_by_employment.png",
+    "Hour"
+)
+plot_faceted_weekly(
+    emp_weekly_df,
+    "daily_end_hour",
+    "Weekly Offset by Employment Status (Dashed Trends + 95% CI Bars)",
+    "05c_weekly_offset_by_employment.png",
+    "Hour"
+)
+plot_faceted_weekly(
+    emp_weekly_df,
+    "daily_duration_hours",
+    "Weekly Duration by Employment Status (Dashed Trends + 95% CI Bars)",
+    "05d_weekly_duration_by_employment.png",
+    "Hours"
+)
 
 # --- 3. Daily Transitions ---
 print("Computing daily transitions...")
@@ -179,12 +213,17 @@ transition_window = 14
 def process_transition_with_errors(lf, day_col, title_prefix, file_prefix):
     trans_lf = agg_with_se(lf.filter(pl.col(day_col).abs() <= transition_window),
                            ["dst_group", day_col], 
-                           ["daily_midpoint_hour", "daily_start_hour", "daily_end_hour"])
+                           ["daily_midpoint_hour", "daily_start_hour", "daily_end_hour", "daily_duration_hours"])
     df = trans_lf.collect().to_pandas().sort_values(["dst_group", day_col])
     
     colors = {"DST": "#e41a1c", "NoDST": "#377eb8"}
-    for var in ["midpoint", "start", "end"]:
-        col_name = f"daily_{var}_hour"
+    metric_specs = [
+        ("midpoint", "daily_midpoint_hour", "Hour"),
+        ("start", "daily_start_hour", "Hour"),
+        ("end", "daily_end_hour", "Hour"),
+        ("duration", "daily_duration_hours", "Hours"),
+    ]
+    for var, col_name, y_label in metric_specs:
         plt.figure(figsize=(10, 6))
         for group in df["dst_group"].unique():
             gdf = df[df["dst_group"] == group]
@@ -196,7 +235,7 @@ def process_transition_with_errors(lf, day_col, title_prefix, file_prefix):
         plt.axvline(0, color="black", linestyle="-", linewidth=1.5, label="Transition Day")
         plt.title(f"{title_prefix} {var.capitalize()} Transition (+/- 14 days)")
         plt.xlabel("Days from Transition")
-        plt.ylabel("Hour")
+        plt.ylabel(y_label)
         plt.legend()
         plt.grid(True, alpha=0.3)
         plt.savefig(OUTPUT_DIR / f"{file_prefix}_{var}.png", dpi=300)
@@ -207,10 +246,10 @@ process_transition_with_errors(lf, "days_to_fall", "Fall DST", "07_fall")
 
 # --- 4. Transition Faceted by Employment ---
 print("Computing faceted transitions...")
-def plot_faceted_transition_with_errors(lf, day_col, title, filename):
+def plot_faceted_transition_with_errors(lf, day_col, y_base, title, filename, y_label="Hour"):
     trans_lf = agg_with_se(lf.filter(pl.col(day_col).abs() <= transition_window),
                            ["dst_group", "employment_status", day_col], 
-                           ["daily_midpoint_hour"])
+                           [y_base])
     df = trans_lf.collect().to_pandas().sort_values(["employment_status", "dst_group", day_col])
     
     employments = df["employment_status"].unique()
@@ -218,30 +257,303 @@ def plot_faceted_transition_with_errors(lf, day_col, title, filename):
     fig, axes = plt.subplots(n_rows, 3, figsize=(18, 5 * n_rows), sharex=True)
     axes = axes.flatten()
     colors = {"DST": "#e41a1c", "NoDST": "#377eb8"}
+    mean_col = f"mean_{y_base}"
+    se_col = f"se_{y_base}"
 
     for i, emp in enumerate(employments):
         ax = axes[i]
         edf = df[df["employment_status"] == emp]
         for group in edf["dst_group"].unique():
             gdf = edf[edf["dst_group"] == group]
-            ax.errorbar(gdf[day_col], gdf["mean_daily_midpoint_hour"], 
-                         yerr=1.96*gdf["se_daily_midpoint_hour"].fillna(0),
+            ax.errorbar(gdf[day_col], gdf[mean_col], 
+                         yerr=1.96*gdf[se_col].fillna(0),
                          fmt='o', color=colors.get(group), markersize=4, capsize=2, alpha=0.6)
-            ax.plot(gdf[day_col], gdf["mean_daily_midpoint_hour"], color=colors.get(group), 
+            ax.plot(gdf[day_col], gdf[mean_col], color=colors.get(group), 
                     linestyle="--", linewidth=1.5, label=group)
         ax.axvline(0, color="black", alpha=0.8)
         ax.set_title(f"Emp: {emp}")
         if i == 0: ax.legend()
 
+    for j in range(len(employments), len(axes)):
+        axes[j].axis("off")
+
     plt.suptitle(title, y=1.02, fontsize=16)
+    fig.supxlabel("Days from Transition")
+    fig.supylabel(y_label)
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / filename, dpi=300)
     plt.close()
 
-plot_faceted_transition_with_errors(lf, "days_to_spring", "Spring Transition: Midpoint by Employment", "08_spring_midpoint_by_employment.png")
-plot_faceted_transition_with_errors(lf, "days_to_fall", "Fall Transition: Midpoint by Employment", "09_fall_midpoint_by_employment.png")
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_spring",
+    "daily_midpoint_hour",
+    "Spring Transition: Midpoint by Employment",
+    "08_spring_midpoint_by_employment.png",
+    "Hour"
+)
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_fall",
+    "daily_midpoint_hour",
+    "Fall Transition: Midpoint by Employment",
+    "09_fall_midpoint_by_employment.png",
+    "Hour"
+)
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_spring",
+    "daily_start_hour",
+    "Spring Transition: Onset by Employment",
+    "08b_spring_onset_by_employment.png",
+    "Hour"
+)
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_fall",
+    "daily_start_hour",
+    "Fall Transition: Onset by Employment",
+    "09b_fall_onset_by_employment.png",
+    "Hour"
+)
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_spring",
+    "daily_end_hour",
+    "Spring Transition: Offset by Employment",
+    "08c_spring_offset_by_employment.png",
+    "Hour"
+)
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_fall",
+    "daily_end_hour",
+    "Fall Transition: Offset by Employment",
+    "09c_fall_offset_by_employment.png",
+    "Hour"
+)
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_spring",
+    "daily_duration_hours",
+    "Spring Transition: Duration by Employment",
+    "08d_spring_duration_by_employment.png",
+    "Hours"
+)
+plot_faceted_transition_with_errors(
+    lf,
+    "days_to_fall",
+    "daily_duration_hours",
+    "Fall Transition: Duration by Employment",
+    "09d_fall_duration_by_employment.png",
+    "Hours"
+)
 
-# --- 5. Diagnostics ---
+# --- 5. ZIP3 Map of DST Filtering ---
+print("Building ZIP3 DST filter map...")
+def plot_dst_zip3_map(lf):
+    gdb_path = Path("environmental_data/v108/zip3.gdb")
+    if not gdb_path.exists():
+        print(f"ZIP3 geodatabase not found at {gdb_path}; skipping map.")
+        return
+
+    try:
+        import geopandas as gpd  # type: ignore[import-not-found]
+        from matplotlib.lines import Line2D
+        from matplotlib.patches import Patch
+        from matplotlib import colors as mcolors
+    except Exception as exc:
+        print(f"Could not import geopandas ({exc}); skipping map.")
+        return
+
+    zip_present = (
+        lf.select(pl.col("zip3").cast(pl.Utf8).str.slice(0, 3).alias("zip3"))
+        .drop_nulls()
+        .unique()
+        .collect()
+        .to_pandas()["zip3"]
+        .astype(str)
+        .str.zfill(3)
+        .str.slice(0, 3)
+    )
+    observed_zip3 = set(zip_present.tolist())
+
+    participant_counts = (
+        lf.select([
+            pl.col("zip3").cast(pl.Utf8).str.slice(0, 3).alias("zip3"),
+            pl.col("person_id"),
+        ])
+        .drop_nulls()
+        .group_by("zip3")
+        .agg(pl.col("person_id").n_unique().alias("n_people"))
+        .collect()
+        .to_pandas()
+    )
+    participant_counts["zip3"] = participant_counts["zip3"].astype(str).str.zfill(3).str.slice(0, 3)
+
+    try:
+        gdf = gpd.read_file(str(gdb_path))
+    except Exception as exc:
+        print(f"Could not read {gdb_path} ({exc}); skipping map.")
+        return
+
+    zip_col_candidates = [
+        col for col in gdf.columns
+        if any(token in str(col).lower() for token in ["zip3", "zcta3", "zip", "geoid"])
+    ]
+    if not zip_col_candidates:
+        print("No ZIP-like column found in ZIP3 geodatabase; skipping map.")
+        return
+
+    zip_col = zip_col_candidates[0]
+    gdf["zip3"] = gdf[zip_col].astype(str).str.zfill(3).str.slice(0, 3)
+    gdf = gdf.merge(participant_counts, on="zip3", how="left")
+    gdf["n_people"] = gdf["n_people"].fillna(0)
+
+    if gdf.crs is not None and str(gdf.crs) != "EPSG:4326":
+        gdf = gdf.to_crs(epsg=4326)
+
+    gdf["filter_group"] = np.where(gdf["zip3"].isin(NO_DST_ZIP3), "NoDST filter", "DST filter")
+    gdf["in_dataset"] = gdf["zip3"].isin(observed_zip3)
+
+    pts = gdf.geometry.representative_point()
+    lon = pts.x
+    lat = pts.y
+
+    contiguous_mask = lon.between(-125, -66) & lat.between(24, 50)
+    hawaii_mask = lon.between(-161, -154) & lat.between(18, 23)
+    us_map = gdf[contiguous_mask | hawaii_mask].copy()
+    contig = us_map[contiguous_mask.loc[us_map.index]].copy()
+    hawaii = us_map[hawaii_mask.loc[us_map.index]].copy()
+
+    if us_map.empty:
+        print("Filtered US ZIP3 geometry is empty; skipping map.")
+        return
+
+    fig = plt.figure(figsize=(14, 9))
+    ax_main = fig.add_axes([0.04, 0.06, 0.76, 0.88])
+    ax_hi = fig.add_axes([0.78, 0.12, 0.2, 0.24])
+
+    def draw_region(ax, region_df, xlim, ylim):
+        region_df.plot(ax=ax, color="#f0f0f0", edgecolor="#d0d0d0", linewidth=0.2, aspect="auto")
+
+        nodst = region_df[region_df["filter_group"] == "NoDST filter"]
+        if not nodst.empty:
+            nodst.plot(
+                ax=ax,
+                color="#377eb8",
+                edgecolor="#08306b",
+                linewidth=0.35,
+                alpha=0.9,
+                aspect="auto",
+            )
+
+        observed = region_df[region_df["in_dataset"]]
+        if not observed.empty:
+            observed.boundary.plot(ax=ax, color="#1f1f1f", linewidth=0.35, alpha=0.7)
+
+        ax.set_xlim(*xlim)
+        ax.set_ylim(*ylim)
+        ax.set_axis_off()
+        ax.set_aspect("auto")
+
+    draw_region(ax_main, contig, xlim=(-125, -66), ylim=(24, 50))
+    draw_region(ax_hi, hawaii, xlim=(-161, -154), ylim=(18, 23))
+    ax_hi.set_title("Hawaii", fontsize=10)
+
+    legend_handles = [
+        Patch(facecolor="#f0f0f0", edgecolor="#d0d0d0", label="ZIP3 outlines"),
+        Patch(facecolor="#377eb8", edgecolor="#08306b", label="NoDST ZIP3 filter"),
+        Line2D([0], [0], color="#1f1f1f", linewidth=1.2, label="ZIP3 present in dataset"),
+    ]
+    ax_main.legend(handles=legend_handles, loc="lower left", frameon=True)
+    fig.suptitle("DST ZIP3 Filtering Map (Continental US + Hawaii)", y=0.98, fontsize=14)
+
+    map_summary = pd.DataFrame([
+        {
+            "zip3_total_in_map": int(len(us_map)),
+            "zip3_observed_in_dataset": int(us_map["in_dataset"].sum()),
+            "zip3_nodst_filter_in_map": int((us_map["filter_group"] == "NoDST filter").sum()),
+            "zip3_nodst_filter_observed": int(((us_map["filter_group"] == "NoDST filter") & us_map["in_dataset"]).sum()),
+        }
+    ])
+    map_summary.to_csv(OUTPUT_DIR / "10_dst_zip3_filter_map_summary.csv", index=False)
+
+    plt.savefig(OUTPUT_DIR / "10_dst_zip3_filter_map.png", dpi=300)
+    plt.close()
+
+    # --- Participant count map (same layout) ---
+    fig2 = plt.figure(figsize=(14, 9))
+    ax2_main = fig2.add_axes([0.04, 0.12, 0.76, 0.82])
+    ax2_hi = fig2.add_axes([0.78, 0.18, 0.2, 0.24])
+    cax = fig2.add_axes([0.12, 0.05, 0.58, 0.03])
+
+    count_df = us_map.copy()
+    count_df = count_df[count_df["n_people"] > 0]
+    count_df["n_people_clipped"] = count_df["n_people"].clip(lower=20)
+
+    vmax = float(count_df["n_people_clipped"].max()) if not count_df.empty else 21.0
+    vmin = 20.0
+    if vmax <= vmin:
+        vmax = vmin + 1.0
+
+    cmap = plt.cm.viridis.copy()
+    cmap.set_under("#440154")
+    norm = mcolors.Normalize(vmin=vmin, vmax=vmax, clip=False)
+
+    def draw_count_region(ax, region_df, xlim, ylim):
+        region_df.plot(ax=ax, color="#f0f0f0", edgecolor="#d0d0d0", linewidth=0.2, aspect="auto")
+        filled = region_df[region_df["n_people"] > 0].copy()
+        if not filled.empty:
+            filled["n_people_clipped"] = filled["n_people"].clip(lower=20)
+            filled.plot(
+                ax=ax,
+                column="n_people_clipped",
+                cmap=cmap,
+                norm=norm,
+                edgecolor="#303030",
+                linewidth=0.2,
+                aspect="auto",
+            )
+        ax.set_xlim(*xlim)
+        ax.set_ylim(*ylim)
+        ax.set_axis_off()
+        ax.set_aspect("auto")
+
+    contig_count = contig.copy()
+    hawaii_count = hawaii.copy()
+    contig_count["n_people"] = contig_count["n_people"].fillna(0)
+    hawaii_count["n_people"] = hawaii_count["n_people"].fillna(0)
+
+    draw_count_region(ax2_main, contig_count, xlim=(-125, -66), ylim=(24, 50))
+    draw_count_region(ax2_hi, hawaii_count, xlim=(-161, -154), ylim=(18, 23))
+    ax2_hi.set_title("Hawaii", fontsize=10)
+
+    if count_df.empty:
+        ax2_main.text(
+            0.5,
+            0.5,
+            "No observed ZIP3 with participants\nin continental US + Hawaii",
+            ha="center",
+            va="center",
+            transform=ax2_main.transAxes,
+            fontsize=11,
+            color="#333333",
+            bbox=dict(facecolor="white", alpha=0.85, edgecolor="#999999"),
+        )
+
+    sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+    sm.set_array([])
+    cb = fig2.colorbar(sm, cax=cax, orientation="horizontal")
+    cb.set_label("Unique participants per ZIP3 (all values < 20 use same color)")
+
+    fig2.suptitle("Participant Count by ZIP3 (Continental US + Hawaii)", y=0.98, fontsize=14)
+    plt.savefig(OUTPUT_DIR / "11_zip3_participant_count_map.png", dpi=300)
+    plt.close(fig2)
+
+plot_dst_zip3_map(lf)
+
+# --- 6. Diagnostics ---
 print("Saving diagnostics...")
 group_counts = lf.group_by("dst_group").agg([
     pl.count("person_id").alias("n_observations"),

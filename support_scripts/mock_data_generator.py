@@ -5,12 +5,81 @@ import os
 from datetime import datetime, timedelta
 from faker import Faker
 import random
+from pathlib import Path
 
 # Configuration
 INPUT_SCHEMA_FILE = "processed_data/dataset_metadata.json"
 OUTPUT_DIR = "processed_data"
 
 fake = Faker()
+
+
+def _load_zip3_pool() -> list[str]:
+    """Load a realistic ZIP3 pool, preferring environmental ZIP3 coverage."""
+    default_pool = [f"{i:03d}" for i in range(1000)]
+
+    env_root = Path("environmental_data")
+    weather_glob = env_root / "prism_weather_daily" / "zip3_weather_*.parquet"
+    photo_file = env_root / "photo_info" / "all_photo_info.parquet"
+
+    zip_sets = []
+
+    try:
+        weather_files = sorted(Path().glob(str(weather_glob)))
+        if weather_files:
+            w = (
+                pl.scan_parquet([str(p) for p in weather_files])
+                .select(
+                    pl.col("ZIP3")
+                    .cast(pl.Utf8)
+                    .str.replace_all(r"[^0-9]", "")
+                    .str.slice(0, 3)
+                    .alias("zip3")
+                )
+                .drop_nulls()
+                .filter(pl.col("zip3").str.len_chars() == 3)
+                .unique()
+                .collect()["zip3"]
+                .to_list()
+            )
+            zip_sets.append(set(w))
+    except Exception:
+        pass
+
+    try:
+        if photo_file.exists():
+            p = (
+                pl.scan_parquet(str(photo_file))
+                .select(
+                    pl.col("ZIP3")
+                    .cast(pl.Utf8)
+                    .str.replace_all(r"[^0-9]", "")
+                    .str.slice(0, 3)
+                    .alias("zip3")
+                )
+                .drop_nulls()
+                .filter(pl.col("zip3").str.len_chars() == 3)
+                .unique()
+                .collect()["zip3"]
+                .to_list()
+            )
+            zip_sets.append(set(p))
+    except Exception:
+        pass
+
+    if zip_sets:
+        intersection = set.intersection(*zip_sets) if len(zip_sets) > 1 else zip_sets[0]
+        if intersection:
+            return sorted(intersection)
+
+        union = set.union(*zip_sets)
+        if union:
+            return sorted(union)
+
+    return default_pool
+
+
+ZIP3_POOL = _load_zip3_pool()
 
 def generate_series(col_name, meta, n_rows):
     """Generates a Polars Series based on metadata specs."""
@@ -61,26 +130,31 @@ def generate_series(col_name, meta, n_rows):
         series = pl.Series(col_name, data, dtype=pl.Boolean)
 
     elif dtype_str == "string":
-        if meta.get("is_categorical", False):
+        name_lower = col_name.lower()
+
+        # ZIP fields should always be 3-digit numeric strings for downstream joins.
+        if "zip" in name_lower:
+            data = [random.choice(ZIP3_POOL) for _ in range(n_rows)]
+            series = pl.Series(col_name, data, dtype=pl.Utf8)
+            # Null handling is applied later in a shared path.
+            
+        elif meta.get("is_categorical", False):
             categories = meta["categories"]
             clean_cats = [c for c in categories if c is not None]
             if not clean_cats: clean_cats = ["MockVal"]
             data = np.random.choice(clean_cats, size=n_rows)
+            series = pl.Series(col_name, data, dtype=pl.Utf8)
         else:
-            name_lower = col_name.lower()
             if "id" in name_lower:
                 data = [str(fake.uuid4()) for _ in range(n_rows)]
             elif "name" in name_lower:
                 data = [fake.name() for _ in range(n_rows)]
             elif "email" in name_lower:
                 data = [fake.email() for _ in range(n_rows)]
-            elif "zip" in name_lower:
-                # Generate realistic 3-digit zip prefixes
-                data = [f"{random.randint(0, 999):03d}" for _ in range(n_rows)]
             else:
                 data = [fake.word() for _ in range(n_rows)]
-        
-        series = pl.Series(col_name, data, dtype=pl.Utf8)
+
+            series = pl.Series(col_name, data, dtype=pl.Utf8)
 
     elif dtype_str in ["date", "datetime"]:
         fmt = "%Y-%m-%d" if dtype_str == "date" else "%Y-%m-%d %H:%M:%S"
@@ -149,7 +223,8 @@ def main():
         
         df = pl.DataFrame(columns)
         
-        output_path = os.path.join(OUTPUT_DIR, filename)
+        output_path = file_data.get("filename") or os.path.join(OUTPUT_DIR, filename)
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
         df.write_parquet(output_path)
         print(f"Saved {output_path} ({n_rows} rows)")
 

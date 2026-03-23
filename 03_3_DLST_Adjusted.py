@@ -49,7 +49,7 @@ WINDOW = 14
 BASELINE_START = -14
 BASELINE_END = -7
 REFERENCE_K = -1
-PLOT_WINDOW = 7
+PLOT_WINDOW = 14
 
 # Set TEST_MODE=1 for quick development runs.
 TEST_MODE = str(os.getenv("TEST_MODE", "0")).strip() == "1"

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+from scipy import stats
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -671,7 +672,168 @@ def plot_dst_zip3_map(lf):
 
 plot_dst_zip3_map(lf)
 
-# --- 6. Diagnostics ---
+# --- 6. Statistical testing (DiD-style, person-level pre/post deltas) ---
+print("Running statistical DST tests (DiD-style)...")
+
+def did_person_level_test(lf, day_col, metric_col, transition_name, window=14):
+    # Build person-year level pre/post deltas: delta = post_mean - pre_mean
+    # and compare deltas between DST vs NoDST groups.
+    # This is a Difference-in-Differences style estimate:
+    #   (post-pre in DST group) - (post-pre in NoDST group)
+    base = (
+        lf.filter(pl.col(day_col).is_between(-window, window))
+        .select([
+            "person_id",
+            "year",
+            "dst_group",
+            pl.col(day_col).alias("day_from_transition"),
+            pl.col(metric_col).alias("metric_value"),
+        ])
+        .drop_nulls(["person_id", "year", "dst_group", "day_from_transition", "metric_value"])
+        .with_columns(
+            pl.when(pl.col("day_from_transition") < 0)
+            .then(pl.lit("pre"))
+            .when(pl.col("day_from_transition") > 0)
+            .then(pl.lit("post"))
+            .otherwise(pl.lit(None))
+            .alias("period")
+        )
+        .drop_nulls(["period"])
+    )
+
+    # Average within person-year-period, then pivot to get pre/post side-by-side.
+    person_period = (
+        base.group_by(["person_id", "year", "dst_group", "period"])
+        .agg(pl.col("metric_value").mean().alias("period_mean"))
+        .collect()
+    )
+
+    if person_period.height == 0:
+        return {
+            "transition": transition_name,
+            "metric": metric_col,
+            "n_dst": 0,
+            "n_nodst": 0,
+            "mean_delta_dst": np.nan,
+            "mean_delta_nodst": np.nan,
+            "did_estimate": np.nan,
+            "se_diff": np.nan,
+            "ci95_low": np.nan,
+            "ci95_high": np.nan,
+            "t_stat": np.nan,
+            "p_value": np.nan,
+            "test": "Welch t-test on person-level deltas",
+            "window_days": window,
+        }
+
+    person_period_pd = person_period.to_pandas()
+
+    pivoted = (
+        person_period_pd
+        .pivot_table(
+            index=["person_id", "year", "dst_group"],
+            columns="period",
+            values="period_mean",
+            aggfunc="mean",
+        )
+        .reset_index()
+    )
+
+    if "pre" not in pivoted.columns or "post" not in pivoted.columns:
+        return {
+            "transition": transition_name,
+            "metric": metric_col,
+            "n_dst": 0,
+            "n_nodst": 0,
+            "mean_delta_dst": np.nan,
+            "mean_delta_nodst": np.nan,
+            "did_estimate": np.nan,
+            "se_diff": np.nan,
+            "ci95_low": np.nan,
+            "ci95_high": np.nan,
+            "t_stat": np.nan,
+            "p_value": np.nan,
+            "test": "Welch t-test on person-level deltas",
+            "window_days": window,
+        }
+
+    pivoted = pivoted.dropna(subset=["pre", "post"]).copy()
+    pivoted["delta"] = pivoted["post"] - pivoted["pre"]
+
+    dst_delta = pivoted.loc[pivoted["dst_group"] == "DST", "delta"].dropna().to_numpy()
+    nodst_delta = pivoted.loc[pivoted["dst_group"] == "NoDST", "delta"].dropna().to_numpy()
+
+    n_dst = int(dst_delta.shape[0])
+    n_nodst = int(nodst_delta.shape[0])
+
+    mean_dst = float(np.mean(dst_delta)) if n_dst > 0 else np.nan
+    mean_nodst = float(np.mean(nodst_delta)) if n_nodst > 0 else np.nan
+    did_est = mean_dst - mean_nodst if (n_dst > 0 and n_nodst > 0) else np.nan
+
+    if n_dst >= 2 and n_nodst >= 2:
+        t_res = stats.ttest_ind(dst_delta, nodst_delta, equal_var=False, nan_policy="omit")
+        var_dst = float(np.var(dst_delta, ddof=1))
+        var_nodst = float(np.var(nodst_delta, ddof=1))
+        se_diff = float(np.sqrt((var_dst / n_dst) + (var_nodst / n_nodst)))
+        ci95_low = did_est - 1.96 * se_diff
+        ci95_high = did_est + 1.96 * se_diff
+        t_stat = float(t_res.statistic)
+        p_value = float(t_res.pvalue)
+    else:
+        se_diff = np.nan
+        ci95_low = np.nan
+        ci95_high = np.nan
+        t_stat = np.nan
+        p_value = np.nan
+
+    return {
+        "transition": transition_name,
+        "metric": metric_col,
+        "n_dst": n_dst,
+        "n_nodst": n_nodst,
+        "mean_delta_dst": mean_dst,
+        "mean_delta_nodst": mean_nodst,
+        "did_estimate": did_est,
+        "se_diff": se_diff,
+        "ci95_low": ci95_low,
+        "ci95_high": ci95_high,
+        "t_stat": t_stat,
+        "p_value": p_value,
+        "test": "Welch t-test on person-level deltas",
+        "window_days": window,
+    }
+
+
+test_metrics = [MIDPOINT_COL, ONSET_COL, OFFSET_COL, "daily_duration_hours"]
+stats_rows = []
+
+for metric in test_metrics:
+    stats_rows.append(did_person_level_test(lf, "days_to_spring", metric, "spring", window=14))
+    stats_rows.append(did_person_level_test(lf, "days_to_fall", metric, "fall", window=14))
+
+stats_df = pd.DataFrame(stats_rows)
+
+# FDR correction across all tests (Benjamini-Hochberg)
+if "p_value" in stats_df.columns:
+    pvals = stats_df["p_value"].to_numpy(dtype=float)
+    valid = np.isfinite(pvals)
+    qvals = np.full_like(pvals, np.nan, dtype=float)
+    if valid.sum() > 0:
+        p_valid = pvals[valid]
+        order = np.argsort(p_valid)
+        ranks = np.arange(1, len(p_valid) + 1)
+        bh = p_valid[order] * len(p_valid) / ranks
+        bh = np.minimum.accumulate(bh[::-1])[::-1]
+        bh = np.clip(bh, 0, 1)
+        qtmp = np.empty_like(p_valid)
+        qtmp[order] = bh
+        qvals[valid] = qtmp
+    stats_df["q_value_bh"] = qvals
+
+stats_df.to_csv(OUTPUT_DIR / "13_dst_did_person_level_stats.csv", index=False)
+print(f"Saved DST statistical tests to {OUTPUT_DIR / '13_dst_did_person_level_stats.csv'}")
+
+# --- 7. Diagnostics ---
 print("Saving diagnostics...")
 group_counts = lf.group_by("dst_group").agg([
     pl.count("person_id").alias("n_observations"),

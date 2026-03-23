@@ -19,16 +19,7 @@ venv/
 .r_libs/
 
 # Generated model artifacts and reports
-models_04_5/
-models_04_5_synth/
-model_summaries_04_5/
-model_summaries_04_5_synth/
-results_05_5/
-results_05_5_synth/
-results_05_6/
-results_05_6_synth/
-model_comparison_aic_04_5.md
-model_comparison_aic_04_5_synth.md
+model_comparison_aic*.md
 Rplots.pdf
 
 # Python cache

@@ -1,0 +1,49 @@
+batch,analysis,employment_status,is_weekend_factor,dst_observes,onset_estimate,offset_estimate,derived_duration_hours,derived_midpoint_linear
+base,derived_duration_midpoint_main_grid,Employed For Wages,Weekday,NA,-1.3107363917605708,7.1432239704008,8.45396036216137,2.916243789320114
+base,derived_duration_midpoint_main_grid,Employed For Wages,Weekend,NA,-0.8296067074382758,7.471494166152486,8.301100873590762,3.320943729357105
+base,derived_duration_midpoint_main_grid,Homemaker,Weekday,NA,-2.081345155764234,9.005203887285186,11.08654904304942,3.4619293657604753
+base,derived_duration_midpoint_main_grid,Homemaker,Weekend,NA,-1.6048058222695207,9.202119470060198,10.80692529232972,3.798656823895339
+base,derived_duration_midpoint_main_grid,Out Of Work Less Than One,Weekday,NA,-13.98125428077212,-13.934032533771395,0.04722174700072479,10.042356592728243
+base,derived_duration_midpoint_main_grid,Out Of Work Less Than One,Weekend,NA,-13.385758495653292,-13.53610141798998,23.849657077663313,22.539070043178363
+base,derived_duration_midpoint_main_grid,Out Of Work One Or More,Weekday,NA,4.569099536381543,13.85402423895937,9.284924702577827,9.211561887670456
+base,derived_duration_midpoint_main_grid,Out Of Work One Or More,Weekend,NA,5.155379654688918,14.164114545600942,9.008734890912024,9.65974710014493
+base,derived_duration_midpoint_main_grid,Retired,Weekday,NA,1.1703114205697491,9.712476858152998,8.542165437583249,5.441394139361374
+base,derived_duration_midpoint_main_grid,Retired,Weekend,NA,1.5864314004114328,9.942959343174378,8.356527942762945,5.7646953717929055
+base,derived_duration_midpoint_main_grid,Self Employed,Weekday,NA,-0.2126851778800541,11.689442914257016,11.90212809213707,5.738378868188481
+base,derived_duration_midpoint_main_grid,Self Employed,Weekend,NA,0.16126107288297753,11.871308700754977,11.710047627872,6.016284886818977
+base,derived_duration_midpoint_main_grid,Student,Weekday,NA,-0.0755924866477244,4.271718437153205,4.347310923800929,2.0980629752527404
+base,derived_duration_midpoint_main_grid,Student,Weekend,NA,0.6301737351513577,4.850354048330387,4.220180313179029,2.7402638917408724
+base,derived_duration_midpoint_main_grid,Unable To Work,Weekday,NA,-1.790330101650485,3.838459687031184,5.628789788681669,1.0240647926903494
+base,derived_duration_midpoint_main_grid,Unable To Work,Weekend,NA,-1.482800675692297,4.06428309343556,5.547083769127857,1.2907412088716317
+dst,derived_duration_midpoint_main_grid,Employed For Wages,Weekday,DST,-2.0201792388202966,5.776096146449362,7.796275385269659,1.8779584538145329
+dst,derived_duration_midpoint_main_grid,Employed For Wages,Weekday,NoDST,-2.128725988779751,5.872029860329029,8.00075584910878,1.8716519357746384
+dst,derived_duration_midpoint_main_grid,Employed For Wages,Weekend,DST,-1.550160873957944,6.1550954981183175,7.705256372076262,2.302467312080186
+dst,derived_duration_midpoint_main_grid,Employed For Wages,Weekend,NoDST,-1.5950006169625504,6.14989470937228,7.74489532633483,2.2774470462048644
+dst,derived_duration_midpoint_main_grid,Homemaker,Weekday,DST,-2.1912428825448007,9.005311253511316,11.196554136056116,3.4070341854832575
+dst,derived_duration_midpoint_main_grid,Homemaker,Weekday,NoDST,-2.2997896325042553,9.101244967390985,11.401034599895238,3.400727667443364
+dst,derived_duration_midpoint_main_grid,Homemaker,Weekend,DST,-1.7330526392156382,9.268383343603544,11.00143598281918,3.767665352193952
+dst,derived_duration_midpoint_main_grid,Homemaker,Weekend,NoDST,-1.7778923822202446,9.263182554857506,11.04107493707775,3.742645086318631
+dst,derived_duration_midpoint_main_grid,Out Of Work Less Than One,Weekday,DST,-14.774083412037516,-13.570590953310123,1.2034924587273927,9.82766281732618
+dst,derived_duration_midpoint_main_grid,Out Of Work Less Than One,Weekday,NoDST,-14.88263016199697,-13.474657239430456,1.407972922566513,9.821356299286286
+dst,derived_duration_midpoint_main_grid,Out Of Work Less Than One,Weekend,DST,-14.200996078151269,-13.096952540782471,1.1040435373687956,10.35102569053313
+dst,derived_duration_midpoint_main_grid,Out Of Work Less Than One,Weekend,NoDST,-14.245835821155874,-13.10215332952851,1.143682491627363,10.326005424657808
+dst,derived_duration_midpoint_main_grid,Out Of Work One Or More,Weekday,DST,4.617762213730757,13.98017966533788,9.362417451607122,9.298970939534318
+dst,derived_duration_midpoint_main_grid,Out Of Work One Or More,Weekday,NoDST,4.5092154637713024,14.076113379217546,9.566897915446244,9.292664421494424
+dst,derived_duration_midpoint_main_grid,Out Of Work One Or More,Weekend,DST,5.206795183846417,14.326780423557397,9.11998523971098,9.766787803701906
+dst,derived_duration_midpoint_main_grid,Out Of Work One Or More,Weekend,NoDST,5.16195544084181,14.32157963481136,9.159624193969549,9.741767537826584
+dst,derived_duration_midpoint_main_grid,Retired,Weekday,DST,1.1564266527906764,9.685872963524512,8.529446310733837,5.421149808157595
+dst,derived_duration_midpoint_main_grid,Retired,Weekday,NoDST,1.0478799028312218,9.78180667740418,8.733926774572959,5.414843290117702
+dst,derived_duration_midpoint_main_grid,Retired,Weekend,DST,1.5638023443865965,9.97098970315991,8.407187358773314,5.767396023773253
+dst,derived_duration_midpoint_main_grid,Retired,Weekend,NoDST,1.51896260138199,9.965788914413872,8.446826313031883,5.742375757897932
+dst,derived_duration_midpoint_main_grid,Self Employed,Weekday,DST,-0.2695403111871451,12.125386778427975,12.39492708961512,5.927923233620414
+dst,derived_duration_midpoint_main_grid,Self Employed,Weekday,NoDST,-0.3780870611466001,12.221320492307642,12.599407553454242,5.92161671558052
+dst,derived_duration_midpoint_main_grid,Self Employed,Weekend,DST,0.10308197704739457,12.350090196857185,12.24700821980979,6.226586086952289
+dst,derived_duration_midpoint_main_grid,Self Employed,Weekend,NoDST,0.05824223404278853,12.344889408111149,12.286647174068358,6.201565821076968
+dst,derived_duration_midpoint_main_grid,Student,Weekday,DST,-0.16861847720268705,4.053461087097676,4.222079564300363,1.9424213049474943
+dst,derived_duration_midpoint_main_grid,Student,Weekday,NoDST,-0.27716522716214165,4.149394800977343,4.426560028139485,1.9361147869076007
+dst,derived_duration_midpoint_main_grid,Student,Weekend,DST,0.5402913109502168,4.6695398863104325,4.129248575360216,2.604915598630325
+dst,derived_duration_midpoint_main_grid,Student,Weekend,NoDST,0.4954515679456109,4.664339097564395,4.168887529618784,2.5798953327550027
+dst,derived_duration_midpoint_main_grid,Unable To Work,Weekday,DST,-81.84889207183896,201.70446820339956,19.553360275238504,23.92778806578029
+dst,derived_duration_midpoint_main_grid,Unable To Work,Weekday,NoDST,-81.95743882179845,201.8004019172793,19.75784073907772,23.921481547740413
+dst,derived_duration_midpoint_main_grid,Unable To Work,Weekend,DST,-81.71623517267129,201.9664689403852,19.682704113056506,0.12511688385696118
+dst,derived_duration_midpoint_main_grid,Unable To Work,Weekend,NoDST,-81.76107491567588,201.9612681516391,19.722343067314966,0.10009661798160609

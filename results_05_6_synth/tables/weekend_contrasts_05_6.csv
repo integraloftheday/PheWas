@@ -1,0 +1,73 @@
+outcome,outcome_type,outcome_variant,batch,model_method,model_file,estimate_Weekday,estimate_Weekend,weekend_minus_weekday,contrast_scope,employment_status,term
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,8.215488600270827,8.340153063219404,0.12466446294857648,overall,NA,Overall
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,7.740539681905422,7.903771213738764,0.16323153183334238,overall,NA,Overall
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,2.9051876110313817,3.5019249489302817,0.5967373378989,overall,NA,Overall
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,1.8469122286136757,2.4693841957021294,0.6224719670884538,overall,NA,Overall
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,7.1432239704008,7.471494166152486,0.3282701957516867,overall,NA,Overall
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,5.776096146449362,6.1550954981183175,0.3789993516689556,overall,NA,Overall
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,-1.3107363917605708,-0.8296067074382758,0.48112968432229497,overall,NA,Overall
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,-2.0201792388202966,-1.550160873957944,0.4700183648623526,overall,NA,Overall
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,8.215488600270827,8.340153063219404,0.12466446294857648,by_employment,Employed For Wages,Employed For Wages
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,10.918944690937035,10.827532511191984,-0.09141217974505088,by_employment,Homemaker,Homemaker
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,-0.658072694119395,-0.5210949717022485,0.13697772241714645,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,10.766168099051406,10.598858363791296,-0.16730973526011006,by_employment,Out Of Work One Or More,Out Of Work One Or More
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,8.651192984848583,8.748319873943101,0.09712688909451828,by_employment,Retired,Retired
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,10.435080195855305,10.382448837374389,-0.05263135848091593,by_employment,Self Employed,Self Employed
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,4.338602737952502,4.484816537639731,0.1462137996872297,by_employment,Student,Student
+duration,Duration,primary,base,REML,duration_poly_interact_04_5_REML.rds,5.561392711328552,5.614746757545493,0.05335404621694106,by_employment,Unable To Work,Unable To Work
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,7.740539681905422,7.903771213738764,0.16323153183334238,by_employment,Employed For Wages,Employed For Wages
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,10.985614627746632,10.96805075085837,-0.01756387688826244,by_employment,Homemaker,Homemaker
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,0.21303054606552232,0.4396419566702148,0.22661141060469245,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,10.789707799839826,10.627579476626018,-0.16212832321380866,by_employment,Out Of Work One Or More,Out Of Work One Or More
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,8.629322178368131,8.770454956895053,0.14113277852692185,by_employment,Retired,Retired
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,10.855628461735645,10.821058877514592,-0.03456958422105316,by_employment,Self Employed,Self Employed
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,4.222737333463956,4.374747588283671,0.15201025481971442,by_employment,Student,Student
+duration,Duration,primary,dst,REML,duration_poly_interact_04_5_dst_REML.rds,190.8939673022859,191.17632704822336,0.2823597459374696,by_employment,Unable To Work,Unable To Work
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,2.9051876110313817,3.5019249489302817,0.5967373378989,by_employment,Employed For Wages,Employed For Wages
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,3.570086025359082,4.122243223060758,0.5521571977016766,by_employment,Homemaker,Homemaker
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,-14.471276594168536,-13.790704176592344,0.680572417576192,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,9.785057672490124,10.445784910643097,0.6607272381529725,by_employment,Out Of Work One Or More,Out Of Work One Or More
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,5.277602367127135,5.799370307696209,0.5217679405690738,by_employment,Retired,Retired
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,5.341849649959069,5.765850000463638,0.42400035050456975,by_employment,Self Employed,Self Employed
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,2.033989272840549,2.863137359520954,0.8291480866804051,by_employment,Student,Student
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_5_REML.rds,0.9410202209391246,1.3356183422968966,0.39459812135777195,by_employment,Unable To Work,Unable To Work
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,1.8469122286136757,2.4693841957021294,0.6224719670884538,by_employment,Employed For Wages,Employed For Wages
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,3.5259522273008588,4.10652628534527,0.580574058044411,by_employment,Homemaker,Homemaker
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,-14.52780849578926,-13.816114584638116,0.7116939111511442,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,9.829835803099828,10.516844007685112,0.6870082045852843,by_employment,Out Of Work One Or More,Out Of Work One Or More
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,5.254717218314994,5.805034958733992,0.5503177404189978,by_employment,Retired,Retired
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,5.574938168710061,6.02612458336658,0.4511864146565187,by_employment,Self Employed,Self Employed
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,1.8737470176872717,2.72974338321641,0.8559963655291385,by_employment,Student,Student
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_5_dst_REML.rds,-27.82184860985249,-27.52645044012704,0.29539816972545196,by_employment,Unable To Work,Unable To Work
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,7.1432239704008,7.471494166152486,0.3282701957516867,by_employment,Employed For Wages,Employed For Wages
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,9.005203887285186,9.202119470060198,0.1969155827750129,by_employment,Homemaker,Homemaker
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,-13.934032533771395,-13.53610141798998,0.3979311157814145,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,13.85402423895937,14.164114545600942,0.31009030664157144,by_employment,Out Of Work One Or More,Out Of Work One Or More
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,9.712476858152998,9.942959343174378,0.2304824850213798,by_employment,Retired,Retired
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,11.689442914257016,11.871308700754977,0.18186578649796023,by_employment,Self Employed,Self Employed
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,4.271718437153205,4.850354048330387,0.578635611177182,by_employment,Student,Student
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_5_REML.rds,3.838459687031184,4.06428309343556,0.22582340640437648,by_employment,Unable To Work,Unable To Work
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,5.776096146449362,6.1550954981183175,0.3789993516689556,by_employment,Employed For Wages,Employed For Wages
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,9.005311253511316,9.268383343603544,0.2630720900922281,by_employment,Homemaker,Homemaker
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,-13.570590953310123,-13.096952540782471,0.47363841252765226,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,13.98017966533788,14.326780423557397,0.3466007582195161,by_employment,Out Of Work One Or More,Out Of Work One Or More
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,9.685872963524512,9.97098970315991,0.28511673963539863,by_employment,Retired,Retired
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,12.125386778427975,12.350090196857185,0.22470341842920935,by_employment,Self Employed,Self Employed
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,4.053461087097676,4.6695398863104325,0.6160787992127563,by_employment,Student,Student
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_5_dst_REML.rds,201.70446820339956,201.9664689403852,0.26200073698564097,by_employment,Unable To Work,Unable To Work
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,-1.3107363917605708,-0.8296067074382758,0.48112968432229497,by_employment,Employed For Wages,Employed For Wages
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,-2.081345155764234,-1.6048058222695207,0.47653933349471345,by_employment,Homemaker,Homemaker
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,-13.98125428077212,-13.385758495653292,0.5954957851188283,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,4.569099536381543,5.155379654688918,0.5862801183073749,by_employment,Out Of Work One Or More,Out Of Work One Or More
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,1.1703114205697491,1.5864314004114328,0.4161199798416837,by_employment,Retired,Retired
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,-0.2126851778800541,0.16126107288297753,0.3739462507630316,by_employment,Self Employed,Self Employed
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,-0.0755924866477244,0.6301737351513577,0.7057662217990821,by_employment,Student,Student
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_5_REML.rds,-1.790330101650485,-1.482800675692297,0.307529425958188,by_employment,Unable To Work,Unable To Work
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,-2.0201792388202966,-1.550160873957944,0.4700183648623526,by_employment,Employed For Wages,Employed For Wages
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,-2.1912428825448007,-1.7330526392156382,0.45819024332916247,by_employment,Homemaker,Homemaker
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,-14.774083412037516,-14.200996078151269,0.5730873338862477,by_employment,Out Of Work Less Than One,Out Of Work Less Than One
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,4.617762213730757,5.206795183846417,0.5890329701156602,by_employment,Out Of Work One Or More,Out Of Work One Or More
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,1.1564266527906764,1.5638023443865965,0.4073756915959202,by_employment,Retired,Retired
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,-0.2695403111871451,0.10308197704739457,0.3726222882345397,by_employment,Self Employed,Self Employed
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,-0.16861847720268705,0.5402913109502168,0.7089097881529038,by_employment,Student,Student
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_5_dst_REML.rds,-81.84889207183896,-81.71623517267129,0.13265689916767087,by_employment,Unable To Work,Unable To Work

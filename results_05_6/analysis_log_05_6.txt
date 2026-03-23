@@ -1,0 +1,44 @@
+2026-03-10 12:51:28 Configuration loaded.
+2026-03-10 12:51:28 PRECOMP_TABLE_DIR: results_05_5/tables
+2026-03-10 12:51:28 OUTPUT_DIR: results_05_6
+2026-03-10 12:51:28 NOTEBOOK_INLINE: TRUE
+2026-03-10 12:51:29 Loaded: results_05_5/tables/predictions_all_05_5.csv | rows: 6864
+2026-03-10 12:51:29 Loaded: results_05_5/tables/model_inventory_05_5.csv | rows: 8
+2026-03-10 12:51:29 Loaded: results_05_5/tables/derived_duration_midpoint_main_grid_05_5.csv | rows: 48
+2026-03-10 12:51:29 Loaded: results_05_5/tables/derived_vs_direct_main_grid_05_5.csv | rows: 48
+2026-03-10 12:51:29 Loaded: results_05_5/tables/derived_duration_midpoint_age_05_5.csv | rows: 408
+2026-03-10 12:51:29 Loaded: results_05_5/tables/derived_vs_direct_age_05_5.csv | rows: 408
+2026-03-10 12:51:29 Loaded: results_05_5/tables/weekend_contrasts_05_5.csv | rows: 72
+2026-03-10 12:51:29 Loaded: results_05_5/tables/dst_contrasts_05_5.csv | rows: 60
+2026-03-10 12:51:29 Wrote table: results_05_6/tables/predictions_all_05_6_input_copy.csv
+2026-03-10 12:51:29 Wrote table: results_05_6/tables/model_inventory_05_6.csv
+2026-03-10 12:51:29 Plot provenance label: Model origin: results_05_5/tables/predictions_all_05_5.csv | Methods: REML | Batches: base, dst | Model files: 8
+2026-03-10 12:51:29 Wrote table: results_05_6/tables/employment_x_weekend_plot_data_05_6.csv
+2026-03-10 12:51:30 Saved plot: results_05_6/plots/employment_weekend_timing_05_6.png
+2026-03-10 12:51:31 Saved plot: results_05_6/plots/employment_weekend_duration_05_6.png
+2026-03-10 12:51:31 Wrote table: results_05_6/tables/main_effects_05_6.csv
+2026-03-10 12:51:32 Saved plot: results_05_6/plots/main_effects_timing_05_6.png
+2026-03-10 12:51:32 Saved plot: results_05_6/plots/main_effects_duration_05_6.png
+2026-03-10 12:51:33 Saved plot: results_05_6/plots/seasonality_month_main_05_6.png
+2026-03-10 12:51:33 Wrote table: results_05_6/tables/month_x_weekend_05_6.csv
+2026-03-10 12:51:34 Saved plot: results_05_6/plots/seasonality_month_x_weekend_05_6.png
+2026-03-10 12:51:34 Wrote table: results_05_6/tables/onset_offset_month_x_dst_05_6.csv
+2026-03-10 12:51:35 Saved plot: results_05_6/plots/onset_offset_month_x_dst_05_6.png
+2026-03-10 12:51:35 Wrote table: results_05_6/tables/age_main_05_6.csv
+2026-03-10 12:51:35 Saved plot: results_05_6/plots/age_trends_timing_05_6.png
+2026-03-10 12:51:36 Saved plot: results_05_6/plots/age_trends_duration_05_6.png
+2026-03-10 12:51:36 Wrote table: results_05_6/tables/duration_age_x_employment_05_6.csv
+2026-03-10 12:51:37 Saved plot: results_05_6/plots/duration_age_x_employment_05_6.png
+2026-03-10 12:51:37 Wrote table: results_05_6/tables/onset_offset_age_x_dst_05_6.csv
+2026-03-10 12:51:37 Saved plot: results_05_6/plots/onset_offset_age_x_dst_05_6.png
+2026-03-10 12:51:37 Wrote table: results_05_6/tables/derived_vs_direct_duration_age_plot_data_05_6.csv
+2026-03-10 12:51:38 Saved plot: results_05_6/plots/derived_vs_direct_duration_age_05_6.png
+2026-03-10 12:51:39 Saved plot: results_05_6/plots/derived_vs_direct_duration_main_grid_05_6.png
+2026-03-10 12:51:39 Wrote table: results_05_6/tables/derived_vs_direct_main_grid_05_6.csv
+2026-03-10 12:51:39 Wrote table: results_05_6/tables/derived_midpoint_duration_main_grid_05_6.csv
+2026-03-10 12:51:39 Wrote table: results_05_6/tables/derived_midpoint_duration_age_05_6.csv
+2026-03-10 12:51:39 Wrote table: results_05_6/tables/derived_vs_direct_age_05_6.csv
+2026-03-10 12:51:39 Wrote table: results_05_6/tables/weekend_contrasts_05_6.csv
+2026-03-10 12:51:39 Saved plot: results_05_6/plots/weekend_contrasts_05_6.png
+2026-03-10 12:51:40 Wrote table: results_05_6/tables/dst_contrasts_05_6.csv
+2026-03-10 12:51:40 Saved plot: results_05_6/plots/dst_contrasts_05_6.png

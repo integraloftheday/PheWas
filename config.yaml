@@ -1,0 +1,27 @@
+# Configuration for PheWAS Sleep Pipeline
+
+# Input data selection
+# Options for dataset_type: "real" or "synthetic"
+dataset_type: "synthetic"
+
+# The master data paths based on dataset_type
+data_paths:
+  real: "processed_data/ready_for_analysis.parquet"
+  synthetic: "processed_data/ready_for_analysis.parquet" # Assuming synthetic overwrites this or we can map to a specific one if needed. Let's make them explicit.
+
+# Subsetting for fast testing
+use_subset: true
+subset_size: 500
+subset_balance_vars:
+  - "sex_concept"
+  - "employment_status"
+
+# Output configuration
+# A new folder will be created inside this base directory (e.g., results/run_YYYYMMDD_HHMMSS)
+output_base_dir: "results"
+
+# Execution steps to run
+run_steps:
+  - "04_LMM_Regression.r"
+  - "05_Precompute_Predictions.r"
+  - "05_LMM_Results.r"

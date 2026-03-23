@@ -1,0 +1,341 @@
+[1] "Model: onset_poly_interact_04_5_dst"
+[1] "Method: REML (for coefficient interpretation)"
+onset_linear ~ poly(age_at_sleep, 2) + employment_status + is_weekend_factor + 
+    poly(age_at_sleep, 2):employment_status + poly(age_at_sleep, 
+    2):is_weekend_factor + is_weekend_factor:employment_status + 
+    sex_concept + month + dst_observes + is_weekend_factor:dst_observes + 
+    (1 | person_id)
+<environment: 0x135a15c10>
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: formula_obj
+   Data: df
+Control: lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05))
+
+REML criterion at convergence: 3603.5
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.9750 -0.6296  0.0003  0.6113  3.3244 
+
+Random effects:
+ Groups    Name        Variance Std.Dev.
+ person_id (Intercept) 0.8158   0.9032  
+ Residual              0.2950   0.5431  
+Number of obs: 2030, groups:  person_id, 118
+
+Fixed effects:
+                                                                      Estimate
+(Intercept)                                                         -2.043e-02
+poly(age_at_sleep, 2)1                                               4.749e+00
+poly(age_at_sleep, 2)2                                              -6.870e+00
+employment_statusHomemaker                                           5.992e-02
+employment_statusOut Of Work Less Than One                           1.435e-01
+employment_statusOut Of Work One Or More                             8.078e-02
+employment_statusRetired                                            -1.204e-01
+employment_statusSelf Employed                                      -4.501e-01
+employment_statusStudent                                             1.618e-01
+employment_statusUnable To Work                                     -9.490e+01
+is_weekend_factorWeekend                                             5.248e-01
+sex_conceptIntersex                                                 -6.643e-01
+sex_conceptMale                                                     -3.079e-01
+sex_conceptNo matching concept                                      -3.677e-01
+sex_conceptSex At Birth: Sex At Birth None Of These                 -2.403e+00
+month02                                                             -2.472e-01
+month03                                                             -2.208e-01
+month04                                                             -3.288e-02
+month05                                                              5.861e-02
+month06                                                             -2.300e-02
+month07                                                             -5.981e-02
+month08                                                             -1.090e-01
+month09                                                             -2.811e-01
+month10                                                             -7.996e-02
+month11                                                             -5.933e-02
+month12                                                              8.659e-02
+dst_observesNoDST                                                   -1.085e-01
+poly(age_at_sleep, 2)1:employment_statusHomemaker                   -1.377e+01
+poly(age_at_sleep, 2)2:employment_statusHomemaker                   -7.284e+00
+poly(age_at_sleep, 2)1:employment_statusOut Of Work Less Than One   -3.536e+01
+poly(age_at_sleep, 2)2:employment_statusOut Of Work Less Than One   -8.509e+01
+poly(age_at_sleep, 2)1:employment_statusOut Of Work One Or More     -2.458e+01
+poly(age_at_sleep, 2)2:employment_statusOut Of Work One Or More      2.461e+01
+poly(age_at_sleep, 2)1:employment_statusRetired                      1.179e+01
+poly(age_at_sleep, 2)2:employment_statusRetired                      2.296e+01
+poly(age_at_sleep, 2)1:employment_statusSelf Employed                2.126e+01
+poly(age_at_sleep, 2)2:employment_statusSelf Employed                2.119e+01
+poly(age_at_sleep, 2)1:employment_statusStudent                      1.375e+01
+poly(age_at_sleep, 2)2:employment_statusStudent                      1.514e+01
+poly(age_at_sleep, 2)1:employment_statusUnable To Work              -4.555e+03
+poly(age_at_sleep, 2)2:employment_statusUnable To Work              -1.916e+03
+poly(age_at_sleep, 2)1:is_weekend_factorWeekend                     -8.236e-01
+poly(age_at_sleep, 2)2:is_weekend_factorWeekend                     -6.565e-01
+employment_statusHomemaker:is_weekend_factorWeekend                 -1.183e-02
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend  1.031e-01
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend    1.190e-01
+employment_statusRetired:is_weekend_factorWeekend                   -6.264e-02
+employment_statusSelf Employed:is_weekend_factorWeekend             -9.740e-02
+employment_statusStudent:is_weekend_factorWeekend                    2.389e-01
+employment_statusUnable To Work:is_weekend_factorWeekend            -3.374e-01
+is_weekend_factorWeekend:dst_observesNoDST                           6.371e-02
+                                                                    Std. Error
+(Intercept)                                                          2.269e-01
+poly(age_at_sleep, 2)1                                               6.283e+00
+poly(age_at_sleep, 2)2                                               7.628e+00
+employment_statusHomemaker                                           3.761e-01
+employment_statusOut Of Work Less Than One                           5.314e-01
+employment_statusOut Of Work One Or More                             4.929e-01
+employment_statusRetired                                             2.261e-01
+employment_statusSelf Employed                                       4.041e-01
+employment_statusStudent                                             3.805e-01
+employment_statusUnable To Work                                      3.337e+02
+is_weekend_factorWeekend                                             4.162e-02
+sex_conceptIntersex                                                  1.150e+00
+sex_conceptMale                                                      1.906e-01
+sex_conceptNo matching concept                                       1.020e+00
+sex_conceptSex At Birth: Sex At Birth None Of These                  1.138e+00
+month02                                                              1.509e-01
+month03                                                              1.740e-01
+month04                                                              2.049e-01
+month05                                                              2.061e-01
+month06                                                              2.092e-01
+month07                                                              2.114e-01
+month08                                                              2.122e-01
+month09                                                              2.039e-01
+month10                                                              1.904e-01
+month11                                                              1.687e-01
+month12                                                              1.576e-01
+dst_observesNoDST                                                    2.839e-01
+poly(age_at_sleep, 2)1:employment_statusHomemaker                    1.744e+01
+poly(age_at_sleep, 2)2:employment_statusHomemaker                    1.747e+01
+poly(age_at_sleep, 2)1:employment_statusOut Of Work Less Than One    3.785e+01
+poly(age_at_sleep, 2)2:employment_statusOut Of Work Less Than One    6.498e+01
+poly(age_at_sleep, 2)1:employment_statusOut Of Work One Or More      3.713e+01
+poly(age_at_sleep, 2)2:employment_statusOut Of Work One Or More      2.473e+01
+poly(age_at_sleep, 2)1:employment_statusRetired                      1.221e+01
+poly(age_at_sleep, 2)2:employment_statusRetired                      1.228e+01
+poly(age_at_sleep, 2)1:employment_statusSelf Employed                2.064e+01
+poly(age_at_sleep, 2)2:employment_statusSelf Employed                3.471e+01
+poly(age_at_sleep, 2)1:employment_statusStudent                      2.414e+01
+poly(age_at_sleep, 2)2:employment_statusStudent                      2.177e+01
+poly(age_at_sleep, 2)1:employment_statusUnable To Work               1.606e+04
+poly(age_at_sleep, 2)2:employment_statusUnable To Work               6.755e+03
+poly(age_at_sleep, 2)1:is_weekend_factorWeekend                      1.276e+00
+poly(age_at_sleep, 2)2:is_weekend_factorWeekend                      1.270e+00
+employment_statusHomemaker:is_weekend_factorWeekend                  1.053e-01
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend  1.493e-01
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend    1.427e-01
+employment_statusRetired:is_weekend_factorWeekend                    6.965e-02
+employment_statusSelf Employed:is_weekend_factorWeekend              1.039e-01
+employment_statusStudent:is_weekend_factorWeekend                    1.034e-01
+employment_statusUnable To Work:is_weekend_factorWeekend             2.826e-01
+is_weekend_factorWeekend:dst_observesNoDST                           8.206e-02
+                                                                            df
+(Intercept)                                                          1.926e+02
+poly(age_at_sleep, 2)1                                               9.067e+01
+poly(age_at_sleep, 2)2                                               9.077e+01
+employment_statusHomemaker                                           9.367e+01
+employment_statusOut Of Work Less Than One                           9.103e+01
+employment_statusOut Of Work One Or More                             9.160e+01
+employment_statusRetired                                             9.058e+01
+employment_statusSelf Employed                                       9.193e+01
+employment_statusStudent                                             9.008e+01
+employment_statusUnable To Work                                      1.966e+03
+is_weekend_factorWeekend                                             1.892e+03
+sex_conceptIntersex                                                  9.065e+01
+sex_conceptMale                                                      9.081e+01
+sex_conceptNo matching concept                                       9.136e+01
+sex_conceptSex At Birth: Sex At Birth None Of These                  8.858e+01
+month02                                                              1.695e+03
+month03                                                              1.466e+03
+month04                                                              7.995e+02
+month05                                                              6.922e+02
+month06                                                              6.879e+02
+month07                                                              7.156e+02
+month08                                                              7.687e+02
+month09                                                              1.002e+03
+month10                                                              1.310e+03
+month11                                                              1.293e+03
+month12                                                              1.374e+03
+dst_observesNoDST                                                    9.326e+01
+poly(age_at_sleep, 2)1:employment_statusHomemaker                    9.051e+01
+poly(age_at_sleep, 2)2:employment_statusHomemaker                    9.027e+01
+poly(age_at_sleep, 2)1:employment_statusOut Of Work Less Than One    8.901e+01
+poly(age_at_sleep, 2)2:employment_statusOut Of Work Less Than One    8.929e+01
+poly(age_at_sleep, 2)1:employment_statusOut Of Work One Or More      9.206e+01
+poly(age_at_sleep, 2)2:employment_statusOut Of Work One Or More      9.269e+01
+poly(age_at_sleep, 2)1:employment_statusRetired                      9.038e+01
+poly(age_at_sleep, 2)2:employment_statusRetired                      9.003e+01
+poly(age_at_sleep, 2)1:employment_statusSelf Employed                9.283e+01
+poly(age_at_sleep, 2)2:employment_statusSelf Employed                9.319e+01
+poly(age_at_sleep, 2)1:employment_statusStudent                      8.921e+01
+poly(age_at_sleep, 2)2:employment_statusStudent                      8.851e+01
+poly(age_at_sleep, 2)1:employment_statusUnable To Work               1.966e+03
+poly(age_at_sleep, 2)2:employment_statusUnable To Work               1.966e+03
+poly(age_at_sleep, 2)1:is_weekend_factorWeekend                      1.891e+03
+poly(age_at_sleep, 2)2:is_weekend_factorWeekend                      1.891e+03
+employment_statusHomemaker:is_weekend_factorWeekend                  1.892e+03
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend  1.891e+03
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend    1.891e+03
+employment_statusRetired:is_weekend_factorWeekend                    1.891e+03
+employment_statusSelf Employed:is_weekend_factorWeekend              1.892e+03
+employment_statusStudent:is_weekend_factorWeekend                    1.891e+03
+employment_statusUnable To Work:is_weekend_factorWeekend             1.894e+03
+is_weekend_factorWeekend:dst_observesNoDST                           1.892e+03
+                                                                    t value
+(Intercept)                                                          -0.090
+poly(age_at_sleep, 2)1                                                0.756
+poly(age_at_sleep, 2)2                                               -0.901
+employment_statusHomemaker                                            0.159
+employment_statusOut Of Work Less Than One                            0.270
+employment_statusOut Of Work One Or More                              0.164
+employment_statusRetired                                             -0.533
+employment_statusSelf Employed                                       -1.114
+employment_statusStudent                                              0.425
+employment_statusUnable To Work                                      -0.284
+is_weekend_factorWeekend                                             12.608
+sex_conceptIntersex                                                  -0.577
+sex_conceptMale                                                      -1.615
+sex_conceptNo matching concept                                       -0.360
+sex_conceptSex At Birth: Sex At Birth None Of These                  -2.111
+month02                                                              -1.638
+month03                                                              -1.269
+month04                                                              -0.160
+month05                                                               0.284
+month06                                                              -0.110
+month07                                                              -0.283
+month08                                                              -0.514
+month09                                                              -1.379
+month10                                                              -0.420
+month11                                                              -0.352
+month12                                                               0.549
+dst_observesNoDST                                                    -0.382
+poly(age_at_sleep, 2)1:employment_statusHomemaker                    -0.790
+poly(age_at_sleep, 2)2:employment_statusHomemaker                    -0.417
+poly(age_at_sleep, 2)1:employment_statusOut Of Work Less Than One    -0.934
+poly(age_at_sleep, 2)2:employment_statusOut Of Work Less Than One    -1.309
+poly(age_at_sleep, 2)1:employment_statusOut Of Work One Or More      -0.662
+poly(age_at_sleep, 2)2:employment_statusOut Of Work One Or More       0.995
+poly(age_at_sleep, 2)1:employment_statusRetired                       0.965
+poly(age_at_sleep, 2)2:employment_statusRetired                       1.870
+poly(age_at_sleep, 2)1:employment_statusSelf Employed                 1.030
+poly(age_at_sleep, 2)2:employment_statusSelf Employed                 0.611
+poly(age_at_sleep, 2)1:employment_statusStudent                       0.569
+poly(age_at_sleep, 2)2:employment_statusStudent                       0.696
+poly(age_at_sleep, 2)1:employment_statusUnable To Work               -0.284
+poly(age_at_sleep, 2)2:employment_statusUnable To Work               -0.284
+poly(age_at_sleep, 2)1:is_weekend_factorWeekend                      -0.645
+poly(age_at_sleep, 2)2:is_weekend_factorWeekend                      -0.517
+employment_statusHomemaker:is_weekend_factorWeekend                  -0.112
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend   0.690
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend     0.834
+employment_statusRetired:is_weekend_factorWeekend                    -0.899
+employment_statusSelf Employed:is_weekend_factorWeekend              -0.937
+employment_statusStudent:is_weekend_factorWeekend                     2.310
+employment_statusUnable To Work:is_weekend_factorWeekend             -1.194
+is_weekend_factorWeekend:dst_observesNoDST                            0.776
+                                                                    Pr(>|t|)
+(Intercept)                                                           0.9283
+poly(age_at_sleep, 2)1                                                0.4517
+poly(age_at_sleep, 2)2                                                0.3702
+employment_statusHomemaker                                            0.8738
+employment_statusOut Of Work Less Than One                            0.7878
+employment_statusOut Of Work One Or More                              0.8702
+employment_statusRetired                                              0.5957
+employment_statusSelf Employed                                        0.2683
+employment_statusStudent                                              0.6717
+employment_statusUnable To Work                                       0.7762
+is_weekend_factorWeekend                                              <2e-16
+sex_conceptIntersex                                                   0.5651
+sex_conceptMale                                                       0.1098
+sex_conceptNo matching concept                                        0.7193
+sex_conceptSex At Birth: Sex At Birth None Of These                   0.0376
+month02                                                               0.1015
+month03                                                               0.2047
+month04                                                               0.8725
+month05                                                               0.7762
+month06                                                               0.9125
+month07                                                               0.7773
+month08                                                               0.6076
+month09                                                               0.1682
+month10                                                               0.6745
+month11                                                               0.7251
+month12                                                               0.5828
+dst_observesNoDST                                                     0.7031
+poly(age_at_sleep, 2)1:employment_statusHomemaker                     0.4318
+poly(age_at_sleep, 2)2:employment_statusHomemaker                     0.6777
+poly(age_at_sleep, 2)1:employment_statusOut Of Work Less Than One     0.3527
+poly(age_at_sleep, 2)2:employment_statusOut Of Work Less Than One     0.1938
+poly(age_at_sleep, 2)1:employment_statusOut Of Work One Or More       0.5096
+poly(age_at_sleep, 2)2:employment_statusOut Of Work One Or More       0.3223
+poly(age_at_sleep, 2)1:employment_statusRetired                       0.3369
+poly(age_at_sleep, 2)2:employment_statusRetired                       0.0648
+poly(age_at_sleep, 2)1:employment_statusSelf Employed                 0.3057
+poly(age_at_sleep, 2)2:employment_statusSelf Employed                 0.5430
+poly(age_at_sleep, 2)1:employment_statusStudent                       0.5706
+poly(age_at_sleep, 2)2:employment_statusStudent                       0.4885
+poly(age_at_sleep, 2)1:employment_statusUnable To Work                0.7767
+poly(age_at_sleep, 2)2:employment_statusUnable To Work                0.7768
+poly(age_at_sleep, 2)1:is_weekend_factorWeekend                       0.5187
+poly(age_at_sleep, 2)2:is_weekend_factorWeekend                       0.6052
+employment_statusHomemaker:is_weekend_factorWeekend                   0.9106
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend   0.4900
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend     0.4044
+employment_statusRetired:is_weekend_factorWeekend                     0.3685
+employment_statusSelf Employed:is_weekend_factorWeekend               0.3488
+employment_statusStudent:is_weekend_factorWeekend                     0.0210
+employment_statusUnable To Work:is_weekend_factorWeekend              0.2327
+is_weekend_factorWeekend:dst_observesNoDST                            0.4376
+                                                                       
+(Intercept)                                                            
+poly(age_at_sleep, 2)1                                                 
+poly(age_at_sleep, 2)2                                                 
+employment_statusHomemaker                                             
+employment_statusOut Of Work Less Than One                             
+employment_statusOut Of Work One Or More                               
+employment_statusRetired                                               
+employment_statusSelf Employed                                         
+employment_statusStudent                                               
+employment_statusUnable To Work                                        
+is_weekend_factorWeekend                                            ***
+sex_conceptIntersex                                                    
+sex_conceptMale                                                        
+sex_conceptNo matching concept                                         
+sex_conceptSex At Birth: Sex At Birth None Of These                 *  
+month02                                                                
+month03                                                                
+month04                                                                
+month05                                                                
+month06                                                                
+month07                                                                
+month08                                                                
+month09                                                                
+month10                                                                
+month11                                                                
+month12                                                                
+dst_observesNoDST                                                      
+poly(age_at_sleep, 2)1:employment_statusHomemaker                      
+poly(age_at_sleep, 2)2:employment_statusHomemaker                      
+poly(age_at_sleep, 2)1:employment_statusOut Of Work Less Than One      
+poly(age_at_sleep, 2)2:employment_statusOut Of Work Less Than One      
+poly(age_at_sleep, 2)1:employment_statusOut Of Work One Or More        
+poly(age_at_sleep, 2)2:employment_statusOut Of Work One Or More        
+poly(age_at_sleep, 2)1:employment_statusRetired                        
+poly(age_at_sleep, 2)2:employment_statusRetired                     .  
+poly(age_at_sleep, 2)1:employment_statusSelf Employed                  
+poly(age_at_sleep, 2)2:employment_statusSelf Employed                  
+poly(age_at_sleep, 2)1:employment_statusStudent                        
+poly(age_at_sleep, 2)2:employment_statusStudent                        
+poly(age_at_sleep, 2)1:employment_statusUnable To Work                 
+poly(age_at_sleep, 2)2:employment_statusUnable To Work                 
+poly(age_at_sleep, 2)1:is_weekend_factorWeekend                        
+poly(age_at_sleep, 2)2:is_weekend_factorWeekend                        
+employment_statusHomemaker:is_weekend_factorWeekend                    
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend    
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend      
+employment_statusRetired:is_weekend_factorWeekend                      
+employment_statusSelf Employed:is_weekend_factorWeekend                
+employment_statusStudent:is_weekend_factorWeekend                   *  
+employment_statusUnable To Work:is_weekend_factorWeekend               
+is_weekend_factorWeekend:dst_observesNoDST                             
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1

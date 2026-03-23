@@ -39,7 +39,11 @@ OUTPUT_PATH = "processed_data/ready_for_analysis.parquet"
 # Load data
 try:
     df_sleep = pl.scan_parquet(SLEEP_DATA_PATH)
-    df_covariates = pl.scan_parquet(COVARIATES_PATH)
+    if os.path.exists(COVARIATES_PATH):
+        df_covariates = pl.scan_parquet(COVARIATES_PATH)
+    else:
+        print(f"Warning: {COVARIATES_PATH} not found. Using master_covariates_only.parquet as fallback.")
+        df_covariates = pl.scan_parquet("processed_data/master/master_covariates_only.parquet")
     print("Data loaded successfully.")
 except FileNotFoundError as e:
     print(f"Error loading data: {e}")
@@ -52,6 +56,9 @@ except FileNotFoundError as e:
 
 # Join Sleep Data with Covariates
 df = df_sleep.join(df_covariates, on="person_id", how="left")
+
+# Fix for mock data where zip_code might be in df_covariates but not sleep data
+# or vice-versa. We ensure it's selected properly.
 
 # Filtering
 # Drop rows with missing date_of_birth or sex_concept

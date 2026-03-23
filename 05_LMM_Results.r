@@ -1,766 +1,905 @@
-# --- Block 0: Global Setup ---
-suppressPackageStartupMessages({
-  library(lme4)
-  library(dplyr)
-  library(performance) # Key package for efficient diagnostics
-  library(tibble)
-  library(knitr)       # For nice table rendering in notebooks
-  library(doParallel)
-  library(foreach)
-library(lme4)
-library(dplyr)
-library(marginaleffects)
-    library(ggplot2)
-library(dplyr)
-library(stringr)
-library(marginaleffects)
-library(purrr)     # For easy iteration
-library(patchwork) # For combining plots with '+'
-    library(ggplot2)
-library(dplyr)
-library(stringr)
-library(patchwork)
-library(scales)
-library(tools)
-library(dplyr)
-library(purrr)
-library(readr) # Part of tidyverse
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,R:percent
+#     text_representation:
+#       extension: .r
+#       format_name: percent
+#       format_version: "1.3"
+#   kernelspec:
+#     display_name: R
+#     language: R
+#     name: ir
+# ---
 
-})
+# %% [markdown]
+# # 05_6_LMM_Results.r
+# Plotting/report layer for precomputed 04_5 model predictions.
+#
+# This script intentionally does NOT load model .rds files. It consumes
+# cached outputs from 05_5_Precompute_Predictions.r and builds figures/tables
+# in the structure of legacy 05_LMM_Results.r, extended for new model outputs.
 
-# Define the directory where your binary models are stored
-model_dir <- "models"
+# %%
+required_packages <- c(
+  "dplyr", "tidyr", "readr", "stringr", "ggplot2", "scales", "tibble", "purrr"
+)
 
-# Define your outcomes and model types for iteration
-outcomes <- c("onset", "offset", "midpoint", "duration")
-complexities <- c("linear", "quad", "interact")
-model_dir <- "models"
-target_complexity <- "interact" # or "linear", "quad"
-model_type <- "REML"  
+missing_packages <- required_packages[
+  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+]
 
-# Helper function to construct file path
-get_model_path <- function(outcome, complexity, type = "REML") {
-  # Type must be "ML" or "REML"
-  model_name <- paste0(outcome, "_", complexity)
-  file_path <- file.path(model_dir, paste0(model_name, "_", type, ".rds"))
-  return(file_path)
+if (length(missing_packages) > 0) {
+  stop(
+    paste0(
+      "Missing required packages: ",
+      paste(missing_packages, collapse = ", "),
+      ". Install them before running 05_6_LMM_Results.r."
+    )
+  )
 }
 
-print("Setup Complete. Ready for Phase 1 Analysis.")
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(tidyr)
+  library(readr)
+  library(stringr)
+  library(ggplot2)
+  library(scales)
+  library(tibble)
+  library(purrr)
+})
 
-# --- 2. HELPER: Time Formatting Function ---
-# This converts linear hours (e.g., -1.5, 25.25) into HH:MM strings (22:30, 01:15)
-# while preserving the continuous numeric scale for the axis.
+set.seed(123)
+
+# %% [markdown]
+# ## Configuration
+
+# %%
+PRECOMP_OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR_05", "results_05")
+PRECOMP_TABLE_DIR <- file.path(PRECOMP_OUTPUT_DIR, "tables")
+
+OUTPUT_DIR <- Sys.getenv("PLOT_DIR", file.path(PRECOMP_OUTPUT_DIR, "plots"))
+TABLE_DIR <- file.path(OUTPUT_DIR, "tables")
+PLOT_DIR <- OUTPUT_DIR
+
+NOTEBOOK_INLINE <- tolower(Sys.getenv("NOTEBOOK_INLINE_05", "true")) %in% c("true", "1", "yes")
+
+if (!dir.exists(OUTPUT_DIR)) dir.create(OUTPUT_DIR, recursive = TRUE)
+if (!dir.exists(TABLE_DIR)) dir.create(TABLE_DIR, recursive = TRUE)
+if (!dir.exists(PLOT_DIR)) dir.create(PLOT_DIR, recursive = TRUE)
+
+analysis_log <- character()
+log_msg <- function(txt) {
+  message(txt)
+  analysis_log <<- c(analysis_log, paste(format(Sys.time(), "%Y-%m-%d %H:%M:%S"), txt))
+}
+
+`%||%` <- function(a, b) {
+  if (!is.null(a) && length(a) > 0 && !all(is.na(a))) a else b
+}
+
+log_msg("Configuration loaded.")
+log_msg(paste("PRECOMP_TABLE_DIR:", PRECOMP_TABLE_DIR))
+log_msg(paste("OUTPUT_DIR:", OUTPUT_DIR))
+log_msg(paste("NOTEBOOK_INLINE:", NOTEBOOK_INLINE))
+
+# %% [markdown]
+# ## Helpers
+
+# %%
 format_time_axis <- function(x) {
-  # 1. Normalize to 0-24 range for the label text
-  #    R's modulo (%%) handles negatives correctly (-1 %% 24 = 23)
-  normalized_hours <- x %% 24
-  
-  # 2. Extract hours and minutes
-  hrs <- floor(normalized_hours)
-  mins <- round((normalized_hours - hrs) * 60)
-  
-  # 3. Format as HH:MM string
+  x_norm <- x %% 24
+  hrs <- floor(x_norm)
+  mins <- round((x_norm - hrs) * 60)
   sprintf("%02d:%02d", hrs, mins)
 }
 
-get_model_values <- function(model, var_name) {
-  meta <- attr(model, "phewas_grid_meta", exact = TRUE)
-  if (!is.null(meta$vars) && var_name %in% names(meta$vars)) {
-    var_info <- meta$vars[[var_name]]
-    if (!is.null(var_info$values) && length(var_info$values) > 0) {
-      return(var_info$values)
-    }
-    if (!is.null(var_info$min) && !is.null(var_info$max)) {
-      return(sort(unique(c(var_info$min, var_info$max))))
-    }
-  }
-  frm <- tryCatch(model@frame, error = function(e) NULL)
-  if (is.null(frm) || !var_name %in% names(frm)) return(NULL)
-  x <- frm[[var_name]]
-  if (is.factor(x)) return(levels(x))
-  if (is.character(x)) return(sort(unique(x)))
-  if (is.logical(x)) return(sort(unique(x)))
-  sort(unique(x))
-}
-
-# --- 3. PROCESS: Batch Load & Predict ---
-# Define the specific files/outcomes you want
-outcomes <- c("onset", "midpoint", "offset", "duration")
-
-message(">>> Batch processing models...")
-
-# map_dfr iterates through 'outcomes', runs the code, and binds rows together
-all_predictions <- map_dfr(outcomes, function(outcome_name) {
-  
-  # Construct path
-  fname <- paste0(outcome_name, "_", target_complexity, "_", model_type, "_fast.rds")
-  fpath <- file.path(model_dir, fname)
-  
-  if (!file.exists(fpath)) {
-    warning(paste("Skipping missing model:", fpath))
-    return(NULL)
-  }
-  message(paste("Processing:", fpath))
-  
-  # 1. Load the model
-  model <- readRDS(fpath)
-  
-  message(paste("Predicting:", outcome_name))
-  
-  # 2. Generate predictions
-  # Using datagrid for speed as requested
-  preds <- predictions(
-    model,
-    newdata = datagrid(
-      employment_status = get_model_values(model, "employment_status"),
-      is_weekend = c(TRUE, FALSE)
-    )
-  )
-  
-  # 3. Process the result into a dataframe
-  # We assign this to a variable first so we can run cleanup code after
-  result_df <- preds %>%
-    as.data.frame() %>%
-    mutate(
-      Outcome = outcome_name,
-      # Identify if this is a 'Clock Time' metric or a 'Duration' metric
-      Type = ifelse(outcome_name == "duration", "Quantity", "ClockTime")
-    )
-  
-  # 4. GARBAGE COLLECTION
-  # Remove the heavy model object from the environment
-  rm(model) 
-  
-  # Explicitly call garbage collection to reclaim RAM to OS
-  # verbose = FALSE keeps the console clean
-  gc(verbose = FALSE) 
-  
-  # 5. Return the result
-  return(result_df)
-})
-
-dim(all_predictions)
-
-write_csv(all_predictions, "./results/interactions_sleep_data.csv")
-saveRDS(all_predictions, "./results/interactions_sleep_data.rds")
-
-
-# --- 1. SETTINGS & FORMATTERS ---
-
-# TIMING PLOT SETTINGS (Onset/Midpoint/Offset)
-# 0.5 = 30 mins, 0.25 = 15 mins
-TIMING_TICK_INTERVAL <- 0.5 
-
-# DURATION PLOT SETTINGS
-# 0.25 = 15 mins (Best for readability of 7h 15m vs 7h 30m)
-DURATION_TICK_INTERVAL <-0.16666666666/2
-
-# Formatter for Time of Day (e.g., 23.5 -> "23:30")
-format_time_axis <- function(x) {
-  x_norm <- x %% 24
-  hours <- floor(x_norm)
-  minutes <- round((x_norm %% 1) * 60)
-  sprintf("%02d:%02d", hours, minutes)
-}
-
-# Formatter for Duration (e.g., 7.5 -> "7h 30m")
 format_duration_axis <- function(x) {
-  hours <- floor(x)
-  minutes <- round((x %% 1) * 60)
-  sprintf("%dh %02dm", hours, minutes) 
+  hrs <- floor(x)
+  mins <- round((x - hrs) * 60)
+  sprintf("%dh %02dm", hrs, mins)
 }
 
-# --- 2. DATA PREPARATION ---
+normalize_weekend_level <- function(x) {
+  sx <- as.character(x)
+  sx <- tolower(sx)
+  sx <- gsub("[^a-z0-9]+", "", sx)
+  out <- rep(NA_character_, length(sx))
+  out[grepl("weekend", sx) | sx %in% c("true", "t", "1", "yes", "y")] <- "Weekend"
+  out[grepl("weekday", sx) | sx %in% c("false", "f", "0", "no", "n")] <- "Weekday"
+  out
+}
 
-plot_ready_data <- all_predictions %>%
-  mutate(
-    Clean_Term = as.character(employment_status),
-    # Replace underscores with spaces
-    Clean_Term = str_replace_all(Clean_Term, "_", " "),
-    # Smart Title Casing (e.g., "Out Of Work" -> "Out of Work")
-    Clean_Term = tools::toTitleCase(tolower(Clean_Term)), 
-    # Wrap text to keep labels tidy
-    Clean_Term = str_wrap(Clean_Term, width = 25),
-    
-    # Define Day Type Factor
-    Day_Type = factor(ifelse(is_weekend == TRUE, "Weekend", "Weekday"), 
-                      levels = c("Weekday", "Weekend")),
-    
-    # Define Outcome Factor
-    Outcome = factor(Outcome, levels = c("onset", "midpoint", "offset", "duration"))
-  )
+clean_level_label <- function(x, unknown = "All") {
+  sx <- as.character(x)
+  sx[is.na(sx) | sx == "" | tolower(sx) == "na"] <- unknown
+  sx
+}
 
-# Sort Employment categories by Sleep Duration (Shortest to Longest on Weekdays)
-# This creates the "staircase" visual effect
-order_levels <- plot_ready_data %>%
-  filter(Outcome == "duration", Day_Type == "Weekday") %>%
-  arrange(estimate) %>% 
-  pull(Clean_Term)
+clean_employment <- function(x) {
+  x %>%
+    as.character() %>%
+    str_replace_all("_", " ") %>%
+    str_to_title()
+}
 
-plot_ready_data$Clean_Term <- factor(plot_ready_data$Clean_Term, levels = order_levels)
+normalize_outcome_variant <- function(x) {
+  sx <- tolower(trimws(as.character(x)))
+  sx[is.na(sx) | sx == "" | sx == "na"] <- "primary"
+  sx
+}
 
+safe_read_csv <- function(names, required = FALSE) {
+  names <- as.character(names)
+  candidates <- file.path(PRECOMP_TABLE_DIR, names)
+  hit <- candidates[file.exists(candidates)]
+  if (length(hit) == 0) {
+    txt <- paste("Missing input table(s):", paste(candidates, collapse = " | "))
+    if (required) stop(txt)
+    log_msg(txt)
+    return(tibble())
+  }
+  path <- hit[[1]]
+  out <- readr::read_csv(path, show_col_types = FALSE)
+  attr(out, "source_path") <- path
+  log_msg(paste("Loaded:", path, "| rows:", nrow(out)))
+  out
+}
 
-# --- 3. PLOTTING FUNCTIONS ---
+require_cols <- function(df, cols, table_name) {
+  missing <- setdiff(cols, names(df))
+  if (length(missing) > 0) {
+    log_msg(paste("Skipping", table_name, "- missing columns:", paste(missing, collapse = ", ")))
+    return(FALSE)
+  }
+  TRUE
+}
 
-# Function A: For Time of Day (Onset, Midpoint, Offset)
-create_timing_plot <- function(data_subset, title_text, show_y_axis = TRUE) {
-  
-  # Calculate limits to ensure ticks fit nicely
-  min_val <- floor(min(data_subset$conf.low))
-  max_val <- ceiling(max(data_subset$conf.high))
-  
-  p <- ggplot(data_subset, aes(x = estimate, y = Clean_Term, color = Day_Type)) +
-    geom_line(aes(group = Clean_Term), color = "gray85", linewidth = 0.6) +
-    geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, linewidth = 1.2, alpha = 1) +
-    geom_point(size = 3.0, shape = 21, fill = "white", stroke = 1.5) + 
-    geom_point(size = 3.0, alpha = 1) + 
-    scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00")) +
-    labs(title = title_text, x = NULL, y = NULL) +
-    theme_classic(base_size = 14) +
-    theme(
-      legend.position = "none",
-      plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
-      axis.line.y = element_blank(), axis.ticks.y = element_blank(),
-      axis.text.x = element_text(color = "black", size = 10),
-      panel.grid.major.y = element_line(color = "gray92"),
-      panel.grid.major.x = element_line(color = "gray90", linetype = "dotted"), 
-      axis.line.x = element_line(color = "black", linewidth = 0.5)
-    )
+write_table <- function(df, csv_name) {
+  path <- file.path(TABLE_DIR, csv_name)
+  readr::write_csv(df, path)
+  saveRDS(df, sub("\\.csv$", ".rds", path))
+  if (requireNamespace("arrow", quietly = TRUE)) {
+    arrow::write_parquet(df, sub("\\.csv$", ".parquet", path))
+  }
+  log_msg(paste("Wrote table:", path))
+}
 
-  # Time Axis Scaling
-  breaks_seq <- seq(from = min_val, to = max_val, by = TIMING_TICK_INTERVAL)
-  p <- p + scale_x_continuous(
-      labels = format_time_axis, 
-      breaks = breaks_seq,
-      limits = c(min(breaks_seq), max(breaks_seq))
-  )
+save_plot <- function(plot_obj, filename, width = 12, height = 7, dpi = 300) {
+  if (exists("PLOT_ORIGIN_LABEL", inherits = TRUE) && nzchar(PLOT_ORIGIN_LABEL)) {
+    existing_caption <- plot_obj$labels$caption %||% ""
+    merged_caption <- if (nzchar(existing_caption)) {
+      paste(existing_caption, PLOT_ORIGIN_LABEL, sep = "\n")
+    } else {
+      PLOT_ORIGIN_LABEL
+    }
+    plot_obj <- plot_obj +
+      labs(caption = merged_caption) +
+      theme(
+        plot.caption = element_text(hjust = 0, size = 9, color = "gray35"),
+        plot.caption.position = "plot"
+      )
+  }
 
-  if (!show_y_axis) {
-    p <- p + theme(axis.text.y = element_blank())
+  out <- file.path(PLOT_DIR, filename)
+  ggsave(filename = out, plot = plot_obj, width = width, height = height, dpi = dpi)
+  log_msg(paste("Saved plot:", out))
+  if (isTRUE(NOTEBOOK_INLINE)) print(plot_obj)
+}
+
+# %% [markdown]
+# ## Load Precomputed Inputs
+
+# %%
+predictions_all <- safe_read_csv(c("predictions_all.csv"), required = TRUE)
+model_inventory <- safe_read_csv(c("model_inventory.csv"), required = FALSE)
+
+derived_main <- safe_read_csv(c("derived_duration_midpoint_main_grid.csv"), required = FALSE)
+derived_main_compare <- safe_read_csv(c("derived_vs_direct_main_grid.csv"), required = FALSE)
+derived_age <- safe_read_csv(c("derived_duration_midpoint_age.csv"), required = FALSE)
+derived_age_compare <- safe_read_csv(c("derived_vs_direct_age.csv"), required = FALSE)
+
+weekend_contrasts <- safe_read_csv(c("weekend_contrasts.csv"), required = FALSE)
+dst_contrasts <- safe_read_csv(c("dst_contrasts.csv"), required = FALSE)
+
+write_table(predictions_all, "predictions_all_input_copy.csv")
+if (nrow(model_inventory) > 0) write_table(model_inventory, "model_inventory.csv")
+
+if (!"outcome_variant" %in% names(predictions_all)) {
+  predictions_all$outcome_variant <- "primary"
+}
+predictions_all$outcome_variant <- normalize_outcome_variant(predictions_all$outcome_variant)
+primary_predictions <- predictions_all %>% filter(outcome_variant == "primary")
+
+build_plot_origin_label <- function(pred_df, inventory_df, precomp_dir) {
+  src <- attr(pred_df, "source_path") %||% file.path(precomp_dir, "tables", "predictions_all.csv")
+  batch_vals <- if ("batch" %in% names(pred_df)) sort(unique(as.character(pred_df$batch))) else character()
+
+  method_vals <- character()
+  if ("model_method" %in% names(pred_df)) {
+    method_vals <- sort(unique(na.omit(as.character(pred_df$model_method))))
+  }
+  if (length(method_vals) == 0 && "model_method" %in% names(inventory_df)) {
+    method_vals <- sort(unique(na.omit(as.character(inventory_df$model_method))))
+  }
+
+  model_file_n <- if ("model_file" %in% names(pred_df)) {
+    length(unique(na.omit(as.character(pred_df$model_file))))
+  } else if ("model_file" %in% names(inventory_df)) {
+    length(unique(na.omit(as.character(inventory_df$model_file))))
   } else {
-    p <- p + theme(axis.text.y = element_text(color = "black", size = 12, margin = margin(r = 10)))
+    NA_integer_
   }
-  return(p)
+
+  paste0(
+    "Model origin: ", src,
+    " | Methods: ", if (length(method_vals) > 0) paste(method_vals, collapse = ", ") else "unknown",
+    " | Batches: ", if (length(batch_vals) > 0) paste(batch_vals, collapse = ", ") else "unknown",
+    " | Model files: ", if (!is.na(model_file_n)) as.character(model_file_n) else "unknown"
+  )
 }
 
-# Function B: For Duration (Hours + Minutes)
-create_duration_plot <- function(data_subset, title_text) {
-  
-  # Determine logical range for 15-minute breaks
-  min_val <- min(data_subset$conf.low)
-  max_val <- max(data_subset$conf.high)
-  
-  # Create breaks every 15 minutes (0.25) or 30 mins (0.5)
-  breaks_seq <- seq(from = floor(min_val * 4)/4, 
-                    to = ceiling(max_val * 4)/4, 
-                    by = DURATION_TICK_INTERVAL) 
-  
-  p <- ggplot(data_subset, aes(x = estimate, y = Clean_Term, color = Day_Type)) +
-    geom_line(aes(group = Clean_Term), color = "gray85", linewidth = 0.8) +
-    geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, linewidth = 1.2, alpha = 1) +
-    geom_point(size = 3.5, shape = 21, fill = "white", stroke = 1.5) + 
-    geom_point(size = 3.5, alpha = 1) + 
-    scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00")) +
-    labs(title = title_text, x = NULL, y = NULL) +
-    theme_classic(base_size = 14) +
-    theme(
-      legend.position = "bottom",
-      legend.title = element_blank(),
-      plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-      axis.line.y = element_blank(), axis.ticks.y = element_blank(),
-      axis.text.y = element_text(color = "black", size = 12, margin = margin(r = 10)),
-      axis.text.x = element_text(color = "black", size = 11),
-      panel.grid.major.y = element_line(color = "gray95"),
-      panel.grid.major.x = element_line(color = "gray90", linetype = "dotted"), # Vital for reading minutes
-      axis.line.x = element_line(color = "black", linewidth = 0.5)
-    ) +
-    scale_x_continuous(
-      labels = format_duration_axis,
-      breaks = breaks_seq,
-      limits = c(min(breaks_seq), max(breaks_seq))
+PLOT_ORIGIN_LABEL <- build_plot_origin_label(predictions_all, model_inventory, PRECOMP_OUTPUT_DIR)
+log_msg(paste("Plot provenance label:", PLOT_ORIGIN_LABEL))
+
+# %% [markdown]
+# ## Figure 1: Employment x Weekend (Legacy-style Core Figure)
+
+# %%
+if (require_cols(
+  primary_predictions,
+  c("analysis", "outcome", "estimate", "conf.low", "conf.high", "employment_status", "is_weekend_factor", "batch"),
+  "predictions_all"
+)) {
+  employment_weekend <- primary_predictions %>%
+    filter(analysis == "employment_x_weekend") %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+      day_type = factor(normalize_weekend_level(is_weekend_factor), levels = c("Weekday", "Weekend")),
+      employment_clean = clean_employment(employment_status),
+      employment_clean = str_wrap(employment_clean, width = 25),
+      batch = factor(batch, levels = c("base", "dst"))
     )
-  
-  return(p)
+
+  write_table(employment_weekend, "employment_x_weekend_plot_data.csv")
+
+  timing_df <- employment_weekend %>% filter(outcome %in% c("onset", "midpoint", "offset"))
+  if (nrow(timing_df) > 0) {
+    p_timing <- ggplot(timing_df, aes(x = estimate, y = employment_clean, color = day_type)) +
+      geom_line(aes(group = interaction(batch, employment_clean)), color = "gray85", linewidth = 0.6) +
+      geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, linewidth = 0.9, alpha = 0.9) +
+      geom_point(size = 2.4) +
+      facet_grid(batch ~ outcome, scales = "free_x") +
+      scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00"), drop = FALSE) +
+      scale_x_continuous(labels = format_time_axis) +
+      labs(
+        title = "Sleep Timing by Employment and Weekend Status",
+        subtitle = "Marginal predictions from precomputed grids",
+        x = "Predicted Clock Time",
+        y = NULL,
+        color = NULL
+      ) +
+      theme_classic(base_size = 13)
+
+    save_plot(p_timing, "employment_weekend_timing.png", width = 15, height = 8)
+  }
+
+  duration_df <- employment_weekend %>% filter(outcome == "duration")
+  if (nrow(duration_df) > 0) {
+    p_duration <- ggplot(duration_df, aes(x = estimate, y = employment_clean, color = day_type)) +
+      geom_line(aes(group = interaction(batch, employment_clean)), color = "gray85", linewidth = 0.6) +
+      geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, linewidth = 0.9, alpha = 0.9) +
+      geom_point(size = 2.4) +
+      facet_wrap(~ batch, ncol = 1, scales = "free_x") +
+      scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00"), drop = FALSE) +
+      scale_x_continuous(labels = format_duration_axis) +
+      labs(
+        title = "Sleep Duration by Employment and Weekend Status",
+        x = "Predicted Sleep Duration",
+        y = NULL,
+        color = NULL
+      ) +
+      theme_classic(base_size = 13)
+
+    save_plot(p_duration, "employment_weekend_duration.png", width = 11, height = 8)
+  }
 }
 
-# --- 4. GENERATE AND COMBINE ---
+# %% [markdown]
+# ## Figure 2: Main Effects Panel (Demographics, Employment, Weekend)
 
-# FIGURE 1: TIMING (Onset + Midpoint + Offset)
-p_on  <- create_timing_plot(filter(plot_ready_data, Outcome == "onset"), "Sleep Onset", show_y_axis = TRUE)
-p_mid <- create_timing_plot(filter(plot_ready_data, Outcome == "midpoint"), "Sleep Midpoint", show_y_axis = FALSE)
-p_off <- create_timing_plot(filter(plot_ready_data, Outcome == "offset"), "Sleep Offset", show_y_axis = FALSE)
+# %%
+main_effects <- tibble()
 
-fig_timing <- p_on + p_mid + p_off + 
-  plot_layout(guides = "collect") & 
-  theme(legend.position = "bottom", legend.title = element_blank())
+sex_main <- tibble()
+if (require_cols(primary_predictions, c("analysis", "sex_concept", "outcome", "batch", "estimate", "conf.low", "conf.high"), "predictions_all")) {
+  sex_main <- primary_predictions %>%
+    filter(analysis == "sex_main") %>%
+    transmute(
+      outcome,
+      batch,
+      category = "Demographics",
+      term = clean_employment(sex_concept),
+      estimate,
+      conf.low,
+      conf.high
+    )
+}
 
-fig_timing <- fig_timing + plot_annotation(
-  title = "Sleep Timing: Social Jetlag Analysis",
-  theme = theme(plot.title = element_text(size = 16, face = "bold"))
-)
+employment_main <- tibble()
+if (require_cols(primary_predictions, c("analysis", "employment_status", "outcome", "batch", "estimate", "conf.low", "conf.high"), "predictions_all")) {
+  employment_main <- primary_predictions %>%
+    filter(analysis == "employment_x_weekend") %>%
+    group_by(outcome, batch, employment_status) %>%
+    summarize(
+      estimate = mean(estimate, na.rm = TRUE),
+      conf.low = mean(conf.low, na.rm = TRUE),
+      conf.high = mean(conf.high, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    transmute(
+      outcome,
+      batch,
+      category = "Employment",
+      term = clean_employment(employment_status),
+      estimate,
+      conf.low,
+      conf.high
+    )
+}
 
-# FIGURE 2: DURATION
-dat_dur <- filter(plot_ready_data, Outcome == "duration")
-fig_duration <- create_duration_plot(dat_dur, "Sleep Duration") + 
-  plot_annotation(
-    title = "Sleep Duration by Employment Status",
-    theme = theme(plot.title = element_text(size = 18, face = "bold"))
+weekend_main <- tibble()
+if (require_cols(primary_predictions, c("analysis", "is_weekend_factor", "outcome", "batch", "estimate", "conf.low", "conf.high"), "predictions_all")) {
+  weekend_main <- primary_predictions %>%
+    filter(analysis == "weekend_main") %>%
+    transmute(
+      outcome,
+      batch,
+      category = "Weekend Effect",
+      term = normalize_weekend_level(is_weekend_factor),
+      estimate,
+      conf.low,
+      conf.high
+    )
+}
+
+main_effects <- bind_rows(sex_main, employment_main, weekend_main) %>%
+  mutate(
+    outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+    category = factor(category, levels = c("Demographics", "Employment", "Weekend Effect")),
+    batch = factor(batch, levels = c("base", "dst"))
   )
 
-# --- 5. VIEW PLOTS ---
+if (nrow(main_effects) > 0) {
+  write_table(main_effects, "main_effects.csv")
 
-# Print Figure 1 (Timing)
-options(repr.plot.width = 16, repr.plot.height = 8)
-print(fig_timing)
+  main_timing <- main_effects %>% filter(outcome %in% c("onset", "midpoint", "offset"))
+  if (nrow(main_timing) > 0) {
+    p_main_timing <- ggplot(main_timing, aes(x = estimate, y = term, color = batch)) +
+      geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2, linewidth = 0.8) +
+      geom_point(size = 2.5) +
+      facet_grid(category ~ outcome, scales = "free_y", space = "free_y") +
+      scale_color_manual(values = c("base" = "#0072B2", "dst" = "#009E73"), drop = FALSE) +
+      scale_x_continuous(labels = format_time_axis) +
+      labs(
+        title = "Main Effects: Sleep Timing",
+        subtitle = "Demographics, employment, and weekend effects",
+        x = "Predicted Clock Time",
+        y = NULL,
+        color = "Batch"
+      ) +
+      theme_bw(base_size = 12)
 
-# Print Figure 2 (Duration) - Note the granular X-axis
-options(repr.plot.width = 16, repr.plot.height = 7)
-print(fig_duration)
+    save_plot(p_main_timing, "main_effects_timing.png", width = 15, height = 9)
+  }
 
+  main_duration <- main_effects %>% filter(outcome == "duration")
+  if (nrow(main_duration) > 0) {
+    p_main_duration <- ggplot(main_duration, aes(x = estimate, y = term, color = batch)) +
+      geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2, linewidth = 0.8) +
+      geom_point(size = 2.5) +
+      facet_wrap(~ category, scales = "free_y", ncol = 1) +
+      scale_color_manual(values = c("base" = "#D55E00", "dst" = "#CC79A7"), drop = FALSE) +
+      scale_x_continuous(labels = format_duration_axis) +
+      labs(
+        title = "Main Effects: Sleep Duration",
+        x = "Predicted Sleep Duration",
+        y = NULL,
+        color = "Batch"
+      ) +
+      theme_bw(base_size = 12)
 
-# --- HELPER: Standardize Prediction Tables ---
-# This renames the specific column (e.g., 'employment_status') to a generic 'Term'
-# so we can stack them all into one big dataframe.
-clean_pred <- function(pred_obj, term_col, category_name, outcome_name) {
-  pred_obj %>%
-    as.data.frame() %>%
-    mutate(
-      Term = as.character(.data[[term_col]]), # Rename specific col to generic 'Term'
-      Category = category_name,
-      Outcome = outcome_name,
-      Type = ifelse(outcome_name == "duration", "Quantity", "ClockTime")
-    ) %>%
-    select(Term, Category, Outcome, Type, estimate, conf.low, conf.high)
+    save_plot(p_main_duration, "main_effects_duration.png", width = 12, height = 10)
+  }
 }
 
-# --- MAIN LOOP ---
-outcomes <- c("onset", "midpoint", "offset", "duration")
+# %% [markdown]
+# ## Figure 3: Seasonality and DST
 
-all_main_effects <- map_dfr(outcomes, function(outcome_name) {
-  
-  # 1. Load Model
-  fname <- paste0(outcome_name, "_", target_complexity, "_", model_type, "_fast.rds")
-  fpath <- file.path(model_dir, fname)
-  
-  if (!file.exists(fpath)) return(NULL)
-  model <- readRDS(fpath)
-  
-  message(paste("Predicting Main Effects for:", outcome_name))
-  
-  # --- PREDICTION 1: EMPLOYMENT EFFECT ---
-  # Vary Employment, hold others at mean/mode
-  p_emp <- predictions(
-    model, 
-    newdata = datagrid(employment_status = get_model_values(model, "employment_status"))
-  ) %>% clean_pred("employment_status", "Employment", outcome_name)
-
-  # --- PREDICTION 2: DEMOGRAPHICS (SEX) ---
-  # Vary Sex, hold others at mean/mode
-  # Note: Adjust 'sex_concept' if your variable name is different
-  p_sex <- predictions(
-    model, 
-    newdata = datagrid(sex_concept = get_model_values(model, "sex_concept"))
-  ) %>% clean_pred("sex_concept", "Demographics", outcome_name)
-
-  # --- PREDICTION 3: WEEKEND EFFECT ---
-  # Vary Weekend, hold others at mean/mode
-  p_we <- predictions(
-    model, 
-    newdata = datagrid(is_weekend = c(TRUE, FALSE))
-  ) %>% 
-    mutate(is_weekend = ifelse(is_weekend, "Weekend", "Weekday")) %>% # Fix label
-    clean_pred("is_weekend", "Weekend Effect", outcome_name)
-
-  # Combine all three for this outcome
-  bind_rows(p_emp, p_sex, p_we)
-})
-
-visualize_main_effects_means <- function(df) {
-  
-  plot_data <- df %>%
-    # Filter "No Matching Concept" to clean up the scale
-    filter(!str_detect(Term, "No Matching|Skip|Refused|None Of These")) %>%
+# %%
+month_main <- primary_predictions %>% filter(analysis == "month_main")
+if (nrow(month_main) > 0 && require_cols(month_main, c("month", "outcome", "batch", "estimate", "conf.low", "conf.high"), "month_main")) {
+  month_main <- month_main %>%
     mutate(
-      Term = str_remove(Term, "^.*:\\s*"), 
-      Term = str_replace_all(Term, "_", " "),
-      Term = str_to_title(Term),
-      Term = str_wrap(Term, width = 25), 
-      
-      Outcome = factor(Outcome, levels = c("onset", "midpoint", "offset", "duration")),
-      Category = factor(Category, levels = c("Demographics", "Employment", "Weekend Effect"))
-    ) %>%
-    group_by(Category) %>%
-    mutate(Term = reorder(Term, estimate)) %>%
-    ungroup()
-  
-  ggplot(plot_data, aes(x = estimate, y = Term)) +
-    geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), 
-                   height = 0.2, linewidth = 0.8, color = "gray60") +
-    geom_point(size = 4.5, color = "#0072B2") +
-    
-    facet_grid(Category ~ Outcome, scales = "free", space = "free_y", switch = "y") +
-    
-    scale_x_continuous(labels = format_time_axis) +
-    
+      month = factor(sprintf("%02d", as.integer(as.character(month))), levels = sprintf("%02d", 1:12)),
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+      batch = factor(batch, levels = c("base", "dst"))
+    )
+
+  p_month <- ggplot(month_main, aes(x = month, y = estimate, color = batch, group = batch, fill = batch)) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0) +
+    geom_line(linewidth = 1.0) +
+    geom_point(size = 1.7) +
+    facet_wrap(~ outcome, scales = "free_y", ncol = 2) +
+    scale_color_manual(values = c("base" = "#0072B2", "dst" = "#009E73"), drop = FALSE) +
+    scale_fill_manual(values = c("base" = "#0072B2", "dst" = "#009E73"), drop = FALSE) +
     labs(
-      title = "Predicted Main Effects: Sleep Patterns",
-      subtitle = "Marginal Means (sorted by estimate)",
-      x = "Predicted Time (HH:MM) / Duration (Hours)",
-      y = NULL
+      title = "Seasonality Across Outcomes",
+      subtitle = "Month-specific marginal predictions",
+      x = "Month",
+      y = "Predicted value",
+      color = "Batch",
+      fill = "Batch"
     ) +
-    
-    theme_bw(base_size = 18) +  # Increased from 14
-    theme(
-      strip.placement = "outside",
-      strip.text.y = element_text(angle = 180, face = "bold", size = 16, 
-                                  margin = margin(r = 10)),
-      strip.text.x = element_text(face = "bold", size = 17, margin = margin(b = 10)),
-      strip.background = element_rect(fill = "gray97", color = NA),
-      
-      axis.text.y = element_text(size = 15), 
-      axis.text.x = element_text(size = 14, angle = 45, hjust = 1),
-      axis.title.x = element_text(size = 16),
-      
-      plot.title = element_text(size = 22, face = "bold"),
-      plot.subtitle = element_text(size = 18),
-      
-      plot.margin = margin(t = 10, r = 10, b = 10, l = 50, unit = "pt"),
-      
-      panel.spacing.x = unit(1.5, "lines"),
-      panel.grid.minor = element_blank()
-    )
+    theme_classic(base_size = 13)
+
+  save_plot(p_month, "seasonality_month_main.png", width = 13, height = 9)
 }
 
-options(repr.plot.width = 20, repr.plot.height = 18)
-print(visualize_main_effects_means(all_main_effects))
-
-dim(all_main_effects)
-
-library(readr) # Part of tidyverse
-
-# Save to the current working directory
-write_csv(all_main_effects, "./results/main_effects_sleep_data.csv")
-saveRDS(all_main_effects, "./results/main_effects_sleep_data.rds")
-
-library(marginaleffects)
-library(dplyr)
-library(purrr)
-library(stringr)
-
-# --- HELPER: Standardize Output ---
-clean_predictions <- function(pred_obj, term_col, category_name, outcome_name) {
-  pred_obj %>%
-    as.data.frame() %>%
+month_weekend <- primary_predictions %>% filter(analysis == "month_x_weekend")
+if (nrow(month_weekend) > 0 && require_cols(month_weekend, c("month", "is_weekend_factor", "outcome", "batch", "estimate"), "month_x_weekend")) {
+  month_weekend <- month_weekend %>%
     mutate(
-      Term = as.character(.data[[term_col]]), 
-      Category = category_name,
-      Outcome = outcome_name,
-      Type = ifelse(outcome_name == "duration", "Quantity", "ClockTime")
-    ) %>%
-    select(Term, Category, Outcome, Type, estimate, conf.low, conf.high)
+      month = factor(sprintf("%02d", as.integer(as.character(month))), levels = sprintf("%02d", 1:12)),
+      day_type = factor(normalize_weekend_level(is_weekend_factor), levels = c("Weekday", "Weekend")),
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+      batch = factor(batch, levels = c("base", "dst"))
+    )
+
+  write_table(month_weekend, "month_x_weekend.csv")
+
+  p_month_weekend <- ggplot(month_weekend, aes(x = month, y = estimate, color = day_type, group = day_type)) +
+    geom_line(linewidth = 0.9) +
+    geom_point(size = 1.5) +
+    facet_grid(batch ~ outcome, scales = "free_y") +
+    scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00"), drop = FALSE) +
+    labs(
+      title = "Seasonality by Weekend Status",
+      x = "Month",
+      y = "Predicted value",
+      color = NULL
+    ) +
+    theme_classic(base_size = 12)
+
+  save_plot(p_month_weekend, "seasonality_month_x_weekend.png", width = 15, height = 8)
 }
 
-# --- MAIN LOOP ---
-outcomes <- c("onset", "midpoint", "offset", "duration")
-
-all_seasonality_means <- map_dfr(outcomes, function(outcome_name) {
-  
-  fname <- paste0(outcome_name, "_", target_complexity, "_", model_type, "_fast.rds")
-  fpath <- file.path(model_dir, fname)
-  
-  if (!file.exists(fpath)) return(NULL)
-  model <- readRDS(fpath)
-  
-  message(paste("Predicting Monthly Means for:", outcome_name))
-  
-  # --- PREDICTION: SEASONALITY ---
-  # distinct() ensures we get exactly one row per month found in the data
-  # This is much faster than emmeans
-  p_month <- predictions(
-    model, 
-    newdata = datagrid(month = get_model_values(model, "month")) 
-  ) %>%
-    clean_predictions("month", "Seasonality", outcome_name)
-  
-  return(p_month)
-})
-
-write_csv(all_seasonality_means, "./results/seasonality_sleep_data.csv")
-saveRDS(all_seasonality_means, "./results/seasonality_sleep_data.rds")
-
-library(ggplot2)
-library(dplyr)
-library(patchwork)
-library(scales)
-library(tools)
-
-# --- 1. AXIS FORMATTERS ---
-# Time: 23.5 -> 23:30
-format_time_axis <- function(x) {
-  x_norm <- x %% 24
-  hours <- floor(x_norm)
-  minutes <- round((x_norm %% 1) * 60)
-  sprintf("%02d:%02d", hours, minutes)
-}
-
-# Duration: 7.5 -> 7h 30m
-format_duration_axis <- function(x) {
-  hours <- floor(x)
-  minutes <- round((x %% 1) * 60)
-  sprintf("%dh %02dm", hours, minutes) 
-}
-
-# --- 2. THE VISUALIZER FUNCTION ---
-visualize_seasonality_means <- function(df) {
-  
-  # A. Data Cleaning & Factor Ordering
-  # -------------------------------------------------------
-  # Map numeric/string months to Abbreviations
-  month_map <- setNames(month.abb, 1:12) # Standard R "Jan"..."Dec"
-  month_map_str <- setNames(month.abb, sprintf("%02d", 1:12)) # "01"..."12"
-  
-  plot_data <- df %>%
+month_dst <- primary_predictions %>% filter(analysis == "month_x_dst", outcome %in% c("onset", "offset"))
+if (nrow(month_dst) > 0 && require_cols(month_dst, c("month", "dst_observes", "outcome", "batch", "estimate", "conf.low", "conf.high"), "month_x_dst")) {
+  month_dst <- month_dst %>%
     mutate(
-      # Create clean month column
-      Clean_Term = case_when(
-        Term %in% names(month_map) ~ month_map[as.character(Term)],
-        Term %in% names(month_map_str) ~ month_map_str[as.character(Term)],
-        TRUE ~ as.character(Term)
-      ),
-      # REVERSE order so "Jan" appears at the TOP of the Y-axis in ggplot
-      Clean_Term = factor(Clean_Term, levels = rev(month.abb)),
-      
-      # Ensure Outcomes are ordered logically
-      Outcome = factor(Outcome, levels = c("onset", "midpoint", "offset", "duration"))
+      month = factor(sprintf("%02d", as.integer(as.character(month))), levels = sprintf("%02d", 1:12)),
+      outcome = factor(outcome, levels = c("onset", "offset")),
+      batch = factor(batch, levels = c("base", "dst"))
     )
 
-  # B. Calculate Yearly Averages (The Red Dashed Line)
-  # -------------------------------------------------------
-  yearly_avg <- plot_data %>%
-    group_by(Outcome) %>%
-    summarise(Avg_Est = mean(estimate, na.rm = TRUE), .groups = "drop")
+  write_table(month_dst, "onset_offset_month_x_dst.csv")
 
-  # C. Common Theme Definition (DRY Principle)
-  # -------------------------------------------------------
-  paper_theme <- theme_bw(base_size = 14) +
-    theme(
-      strip.background = element_rect(fill = "white", color = "black"),
-      strip.text = element_text(face = "bold", size = 12),
-      axis.text.x = element_text(angle = 0, hjust = 0.5, color = "black"),
-      axis.text.y = element_text(color = "black"),
-      panel.grid.minor = element_blank(),
-      panel.grid.major.y = element_line(color = "gray92"), # horizontal guides
-      panel.grid.major.x = element_line(color = "gray90", linetype = "dotted"), # vertical guides
-      plot.title = element_text(face = "bold", size = 14)
-    )
-
-  # D. Plot 1: TIMING (Onset, Midpoint, Offset)
-  # -------------------------------------------------------
-  df_timing <- filter(plot_data, Outcome != "duration")
-  avg_timing <- filter(yearly_avg, Outcome != "duration")
-  
-  # Dynamic limits for timing to make ticks nice
-  t_min <- floor(min(df_timing$conf.low))
-  t_max <- ceiling(max(df_timing$conf.high))
-  
-  p_timing <- ggplot(df_timing, aes(x = estimate, y = Clean_Term, group = 1)) +
-    # 1. Yearly Average Line
-    geom_vline(data = avg_timing, aes(xintercept = Avg_Est), 
-               linetype = "dashed", color = "#D55E00", linewidth = 0.8) +
-    # 2. The Seasonal Trend Line (Connects the months)
-    geom_path(color = "gray70", linewidth = 0.8) +
-    # 3. Error Bars
-    geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), 
-                   height = 0, linewidth = 0.6, color = "gray40") +
-    # 4. Points
-    geom_point(size = 3, color = "#0072B2") +
-    # 5. Faceting
-    facet_grid(~ Outcome, scales = "free_x") +
-    # 6. Formatting
-    scale_x_continuous(labels = format_time_axis, breaks = scales::pretty_breaks(n=4)) +
-    labs(title = "Seasonal Sleep Timing", x = NULL, y = NULL) +
-    paper_theme
-
-  # E. Plot 2: DURATION (Hours)
-  # -------------------------------------------------------
-  df_dur <- filter(plot_data, Outcome == "duration")
-  avg_dur <- filter(yearly_avg, Outcome == "duration")
-  
-  # Dynamic limits for duration (force quarters if needed)
-  d_min <- floor(min(df_dur$conf.low))
-  d_max <- ceiling(max(df_dur$conf.high))
-  
-  p_duration <- ggplot(df_dur, aes(x = estimate, y = Clean_Term, group = 1)) +
-    geom_vline(data = avg_dur, aes(xintercept = Avg_Est), 
-               linetype = "dashed", color = "#D55E00", linewidth = 0.8) +
-    geom_path(color = "gray70", linewidth = 0.8) +
-    geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), 
-                   height = 0, linewidth = 0.6, color = "gray40") +
-    geom_point(size = 3, color = "#0072B2") +
-    facet_grid(~ Outcome) +
-    # Use Duration Formatter here
-    scale_x_continuous(labels = format_duration_axis, breaks = scales::pretty_breaks(n=5)) +
-    labs(title = "Seasonal Sleep Duration", x = "Estimated Means (95% CI)", y = NULL) +
-    paper_theme +
-    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) # Hide Y labels on 2nd plot
-
-  # F. Combine with Patchwork
-  # -------------------------------------------------------
-  # Layout: Timing (3/4 width) | Duration (1/4 width)
-  combined_plot <- p_timing + p_duration + 
-    plot_layout(widths = c(3, 1)) +
-    plot_annotation(
-      title = "Seasonal Trends in Sleep Behavior",
-      subtitle = "Monthly predicted means relative to yearly average (dashed red line)",
-      theme = theme(plot.title = element_text(size = 18, face = "bold"),
-                    plot.subtitle = element_text(size = 12, color = "gray50"))
-    )
-    
-  return(combined_plot)
-}
-
-# --- 3. RUN IT ---
-# (Assuming 'all_seasonality_means' exists from your previous code)
-seasonality_plot <- visualize_seasonality_means(all_seasonality_means)
-
-# View
-options(repr.plot.width = 20, repr.plot.height = 8)
-print(seasonality_plot)
-
-# --- Block 5: Age Effect Analysis (Quadratic) ---
-
-library(lme4)
-library(dplyr)
-library(marginaleffects)
-library(ggplot2)
-library(patchwork)
-library(purrr)
-
-# --- 1. SETTINGS ---
-model_dir <- "models"
-outcomes <- c("onset", "midpoint", "offset", "duration")
-target_complexity <- "interact" 
-model_type <- "REML"
-
-# *** MANUAL OVERRIDE ***
-# Since the model stores transformed polynomials (small decimals),
-# we must specify the real-world age range we want to graph.
-MIN_AGE <- 18
-MAX_AGE <- 85 
-
-# --- 2. PREDICTION LOOP ---
-all_age_preds <- map_dfr(outcomes, function(outcome_name) {
-  
-  fname <- paste0(outcome_name, "_", target_complexity, "_", model_type, "_fast.rds")
-  fpath <- file.path(model_dir, fname)
-  
-  if (!file.exists(fpath)) {
-    warning(paste("Model not found:", fpath))
-    return(NULL)
-  }
-  
-  model <- readRDS(fpath)
-  message(paste("Processing Age Trends for:", outcome_name))
-  
-  # Create a sequence of REAL ages
-  age_seq <- seq(from = MIN_AGE, to = MAX_AGE, by = 1)
-  
-  # Generate Predictions
-  # datagrid() is smart enough to take these real numbers (e.g., 45)
-  # and pass them through the model's poly() function correctly.
-  preds <- predictions(
-    model,
-    newdata = datagrid(age_at_sleep = age_seq)
-  )
-  
-  # Clean and Format
-  preds %>%
-    as.data.frame() %>%
-    mutate(
-      Outcome = outcome_name,
-      Type = ifelse(outcome_name == "duration", "Quantity", "ClockTime")
-    ) %>%
-    select(age_at_sleep, Outcome, Type, estimate, conf.low, conf.high)
-})
-
-# --- 3. PLOTTING FUNCTIONS ---
-
-format_time_axis <- function(x) {
-  x_norm <- x %% 24
-  hours <- floor(x_norm)
-  minutes <- round((x_norm %% 1) * 60)
-  sprintf("%02d:%02d", hours, minutes)
-}
-
-format_duration_axis <- function(x) {
-  hours <- floor(x)
-  minutes <- round((x %% 1) * 60)
-  sprintf("%dh %02dm", hours, minutes) 
-}
-
-visualize_age_trends <- function(df) {
-  
-  plot_data <- df %>%
-    mutate(
-      Outcome = factor(Outcome, levels = c("onset", "midpoint", "offset", "duration"))
-    )
-  
-  common_theme <- theme_classic(base_size = 14) +
-    theme(
-      plot.title = element_text(face = "bold", size = 16),
-      strip.background = element_rect(fill = "gray95", color = NA),
-      strip.text = element_text(face = "bold", size = 12),
-      panel.grid.major = element_line(color = "gray92"),
-      panel.grid.minor = element_blank(),
-      legend.position = "none"
-    )
-
-  # Plot 1: Timing
-  df_timing <- filter(plot_data, Outcome != "duration")
-  
-  p_timing <- ggplot(df_timing, aes(x = age_at_sleep, y = estimate)) +
-    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), fill = "#0072B2", alpha = 0.2) +
-    geom_line(color = "#0072B2", linewidth = 1.2) +
-    facet_wrap(~ Outcome, scales = "free_y", ncol = 3) +
+  p_month_dst <- ggplot(month_dst, aes(x = month, y = estimate, color = dst_observes, group = dst_observes, fill = dst_observes)) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0) +
+    geom_line(linewidth = 1.0) +
+    geom_point(size = 1.7) +
+    facet_grid(batch ~ outcome, scales = "free_y") +
     scale_y_continuous(labels = format_time_axis) +
-    labs(title = "Age-Related Shifts in Sleep Timing", x = "Age (Years)", y = "Time of Day") +
-    common_theme
+    labs(
+      title = "Onset and Offset vs Month by DST Group",
+      x = "Month",
+      y = "Predicted Clock Time",
+      color = "DST Group",
+      fill = "DST Group"
+    ) +
+    theme_classic(base_size = 13)
 
-  # Plot 2: Duration
-  df_dur <- filter(plot_data, Outcome == "duration")
-  
-  p_duration <- ggplot(df_dur, aes(x = age_at_sleep, y = estimate)) +
-    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), fill = "#D55E00", alpha = 0.2) +
-    geom_line(color = "#D55E00", linewidth = 1.2) +
-    facet_wrap(~ Outcome, scales = "free_y") + 
+  save_plot(p_month_dst, "onset_offset_month_x_dst.png", width = 13, height = 8)
+}
+
+# %% [markdown]
+# ## Figure 4: Age Trends (Global + Controlled)
+
+# %%
+age_main <- primary_predictions %>% filter(analysis == "age_main")
+if (nrow(age_main) > 0 && require_cols(age_main, c("age_at_sleep", "outcome", "batch", "estimate", "conf.low", "conf.high"), "age_main")) {
+  age_main <- age_main %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+      batch = factor(batch, levels = c("base", "dst"))
+    )
+
+  write_table(age_main, "age_main.csv")
+
+  age_timing <- age_main %>% filter(outcome %in% c("onset", "midpoint", "offset"))
+  if (nrow(age_timing) > 0) {
+    p_age_timing <- ggplot(age_timing, aes(x = age_at_sleep, y = estimate, color = batch, fill = batch)) +
+      geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.14, linewidth = 0) +
+      geom_line(linewidth = 1.0) +
+      facet_wrap(~ outcome, scales = "free_y", ncol = 3) +
+      scale_y_continuous(labels = format_time_axis) +
+      labs(
+        title = "Age-related Shifts in Sleep Timing",
+        x = "Age (years)",
+        y = "Predicted Clock Time",
+        color = "Batch",
+        fill = "Batch"
+      ) +
+      theme_classic(base_size = 13)
+
+    save_plot(p_age_timing, "age_trends_timing.png", width = 15, height = 6)
+  }
+
+  age_duration <- age_main %>% filter(outcome == "duration")
+  if (nrow(age_duration) > 0) {
+    p_age_duration <- ggplot(age_duration, aes(x = age_at_sleep, y = estimate, color = batch, fill = batch)) +
+      geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.14, linewidth = 0) +
+      geom_line(linewidth = 1.0) +
+      facet_wrap(~ batch, scales = "free_y", ncol = 1) +
+      scale_y_continuous(labels = format_duration_axis) +
+      labs(
+        title = "Age-related Shifts in Sleep Duration",
+        x = "Age (years)",
+        y = "Predicted Sleep Duration",
+        color = "Batch",
+        fill = "Batch"
+      ) +
+      theme_classic(base_size = 13)
+
+    save_plot(p_age_duration, "age_trends_duration.png", width = 11, height = 8)
+  }
+}
+
+age_x_employment_duration <- primary_predictions %>% filter(analysis == "age_x_employment", outcome == "duration")
+if (nrow(age_x_employment_duration) > 0 && require_cols(age_x_employment_duration, c("age_at_sleep", "employment_status", "batch", "estimate", "conf.low", "conf.high"), "age_x_employment_duration")) {
+  age_x_employment_duration <- age_x_employment_duration %>%
+    mutate(
+      employment_clean = clean_employment(employment_status),
+      batch = factor(batch, levels = c("base", "dst"))
+    )
+
+  write_table(age_x_employment_duration, "duration_age_x_employment.csv")
+
+  p_age_emp <- ggplot(age_x_employment_duration, aes(x = age_at_sleep, y = estimate, color = employment_clean, fill = employment_clean)) +
+    geom_line(linewidth = 0.9) +
+    facet_wrap(~ batch, ncol = 1, scales = "free_y") +
     scale_y_continuous(labels = format_duration_axis) +
-    labs(title = "Age-Related Shifts in Duration", x = "Age (Years)", y = "Duration") +
-    common_theme
+    labs(
+      title = "Duration vs Age Controlling for Employment",
+      subtitle = "Precomputed age x employment grid",
+      x = "Age (years)",
+      y = "Predicted Sleep Duration",
+      color = "Employment",
+      fill = "Employment"
+    ) +
+    theme_classic(base_size = 12)
 
-  # Combine
-  combined <- p_timing / p_duration + plot_layout(heights = c(2, 1))
-  return(combined)
+  save_plot(p_age_emp, "duration_age_x_employment.png", width = 12, height = 9)
 }
 
-# --- 4. EXECUTE ---
-if (exists("all_age_preds") && nrow(all_age_preds) > 0) {
-  age_plot <- visualize_age_trends(all_age_preds)
-  options(repr.plot.width = 16, repr.plot.height = 10)
-  print(age_plot)
-} else {
-  message("No predictions generated.")
+age_x_dst_onoff <- primary_predictions %>% filter(analysis == "age_x_dst", outcome %in% c("onset", "offset"))
+if (nrow(age_x_dst_onoff) > 0 && require_cols(age_x_dst_onoff, c("age_at_sleep", "dst_observes", "outcome", "batch", "estimate", "conf.low", "conf.high"), "age_x_dst")) {
+  age_x_dst_onoff <- age_x_dst_onoff %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "offset")),
+      batch = factor(batch, levels = c("base", "dst"))
+    )
+
+  write_table(age_x_dst_onoff, "onset_offset_age_x_dst.csv")
+
+  p_age_dst <- ggplot(age_x_dst_onoff, aes(x = age_at_sleep, y = estimate, color = dst_observes, fill = dst_observes)) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0) +
+    geom_line(linewidth = 1.0) +
+    facet_grid(batch ~ outcome, scales = "free_y") +
+    scale_y_continuous(labels = format_time_axis) +
+    labs(
+      title = "Onset/Offset vs Age by DST Group",
+      x = "Age (years)",
+      y = "Predicted Clock Time",
+      color = "DST Group",
+      fill = "DST Group"
+    ) +
+    theme_classic(base_size = 13)
+
+  save_plot(p_age_dst, "onset_offset_age_x_dst.png", width = 13, height = 8)
 }
 
-# Example of how to save the raw data
-readr::write_csv(
-    x = all_age_preds, 
-    file = "results/Age_Effect_Quadratic_Predictions.csv"
-)
+# %% [markdown]
+# ## Figure 5: Reconstruction Quality (Derived vs Direct)
 
-# OR (if you prefer an R binary format for speed and precision)
-saveRDS(
-    object = all_age_preds, 
-    file = "results/Age_Effect_Quadratic_Predictions.rds"
-)
+# %%
+if (nrow(derived_age_compare) > 0) {
+  if (require_cols(derived_age_compare, c("age_at_sleep", "batch", "derived_duration_hours"), "derived_age_compare")) {
+    duration_series_cols <- intersect(
+      c("derived_duration_hours", "duration_direct_estimate", "duration_adjusted_estimate"),
+      names(derived_age_compare)
+    )
+    if (length(duration_series_cols) >= 2) {
+      derived_age_duration <- derived_age_compare %>%
+        select(any_of(c("batch", "age_at_sleep", "is_weekend_factor", "dst_observes", duration_series_cols))) %>%
+        pivot_longer(
+          cols = all_of(duration_series_cols),
+          names_to = "series",
+          values_to = "estimate"
+        ) %>%
+        filter(!is.na(estimate)) %>%
+        mutate(
+          series = recode(
+            series,
+            derived_duration_hours = "Derived from Onset+Offset",
+            duration_direct_estimate = "Direct Duration Model",
+            duration_adjusted_estimate = "Duration Model Adjusted for Midpoint"
+          ),
+          facet_key = "All"
+        )
 
+      if ("is_weekend_factor" %in% names(derived_age_duration)) {
+        wk_clean <- clean_level_label(normalize_weekend_level(derived_age_duration$is_weekend_factor), unknown = "AllDays")
+        derived_age_duration$facet_key <- paste0(derived_age_duration$facet_key, " | ", wk_clean)
+      }
+      if ("dst_observes" %in% names(derived_age_duration)) {
+        dst_clean <- clean_level_label(derived_age_duration$dst_observes, unknown = "AllDST")
+        derived_age_duration$facet_key <- paste0(derived_age_duration$facet_key, " | ", dst_clean)
+      }
+
+      derived_age_duration <- derived_age_duration %>%
+        mutate(
+          batch = factor(batch, levels = c("base", "dst")),
+          facet_key = factor(facet_key)
+        ) %>%
+        arrange(batch, facet_key, series, age_at_sleep)
+
+      write_table(derived_age_duration, "derived_vs_direct_duration_age_plot_data.csv")
+
+      p_derived_age_duration <- ggplot(
+        derived_age_duration,
+        aes(x = age_at_sleep, y = estimate, color = series, group = interaction(series, batch, facet_key, drop = TRUE))
+      ) +
+        geom_line(linewidth = 1.0) +
+        facet_grid(batch ~ facet_key, scales = "free_y") +
+        scale_y_continuous(labels = format_duration_axis) +
+        labs(
+          title = "Duration: Derived vs Direct Models",
+          subtitle = "Age-grid comparison including midpoint-adjusted sensitivity model",
+          x = "Age (years)",
+          y = "Predicted Sleep Duration",
+          color = NULL
+        ) +
+        theme_classic(base_size = 12)
+
+      save_plot(p_derived_age_duration, "derived_vs_direct_duration_age.png", width = 16, height = 8)
+    }
+  }
+
+  if (require_cols(derived_age_compare, c("age_at_sleep", "batch", "derived_midpoint_linear"), "derived_age_compare")) {
+    midpoint_series_cols <- intersect(
+      c("derived_midpoint_linear", "midpoint_direct_estimate", "midpoint_adjusted_estimate"),
+      names(derived_age_compare)
+    )
+    if (length(midpoint_series_cols) >= 2) {
+      derived_age_midpoint <- derived_age_compare %>%
+        select(any_of(c("batch", "age_at_sleep", "is_weekend_factor", "dst_observes", midpoint_series_cols))) %>%
+        pivot_longer(
+          cols = all_of(midpoint_series_cols),
+          names_to = "series",
+          values_to = "estimate"
+        ) %>%
+        filter(!is.na(estimate)) %>%
+        mutate(
+          series = recode(
+            series,
+            derived_midpoint_linear = "Derived from Onset+Offset",
+            midpoint_direct_estimate = "Direct Midpoint Model",
+            midpoint_adjusted_estimate = "Midpoint Model Adjusted for Duration"
+          ),
+          facet_key = "All"
+        )
+
+      if ("is_weekend_factor" %in% names(derived_age_midpoint)) {
+        wk_clean <- clean_level_label(normalize_weekend_level(derived_age_midpoint$is_weekend_factor), unknown = "AllDays")
+        derived_age_midpoint$facet_key <- paste0(derived_age_midpoint$facet_key, " | ", wk_clean)
+      }
+      if ("dst_observes" %in% names(derived_age_midpoint)) {
+        dst_clean <- clean_level_label(derived_age_midpoint$dst_observes, unknown = "AllDST")
+        derived_age_midpoint$facet_key <- paste0(derived_age_midpoint$facet_key, " | ", dst_clean)
+      }
+
+      derived_age_midpoint <- derived_age_midpoint %>%
+        mutate(
+          batch = factor(batch, levels = c("base", "dst")),
+          facet_key = factor(facet_key)
+        ) %>%
+        arrange(batch, facet_key, series, age_at_sleep)
+
+      write_table(derived_age_midpoint, "derived_vs_direct_midpoint_age_plot_data.csv")
+
+      p_derived_age_midpoint <- ggplot(
+        derived_age_midpoint,
+        aes(x = age_at_sleep, y = estimate, color = series, group = interaction(series, batch, facet_key, drop = TRUE))
+      ) +
+        geom_line(linewidth = 1.0) +
+        facet_grid(batch ~ facet_key, scales = "free_y") +
+        scale_y_continuous(labels = format_time_axis) +
+        labs(
+          title = "Midpoint: Derived vs Direct Models",
+          subtitle = "Age-grid comparison including duration-adjusted sensitivity model",
+          x = "Age (years)",
+          y = "Predicted Clock Time",
+          color = NULL
+        ) +
+        theme_classic(base_size = 12)
+
+      save_plot(p_derived_age_midpoint, "derived_vs_direct_midpoint_age.png", width = 16, height = 8)
+    }
+  }
+}
+
+if (nrow(derived_main_compare) > 0 && require_cols(derived_main_compare, c("batch", "derived_duration_hours", "derived_midpoint_linear"), "derived_main_compare")) {
+  derived_main_compare <- derived_main_compare %>%
+    mutate(strata = "Overall")
+
+  if ("employment_status" %in% names(derived_main_compare)) {
+    derived_main_compare$strata <- paste0(derived_main_compare$strata, " | ", clean_employment(derived_main_compare$employment_status))
+  }
+  if ("is_weekend_factor" %in% names(derived_main_compare)) {
+    wk_clean <- clean_level_label(normalize_weekend_level(derived_main_compare$is_weekend_factor), unknown = "AllDays")
+    derived_main_compare$strata <- paste0(derived_main_compare$strata, " | ", wk_clean)
+  }
+  if ("dst_observes" %in% names(derived_main_compare)) {
+    dst_clean <- clean_level_label(derived_main_compare$dst_observes, unknown = "AllDST")
+    derived_main_compare$strata <- paste0(derived_main_compare$strata, " | ", dst_clean)
+  }
+
+  duration_diff_cols <- intersect(
+    c("duration_direct_minus_derived", "duration_adjusted_minus_derived"),
+    names(derived_main_compare)
+  )
+  if (length(duration_diff_cols) > 0) {
+    duration_main_diff <- derived_main_compare %>%
+      select(any_of(c("batch", "strata", duration_diff_cols))) %>%
+      pivot_longer(cols = all_of(duration_diff_cols), names_to = "series", values_to = "difference") %>%
+      filter(!is.na(difference)) %>%
+      mutate(
+        series = recode(
+          series,
+          duration_direct_minus_derived = "Direct Duration Model",
+          duration_adjusted_minus_derived = "Duration Model Adjusted for Midpoint"
+        )
+      )
+
+    write_table(duration_main_diff, "derived_vs_direct_duration_main_grid_plot_data.csv")
+
+    p_main_duration_diff <- ggplot(duration_main_diff, aes(x = difference, y = reorder(strata, difference), color = series)) +
+      geom_vline(xintercept = 0, linetype = "dashed", color = "gray60") +
+      geom_point(size = 2.3) +
+      facet_wrap(~ batch, ncol = 1, scales = "free_y") +
+      labs(
+        title = "Duration Models minus Derived Duration (Main Grid)",
+        x = "Hours (Model - Derived)",
+        y = NULL,
+        color = NULL
+      ) +
+      theme_classic(base_size = 12)
+
+    save_plot(p_main_duration_diff, "derived_vs_direct_duration_main_grid.png", width = 12, height = 8)
+  }
+
+  midpoint_diff_cols <- intersect(
+    c("midpoint_direct_minus_derived", "midpoint_adjusted_minus_derived"),
+    names(derived_main_compare)
+  )
+  if (length(midpoint_diff_cols) > 0) {
+    midpoint_main_diff <- derived_main_compare %>%
+      select(any_of(c("batch", "strata", midpoint_diff_cols))) %>%
+      pivot_longer(cols = all_of(midpoint_diff_cols), names_to = "series", values_to = "difference") %>%
+      filter(!is.na(difference)) %>%
+      mutate(
+        series = recode(
+          series,
+          midpoint_direct_minus_derived = "Direct Midpoint Model",
+          midpoint_adjusted_minus_derived = "Midpoint Model Adjusted for Duration"
+        )
+      )
+
+    write_table(midpoint_main_diff, "derived_vs_direct_midpoint_main_grid_plot_data.csv")
+
+    p_main_midpoint_diff <- ggplot(midpoint_main_diff, aes(x = difference, y = reorder(strata, difference), color = series)) +
+      geom_vline(xintercept = 0, linetype = "dashed", color = "gray60") +
+      geom_point(size = 2.3) +
+      facet_wrap(~ batch, ncol = 1, scales = "free_y") +
+      scale_x_continuous(labels = function(x) sprintf("%.2fh", x)) +
+      labs(
+        title = "Midpoint Models minus Derived Midpoint (Main Grid)",
+        x = "Hours (Model - Derived)",
+        y = NULL,
+        color = NULL
+      ) +
+      theme_classic(base_size = 12)
+
+    save_plot(p_main_midpoint_diff, "derived_vs_direct_midpoint_main_grid.png", width = 12, height = 8)
+  }
+
+  write_table(derived_main_compare, "derived_vs_direct_main_grid.csv")
+}
+
+if (nrow(derived_main) > 0) write_table(derived_main, "derived_midpoint_duration_main_grid.csv")
+if (nrow(derived_age) > 0) write_table(derived_age, "derived_midpoint_duration_age.csv")
+if (nrow(derived_age_compare) > 0) write_table(derived_age_compare, "derived_vs_direct_age.csv")
+
+# %% [markdown]
+# ## Figure 6: Contrast Summaries
+
+# %%
+if (nrow(weekend_contrasts) > 0 && require_cols(weekend_contrasts, c("outcome", "contrast_scope", "weekend_minus_weekday"), "weekend_contrasts")) {
+  if (!"outcome_variant" %in% names(weekend_contrasts)) weekend_contrasts$outcome_variant <- "primary"
+  weekend_contrasts <- weekend_contrasts %>%
+    mutate(outcome_variant = normalize_outcome_variant(outcome_variant)) %>%
+    filter(outcome_variant == "primary") %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+      term = ifelse("employment_status" %in% names(weekend_contrasts) & !is.na(employment_status), clean_employment(employment_status), "Overall")
+    )
+
+  write_table(weekend_contrasts, "weekend_contrasts.csv")
+
+  p_weekend_ctr <- ggplot(weekend_contrasts, aes(x = weekend_minus_weekday, y = reorder(term, weekend_minus_weekday), color = batch)) +
+    geom_vline(xintercept = 0, linetype = "dashed", color = "gray60") +
+    geom_point(size = 2.2) +
+    facet_grid(contrast_scope ~ outcome, scales = "free_y", space = "free_y") +
+    labs(
+      title = "Weekend minus Weekday Contrasts",
+      x = "Difference in predicted value",
+      y = NULL,
+      color = "Batch"
+    ) +
+    theme_bw(base_size = 11)
+
+  save_plot(p_weekend_ctr, "weekend_contrasts.png", width = 16, height = 10)
+}
+
+if (nrow(dst_contrasts) > 0 && require_cols(dst_contrasts, c("outcome", "contrast_scope", "nodst_minus_dst"), "dst_contrasts")) {
+  if (!"outcome_variant" %in% names(dst_contrasts)) dst_contrasts$outcome_variant <- "primary"
+  dst_contrasts <- dst_contrasts %>%
+    mutate(outcome_variant = normalize_outcome_variant(outcome_variant)) %>%
+    filter(outcome_variant == "primary") %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+      term = case_when(
+        "month" %in% names(dst_contrasts) & !is.na(month) ~ paste("Month", month),
+        "is_weekend_factor" %in% names(dst_contrasts) & !is.na(is_weekend_factor) ~ normalize_weekend_level(is_weekend_factor),
+        TRUE ~ "Overall"
+      )
+    )
+
+  write_table(dst_contrasts, "dst_contrasts.csv")
+
+  p_dst_ctr <- ggplot(dst_contrasts, aes(x = nodst_minus_dst, y = reorder(term, nodst_minus_dst), color = batch)) +
+    geom_vline(xintercept = 0, linetype = "dashed", color = "gray60") +
+    geom_point(size = 2.2) +
+    facet_grid(contrast_scope ~ outcome, scales = "free_y", space = "free_y") +
+    labs(
+      title = "NoDST minus DST Contrasts",
+      x = "Difference in predicted value",
+      y = NULL,
+      color = "Batch"
+    ) +
+    theme_bw(base_size = 11)
+
+  save_plot(p_dst_ctr, "dst_contrasts.png", width = 16, height = 10)
+}
+
+# %% [markdown]
+# ## Final Export
+
+# %%
+writeLines(analysis_log, con = file.path(OUTPUT_DIR, "analysis_log.txt"))
+log_msg("Done.")
+log_msg(paste("Tables:", TABLE_DIR))
+log_msg(paste("Plots:", PLOT_DIR))

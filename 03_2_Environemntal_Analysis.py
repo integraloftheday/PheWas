@@ -39,12 +39,32 @@ TABLE_DIR = OUTPUT_DIR / "tables"
 for d in [OUTPUT_DIR, PLOT_DIR, TABLE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
-OUTCOMES = {
-    "daily_midpoint_hour": "Sleep Midpoint (hour)",
-    "daily_start_hour": "Sleep Onset (hour)",
-    "daily_end_hour": "Sleep Offset (hour)",
-    "daily_duration_hours": "Sleep Duration (hours)",
-}
+OUTCOME_SPECS = [
+    {
+        "name": "midpoint",
+        "analysis_col": "midpoint_linear_use",
+        "label": "Sleep Midpoint (clock hour)",
+        "is_clock": True,
+    },
+    {
+        "name": "onset",
+        "analysis_col": "onset_linear_use",
+        "label": "Sleep Onset (clock hour)",
+        "is_clock": True,
+    },
+    {
+        "name": "offset",
+        "analysis_col": "offset_linear_use",
+        "label": "Sleep Offset (clock hour)",
+        "is_clock": True,
+    },
+    {
+        "name": "duration",
+        "analysis_col": "daily_duration_hours",
+        "label": "Sleep Duration (hours)",
+        "is_clock": False,
+    },
+]
 
 ENV_CANDIDATES = [
     "PhotoPeriod",
@@ -63,6 +83,11 @@ SCATTER_SAMPLE_N = 120_000
 BINS = 16
 MAX_ROWS_PER_PAIR = 400_000
 
+# Plot controls
+# Default keeps only essential figures for speed.
+ENABLE_ALL_PLOTS = False
+UNLINEARIZE_CLOCK_PLOTS = True
+
 sns.set_style("whitegrid")
 
 
@@ -77,6 +102,17 @@ def normalize_zip3(expr: pl.Expr) -> pl.Expr:
         .then(digits.str.slice(0, 3))
         .otherwise(pl.lit(None, dtype=pl.String))
     )
+
+
+def linearize_noon_to_noon(expr: pl.Expr) -> pl.Expr:
+    """Map clock-hour [0,24) to noon-to-noon domain [12,36) for stable averaging/fits."""
+    return pl.when(expr < 12).then(expr + 24).otherwise(expr)
+
+
+def unlinearize_clock(values: np.ndarray | pd.Series) -> np.ndarray:
+    """Map linearized hour back to 0-24 clock-hour for plotting."""
+    arr = np.asarray(values, dtype=float)
+    return np.mod(arr, 24.0)
 
 
 def qcut_labels(values: pd.Series, bins: int = BINS) -> pd.Series:
@@ -253,17 +289,36 @@ with (TABLE_DIR / "00_environmental_diagnostics_notes.txt").open("w", encoding="
 # Merge sleep with environmental data
 # -----------------------------
 print("Merging sleep + environmental data...")
-sleep_base_lf = sleep_lf.select(
-    [
-        "person_id",
-        "sleep_date",
-        "employment_status",
-        "daily_midpoint_hour",
-        "daily_start_hour",
-        "daily_end_hour",
-        "daily_duration_mins",
-        "zip3" if "zip3" in sleep_cols else "zip_code",
-    ]
+sleep_select_cols = [
+    "person_id",
+    "sleep_date",
+    "employment_status",
+    "daily_midpoint_hour",
+    "daily_start_hour",
+    "daily_end_hour",
+    "daily_duration_mins",
+    "zip3" if "zip3" in sleep_cols else "zip_code",
+]
+for c in ["onset_linear", "midpoint_linear", "offset_linear"]:
+    if c in sleep_cols:
+        sleep_select_cols.append(c)
+
+sleep_base_lf = sleep_lf.select(sleep_select_cols)
+
+onset_linear_expr = (
+    pl.col("onset_linear").cast(pl.Float64)
+    if "onset_linear" in sleep_select_cols
+    else linearize_noon_to_noon(pl.col("daily_start_hour").cast(pl.Float64))
+)
+midpoint_linear_expr = (
+    pl.col("midpoint_linear").cast(pl.Float64)
+    if "midpoint_linear" in sleep_select_cols
+    else linearize_noon_to_noon(pl.col("daily_midpoint_hour").cast(pl.Float64))
+)
+offset_linear_expr = (
+    pl.col("offset_linear").cast(pl.Float64)
+    if "offset_linear" in sleep_select_cols
+    else linearize_noon_to_noon(pl.col("daily_end_hour").cast(pl.Float64))
 )
 
 sleep_env_lf = (
@@ -274,6 +329,9 @@ sleep_env_lf = (
             pl.col("sleep_date").cast(pl.Date).alias("Date"),
             pl.col("sleep_date").cast(pl.Date).dt.ordinal_day().alias("DayOfYear"),
             (pl.col("daily_duration_mins") / 60.0).alias("daily_duration_hours"),
+            onset_linear_expr.alias("onset_linear_use"),
+            midpoint_linear_expr.alias("midpoint_linear_use"),
+            offset_linear_expr.alias("offset_linear_use"),
             pl.when(pl.col("employment_status").is_null() | (pl.col("employment_status") == ""))
             .then(pl.lit("Unknown"))
             .otherwise(pl.col("employment_status"))
@@ -326,18 +384,18 @@ if not employment_groups:
     employment_groups = emp_counts_df["employment_status"].head(6).tolist()
 
 
-def collect_pair_df(outcome: str, env: str) -> tuple[pd.DataFrame, int]:
-    pair_lf = merged_lf.select(["person_id", "employment_status", outcome, env]).drop_nulls()
+def collect_pair_df(outcome_col: str, env_col: str) -> tuple[pd.DataFrame, int]:
+    pair_lf = merged_lf.select(["person_id", "employment_status", outcome_col, env_col]).drop_nulls()
     n_full = int(pair_lf.select(pl.len().alias("n")).collect(engine="streaming").item())
 
     if n_full == 0:
-        return pd.DataFrame(columns=[outcome, env, "employment_status"]), 0
+        return pd.DataFrame(columns=[outcome_col, env_col, "employment_status"]), 0
 
     if n_full > MAX_ROWS_PER_PAIR:
         mod = int(np.ceil(n_full / MAX_ROWS_PER_PAIR))
         pair_lf = pair_lf.filter((pl.col("person_id").cast(pl.Utf8).hash(seed=2026) % mod) == 0)
 
-    pdf = pair_lf.select([outcome, env, "employment_status"]).collect(engine="streaming").to_pandas()
+    pdf = pair_lf.select([outcome_col, env_col, "employment_status"]).collect(engine="streaming").to_pandas()
     return pdf, n_full
 
 # -----------------------------
@@ -347,101 +405,119 @@ print("Generating plots and GAM models...")
 
 summary_rows: List[Dict[str, object]] = []
 
-for outcome, y_label in OUTCOMES.items():
-    if outcome not in merged_cols:
+for spec in OUTCOME_SPECS:
+    outcome_col = spec["analysis_col"]
+    outcome_name = spec["name"]
+    y_label = spec["label"]
+    is_clock = bool(spec["is_clock"])
+
+    if outcome_col not in merged_cols:
         continue
 
     for env in env_vars:
-        d, n_full = collect_pair_df(outcome, env)
+        d, n_full = collect_pair_df(outcome_col, env)
         if d.empty:
             continue
 
-        # -------- Raw scatter (overall) --------
-        n_sample = min(SCATTER_SAMPLE_N, len(d))
-        d_sample = d.sample(n=n_sample, random_state=2026) if len(d) > n_sample else d
+        d_plot = d.copy()
+        if is_clock and UNLINEARIZE_CLOCK_PLOTS:
+            d_plot["y_plot"] = unlinearize_clock(d_plot[outcome_col].to_numpy())
+        else:
+            d_plot["y_plot"] = d_plot[outcome_col].to_numpy(dtype=float)
 
-        plt.figure(figsize=(9, 6))
-        plt.scatter(d_sample[env], d_sample[outcome], s=8, alpha=0.12, color="#1f77b4", edgecolor="none")
-        plt.xlabel(env)
-        plt.ylabel(y_label)
-        plt.title(f"Raw sleep vs environmental: {outcome} ~ {env} (overall)")
-        plt.tight_layout()
-        plt.savefig(PLOT_DIR / f"raw_overall__{outcome}__{env}.png", dpi=220)
-        plt.close()
+        # -------- Raw scatter (overall/by employment) [optional] --------
+        n_sample = min(SCATTER_SAMPLE_N, len(d_plot))
+        d_sample = d_plot.sample(n=n_sample, random_state=2026) if len(d_plot) > n_sample else d_plot
 
-        # -------- Raw scatter by employment --------
-        d_emp = d[d["employment_status"].isin(employment_groups)].copy()
-        if not d_emp.empty:
-            g = sns.FacetGrid(
-                d_emp.sample(n=min(len(d_emp), 80_000), random_state=2026) if len(d_emp) > 80_000 else d_emp,
-                col="employment_status",
-                col_wrap=3,
-                sharex=True,
-                sharey=True,
-                height=3.1,
-            )
-            g.map_dataframe(sns.scatterplot, x=env, y=outcome, s=7, alpha=0.15, linewidth=0)
-            g.set_axis_labels(env, y_label)
-            g.fig.subplots_adjust(top=0.90)
-            g.fig.suptitle(f"Raw sleep vs environmental by employment: {outcome} ~ {env}")
-            g.savefig(PLOT_DIR / f"raw_by_employment__{outcome}__{env}.png", dpi=200)
-            plt.close(g.fig)
-
-        # -------- Average + error bars (overall) --------
-        avg = mean_se_table(d, x_col=env, y_col=outcome)
-        if not avg.empty:
+        if ENABLE_ALL_PLOTS:
             plt.figure(figsize=(9, 6))
-            plt.errorbar(avg["x_mean"], avg["y_mean"], yerr=avg["ci95"], fmt="o-", capsize=3, alpha=0.9)
+            plt.scatter(d_sample[env], d_sample["y_plot"], s=8, alpha=0.12, color="#1f77b4", edgecolor="none")
             plt.xlabel(env)
             plt.ylabel(y_label)
-            plt.title(f"Binned mean ±95% CI: {outcome} ~ {env} (overall)")
+            plt.title(f"Raw sleep vs environmental: {outcome_name} ~ {env} (overall)")
             plt.tight_layout()
-            plt.savefig(PLOT_DIR / f"avg_overall__{outcome}__{env}.png", dpi=220)
+            plt.savefig(PLOT_DIR / f"raw_overall__{outcome_name}__{env}.png", dpi=220)
             plt.close()
 
-        # -------- Average + error bars (by employment) --------
+            d_emp = d_plot[d_plot["employment_status"].isin(employment_groups)].copy()
+            if not d_emp.empty:
+                g = sns.FacetGrid(
+                    d_emp.sample(n=min(len(d_emp), 80_000), random_state=2026) if len(d_emp) > 80_000 else d_emp,
+                    col="employment_status",
+                    col_wrap=3,
+                    sharex=True,
+                    sharey=True,
+                    height=3.1,
+                )
+                g.map_dataframe(sns.scatterplot, x=env, y="y_plot", s=7, alpha=0.15, linewidth=0)
+                g.set_axis_labels(env, y_label)
+                g.fig.subplots_adjust(top=0.90)
+                g.fig.suptitle(f"Raw sleep vs environmental by employment: {outcome_name} ~ {env}")
+                g.savefig(PLOT_DIR / f"raw_by_employment__{outcome_name}__{env}.png", dpi=200)
+                plt.close(g.fig)
+
+        # -------- Average + error bars (overall) [essential] --------
+        avg = mean_se_table(d, x_col=env, y_col=outcome_col)
+        if not avg.empty:
+            y_mean = unlinearize_clock(avg["y_mean"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else avg["y_mean"].to_numpy(dtype=float)
+            plt.figure(figsize=(9, 6))
+            plt.errorbar(avg["x_mean"], y_mean, yerr=avg["ci95"], fmt="o-", capsize=3, alpha=0.9)
+            plt.xlabel(env)
+            plt.ylabel(y_label)
+            plt.title(f"Binned mean ±95% CI: {outcome_name} ~ {env} (overall)")
+            plt.tight_layout()
+            plt.savefig(PLOT_DIR / f"avg_overall__{outcome_name}__{env}.png", dpi=220)
+            plt.close()
+
+        # -------- Average + error bars (by employment) [essential] --------
         avg_emp = mean_se_table(
             d[d["employment_status"].isin(employment_groups)],
             x_col=env,
-            y_col=outcome,
+            y_col=outcome_col,
             group_col="employment_status",
         )
         if not avg_emp.empty:
             plt.figure(figsize=(11, 7))
             for grp, gdf in avg_emp.groupby("employment_status"):
-                plt.errorbar(gdf["x_mean"], gdf["y_mean"], yerr=gdf["ci95"], fmt="o-", capsize=2, alpha=0.8, label=grp)
+                y_grp = unlinearize_clock(gdf["y_mean"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else gdf["y_mean"].to_numpy(dtype=float)
+                plt.errorbar(gdf["x_mean"], y_grp, yerr=gdf["ci95"], fmt="o-", capsize=2, alpha=0.8, label=grp)
             plt.xlabel(env)
             plt.ylabel(y_label)
-            plt.title(f"Binned mean ±95% CI by employment: {outcome} ~ {env}")
+            plt.title(f"Binned mean ±95% CI by employment: {outcome_name} ~ {env}")
             plt.legend(loc="best", fontsize=8)
             plt.tight_layout()
-            plt.savefig(PLOT_DIR / f"avg_by_employment__{outcome}__{env}.png", dpi=220)
+            plt.savefig(PLOT_DIR / f"avg_by_employment__{outcome_name}__{env}.png", dpi=220)
             plt.close()
 
-        # -------- GAM overall --------
+        # -------- GAM overall [essential] --------
         x = d[env].to_numpy(dtype=float)
-        y = d[outcome].to_numpy(dtype=float)
+        y = d[outcome_col].to_numpy(dtype=float)
         gam = fit_gam_1d(x, y)
         if gam is not None:
             curve = gam_curve(gam, np.nanpercentile(x, 1), np.nanpercentile(x, 99))
+            yhat_plot = unlinearize_clock(curve["yhat"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["yhat"].to_numpy(dtype=float)
+            lo_plot = unlinearize_clock(curve["lo"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["lo"].to_numpy(dtype=float)
+            hi_plot = unlinearize_clock(curve["hi"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve["hi"].to_numpy(dtype=float)
 
             plt.figure(figsize=(9, 6))
-            plt.scatter(d_sample[env], d_sample[outcome], s=8, alpha=0.08, color="gray", edgecolor="none")
-            plt.plot(curve["x"], curve["yhat"], color="#d62728", linewidth=2.3, label="GAM smooth")
-            plt.fill_between(curve["x"], curve["lo"], curve["hi"], color="#d62728", alpha=0.2, label="95% CI")
+            if ENABLE_ALL_PLOTS:
+                plt.scatter(d_sample[env], d_sample["y_plot"], s=8, alpha=0.08, color="gray", edgecolor="none")
+            plt.plot(curve["x"], yhat_plot, color="#d62728", linewidth=2.3, label="GAM smooth")
+            plt.fill_between(curve["x"], lo_plot, hi_plot, color="#d62728", alpha=0.2, label="95% CI")
             plt.xlabel(env)
             plt.ylabel(y_label)
-            plt.title(f"GAM: {outcome} ~ s({env}) (overall)")
+            plt.title(f"GAM: {outcome_name} ~ s({env}) (overall)")
             plt.legend()
             plt.tight_layout()
-            plt.savefig(PLOT_DIR / f"gam_overall__{outcome}__{env}.png", dpi=220)
+            plt.savefig(PLOT_DIR / f"gam_overall__{outcome_name}__{env}.png", dpi=220)
             plt.close()
 
             stats = gam.statistics_
             summary_rows.append(
                 {
                     "scope": "overall",
-                    "outcome": outcome,
+                    "outcome": outcome_name,
+                    "analysis_col": outcome_col,
                     "environment_var": env,
                     "n": int(n_full),
                     "edof": float(stats.get("edof", np.nan)),
@@ -452,46 +528,53 @@ for outcome, y_label in OUTCOMES.items():
                 }
             )
 
-        # -------- GAM by employment --------
-        for grp in employment_groups:
-            dg = d[d["employment_status"] == grp]
-            if len(dg) < MIN_GROUP_ROWS:
-                continue
+        # -------- GAM by employment [optional; expensive] --------
+        if ENABLE_ALL_PLOTS:
+            for grp in employment_groups:
+                dg = d[d["employment_status"] == grp]
+                if len(dg) < MIN_GROUP_ROWS:
+                    continue
 
-            xg = dg[env].to_numpy(dtype=float)
-            yg = dg[outcome].to_numpy(dtype=float)
-            gam_g = fit_gam_1d(xg, yg)
-            if gam_g is None:
-                continue
+                xg = dg[env].to_numpy(dtype=float)
+                yg = dg[outcome_col].to_numpy(dtype=float)
+                gam_g = fit_gam_1d(xg, yg)
+                if gam_g is None:
+                    continue
 
-            curve_g = gam_curve(gam_g, np.nanpercentile(xg, 1), np.nanpercentile(xg, 99))
-            plt.figure(figsize=(8.5, 5.5))
-            ds = dg.sample(n=min(len(dg), 25_000), random_state=2026) if len(dg) > 25_000 else dg
-            plt.scatter(ds[env], ds[outcome], s=8, alpha=0.10, color="gray", edgecolor="none")
-            plt.plot(curve_g["x"], curve_g["yhat"], color="#2ca02c", linewidth=2.2)
-            plt.fill_between(curve_g["x"], curve_g["lo"], curve_g["hi"], color="#2ca02c", alpha=0.2)
-            plt.xlabel(env)
-            plt.ylabel(y_label)
-            plt.title(f"GAM by employment ({grp}): {outcome} ~ s({env})")
-            plt.tight_layout()
-            plt.savefig(PLOT_DIR / f"gam_by_employment__{outcome}__{env}__{grp[:40].replace('/', '-').replace(' ', '_')}.png", dpi=220)
-            plt.close()
+                curve_g = gam_curve(gam_g, np.nanpercentile(xg, 1), np.nanpercentile(xg, 99))
+                yhat_g = unlinearize_clock(curve_g["yhat"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve_g["yhat"].to_numpy(dtype=float)
+                lo_g = unlinearize_clock(curve_g["lo"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve_g["lo"].to_numpy(dtype=float)
+                hi_g = unlinearize_clock(curve_g["hi"].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else curve_g["hi"].to_numpy(dtype=float)
 
-            stats_g = gam_g.statistics_
-            summary_rows.append(
-                {
-                    "scope": "employment_group",
-                    "employment_status": grp,
-                    "outcome": outcome,
-                    "environment_var": env,
-                    "n": int(len(dg)),
-                    "edof": float(stats_g.get("edof", np.nan)),
-                    "AIC": float(stats_g.get("AIC", np.nan)),
-                    "GCV": float(stats_g.get("GCV", np.nan)),
-                    "pseudo_r2_explained_deviance": float(stats_g.get("pseudo_r2", {}).get("explained_deviance", np.nan)),
-                    "p_value_smooth": float(gam_g.statistics_.get("p_values", [np.nan])[0]),
-                }
-            )
+                plt.figure(figsize=(8.5, 5.5))
+                ds = dg.sample(n=min(len(dg), 25_000), random_state=2026) if len(dg) > 25_000 else dg
+                ds_y = unlinearize_clock(ds[outcome_col].to_numpy()) if (is_clock and UNLINEARIZE_CLOCK_PLOTS) else ds[outcome_col].to_numpy(dtype=float)
+                plt.scatter(ds[env], ds_y, s=8, alpha=0.10, color="gray", edgecolor="none")
+                plt.plot(curve_g["x"], yhat_g, color="#2ca02c", linewidth=2.2)
+                plt.fill_between(curve_g["x"], lo_g, hi_g, color="#2ca02c", alpha=0.2)
+                plt.xlabel(env)
+                plt.ylabel(y_label)
+                plt.title(f"GAM by employment ({grp}): {outcome_name} ~ s({env})")
+                plt.tight_layout()
+                plt.savefig(PLOT_DIR / f"gam_by_employment__{outcome_name}__{env}__{grp[:40].replace('/', '-').replace(' ', '_')}.png", dpi=220)
+                plt.close()
+
+                stats_g = gam_g.statistics_
+                summary_rows.append(
+                    {
+                        "scope": "employment_group",
+                        "employment_status": grp,
+                        "outcome": outcome_name,
+                        "analysis_col": outcome_col,
+                        "environment_var": env,
+                        "n": int(len(dg)),
+                        "edof": float(stats_g.get("edof", np.nan)),
+                        "AIC": float(stats_g.get("AIC", np.nan)),
+                        "GCV": float(stats_g.get("GCV", np.nan)),
+                        "pseudo_r2_explained_deviance": float(stats_g.get("pseudo_r2", {}).get("explained_deviance", np.nan)),
+                        "p_value_smooth": float(gam_g.statistics_.get("p_values", [np.nan])[0]),
+                    }
+                )
 
 # Save GAM summaries
 if summary_rows:

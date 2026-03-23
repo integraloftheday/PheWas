@@ -48,6 +48,15 @@ else:
         "Input parquet must contain either 'zip3' or 'zip_code' to derive DST grouping."
     )
 
+MIDPOINT_COL = "midpoint_linear" if "midpoint_linear" in schema_cols else "daily_midpoint_hour"
+ONSET_COL = "onset_linear" if "onset_linear" in schema_cols else "daily_start_hour"
+OFFSET_COL = "offset_linear" if "offset_linear" in schema_cols else "daily_end_hour"
+
+print(
+    "Using timing columns for DST analysis: "
+    f"onset={ONSET_COL}, midpoint={MIDPOINT_COL}, offset={OFFSET_COL}"
+)
+
 lf = lf.with_columns([
     zip3_expr.alias("zip3")
 ])
@@ -97,7 +106,7 @@ def agg_with_se(lf, group_cols, target_cols):
 # --- 1. Weekly Trends ---
 print("Computing weekly trends...")
 weekly_lf = agg_with_se(lf, ["dst_group", "day_of_year"], 
-                        ["daily_midpoint_hour", "daily_start_hour", "daily_end_hour", "daily_duration_hours"])
+                        [MIDPOINT_COL, ONSET_COL, OFFSET_COL, "daily_duration_hours"])
 weekly_df = weekly_lf.collect().to_pandas().sort_values(["dst_group", "day_of_year"])
 
 def plot_weekly(df, y_base, title, filename):
@@ -127,9 +136,9 @@ def plot_weekly(df, y_base, title, filename):
     plt.savefig(OUTPUT_DIR / filename, dpi=300)
     plt.close()
 
-plot_weekly(weekly_df, "daily_midpoint_hour", "Weekly Midpoint: DST vs No-DST", "01_weekly_midpoint.png")
-plot_weekly(weekly_df, "daily_start_hour", "Weekly Onset: DST vs No-DST", "02_weekly_onset.png")
-plot_weekly(weekly_df, "daily_end_hour", "Weekly Offset: DST vs No-DST", "03_weekly_offset.png")
+plot_weekly(weekly_df, MIDPOINT_COL, "Weekly Midpoint: DST vs No-DST", "01_weekly_midpoint.png")
+plot_weekly(weekly_df, ONSET_COL, "Weekly Onset: DST vs No-DST", "02_weekly_onset.png")
+plot_weekly(weekly_df, OFFSET_COL, "Weekly Offset: DST vs No-DST", "03_weekly_offset.png")
 plot_weekly(weekly_df, "daily_duration_hours", "Weekly Duration: DST vs No-DST", "04_weekly_duration.png")
 
 # --- 2. Weekly Faceted by Employment ---
@@ -137,7 +146,7 @@ print("Computing weekly trends by employment...")
 emp_weekly_lf = agg_with_se(
     lf,
     ["dst_group", "employment_status", "day_of_year"],
-    ["daily_midpoint_hour", "daily_start_hour", "daily_end_hour", "daily_duration_hours"]
+    [MIDPOINT_COL, ONSET_COL, OFFSET_COL, "daily_duration_hours"]
 )
 emp_weekly_df = emp_weekly_lf.collect().to_pandas().sort_values(["employment_status", "dst_group", "day_of_year"])
 
@@ -179,21 +188,21 @@ def plot_faceted_weekly(df, y_base, title, filename, y_label="Hour / Duration"):
 
 plot_faceted_weekly(
     emp_weekly_df,
-    "daily_midpoint_hour",
+    MIDPOINT_COL,
     "Weekly Midpoint by Employment Status (Dashed Trends + 95% CI Bars)",
     "05_weekly_midpoint_by_employment.png",
     "Hour"
 )
 plot_faceted_weekly(
     emp_weekly_df,
-    "daily_start_hour",
+    ONSET_COL,
     "Weekly Onset by Employment Status (Dashed Trends + 95% CI Bars)",
     "05b_weekly_onset_by_employment.png",
     "Hour"
 )
 plot_faceted_weekly(
     emp_weekly_df,
-    "daily_end_hour",
+    OFFSET_COL,
     "Weekly Offset by Employment Status (Dashed Trends + 95% CI Bars)",
     "05c_weekly_offset_by_employment.png",
     "Hour"
@@ -213,14 +222,14 @@ transition_window = 14
 def process_transition_with_errors(lf, day_col, title_prefix, file_prefix):
     trans_lf = agg_with_se(lf.filter(pl.col(day_col).abs() <= transition_window),
                            ["dst_group", day_col], 
-                           ["daily_midpoint_hour", "daily_start_hour", "daily_end_hour", "daily_duration_hours"])
+                           [MIDPOINT_COL, ONSET_COL, OFFSET_COL, "daily_duration_hours"])
     df = trans_lf.collect().to_pandas().sort_values(["dst_group", day_col])
     
     colors = {"DST": "#e41a1c", "NoDST": "#377eb8"}
     metric_specs = [
-        ("midpoint", "daily_midpoint_hour", "Hour"),
-        ("start", "daily_start_hour", "Hour"),
-        ("end", "daily_end_hour", "Hour"),
+        ("midpoint", MIDPOINT_COL, "Hour"),
+        ("start", ONSET_COL, "Hour"),
+        ("end", OFFSET_COL, "Hour"),
         ("duration", "daily_duration_hours", "Hours"),
     ]
     for var, col_name, y_label in metric_specs:
@@ -287,7 +296,7 @@ def plot_faceted_transition_with_errors(lf, day_col, y_base, title, filename, y_
 plot_faceted_transition_with_errors(
     lf,
     "days_to_spring",
-    "daily_midpoint_hour",
+    MIDPOINT_COL,
     "Spring Transition: Midpoint by Employment",
     "08_spring_midpoint_by_employment.png",
     "Hour"
@@ -295,7 +304,7 @@ plot_faceted_transition_with_errors(
 plot_faceted_transition_with_errors(
     lf,
     "days_to_fall",
-    "daily_midpoint_hour",
+    MIDPOINT_COL,
     "Fall Transition: Midpoint by Employment",
     "09_fall_midpoint_by_employment.png",
     "Hour"
@@ -303,7 +312,7 @@ plot_faceted_transition_with_errors(
 plot_faceted_transition_with_errors(
     lf,
     "days_to_spring",
-    "daily_start_hour",
+    ONSET_COL,
     "Spring Transition: Onset by Employment",
     "08b_spring_onset_by_employment.png",
     "Hour"
@@ -311,7 +320,7 @@ plot_faceted_transition_with_errors(
 plot_faceted_transition_with_errors(
     lf,
     "days_to_fall",
-    "daily_start_hour",
+    ONSET_COL,
     "Fall Transition: Onset by Employment",
     "09b_fall_onset_by_employment.png",
     "Hour"
@@ -319,7 +328,7 @@ plot_faceted_transition_with_errors(
 plot_faceted_transition_with_errors(
     lf,
     "days_to_spring",
-    "daily_end_hour",
+    OFFSET_COL,
     "Spring Transition: Offset by Employment",
     "08c_spring_offset_by_employment.png",
     "Hour"
@@ -327,7 +336,7 @@ plot_faceted_transition_with_errors(
 plot_faceted_transition_with_errors(
     lf,
     "days_to_fall",
-    "daily_end_hour",
+    OFFSET_COL,
     "Fall Transition: Offset by Employment",
     "09c_fall_offset_by_employment.png",
     "Hour"

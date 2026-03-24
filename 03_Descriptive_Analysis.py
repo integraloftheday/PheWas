@@ -35,6 +35,18 @@ def to_noon_linear(s: pd.Series) -> pd.Series:
     return np.where(vals < 12.0, vals + 24.0, vals)
 
 
+def ensure_noon_linear(s: pd.Series) -> pd.Series:
+    vals = pd.to_numeric(s, errors="coerce")
+    out = vals.copy()
+    # If a value looks like clock-hour [0,24), move to noon-linearized scale.
+    mask = out.notna() & (out >= 0.0) & (out < 24.0)
+    out.loc[mask] = np.where(out.loc[mask] < 12.0, out.loc[mask] + 24.0, out.loc[mask])
+    # Wrap all finite values into [12, 36) for consistent centered plotting.
+    finite_mask = out.notna()
+    out.loc[finite_mask] = np.mod(out.loc[finite_mask] - 12.0, 24.0) + 12.0
+    return out
+
+
 def hour_24_formatter(x: float, _pos: int) -> str:
     if not np.isfinite(x):
         return ""
@@ -64,14 +76,14 @@ def style_publication() -> None:
 
 
 def apply_time_axis(ax: plt.Axes, axis: str = "x") -> None:
-    ticks = np.arange(0, 25, 2)
+    ticks = np.arange(12, 37, 2)
     formatter = FuncFormatter(hour_24_formatter)
     if axis == "x":
-        ax.set_xlim(0, 24)
+        ax.set_xlim(12, 36)
         ax.set_xticks(ticks)
         ax.xaxis.set_major_formatter(formatter)
     else:
-        ax.set_ylim(0, 24)
+        ax.set_ylim(12, 36)
         ax.set_yticks(ticks)
         ax.yaxis.set_major_formatter(formatter)
 
@@ -333,9 +345,12 @@ def main() -> None:
     else:
         raise ValueError("Need either is_weekend_or_holiday or is_weekend to define work/free days.")
 
-    df["onset_clock"] = linear_to_clock(df["onset_linear_use"])
-    df["midpoint_clock"] = linear_to_clock(df["midpoint_linear_use"])
-    df["offset_clock"] = linear_to_clock(df["offset_linear_use"])
+    df["onset_centered"] = ensure_noon_linear(df["onset_linear_use"])
+    df["midpoint_centered"] = ensure_noon_linear(df["midpoint_linear_use"])
+    df["offset_centered"] = ensure_noon_linear(df["offset_linear_use"])
+    df["onset_clock"] = linear_to_clock(df["onset_centered"])
+    df["midpoint_clock"] = linear_to_clock(df["midpoint_centered"])
+    df["offset_clock"] = linear_to_clock(df["offset_centered"])
     df["week"] = np.ceil(pd.to_numeric(df["day_of_year"], errors="coerce") / 7.0)
 
     midpoint_person = build_midpoint_person_level(df)
@@ -348,19 +363,19 @@ def main() -> None:
 
     # ---------- Plot 1: Midpoint histogram in 24h ----------
     fig, ax = plt.subplots(figsize=(10.0, 5.4))
-    bins = np.arange(0, 24.5, 0.5)
+    bins = np.arange(12, 36.5, 0.5)
     if not midpoint_person.empty:
-        ax.hist(midpoint_person["MSW_clock"].dropna(), bins=bins, alpha=0.45, label="Work midpoint (MSW)", color="#1f77b4", density=True)
-        ax.hist(midpoint_person["MSF_clock"].dropna(), bins=bins, alpha=0.45, label="Free midpoint (MSF)", color="#ff7f0e", density=True)
-        ax.hist(midpoint_person["MSFsc_clock"].dropna(), bins=bins, alpha=0.45, label="Adjusted midpoint (MSFsc)", color="#2ca02c", density=True)
+        ax.hist(midpoint_person["MSW_linear"].dropna(), bins=bins, alpha=0.45, label="Work midpoint (MSW)", color="#1f77b4", density=True)
+        ax.hist(midpoint_person["MSF_linear"].dropna(), bins=bins, alpha=0.45, label="Free midpoint (MSF)", color="#ff7f0e", density=True)
+        ax.hist(midpoint_person["MSFsc_linear"].dropna(), bins=bins, alpha=0.45, label="Adjusted midpoint (MSFsc)", color="#2ca02c", density=True)
         ax.set_ylabel("Density")
         ax.legend(frameon=False, title="")
         ax.set_title("Distribution of Midpoint (work, free, adjusted)")
     else:
-        ax.hist(df["midpoint_clock"].dropna(), bins=bins, color="#86b0d9", edgecolor="white")
+        ax.hist(df["midpoint_centered"].dropna(), bins=bins, color="#86b0d9", edgecolor="white")
         ax.set_ylabel("N nights")
         ax.set_title("Distribution of Sleep Midpoint")
-    ax.set_xlabel("Midpoint time (24h)")
+    ax.set_xlabel("Midpoint time (24h, midnight-centered)")
     apply_time_axis(ax, axis="x")
     fig.tight_layout()
     fig.savefig(OUTPUT_DIR / "01_midpoint_hist_24h.png", bbox_inches="tight")
@@ -380,8 +395,8 @@ def main() -> None:
 
     # ---------- Plot 3/4: onset/offset work vs free ----------
     for col, title, out_name in [
-        ("onset_clock", "Sleep onset density: work vs free days", "03_onset_density_work_free_24h.png"),
-        ("offset_clock", "Sleep offset density: work vs free days", "04_offset_density_work_free_24h.png"),
+        ("onset_centered", "Sleep onset density: work vs free days", "03_onset_density_work_free_24h.png"),
+        ("offset_centered", "Sleep offset density: work vs free days", "04_offset_density_work_free_24h.png"),
     ]:
         tmp = df[[col, "is_work_day"]].dropna().copy()
         if tmp.empty:
@@ -401,7 +416,7 @@ def main() -> None:
             palette=["#1f77b4", "#d62728"],
         )
         ax.set_title(title)
-        ax.set_xlabel("Clock time (24h)")
+        ax.set_xlabel("Clock time (24h, midnight-centered)")
         ax.set_ylabel("Density")
         apply_time_axis(ax, axis="x")
         leg = ax.get_legend()
@@ -427,11 +442,12 @@ def main() -> None:
         msfsc_df["series"] = "Adjusted midpoint (MSFsc)"
 
         dens_df = pd.concat([msw_df, msf_df, msfsc_df], ignore_index=True).dropna()
+        dens_df["midpoint_centered"] = ensure_noon_linear(dens_df["midpoint_clock"])
 
         fig, ax = plt.subplots(figsize=(10.5, 5.7))
         sns.kdeplot(
             data=dens_df,
-            x="midpoint_clock",
+            x="midpoint_centered",
             hue="series",
             fill=True,
             common_norm=False,
@@ -441,7 +457,7 @@ def main() -> None:
             ax=ax,
         )
         ax.set_title("Midpoint density: work, free, and sleep-corrected")
-        ax.set_xlabel("Midpoint time (24h)")
+        ax.set_xlabel("Midpoint time (24h, midnight-centered)")
         ax.set_ylabel("Density")
         apply_time_axis(ax, axis="x")
         leg = ax.get_legend()
@@ -483,21 +499,21 @@ def main() -> None:
 
     # ---------- Plot 7: weekly midpoint trend (work/free/adjusted together) ----------
     week_mid_frames: list[pd.DataFrame] = []
-    week_work = df[df["is_work_day"] == 1][["week", "midpoint_clock"]].dropna()
+    week_work = df[df["is_work_day"] == 1][["week", "midpoint_centered"]].dropna()
     if not week_work.empty:
-        week_mid_frames.append(week_work.assign(series="Work midpoint (MSW proxy)").rename(columns={"midpoint_clock": "value"}))
+        week_mid_frames.append(week_work.assign(series="Work midpoint (MSW proxy)").rename(columns={"midpoint_centered": "value"}))
 
-    week_free = df[df["is_work_day"] == 0][["week", "midpoint_clock"]].dropna()
+    week_free = df[df["is_work_day"] == 0][["week", "midpoint_centered"]].dropna()
     if not week_free.empty:
-        week_mid_frames.append(week_free.assign(series="Free midpoint (MSF proxy)").rename(columns={"midpoint_clock": "value"}))
+        week_mid_frames.append(week_free.assign(series="Free midpoint (MSF proxy)").rename(columns={"midpoint_centered": "value"}))
 
     if not midpoint_person.empty:
         person_week = (
             df[["person_id", "week"]]
             .dropna()
             .drop_duplicates()
-            .merge(midpoint_person[["person_id", "MSFsc_clock"]], on="person_id", how="inner")
-            .rename(columns={"MSFsc_clock": "value"})
+            .merge(midpoint_person[["person_id", "MSFsc_linear"]], on="person_id", how="inner")
+            .rename(columns={"MSFsc_linear": "value"})
             .assign(series="Adjusted midpoint (MSFsc)")
         )
         week_mid_frames.append(person_week[["week", "value", "series"]])
@@ -526,7 +542,7 @@ def main() -> None:
             ax.fill_between(g["week"], g["mean"] - 1.96 * g["se"].fillna(0), g["mean"] + 1.96 * g["se"].fillna(0), color=c, alpha=0.12)
 
         ax.set_title("Weekly seasonal trend: midpoint (work, free, adjusted)")
-        ax.set_ylabel("Midpoint time (24h)")
+        ax.set_ylabel("Midpoint time (24h, midnight-centered)")
         add_week_and_month_labels(ax)
         apply_time_axis(ax, axis="y")
         ax.grid(alpha=0.25)
@@ -537,8 +553,8 @@ def main() -> None:
 
     # ---------- Plot 8/9/10: weekly onset/offset/duration ----------
     for col, title, out_name, ylabel, is_time in [
-        ("onset_clock", "Weekly seasonal trend: sleep onset", "08_weekly_onset_24h.png", "Onset time (24h)", True),
-        ("offset_clock", "Weekly seasonal trend: sleep offset", "09_weekly_offset_24h.png", "Offset time (24h)", True),
+        ("onset_centered", "Weekly seasonal trend: sleep onset", "08_weekly_onset_24h.png", "Onset time (24h, midnight-centered)", True),
+        ("offset_centered", "Weekly seasonal trend: sleep offset", "09_weekly_offset_24h.png", "Offset time (24h, midnight-centered)", True),
         ("duration_hours", "Weekly seasonal trend: sleep duration", "10_weekly_duration_hours.png", "Duration (hours)", False),
     ]:
         tmp = df[["week", col]].dropna()
@@ -554,14 +570,14 @@ def main() -> None:
 
     # ---------- Plot 11: age-bin plots (5-year bins; midpoint includes all three) ----------
     age_person = (
-        df[["person_id", "age_at_sleep", "duration_hours", "onset_clock", "offset_clock"]]
+        df[["person_id", "age_at_sleep", "duration_hours", "onset_centered", "offset_centered"]]
         .dropna(subset=["person_id", "age_at_sleep"])
         .groupby("person_id", as_index=False)
         .agg(
             age=("age_at_sleep", "mean"),
             duration=("duration_hours", "mean"),
-            onset=("onset_clock", "mean"),
-            offset=("offset_clock", "mean"),
+            onset=("onset_centered", "mean"),
+            offset=("offset_centered", "mean"),
         )
     )
     if not age_person.empty:
@@ -574,7 +590,7 @@ def main() -> None:
 
         midpoint_age = pd.DataFrame()
         if not midpoint_person.empty:
-            midpoint_age = midpoint_person[["person_id", "MSW_clock", "MSF_clock", "MSFsc_clock"]].merge(
+            midpoint_age = midpoint_person[["person_id", "MSW_linear", "MSF_linear", "MSFsc_linear"]].merge(
                 age_person[["person_id", "age_bin"]], on="person_id", how="inner"
             )
 
@@ -606,14 +622,14 @@ def main() -> None:
         if not midpoint_age.empty:
             mid_long = midpoint_age.melt(
                 id_vars=["age_bin"],
-                value_vars=["MSW_clock", "MSF_clock", "MSFsc_clock"],
+                value_vars=["MSW_linear", "MSF_linear", "MSFsc_linear"],
                 var_name="series",
                 value_name="midpoint_clock",
             )
             mid_map = {
-                "MSW_clock": "Work midpoint",
-                "MSF_clock": "Free midpoint",
-                "MSFsc_clock": "Adjusted midpoint",
+                "MSW_linear": "Work midpoint",
+                "MSF_linear": "Free midpoint",
+                "MSFsc_linear": "Adjusted midpoint",
             }
             mid_long["series"] = mid_long["series"].map(mid_map)
             mid_agg = mid_long.groupby(["age_bin", "series"], observed=True, as_index=False).agg(
@@ -714,7 +730,7 @@ def main() -> None:
             .groupby("person_id", as_index=False)["employment_status"]
             .agg(lambda x: x.mode().iloc[0] if not x.mode().empty else x.iloc[0])
         )
-        emp_mid = midpoint_person[["person_id", "MSW_clock", "MSF_clock", "MSFsc_clock"]].merge(
+        emp_mid = midpoint_person[["person_id", "MSW_linear", "MSF_linear", "MSFsc_linear"]].merge(
             person_emp,
             on="person_id",
             how="inner",
@@ -723,15 +739,15 @@ def main() -> None:
             order = emp_mid["employment_status"].value_counts().index.tolist()
             emp_long = emp_mid.melt(
                 id_vars=["employment_status"],
-                value_vars=["MSW_clock", "MSF_clock", "MSFsc_clock"],
+                value_vars=["MSW_linear", "MSF_linear", "MSFsc_linear"],
                 var_name="series",
                 value_name="midpoint_clock",
             )
             emp_long["series"] = emp_long["series"].map(
                 {
-                    "MSW_clock": "Work midpoint",
-                    "MSF_clock": "Free midpoint",
-                    "MSFsc_clock": "Adjusted midpoint",
+                    "MSW_linear": "Work midpoint",
+                    "MSF_linear": "Free midpoint",
+                    "MSFsc_linear": "Adjusted midpoint",
                 }
             )
 
@@ -750,7 +766,7 @@ def main() -> None:
             )
             ax.set_title("Midpoint by employment status (work, free, adjusted)")
             ax.set_xlabel("Employment status")
-            ax.set_ylabel("Midpoint time (24h)")
+            ax.set_ylabel("Midpoint time (24h, midnight-centered)")
             ax.tick_params(axis="x", rotation=25)
             apply_time_axis(ax, axis="y")
             ax.legend(frameon=False, title="")

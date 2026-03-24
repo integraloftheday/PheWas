@@ -10,6 +10,10 @@ suppressPackageStartupMessages({
   library(yaml)
 })
 
+`%||%` <- function(a, b) {
+  if (!is.null(a) && length(a) > 0 && !all(is.na(a))) a else b
+}
+
 # Prefer project-local R library when present.
 if (dir.exists(".r_libs")) {
   .libPaths(c(".r_libs", .libPaths()))
@@ -62,8 +66,32 @@ if (is.null(input_data) || !file.exists(input_data)) {
 # 4. Handle Subsetting
 if (isTRUE(config$use_subset)) {
   log_msg("use_subset is TRUE, invoking subset creator...")
-  subset_cmd <- sprintf("Rscript 02b_Create_Analysis_Subset.r %s %s", config_path, run_dir)
-  ret <- system(subset_cmd)
+  subset_engine <- tolower(config$subset_engine %||% "python")
+  py_script <- "02b_Create_Analysis_Subset.py"
+  r_script <- "02b_Create_Analysis_Subset.r"
+
+  if (subset_engine == "python" && file.exists(py_script)) {
+    py_bin <- Sys.getenv("PYTHON_BIN", "python3")
+    subset_cmd <- sprintf(
+      "%s %s %s %s",
+      shQuote(py_bin),
+      shQuote(py_script),
+      shQuote(config_path),
+      shQuote(run_dir)
+    )
+    log_msg(sprintf("Running subset creator (python): %s", subset_cmd))
+    ret <- system(subset_cmd)
+  } else {
+    subset_cmd <- sprintf(
+      "Rscript %s %s %s",
+      shQuote(r_script),
+      shQuote(config_path),
+      shQuote(run_dir)
+    )
+    log_msg(sprintf("Running subset creator (R): %s", subset_cmd))
+    ret <- system(subset_cmd)
+  }
+
   if (ret != 0) stop("Subset creation failed.")
   
   # Update input data to point to the new subset

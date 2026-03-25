@@ -24,6 +24,9 @@ INPUT_PATH = Path("processed_data/ready_for_analysis.parquet")
 OUTPUT_DIR = Path("results/descriptive_analysis")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+DENSITY_BW_ADJUST = 1.10
+DENSITY_GRIDSIZE = 1024
+
 
 def linear_to_clock(s: pd.Series) -> pd.Series:
     vals = pd.to_numeric(s, errors="coerce")
@@ -115,7 +118,7 @@ def apply_time_axis_zoom(
         vmin -= step_hours
         vmax += step_hours
 
-    pad = max(0.20 * (vmax - vmin), step_hours)
+    pad = max(0.08 * (vmax - vmin), 0.125)
     lo = np.floor((vmin - pad) / step_hours) * step_hours
     hi = np.ceil((vmax + pad) / step_hours) * step_hours
 
@@ -458,7 +461,9 @@ def main() -> None:
             common_norm=False,
             fill=True,
             alpha=0.35,
-            bw_adjust=0.8,
+            bw_adjust=DENSITY_BW_ADJUST,
+            gridsize=DENSITY_GRIDSIZE,
+            cut=0,
             ax=ax,
             palette=["#1f77b4", "#d62728"],
         )
@@ -487,7 +492,9 @@ def main() -> None:
             common_norm=False,
             fill=True,
             alpha=0.35,
-            bw_adjust=0.85,
+            bw_adjust=DENSITY_BW_ADJUST,
+            gridsize=DENSITY_GRIDSIZE,
+            cut=0,
             ax=ax,
             palette=["#1f77b4", "#d62728"],
         )
@@ -527,7 +534,9 @@ def main() -> None:
             fill=True,
             common_norm=False,
             alpha=0.35,
-            bw_adjust=0.85,
+            bw_adjust=DENSITY_BW_ADJUST,
+            gridsize=DENSITY_GRIDSIZE,
+            cut=0,
             palette=["#1f77b4", "#ff7f0e", "#2ca02c"],
             ax=ax,
         )

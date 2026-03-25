@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+from matplotlib.ticker import FuncFormatter
 from scipy import stats
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -35,6 +36,14 @@ def get_dst_dates(year):
 YEARS = range(2009, 2024)
 DST_DATES = {year: get_dst_dates(year) for year in YEARS}
 
+SPRING_DST_DOY = int(round(np.mean([spring.timetuple().tm_yday for spring, _ in DST_DATES.values()])))
+FALL_DST_DOY = int(round(np.mean([fall.timetuple().tm_yday for _, fall in DST_DATES.values()])))
+
+MONTH_STARTS_NON_LEAP = [
+    (1, "Jan"), (32, "Feb"), (60, "Mar"), (91, "Apr"), (121, "May"), (152, "Jun"),
+    (182, "Jul"), (213, "Aug"), (244, "Sep"), (274, "Oct"), (305, "Nov"), (335, "Dec")
+]
+
 # --- DATA PREPARATION ---
 print(f"Loading {INPUT_PARQUET}...")
 lf = pl.scan_parquet(INPUT_PARQUET)
@@ -58,8 +67,47 @@ print(
     f"onset={ONSET_COL}, midpoint={MIDPOINT_COL}, offset={OFFSET_COL}"
 )
 
-TIME_AXIS_LABEL = "Sleep timing (hours; linearized/noon-to-noon scale when applicable)"
-DURATION_AXIS_LABEL = "Sleep duration (hours/night)"
+TIME_AXIS_LABEL = "Sleep timing (HH:MM; linearized/noon-to-noon scale when applicable)"
+DURATION_AXIS_LABEL = "Sleep duration (HH:MM/night)"
+TIME_METRIC_COLS = {MIDPOINT_COL, ONSET_COL, OFFSET_COL}
+
+
+def decimal_hours_to_hhmm(value, wrap_24=False):
+    if pd.isna(value) or np.isinf(value):
+        return ""
+    sign = "-" if value < 0 else ""
+    total_minutes = int(round(abs(float(value)) * 60))
+    hours, minutes = divmod(total_minutes, 60)
+
+    if wrap_24:
+        day_offset, hour24 = divmod(hours, 24)
+        if day_offset == 0:
+            return f"{sign}{hour24:02d}:{minutes:02d}"
+        return f"{sign}{hour24:02d}:{minutes:02d} (+{day_offset}d)"
+
+    return f"{sign}{hours:02d}:{minutes:02d}"
+
+
+def apply_hhmm_axis_formatter(ax, metric_col):
+    wrap_24 = metric_col in TIME_METRIC_COLS
+    ax.yaxis.set_major_formatter(
+        FuncFormatter(lambda x, pos: decimal_hours_to_hhmm(x, wrap_24=wrap_24))
+    )
+
+
+def apply_weekly_month_ticks(ax, max_day=366):
+    ticks = [d for d, _ in MONTH_STARTS_NON_LEAP if d <= max_day]
+    labels = [f"{d}\n{m}" for d, m in MONTH_STARTS_NON_LEAP if d <= max_day]
+    if ticks:
+        ax.set_xticks(ticks)
+        ax.set_xticklabels(labels)
+
+
+def add_weekly_dst_transition_lines(ax, show_labels=False):
+    spring_label = "Spring DST transition" if show_labels else None
+    fall_label = "Fall DST transition" if show_labels else None
+    ax.axvline(SPRING_DST_DOY, color="#636363", linestyle="--", linewidth=1.3, alpha=0.9, label=spring_label)
+    ax.axvline(FALL_DST_DOY, color="#636363", linestyle="--", linewidth=1.3, alpha=0.9, label=fall_label)
 
 lf = lf.with_columns([
     zip3_expr.alias("zip3")
@@ -130,9 +178,13 @@ def plot_weekly(df, y_base, title, filename, y_label):
         smooth_y = gdf[mean_col].rolling(7, center=True, min_periods=1).mean()
         plt.plot(gdf["day_of_year"], smooth_y, color=colors.get(group, "black"), 
                  linestyle="--", linewidth=2.5, label=f"{group} Trend (7d smooth)")
+
+    add_weekly_dst_transition_lines(plt.gca(), show_labels=True)
+    apply_weekly_month_ticks(plt.gca(), max_day=int(df["day_of_year"].max()))
+    apply_hhmm_axis_formatter(plt.gca(), y_base)
     
     plt.title(title)
-    plt.xlabel("Day of year (1-366)")
+    plt.xlabel("Day of year + month")
     plt.ylabel(y_label)
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.grid(True, alpha=0.3)
@@ -200,6 +252,9 @@ def plot_faceted_weekly(df, y_base, title, filename, y_label="Value"):
             smooth_y = gdf[mean_col].rolling(7, center=True, min_periods=1).mean()
             ax.plot(gdf["day_of_year"], smooth_y, color=colors.get(group), 
                     linestyle="--", linewidth=2, label=group)
+            add_weekly_dst_transition_lines(ax, show_labels=False)
+            apply_weekly_month_ticks(ax, max_day=int(df["day_of_year"].max()))
+            apply_hhmm_axis_formatter(ax, y_base)
         ax.set_title(f"Emp: {emp}")
         ax.grid(True, alpha=0.2)
         if i == 0: ax.legend()
@@ -208,7 +263,7 @@ def plot_faceted_weekly(df, y_base, title, filename, y_label="Value"):
         axes[j].axis("off")
 
     plt.suptitle(title, y=1.02, fontsize=16)
-    fig.supxlabel("Day of year (1-366)")
+    fig.supxlabel("Day of year + month")
     fig.supylabel(y_label)
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / filename, dpi=300)
@@ -275,6 +330,7 @@ def process_transition_with_errors(lf, day_col, title_prefix, file_prefix):
         )
         plt.xlabel("Days from DST transition date")
         plt.ylabel(y_label)
+        apply_hhmm_axis_formatter(plt.gca(), col_name)
         plt.legend()
         plt.grid(True, alpha=0.3)
         plt.savefig(OUTPUT_DIR / f"{file_prefix}_{var}.png", dpi=300)
@@ -310,6 +366,7 @@ def plot_faceted_transition_with_errors(lf, day_col, y_base, title, filename, y_
             ax.plot(gdf[day_col], gdf[mean_col], color=colors.get(group), 
                     linestyle="--", linewidth=1.5, label=group)
         ax.axvline(0, color="black", alpha=0.8)
+        apply_hhmm_axis_formatter(ax, y_base)
         ax.set_title(f"Emp: {emp}")
         if i == 0: ax.legend()
 
@@ -833,7 +890,160 @@ if "p_value" in stats_df.columns:
 stats_df.to_csv(OUTPUT_DIR / "13_dst_did_person_level_stats.csv", index=False)
 print(f"Saved DST statistical tests to {OUTPUT_DIR / '13_dst_did_person_level_stats.csv'}")
 
-# --- 7. Diagnostics ---
+# --- 7. Descriptive table (Overall vs DST/NoDST) ---
+print("Building DST descriptive table...")
+
+TABLE_OUTPUT = Path("results") / "dst_descriptive_table_by_group.csv"
+TABLE_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+
+
+def _safe_n_label(n):
+    return f"{int(n):,}" if pd.notna(n) else "0"
+
+
+def _fmt_pct(n, denom):
+    if denom <= 0 or pd.isna(n):
+        return "0 (0%)"
+    pct = 100.0 * float(n) / float(denom)
+    pct_str = f"{pct:.1f}".rstrip("0").rstrip(".")
+    return f"{int(n):,} ({pct_str}%)"
+
+
+def _fmt_categorical_cell(n, denom, suppress_lt20=True):
+    if pd.isna(n) or n <= 0:
+        return "0 (0%)"
+    if suppress_lt20 and n < 20:
+        return "<20"
+    return _fmt_pct(n, denom)
+
+
+def _fmt_continuous(values, decimals=0, suppress_lt20=True):
+    arr = pd.Series(values).dropna()
+    n = arr.shape[0]
+    if n == 0:
+        return "NA"
+    if suppress_lt20 and n < 20:
+        return "<20"
+    mean_v = arr.mean()
+    sd_v = arr.std(ddof=1) if n > 1 else 0.0
+    min_v = arr.min()
+    max_v = arr.max()
+    if decimals == 0:
+        return f"{mean_v:.0f} ({sd_v:.0f}) [{min_v:.0f}, {max_v:.0f}]"
+    return f"{mean_v:.{decimals}f} ({sd_v:.{decimals}f}) [{min_v:.{decimals}f}, {max_v:.{decimals}f}]"
+
+
+def _normalize_sex_concept(value):
+    if pd.isna(value):
+        return "Other/Unknown"
+    txt = str(value).strip().lower()
+    if "female" in txt:
+        return "Female"
+    if "male" in txt and "female" not in txt:
+        return "Male"
+    return "Other/Unknown"
+
+
+person_agg_exprs = [
+    pl.len().alias("n_nights"),
+    pl.col("daily_duration_mins").mean().alias("avg_nightly_duration_mins"),
+]
+
+if "age_at_sleep" in schema_cols:
+    person_agg_exprs.append(pl.col("age_at_sleep").mean().alias("age_years"))
+if "sex_concept" in schema_cols:
+    person_agg_exprs.append(pl.col("sex_concept").drop_nulls().first().alias("sex_concept"))
+if "employment_status" in schema_cols:
+    person_agg_exprs.append(pl.col("employment_status").drop_nulls().first().alias("employment_status"))
+
+person_agg_exprs.append(pl.col("dst_group").drop_nulls().first().alias("dst_group"))
+
+person_df = (
+    lf.select([
+        "person_id",
+        "dst_group",
+        "daily_duration_mins",
+        *(["age_at_sleep"] if "age_at_sleep" in schema_cols else []),
+        *(["sex_concept"] if "sex_concept" in schema_cols else []),
+        *(["employment_status"] if "employment_status" in schema_cols else []),
+    ])
+    .drop_nulls(["person_id", "dst_group"])
+    .group_by("person_id")
+    .agg(person_agg_exprs)
+    .collect()
+    .to_pandas()
+)
+
+if "sex_concept" in person_df.columns:
+    person_df["sex_group"] = person_df["sex_concept"].apply(_normalize_sex_concept)
+else:
+    person_df["sex_group"] = "Other/Unknown"
+
+if "employment_status" in person_df.columns:
+    person_df["employment_status"] = person_df["employment_status"].fillna("Unknown")
+else:
+    person_df["employment_status"] = "Unknown"
+
+group_subsets = {
+    "Overall": person_df,
+    "DST": person_df[person_df["dst_group"] == "DST"].copy(),
+    "NoDST": person_df[person_df["dst_group"] == "NoDST"].copy(),
+}
+
+column_order = ["Overall", "DST", "NoDST"]
+col_headers = {
+    k: f"{k} N = {_safe_n_label(v['person_id'].nunique() if not v.empty else 0)}"
+    for k, v in group_subsets.items()
+}
+
+table_rows = []
+
+def add_row(var_name, formatter):
+    row = {"Variable": var_name}
+    for col in column_order:
+        row[col_headers[col]] = formatter(group_subsets[col])
+    table_rows.append(row)
+
+
+add_row("Age (Years)", lambda d: _fmt_continuous(d["age_years"], decimals=0) if "age_years" in d.columns else "NA")
+
+table_rows.append({"Variable": "Sex Concept", **{col_headers[c]: "" for c in column_order}})
+for sex_level in ["Female", "Male"]:
+    add_row(
+        f"  {sex_level}",
+        lambda d, lvl=sex_level: _fmt_categorical_cell((d["sex_group"] == lvl).sum(), d["person_id"].nunique())
+    )
+
+table_rows.append({"Variable": "Employment Status", **{col_headers[c]: "" for c in column_order}})
+preferred_emp_order = [
+    "Employed For Wages",
+    "Homemaker",
+    "Out Of Work Less Than One",
+    "Out Of Work One Or More",
+    "Retired",
+    "Self Employed",
+    "Student",
+    "Unable To Work",
+    "Unknown",
+]
+observed_emp = set(person_df["employment_status"].dropna().astype(str).unique().tolist())
+employment_levels = [e for e in preferred_emp_order if e in observed_emp]
+employment_levels += sorted([e for e in observed_emp if e not in employment_levels])
+
+for emp in employment_levels:
+    add_row(
+        f"  {emp}",
+        lambda d, lvl=emp: _fmt_categorical_cell((d["employment_status"] == lvl).sum(), d["person_id"].nunique())
+    )
+
+add_row("Total Nights Recorded (n)", lambda d: _fmt_continuous(d["n_nights"], decimals=0))
+add_row("Avg Nightly Duration (mins)", lambda d: _fmt_continuous(d["avg_nightly_duration_mins"], decimals=0))
+
+table_df = pd.DataFrame(table_rows)
+table_df.to_csv(TABLE_OUTPUT, index=False)
+print(f"Saved DST descriptive table to {TABLE_OUTPUT}")
+
+# --- 8. Diagnostics ---
 print("Saving diagnostics...")
 group_counts = lf.group_by("dst_group").agg([
     pl.count("person_id").alias("n_observations"),

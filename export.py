@@ -109,12 +109,28 @@ def resolve_out_zip(out_zip: str | None, figures_only: bool) -> Path:
     return zip_path
 
 
+def resolve_out_dir(zip_path: Path) -> Path:
+    if zip_path.suffix.lower() == ".zip":
+        out_dir = zip_path.with_suffix("")
+    else:
+        out_dir = zip_path.parent / f"{zip_path.name}_unzipped"
+    out_dir.parent.mkdir(parents=True, exist_ok=True)
+    return out_dir
+
+
 def zip_folder(root_dir: Path, zip_path: Path, top_level_dir_name: str) -> None:
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         base = root_dir / top_level_dir_name
         for f in sorted(base.rglob("*")):
             if f.is_file():
                 zf.write(f, f.relative_to(root_dir).as_posix())
+
+
+def copy_unzipped(root_dir: Path, out_dir: Path, top_level_dir_name: str) -> None:
+    src = root_dir / top_level_dir_name
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    shutil.copytree(src, out_dir)
 
 
 def resolve_export_root(results_dir: Path, subpath: str | None) -> Path:
@@ -225,7 +241,9 @@ def annotate_svg(path: Path, text: str) -> None:
     tree.write(path, encoding="utf-8", xml_declaration=True)
 
 
-def export_figures_only(results_dir: Path, export_root: Path, zip_path: Path) -> None:
+def export_figures_only(
+    results_dir: Path, export_root: Path, zip_path: Path, out_dir: Path
+) -> None:
     date_label = dt.date.today().isoformat()
     text = f"Exported {date_label}"
 
@@ -261,8 +279,10 @@ def export_figures_only(results_dir: Path, export_root: Path, zip_path: Path) ->
                 skipped.append((rel.as_posix(), str(exc)))
 
         zip_folder(tmp_root, zip_path, "results")
+        copy_unzipped(tmp_root, out_dir, "results")
 
     print(f"Figure export created: {zip_path}")
+    print(f"Figure export directory created: {out_dir}")
     print(f"Figures copied: {copied}")
     print(f"Figures annotated: {annotated}")
     if skipped:
@@ -330,7 +350,11 @@ def scan_identifier_columns(stage_results: Path, report: list[str]) -> None:
 
 
 def sanitized_export(
-    results_dir: Path, export_root: Path, zip_path: Path, remove_rds: bool
+    results_dir: Path,
+    export_root: Path,
+    zip_path: Path,
+    out_dir: Path,
+    remove_rds: bool,
 ) -> None:
     with tempfile.TemporaryDirectory(prefix="phewas_export_") as tmp:
         tmp_root = Path(tmp)
@@ -348,8 +372,10 @@ def sanitized_export(
 
         report = sorted(set(report))
         zip_folder(tmp_root, zip_path, "results")
+        copy_unzipped(tmp_root, out_dir, "results")
 
     print(f"Sanitized export created: {zip_path}")
+    print(f"Sanitized export directory created: {out_dir}")
     if report:
         print("Removed potential person-level artifacts:")
         for item in report:
@@ -367,11 +393,12 @@ def main() -> None:
     ensure_results_dir(results_dir)
     export_root = resolve_export_root(results_dir, args.subpath)
     zip_path = resolve_out_zip(args.out_zip, args.figures)
+    out_dir = resolve_out_dir(zip_path)
 
     if args.figures:
-        export_figures_only(results_dir, export_root, zip_path)
+        export_figures_only(results_dir, export_root, zip_path, out_dir)
     else:
-        sanitized_export(results_dir, export_root, zip_path, args.remove_rds)
+        sanitized_export(results_dir, export_root, zip_path, out_dir, args.remove_rds)
 
 
 if __name__ == "__main__":

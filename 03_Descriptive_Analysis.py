@@ -57,6 +57,16 @@ def hour_24_formatter(x: float, _pos: int) -> str:
     return f"{h:02d}:{m:02d}"
 
 
+def duration_hhmm_formatter(x: float, _pos: int) -> str:
+    if not np.isfinite(x):
+        return ""
+    sign = "-" if x < 0 else ""
+    total_minutes = int(round(abs(float(x)) * 60.0))
+    h = total_minutes // 60
+    m = total_minutes % 60
+    return f"{sign}{h:02d}:{m:02d}"
+
+
 def style_publication() -> None:
     sns.set_theme(style="whitegrid", context="paper")
     plt.rcParams.update(
@@ -86,6 +96,36 @@ def apply_time_axis(ax: plt.Axes, axis: str = "x") -> None:
         ax.set_ylim(12, 36)
         ax.set_yticks(ticks)
         ax.yaxis.set_major_formatter(formatter)
+
+
+def apply_time_axis_zoom(
+    ax: plt.Axes,
+    values: pd.Series | np.ndarray,
+    step_hours: float = 0.25,
+    mode: str = "clock",
+) -> None:
+    vals = pd.to_numeric(pd.Series(values), errors="coerce")
+    vals = vals[np.isfinite(vals)]
+    if vals.empty:
+        return
+
+    vmin = float(vals.min())
+    vmax = float(vals.max())
+    if np.isclose(vmin, vmax):
+        vmin -= step_hours
+        vmax += step_hours
+
+    pad = max(0.20 * (vmax - vmin), step_hours)
+    lo = np.floor((vmin - pad) / step_hours) * step_hours
+    hi = np.ceil((vmax + pad) / step_hours) * step_hours
+
+    ax.set_ylim(lo, hi)
+    ticks = np.arange(lo, hi + 0.5 * step_hours, step_hours)
+    ax.set_yticks(ticks)
+    if mode == "duration":
+        ax.yaxis.set_major_formatter(FuncFormatter(duration_hhmm_formatter))
+    else:
+        ax.yaxis.set_major_formatter(FuncFormatter(hour_24_formatter))
 
 
 def month_week_ticks() -> tuple[list[int], list[str]]:
@@ -252,7 +292,14 @@ def build_midpoint_person_level_from_summary(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def weekly_plot(agg: pd.DataFrame, y_col: str, title: str, filename: str, ylabel: str, is_time: bool = False) -> None:
+def weekly_plot(
+    agg: pd.DataFrame,
+    y_col: str,
+    title: str,
+    filename: str,
+    ylabel: str,
+    time_mode: str | None = None,
+) -> None:
     if agg.empty:
         return
 
@@ -280,8 +327,8 @@ def weekly_plot(agg: pd.DataFrame, y_col: str, title: str, filename: str, ylabel
     ax.set_ylabel(ylabel)
     add_week_and_month_labels(ax)
     ax.grid(alpha=0.25)
-    if is_time:
-        apply_time_axis(ax, axis="y")
+    if time_mode in {"clock", "duration"}:
+        apply_time_axis_zoom(ax, agg["mean"], step_hours=0.25, mode=time_mode)
     ax.legend(frameon=False, loc="best")
     fig.tight_layout()
     fig.savefig(OUTPUT_DIR / filename, bbox_inches="tight")
@@ -583,7 +630,7 @@ def main() -> None:
         ax.set_title("Weekly seasonal trend: midpoint (work, free, adjusted)")
         ax.set_ylabel("Midpoint time (24h, midnight-centered)")
         add_week_and_month_labels(ax)
-        apply_time_axis(ax, axis="y")
+        apply_time_axis_zoom(ax, weekly_mid["mean"], step_hours=0.25, mode="clock")
         ax.grid(alpha=0.25)
         ax.legend(frameon=False, title="")
         fig.tight_layout()
@@ -591,10 +638,10 @@ def main() -> None:
         plt.close(fig)
 
     # ---------- Plot 8/9/10: weekly onset/offset/duration ----------
-    for col, title, out_name, ylabel, is_time in [
-        ("onset_centered", "Weekly seasonal trend: sleep onset", "08_weekly_onset_24h.png", "Onset time (24h, midnight-centered)", True),
-        ("offset_centered", "Weekly seasonal trend: sleep offset", "09_weekly_offset_24h.png", "Offset time (24h, midnight-centered)", True),
-        ("duration_hours", "Weekly seasonal trend: sleep duration", "10_weekly_duration_hours.png", "Duration (hours)", False),
+    for col, title, out_name, ylabel, time_mode in [
+        ("onset_centered", "Weekly seasonal trend: sleep onset", "08_weekly_onset_24h.png", "Onset time (24h, midnight-centered)", "clock"),
+        ("offset_centered", "Weekly seasonal trend: sleep offset", "09_weekly_offset_24h.png", "Offset time (24h, midnight-centered)", "clock"),
+        ("duration_hours", "Weekly seasonal trend: sleep duration", "10_weekly_duration_hours.png", "Duration (HH:MM)", "duration"),
     ]:
         tmp = df[["week", col]].dropna()
         if tmp.empty:
@@ -605,7 +652,7 @@ def main() -> None:
             .sort_values("week")
         )
         agg["smooth"] = agg["mean"].rolling(3, min_periods=1, center=True).mean()
-        weekly_plot(agg, "smooth", title, out_name, ylabel, is_time=is_time)
+        weekly_plot(agg, "smooth", title, out_name, ylabel, time_mode=time_mode)
 
     # ---------- Plot 11: age-bin plots (5-year bins; midpoint includes all three) ----------
     age_person = (

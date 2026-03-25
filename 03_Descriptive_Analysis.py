@@ -88,43 +88,6 @@ def apply_time_axis(ax: plt.Axes, axis: str = "x") -> None:
         ax.yaxis.set_major_formatter(formatter)
 
 
-def apply_time_axis_zoom(ax: plt.Axes, values: pd.Series | np.ndarray) -> None:
-    vals = pd.to_numeric(pd.Series(values), errors="coerce")
-    vals = vals[np.isfinite(vals)]
-    if vals.empty:
-        apply_time_axis(ax, axis="y")
-        return
-
-    vmin = float(vals.min())
-    vmax = float(vals.max())
-    if np.isclose(vmin, vmax):
-        vmin -= 0.5
-        vmax += 0.5
-
-    span = vmax - vmin
-    pad = max(0.20 * span, 0.20)
-    lo = vmin - pad
-    hi = vmax + pad
-
-    total = hi - lo
-    if total <= 2.0:
-        step = 0.25
-    elif total <= 4.0:
-        step = 0.5
-    elif total <= 8.0:
-        step = 1.0
-    else:
-        step = 2.0
-
-    t0 = np.floor(lo / step) * step
-    t1 = np.ceil(hi / step) * step
-    ticks = np.arange(t0, t1 + step * 0.5, step)
-
-    ax.set_ylim(lo, hi)
-    ax.set_yticks(ticks)
-    ax.yaxis.set_major_formatter(FuncFormatter(hour_24_formatter))
-
-
 def month_week_ticks() -> tuple[list[int], list[str]]:
     # Non-leap template year; used only for labeling week-of-year axis.
     year = 2021
@@ -318,7 +281,7 @@ def weekly_plot(agg: pd.DataFrame, y_col: str, title: str, filename: str, ylabel
     add_week_and_month_labels(ax)
     ax.grid(alpha=0.25)
     if is_time:
-        apply_time_axis_zoom(ax, agg["mean"])
+        apply_time_axis(ax, axis="y")
     ax.legend(frameon=False, loc="best")
     fig.tight_layout()
     fig.savefig(OUTPUT_DIR / filename, bbox_inches="tight")
@@ -581,7 +544,7 @@ def main() -> None:
         ax.set_title("Weekly seasonal trend: midpoint (work, free, adjusted)")
         ax.set_ylabel("Midpoint time (24h, midnight-centered)")
         add_week_and_month_labels(ax)
-        apply_time_axis_zoom(ax, weekly_mid["mean"])
+        apply_time_axis(ax, axis="y")
         ax.grid(alpha=0.25)
         ax.legend(frameon=False, title="")
         fig.tight_layout()
@@ -702,7 +665,7 @@ def main() -> None:
             axs[0, 1].set_xticks(np.arange(len(age_levels)))
             axs[0, 1].set_xticklabels(age_levels)
             axs[0, 1].legend(frameon=False, title="")
-            apply_time_axis_zoom(axs[0, 1], mid_agg["mean"])
+            apply_time_axis(axs[0, 1], axis="y")
         axs[0, 1].set_title("Midpoint vs age (work, free, adjusted)")
         axs[0, 1].set_xlabel("Age bin (years)")
         axs[0, 1].set_ylabel("Midpoint time (24h)")
@@ -730,7 +693,7 @@ def main() -> None:
         axs[1, 0].set_xlabel("Age bin (years)")
         axs[1, 0].set_ylabel("Onset time (24h)")
         axs[1, 0].tick_params(axis="x", rotation=45)
-        apply_time_axis_zoom(axs[1, 0], onset_agg["mean"])
+        apply_time_axis(axs[1, 0], axis="y")
 
         offset_agg = age_person.groupby("age_bin", observed=True, as_index=False).agg(
             mean=("offset", "mean"),
@@ -754,7 +717,7 @@ def main() -> None:
         axs[1, 1].set_xlabel("Age bin (years)")
         axs[1, 1].set_ylabel("Offset time (24h)")
         axs[1, 1].tick_params(axis="x", rotation=45)
-        apply_time_axis_zoom(axs[1, 1], offset_agg["mean"])
+        apply_time_axis(axs[1, 1], axis="y")
 
         fig.savefig(OUTPUT_DIR / "11_age_bin_sleep_metrics_5y.png", bbox_inches="tight")
         plt.close(fig)
@@ -805,7 +768,7 @@ def main() -> None:
             ax.set_xlabel("Employment status")
             ax.set_ylabel("Midpoint time (24h, midnight-centered)")
             ax.tick_params(axis="x", rotation=25)
-            apply_time_axis_zoom(ax, emp_long["midpoint_clock"])
+            apply_time_axis(ax, axis="y")
             ax.legend(frameon=False, title="")
             fig.tight_layout()
             fig.savefig(OUTPUT_DIR / "12_employment_vs_midpoint_violin_24h.png", bbox_inches="tight")

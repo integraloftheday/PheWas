@@ -363,7 +363,7 @@ def sanitized_export(
 
 def main() -> None:
     args = parse_args()
-    results_dir = Path(args.results_dir)
+    results_dir = Path(args.results_dir).resolve()
     ensure_results_dir(results_dir)
     export_root = resolve_export_root(results_dir, args.subpath)
     zip_path = resolve_out_zip(args.out_zip, args.figures)

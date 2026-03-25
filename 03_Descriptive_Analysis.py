@@ -427,6 +427,34 @@ def main() -> None:
         fig.savefig(OUTPUT_DIR / out_name, bbox_inches="tight")
         plt.close(fig)
 
+    # ---------- Plot 4b: duration density (work vs free) ----------
+    dur_tmp = df[["duration_hours", "is_work_day"]].dropna().copy()
+    if not dur_tmp.empty:
+        dur_tmp["day_type"] = np.where(dur_tmp["is_work_day"] == 1, "Work days", "Free days")
+
+        fig, ax = plt.subplots(figsize=(10.0, 5.5))
+        sns.kdeplot(
+            data=dur_tmp,
+            x="duration_hours",
+            hue="day_type",
+            common_norm=False,
+            fill=True,
+            alpha=0.35,
+            bw_adjust=0.85,
+            ax=ax,
+            palette=["#1f77b4", "#d62728"],
+        )
+        ax.set_title("Sleep duration density: work vs free days")
+        ax.set_xlabel("Duration (hours)")
+        ax.set_ylabel("Density")
+        leg = ax.get_legend()
+        if leg is not None:
+            leg.set_frame_on(False)
+            leg.set_title("")
+        fig.tight_layout()
+        fig.savefig(OUTPUT_DIR / "04b_duration_density_work_free.png", bbox_inches="tight")
+        plt.close(fig)
+
     # ---------- Plot 5: midpoint density work/free/adjusted ----------
     if not midpoint_person.empty:
         msw_df = midpoint_person[["MSW_clock"]].copy()
@@ -501,11 +529,11 @@ def main() -> None:
     week_mid_frames: list[pd.DataFrame] = []
     week_work = df[df["is_work_day"] == 1][["week", "midpoint_centered"]].dropna()
     if not week_work.empty:
-        week_mid_frames.append(week_work.assign(series="Work midpoint (MSW proxy)").rename(columns={"midpoint_centered": "value"}))
+        week_mid_frames.append(week_work.assign(series="Work midpoint (MSW)").rename(columns={"midpoint_centered": "value"}))
 
     week_free = df[df["is_work_day"] == 0][["week", "midpoint_centered"]].dropna()
     if not week_free.empty:
-        week_mid_frames.append(week_free.assign(series="Free midpoint (MSF proxy)").rename(columns={"midpoint_centered": "value"}))
+        week_mid_frames.append(week_free.assign(series="Free midpoint (MSF)").rename(columns={"midpoint_centered": "value"}))
 
     if not midpoint_person.empty:
         person_week = (
@@ -532,14 +560,25 @@ def main() -> None:
 
         fig, ax = plt.subplots(figsize=(11.2, 6.0))
         palette = {
-            "Work midpoint (MSW proxy)": "#1f77b4",
-            "Free midpoint (MSF proxy)": "#ff7f0e",
+            "Work midpoint (MSW)": "#1f77b4",
+            "Free midpoint (MSF)": "#ff7f0e",
             "Adjusted midpoint (MSFsc)": "#2ca02c",
         }
         for series, g in weekly_mid.groupby("series"):
             c = palette.get(series, "#333333")
-            ax.plot(g["week"], g["smooth"], linewidth=2.4, color=c, label=series)
-            ax.fill_between(g["week"], g["mean"] - 1.96 * g["se"].fillna(0), g["mean"] + 1.96 * g["se"].fillna(0), color=c, alpha=0.12)
+            ax.errorbar(
+                g["week"],
+                g["mean"],
+                yerr=1.96 * g["se"].fillna(0),
+                fmt="o",
+                alpha=0.3,
+                markersize=2.8,
+                color=c,
+                ecolor=c,
+                elinewidth=0.8,
+                capsize=1,
+            )
+            ax.plot(g["week"], g["smooth"], linewidth=2.2, color=c, label=series)
 
         ax.set_title("Weekly seasonal trend: midpoint (work, free, adjusted)")
         ax.set_ylabel("Midpoint time (24h, midnight-centered)")
@@ -768,7 +807,9 @@ def main() -> None:
             ax.set_xlabel("Employment status")
             ax.set_ylabel("Midpoint time (24h, midnight-centered)")
             ax.tick_params(axis="x", rotation=25)
-            apply_time_axis(ax, axis="y")
+            ax.set_ylim(22.0, 32.0)
+            ax.set_yticks(np.arange(22.0, 32.1, 1.0))
+            ax.yaxis.set_major_formatter(FuncFormatter(hour_24_formatter))
             ax.legend(frameon=False, title="")
             fig.tight_layout()
             fig.savefig(OUTPUT_DIR / "12_employment_vs_midpoint_violin_24h.png", bbox_inches="tight")

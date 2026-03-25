@@ -65,6 +65,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--subpath",
+        default=None,
+        help=(
+            "Relative path inside results_dir to export (file or directory). "
+            "Example: --subpath model_summaries_04_5"
+        ),
+    )
+    parser.add_argument(
         "--remove-rds",
         dest="remove_rds",
         action="store_true",
@@ -109,6 +117,46 @@ def zip_folder(root_dir: Path, zip_path: Path, top_level_dir_name: str) -> None:
                 zf.write(f, f.relative_to(root_dir).as_posix())
 
 
+def resolve_export_root(results_dir: Path, subpath: str | None) -> Path:
+    if not subpath:
+        return results_dir
+
+    candidate = (results_dir / subpath).resolve()
+    base = results_dir.resolve()
+
+    try:
+        candidate.relative_to(base)
+    except ValueError as exc:
+        raise SystemExit(f"ERROR: --subpath must stay within {results_dir}") from exc
+
+    if not candidate.exists():
+        raise SystemExit(f"ERROR: Subpath not found under results_dir: {subpath}")
+
+    return candidate
+
+
+def iter_source_files(export_root: Path) -> list[Path]:
+    if export_root.is_file():
+        return [export_root]
+    return [p for p in sorted(export_root.rglob("*")) if p.is_file()]
+
+
+def copy_selected_to_stage(results_dir: Path, export_root: Path, stage_results: Path) -> None:
+    rel = export_root.relative_to(results_dir)
+    dst = stage_results / rel
+
+    if export_root.is_file():
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(export_root, dst)
+    else:
+        shutil.copytree(
+            export_root,
+            dst,
+            ignore=shutil.ignore_patterns(".DS_Store"),
+            dirs_exist_ok=True,
+        )
+
+
 def annotate_raster_image(path: Path, text: str) -> None:
     try:
         from PIL import Image, ImageDraw, ImageFont  # type: ignore
@@ -122,13 +170,17 @@ def annotate_raster_image(path: Path, text: str) -> None:
         base = img.convert("RGBA")
         overlay = Image.new("RGBA", base.size, (255, 255, 255, 0))
         draw = ImageDraw.Draw(overlay)
-        font = ImageFont.load_default()
+        font_size = max(24, int(min(base.width, base.height) * 0.035))
+        try:
+            font = ImageFont.truetype("DejaVuSans.ttf", font_size)
+        except Exception:
+            font = ImageFont.load_default()
 
         left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
         text_w = right - left
         text_h = bottom - top
-        pad = 6
-        margin = 10
+        pad = max(8, int(font_size * 0.35))
+        margin = max(12, int(font_size * 0.6))
 
         x = max(margin, base.width - text_w - (2 * pad) - margin)
         y = max(margin, base.height - text_h - (2 * pad) - margin)
@@ -173,7 +225,7 @@ def annotate_svg(path: Path, text: str) -> None:
     tree.write(path, encoding="utf-8", xml_declaration=True)
 
 
-def export_figures_only(results_dir: Path, zip_path: Path) -> None:
+def export_figures_only(results_dir: Path, export_root: Path, zip_path: Path) -> None:
     date_label = dt.date.today().isoformat()
     text = f"Exported {date_label}"
 
@@ -186,9 +238,7 @@ def export_figures_only(results_dir: Path, zip_path: Path) -> None:
         annotated = 0
         skipped = []
 
-        for src in sorted(results_dir.rglob("*")):
-            if not src.is_file():
-                continue
+        for src in iter_source_files(export_root):
             if src.name == ".DS_Store":
                 continue
             if src.suffix.lower() not in FIGURE_EXTS:
@@ -279,17 +329,15 @@ def scan_identifier_columns(stage_results: Path, report: list[str]) -> None:
                 continue
 
 
-def sanitized_export(results_dir: Path, zip_path: Path, remove_rds: bool) -> None:
+def sanitized_export(
+    results_dir: Path, export_root: Path, zip_path: Path, remove_rds: bool
+) -> None:
     with tempfile.TemporaryDirectory(prefix="phewas_export_") as tmp:
         tmp_root = Path(tmp)
         stage_results = tmp_root / "results"
 
-        shutil.copytree(
-            results_dir,
-            stage_results,
-            ignore=shutil.ignore_patterns(".DS_Store"),
-            dirs_exist_ok=True,
-        )
+        stage_results.mkdir(parents=True, exist_ok=True)
+        copy_selected_to_stage(results_dir, export_root, stage_results)
 
         report: list[str] = []
 
@@ -317,12 +365,13 @@ def main() -> None:
     args = parse_args()
     results_dir = Path(args.results_dir)
     ensure_results_dir(results_dir)
+    export_root = resolve_export_root(results_dir, args.subpath)
     zip_path = resolve_out_zip(args.out_zip, args.figures)
 
     if args.figures:
-        export_figures_only(results_dir, zip_path)
+        export_figures_only(results_dir, export_root, zip_path)
     else:
-        sanitized_export(results_dir, zip_path, args.remove_rds)
+        sanitized_export(results_dir, export_root, zip_path, args.remove_rds)
 
 
 if __name__ == "__main__":

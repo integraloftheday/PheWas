@@ -51,7 +51,7 @@ ENV_MODEL_SPECS = {
     "tmax": {"model": "quadratic", "label": "Maximum Temperature"},
 }
 
-SCATTER_SAMPLE_N = 120_000
+BINS = 16
 
 sns.set_style("whitegrid")
 
@@ -106,6 +106,37 @@ def fit_quadratic(x: np.ndarray, y: np.ndarray) -> Tuple[np.ndarray, np.ndarray,
         f"{'+' if coef[2] >= 0 else '-'} {abs(coef[2]):.4f}"
     )
     return coef, yhat, eq, r2
+
+
+def qcut_labels(values: pd.Series, bins: int = BINS) -> pd.Series:
+    valid = values.dropna()
+    if valid.empty:
+        return pd.Series([np.nan] * len(values), index=values.index)
+    unique_n = valid.nunique()
+    q = int(max(2, min(bins, unique_n)))
+    return pd.qcut(values, q=q, duplicates="drop")
+
+
+def mean_se_table(df: pd.DataFrame, x_col: str, y_col: str) -> pd.DataFrame:
+    work = df[[x_col, y_col]].dropna().copy()
+    if work.empty:
+        return pd.DataFrame()
+
+    work["x_bin"] = qcut_labels(work[x_col], bins=BINS)
+    out = (
+        work.groupby("x_bin", observed=True)
+        .agg(
+            x_mean=(x_col, "mean"),
+            y_mean=(y_col, "mean"),
+            y_sd=(y_col, "std"),
+            n=(y_col, "size"),
+        )
+        .reset_index()
+        .sort_values("x_mean")
+    )
+    out["se"] = out["y_sd"] / np.sqrt(out["n"].clip(lower=1))
+    out["ci95"] = 1.96 * out["se"].fillna(0.0)
+    return out
 
 
 def main() -> None:
@@ -215,37 +246,47 @@ def main() -> None:
                 continue
 
             n_full = tmp.shape[0]
-            if n_full > SCATTER_SAMPLE_N:
-                sample_df = tmp.sample(n=SCATTER_SAMPLE_N, random_state=2026)
-            else:
-                sample_df = tmp
 
             x = tmp[env_col].to_numpy(dtype=float)
             y = tmp[y_col].to_numpy(dtype=float)
 
+            x_lo = float(np.nanquantile(x, 0.10))
+            x_hi = float(np.nanquantile(x, 0.90))
+
+            reg_mask = np.isfinite(x) & np.isfinite(y) & (x >= x_lo) & (x <= x_hi)
+            x_reg = x[reg_mask]
+            y_reg = y[reg_mask]
+            if x_reg.shape[0] < 25:
+                continue
+
+            avg = mean_se_table(tmp, env_col, y_col)
+            if avg.empty:
+                continue
+
             if env_spec["model"] == "linear":
-                coef, _, eq, r2 = fit_linear(x, y)
+                coef, _, eq, r2 = fit_linear(x_reg, y_reg)
                 poly = np.poly1d(coef)
             else:
-                coef, _, eq, r2 = fit_quadratic(x, y)
+                coef, _, eq, r2 = fit_quadratic(x_reg, y_reg)
                 poly = np.poly1d(coef)
 
-            x_lo = float(np.nanpercentile(x, 1))
-            x_hi = float(np.nanpercentile(x, 99))
             x_grid = np.linspace(x_lo, x_hi, 300)
             y_grid = poly(x_grid)
 
             fig, ax = plt.subplots(figsize=(9.8, 6.2))
-            ax.scatter(
-                sample_df[env_col],
-                sample_df[y_col],
-                s=8,
-                alpha=0.12,
-                color="#4c72b0",
-                edgecolors="none",
-                label="Observed",
+            ax.errorbar(
+                avg["x_mean"],
+                avg["y_mean"],
+                yerr=avg["ci95"],
+                fmt="o",
+                capsize=3,
+                alpha=0.95,
+                color="#1f77b4",
+                label="Binned mean ±95% CI",
             )
-            ax.plot(x_grid, y_grid, color="#d62728", linewidth=2.4, label=f"{env_spec['model'].capitalize()} fit")
+            ax.plot(x_grid, y_grid, color="#d62728", linewidth=2.4, label=f"{env_spec['model'].capitalize()} fit (10%-90% interval)")
+            ax.axvline(x_lo, color="#555555", linestyle="--", linewidth=1.6, label="10th pct x")
+            ax.axvline(x_hi, color="#555555", linestyle="--", linewidth=1.6, label="90th pct x")
 
             ax.set_title(f"Overall: {out_spec['name']} vs {env_col}")
             ax.set_xlabel(env_spec["label"])
@@ -256,7 +297,7 @@ def main() -> None:
                 ax.set_yticks(ticks)
                 ax.yaxis.set_major_formatter(FuncFormatter(hour_24_formatter))
 
-            text = f"{eq}\n$R^2$ = {r2:.4f}\nN = {n_full:,}"
+            text = f"{eq}\n$R^2$ = {r2:.4f}\nN(all) = {n_full:,}\nN(10-90%) = {x_reg.shape[0]:,}"
             ax.text(
                 0.02,
                 0.98,
@@ -282,8 +323,11 @@ def main() -> None:
                     "environment_var": env_col,
                     "model_type": env_spec["model"],
                     "n": int(n_full),
+                    "n_reg_10_90": int(x_reg.shape[0]),
                     "equation": eq,
                     "r2": float(r2),
+                    "x_lo_10pct": float(x_lo),
+                    "x_hi_90pct": float(x_hi),
                     "coef_0": float(coef[0]) if len(coef) > 0 else np.nan,
                     "coef_1": float(coef[1]) if len(coef) > 1 else np.nan,
                     "coef_2": float(coef[2]) if len(coef) > 2 else np.nan,

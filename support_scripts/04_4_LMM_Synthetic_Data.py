@@ -36,6 +36,9 @@ REQUIRED_COLS = [
     "zip3",
 ]
 
+NUMERIC_QUANTILES = [0.01, 0.05, 0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 0.95, 0.99]
+CATEGORICAL_TOP_K = 200
+
 DEFAULT_NO_DST_ZIP3 = sorted(
     set([f"{z:03d}" for z in range(850, 866)] + ["967", "968", "006", "007", "008", "009", "969"])
 )
@@ -85,14 +88,18 @@ def profile_parquet(input_path: str, profile_out: str) -> dict:
         "column_count": int(df.width),
         "required_columns_present": [c for c in REQUIRED_COLS if c in df.columns],
         "required_columns_missing": [c for c in REQUIRED_COLS if c not in df.columns],
+        "numeric_quantiles": NUMERIC_QUANTILES,
         "columns": {},
     }
 
     for c in df.columns:
         s = df[c]
+        non_null_count = int(s.len() - s.null_count())
         info: dict[str, Any] = {
             "dtype": str(s.dtype),
             "null_count": int(s.null_count()),
+            "non_null_count": non_null_count,
+            "null_fraction": float(s.null_count() / max(1, s.len())),
             "n_unique": int(s.n_unique()),
         }
         if s.dtype.is_numeric():
@@ -100,12 +107,38 @@ def profile_parquet(input_path: str, profile_out: str) -> dict:
             info["max"] = _jsonable_value(s.max())
             info["mean"] = _jsonable_value(s.mean())
             info["std"] = _jsonable_value(s.std())
+            nn = s.drop_nulls().to_numpy()
+            q_vals = np.quantile(nn, NUMERIC_QUANTILES) if nn.size else np.array([None] * len(NUMERIC_QUANTILES))
+            info["quantiles"] = {
+                f"{q:.2f}": _jsonable_value(v) for q, v in zip(NUMERIC_QUANTILES, q_vals.tolist(), strict=False)
+            }
         elif s.dtype == pl.Boolean:
-            vals = s.drop_nulls().unique().to_list()
-            info["values"] = [_jsonable_value(v) for v in vals]
+            non_null = s.drop_nulls().cast(pl.Boolean)
+            true_count = int(non_null.sum()) if non_null_count else 0
+            false_count = int(non_null_count - true_count)
+            info["value_distribution"] = [
+                {"value": True, "count": true_count, "prob": float(true_count / max(1, non_null_count))},
+                {"value": False, "count": false_count, "prob": float(false_count / max(1, non_null_count))},
+            ]
         else:
-            vals = s.drop_nulls().unique().head(20).to_list()
-            info["sample_values"] = [_jsonable_value(v) for v in vals]
+            vc = (
+                pl.DataFrame({"v": s})
+                .drop_nulls()
+                .group_by("v")
+                .len()
+                .sort("len", descending=True)
+                .head(CATEGORICAL_TOP_K)
+            )
+            values = vc["v"].to_list() if "v" in vc.columns else []
+            counts = vc["len"].to_list() if "len" in vc.columns else []
+            info["value_distribution"] = [
+                {
+                    "value": _jsonable_value(v),
+                    "count": int(c),
+                    "prob": float(c / max(1, non_null_count)),
+                }
+                for v, c in zip(values, counts, strict=False)
+            ]
         profile["columns"][c] = info
 
     os.makedirs(os.path.dirname(profile_out) or ".", exist_ok=True)
@@ -123,11 +156,72 @@ def _pick_with_fallback(rng: np.random.Generator, vals: list[str], probs: list[f
     return str(rng.choice(vals, p=p))
 
 
+def _column_profile(profile: dict, col: str) -> dict[str, Any]:
+    return (profile.get("columns") or {}).get(col, {})
+
+
+def _distribution_from_profile(col_profile: dict[str, Any], fallback_vals: list[str], fallback_probs: list[float]) -> tuple[list[str], list[float]]:
+    value_dist = col_profile.get("value_distribution") or []
+    vals: list[str] = []
+    probs: list[float] = []
+    for rec in value_dist:
+        if rec is None:
+            continue
+        v = rec.get("value")
+        if v is None:
+            continue
+        vals.append(str(v))
+        probs.append(float(rec.get("prob", 0.0)))
+
+    if vals:
+        p = np.array(probs, dtype=float)
+        if np.isfinite(p).all() and p.sum() > 0:
+            p = p / p.sum()
+            return vals, p.tolist()
+
+    return fallback_vals, fallback_probs
+
+
+def _null_fraction_from_profile(col_profile: dict[str, Any], fallback: float = 0.0) -> float:
+    v = col_profile.get("null_fraction")
+    try:
+        fv = float(v)
+        return float(np.clip(fv, 0.0, 0.95))
+    except Exception:
+        return fallback
+
+
+def _sample_numeric_from_quantiles(
+    rng: np.random.Generator,
+    col_profile: dict[str, Any],
+    n: int,
+    fallback_mean: float,
+    fallback_sd: float,
+    lo: float,
+    hi: float,
+) -> np.ndarray:
+    q_map = col_profile.get("quantiles") or {}
+    points = sorted((float(k), float(v)) for k, v in q_map.items() if v is not None)
+    if len(points) >= 2:
+        q_probs = np.array([q for q, _ in points], dtype=float)
+        q_vals = np.array([v for _, v in points], dtype=float)
+        u = rng.uniform(0.01, 0.99, size=n)
+        arr = np.interp(u, q_probs, q_vals)
+    else:
+        arr = rng.normal(fallback_mean, fallback_sd, size=n)
+    return np.clip(arr, lo, hi)
+
+
 def generate_synthetic_lmm(cfg: SyntheticConfig) -> pl.DataFrame:
     rng = np.random.default_rng(cfg.seed)
 
+    profile: dict[str, Any] = {}
+    if os.path.exists(PROFILE_OUT):
+        with open(PROFILE_OUT, "r", encoding="utf-8") as f:
+            profile = json.load(f)
+
     # Employment categories aligned to 01b_Fitbit_Cohort_Covariates.py normalization.
-    employment_levels = [
+    employment_levels_default = [
         "Employed For Wages",
         "Self Employed",
         "Student",
@@ -137,10 +231,10 @@ def generate_synthetic_lmm(cfg: SyntheticConfig) -> pl.DataFrame:
         "Out Of Work Less Than One",
         "Out Of Work One Or More",
     ]
-    employment_probs = [0.42, 0.10, 0.08, 0.07, 0.18, 0.06, 0.05, 0.04]
+    employment_probs_default = [0.42, 0.10, 0.08, 0.07, 0.18, 0.06, 0.05, 0.04]
 
     # Reflect observed AoU-style sex categories from your profile.
-    sex_levels = [
+    sex_levels_default = [
         "Female",
         "Male",
         "PMI: Skip",
@@ -149,7 +243,36 @@ def generate_synthetic_lmm(cfg: SyntheticConfig) -> pl.DataFrame:
         "No matching concept",
         "Intersex",
     ]
-    sex_probs = [0.50, 0.47, 0.005, 0.01, 0.005, 0.007, 0.003]
+    sex_probs_default = [0.50, 0.47, 0.005, 0.01, 0.005, 0.007, 0.003]
+
+    employment_levels, employment_probs = _distribution_from_profile(
+        _column_profile(profile, "employment_status"),
+        employment_levels_default,
+        employment_probs_default,
+    )
+    sex_levels, sex_probs = _distribution_from_profile(
+        _column_profile(profile, "sex_concept"),
+        sex_levels_default,
+        sex_probs_default,
+    )
+
+    zip_vals, zip_probs = _distribution_from_profile(
+        _column_profile(profile, "zip3"),
+        [f"{z:03d}" for z in range(100, 999)],
+        [1.0 / 899.0] * 899,
+    )
+    month_vals, month_probs = _distribution_from_profile(
+        _column_profile(profile, "month"),
+        [f"{m:02d}" for m in range(1, 13)],
+        [1.0 / 12.0] * 12,
+    )
+
+    zip_null_fraction = _null_fraction_from_profile(_column_profile(profile, "zip3"), fallback=0.02)
+    emp_null_fraction = _null_fraction_from_profile(_column_profile(profile, "employment_status"), fallback=0.005)
+
+    age_prof = _column_profile(profile, "age_at_sleep")
+    onset_prof = _column_profile(profile, "onset_linear")
+    duration_prof = _column_profile(profile, "daily_sleep_window_mins")
 
     dst_zip_pool = [f"{z:03d}" for z in range(100, 999) if f"{z:03d}" not in DEFAULT_NO_DST_ZIP3]
     no_dst_zip_pool = DEFAULT_NO_DST_ZIP3
@@ -161,31 +284,61 @@ def generate_synthetic_lmm(cfg: SyntheticConfig) -> pl.DataFrame:
         person_id = f"SYN_{i + 1:06d}"
         n_nights = int(rng.integers(cfg.min_nights, cfg.max_nights + 1))
 
-        # Match wide observed span while keeping most participants in adult range.
-        base_age = float(np.clip(rng.normal(53, 15), 13, 95))
+        # Draw person-level latent traits from empirical marginal distributions when available.
+        base_age = float(
+            _sample_numeric_from_quantiles(
+                rng,
+                age_prof,
+                n=1,
+                fallback_mean=53.0,
+                fallback_sd=15.0,
+                lo=13.0,
+                hi=95.0,
+            )[0]
+        )
         sex = _pick_with_fallback(rng, sex_levels, sex_probs, "Female")
         employment = _pick_with_fallback(rng, employment_levels, employment_probs, "Employed For Wages")
 
         # person-level random effect in hours
         person_re = float(rng.normal(0, 0.8))
-        base_onset = float(rng.normal(-0.4, 0.9)) + person_re * 0.2
-        base_duration = float(np.clip(rng.normal(7.2, 0.7), 4.5, 10.5)) + person_re * 0.15
+        base_onset = float(
+            _sample_numeric_from_quantiles(
+                rng,
+                onset_prof,
+                n=1,
+                fallback_mean=-0.4,
+                fallback_sd=0.9,
+                lo=-8.0,
+                hi=11.5,
+            )[0]
+        ) + person_re * 0.2
 
-        # 15% participants in NoDST geographies to guarantee DST level variation.
-        if rng.uniform() < 0.15:
-            zip3 = str(rng.choice(no_dst_zip_pool))
-        else:
-            zip3 = str(rng.choice(dst_zip_pool))
+        duration_mins = float(
+            _sample_numeric_from_quantiles(
+                rng,
+                duration_prof,
+                n=1,
+                fallback_mean=430.0,
+                fallback_sd=42.0,
+                lo=180.0,
+                hi=929.0,
+            )[0]
+        )
+        base_duration = float(np.clip(duration_mins / 60.0, 3.5, 12.0)) + person_re * 0.15
 
-        # Sparse missing zip3 values to test DST filtering path.
-        if rng.uniform() < 0.02:
+        zip3 = _pick_with_fallback(rng, zip_vals, zip_probs, str(rng.choice(dst_zip_pool)))
+        zip3_digits = "".join(ch for ch in zip3 if ch.isdigit())
+        zip3 = (zip3_digits[:3] if len(zip3_digits) >= 3 else zip3.zfill(3)) if zip3 else None
+
+        if rng.uniform() < zip_null_fraction:
             zip3 = None
 
         person_start = start_date + timedelta(days=int(rng.integers(0, 365)))
 
         for d in range(n_nights):
             this_date = person_start + timedelta(days=d)
-            month = this_date.strftime("%m")
+            # Keep temporal coherence but align month marginals to observed data.
+            month = _pick_with_fallback(rng, month_vals, month_probs, this_date.strftime("%m"))
             is_weekend = this_date.weekday() >= 5
             age_at_sleep = base_age + (d / 365.25)
 
@@ -252,7 +405,7 @@ def generate_synthetic_lmm(cfg: SyntheticConfig) -> pl.DataFrame:
                     "daily_sleep_window_mins": sleep_window_mins,
                     "age_at_sleep": float(age_at_sleep),
                     "sex_concept": sex,
-                    "employment_status": employment if rng.uniform() > 0.005 else None,
+                    "employment_status": employment if rng.uniform() > emp_null_fraction else None,
                     "month": month,
                     "is_weekend": bool(is_weekend),
                     "zip3": zip3,

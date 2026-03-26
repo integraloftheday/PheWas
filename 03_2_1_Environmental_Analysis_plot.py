@@ -266,14 +266,33 @@ def main() -> None:
             if env_spec["model"] == "linear":
                 coef, _, eq, r2 = fit_linear(x_reg, y_reg)
                 poly = np.poly1d(coef)
+                effect_minutes_per_unit = float(coef[0] * 60.0)
+                effect_text = f"Effect: {effect_minutes_per_unit:+.2f} min per +1 unit {env_col}"
             else:
                 coef, _, eq, r2 = fit_quadratic(x_reg, y_reg)
                 poly = np.poly1d(coef)
+                x_mid = float(np.nanmedian(x_reg))
+                slope_mid = float((2.0 * coef[0] * x_mid) + coef[1])
+                effect_minutes_per_unit = float(slope_mid * 60.0)
+                effect_text = f"Local effect @ median x: {effect_minutes_per_unit:+.2f} min per +1 unit {env_col}"
 
             x_grid = np.linspace(x_lo, x_hi, 300)
             y_grid = poly(x_grid)
+            y_lo = poly(x_lo)
+            y_hi = poly(x_hi)
+            delta_10_90_minutes = float((y_hi - y_lo) * 60.0)
 
             fig, ax = plt.subplots(figsize=(9.8, 6.2))
+            # Background variability ribbon: binned mean ± 1 SD
+            ax.fill_between(
+                avg["x_mean"],
+                avg["y_mean"] - avg["y_sd"].fillna(0.0),
+                avg["y_mean"] + avg["y_sd"].fillna(0.0),
+                color="#9e9e9e",
+                alpha=0.18,
+                label="Binned mean ±1 SD",
+                zorder=1,
+            )
             ax.errorbar(
                 avg["x_mean"],
                 avg["y_mean"],
@@ -283,8 +302,16 @@ def main() -> None:
                 alpha=0.95,
                 color="#1f77b4",
                 label="Binned mean ±95% CI",
+                zorder=3,
             )
-            ax.plot(x_grid, y_grid, color="#d62728", linewidth=2.4, label=f"{env_spec['model'].capitalize()} fit (10%-90% interval)")
+            ax.plot(
+                x_grid,
+                y_grid,
+                color="#d62728",
+                linewidth=2.4,
+                label=f"{env_spec['model'].capitalize()} fit (10%-90% interval)",
+                zorder=4,
+            )
             ax.axvline(x_lo, color="#555555", linestyle="--", linewidth=1.6, label="10th pct x")
             ax.axvline(x_hi, color="#555555", linestyle="--", linewidth=1.6, label="90th pct x")
 
@@ -297,7 +324,14 @@ def main() -> None:
                 ax.set_yticks(ticks)
                 ax.yaxis.set_major_formatter(FuncFormatter(hour_24_formatter))
 
-            text = f"{eq}\n$R^2$ = {r2:.4f}\nN(all) = {n_full:,}\nN(10-90%) = {x_reg.shape[0]:,}"
+            text = (
+                f"{eq}\n"
+                f"$R^2$ = {r2:.4f}\n"
+                f"{effect_text}\n"
+                f"Net 10-90% change: {delta_10_90_minutes:+.2f} min\n"
+                f"N(all) = {n_full:,}\n"
+                f"N(10-90%) = {x_reg.shape[0]:,}"
+            )
             ax.text(
                 0.02,
                 0.98,
@@ -326,6 +360,8 @@ def main() -> None:
                     "n_reg_10_90": int(x_reg.shape[0]),
                     "equation": eq,
                     "r2": float(r2),
+                    "effect_minutes_per_unit": float(effect_minutes_per_unit),
+                    "delta_10_90_minutes": float(delta_10_90_minutes),
                     "x_lo_10pct": float(x_lo),
                     "x_hi_90pct": float(x_hi),
                     "coef_0": float(coef[0]) if len(coef) > 0 else np.nan,

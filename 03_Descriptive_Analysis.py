@@ -711,8 +711,9 @@ def main() -> None:
         axs[0, 0].set_xticklabels(dur_agg["age_bin"].astype(str))
         axs[0, 0].set_title("Duration vs age (5-year bins)")
         axs[0, 0].set_xlabel("Age bin (years)")
-        axs[0, 0].set_ylabel("Duration (hours)")
+        axs[0, 0].set_ylabel("Duration (HH:MM)")
         axs[0, 0].tick_params(axis="x", rotation=45)
+        apply_time_axis_zoom(axs[0, 0], dur_agg["mean"], step_hours=0.25, mode="duration")
 
         if not midpoint_age.empty:
             mid_long = midpoint_age.melt(
@@ -760,10 +761,10 @@ def main() -> None:
             axs[0, 1].set_xticks(np.arange(len(age_levels)))
             axs[0, 1].set_xticklabels(age_levels)
             axs[0, 1].legend(frameon=False, title="")
-            apply_time_axis(axs[0, 1], axis="y")
+            apply_time_axis_zoom(axs[0, 1], mid_agg["mean"], step_hours=0.25, mode="clock")
         axs[0, 1].set_title("Midpoint vs age (work, free, adjusted)")
         axs[0, 1].set_xlabel("Age bin (years)")
-        axs[0, 1].set_ylabel("Midpoint time (24h)")
+        axs[0, 1].set_ylabel("Midpoint time (HH:MM)")
         axs[0, 1].tick_params(axis="x", rotation=45)
 
         onset_agg = age_person.groupby("age_bin", observed=True, as_index=False).agg(
@@ -786,9 +787,9 @@ def main() -> None:
         axs[1, 0].set_xticklabels(onset_agg["age_bin"].astype(str))
         axs[1, 0].set_title("Onset vs age (5-year bins)")
         axs[1, 0].set_xlabel("Age bin (years)")
-        axs[1, 0].set_ylabel("Onset time (24h)")
+        axs[1, 0].set_ylabel("Onset time (HH:MM)")
         axs[1, 0].tick_params(axis="x", rotation=45)
-        apply_time_axis(axs[1, 0], axis="y")
+        apply_time_axis_zoom(axs[1, 0], onset_agg["mean"], step_hours=0.25, mode="clock")
 
         offset_agg = age_person.groupby("age_bin", observed=True, as_index=False).agg(
             mean=("offset", "mean"),
@@ -810,9 +811,9 @@ def main() -> None:
         axs[1, 1].set_xticklabels(offset_agg["age_bin"].astype(str))
         axs[1, 1].set_title("Offset vs age (5-year bins)")
         axs[1, 1].set_xlabel("Age bin (years)")
-        axs[1, 1].set_ylabel("Offset time (24h)")
+        axs[1, 1].set_ylabel("Offset time (HH:MM)")
         axs[1, 1].tick_params(axis="x", rotation=45)
-        apply_time_axis(axs[1, 1], axis="y")
+        apply_time_axis_zoom(axs[1, 1], offset_agg["mean"], step_hours=0.25, mode="clock")
 
         fig.savefig(OUTPUT_DIR / "11_age_bin_sleep_metrics_5y.png", bbox_inches="tight")
         plt.close(fig)

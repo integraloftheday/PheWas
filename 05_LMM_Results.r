@@ -249,6 +249,7 @@ derived_age_compare <- safe_read_csv(c("derived_vs_direct_age.csv"), required = 
 
 weekend_contrasts <- safe_read_csv(c("weekend_contrasts.csv"), required = FALSE)
 dst_contrasts <- safe_read_csv(c("dst_contrasts.csv"), required = FALSE)
+emmeans_marginalized <- safe_read_csv(c("emmeans_marginalized.csv"), required = FALSE)
 
 write_table(predictions_all, "predictions_all_input_copy.csv")
 if (nrow(model_inventory) > 0) write_table(model_inventory, "model_inventory.csv")
@@ -351,6 +352,7 @@ if (require_cols(
 
     save_plot(p_duration, "employment_weekend_duration.png", width = 11, height = 8)
   }
+
 }
 
 # %% [markdown]
@@ -459,6 +461,66 @@ if (nrow(main_effects) > 0) {
 
     save_plot(p_main_duration, "main_effects_duration.png", width = 12, height = 10)
   }
+
+}
+
+# %% [markdown]
+# ## Figure 2B: Continuous Main Effects (Photoperiod, Duration Covariate)
+
+# %%
+photoperiod_main <- predictions_all %>% filter(analysis == "photoperiod_main")
+if (nrow(photoperiod_main) > 0 && require_cols(photoperiod_main, c("PhotoPeriod", "outcome", "batch", "estimate", "conf.low", "conf.high"), "photoperiod_main")) {
+  photoperiod_main <- photoperiod_main %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
+      batch = factor(batch, levels = c("base", "dst"))
+    )
+
+  write_table(photoperiod_main, "photoperiod_main.csv")
+
+  p_photo <- ggplot(photoperiod_main, aes(x = PhotoPeriod, y = estimate, color = batch, fill = batch)) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0) +
+    geom_line(linewidth = 1.0) +
+    facet_wrap(~ outcome, scales = "free_y", ncol = 2) +
+    labs(
+      title = "Photoperiod Main Effect",
+      subtitle = "Marginal predictions across observed photoperiod range",
+      x = "Photoperiod",
+      y = "Predicted value",
+      color = "Batch",
+      fill = "Batch"
+    ) +
+    theme_classic(base_size = 13)
+
+  save_plot(p_photo, "photoperiod_main_effect.png", width = 13, height = 8)
+}
+
+duration_cov_main <- predictions_all %>% filter(analysis == "duration_covariate_main")
+if (nrow(duration_cov_main) > 0 && require_cols(duration_cov_main, c("duration_hours", "outcome", "batch", "estimate", "conf.low", "conf.high"), "duration_covariate_main")) {
+  duration_cov_main <- duration_cov_main %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset")),
+      batch = factor(batch, levels = c("base", "dst"))
+    )
+
+  write_table(duration_cov_main, "duration_covariate_main.csv")
+
+  p_dur_cov <- ggplot(duration_cov_main, aes(x = duration_hours, y = estimate, color = batch, fill = batch)) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0) +
+    geom_line(linewidth = 1.0) +
+    facet_wrap(~ outcome, scales = "free_y", ncol = 3) +
+    scale_y_continuous(labels = format_time_axis) +
+    labs(
+      title = "Duration Covariate Main Effect",
+      subtitle = "Timing outcomes as a function of sleep duration covariate",
+      x = "Duration covariate (hours)",
+      y = "Predicted Clock Time",
+      color = "Batch",
+      fill = "Batch"
+    ) +
+    theme_classic(base_size = 13)
+
+  save_plot(p_dur_cov, "duration_covariate_main_effect.png", width = 13, height = 6)
 }
 
 # %% [markdown]
@@ -492,6 +554,7 @@ if (nrow(month_main) > 0 && require_cols(month_main, c("month", "outcome", "batc
     theme_classic(base_size = 13)
 
   save_plot(p_month, "seasonality_month_main.png", width = 13, height = 9)
+
 }
 
 month_weekend <- primary_predictions %>% filter(analysis == "month_x_weekend")
@@ -520,6 +583,7 @@ if (nrow(month_weekend) > 0 && require_cols(month_weekend, c("month", "is_weeken
     theme_classic(base_size = 12)
 
   save_plot(p_month_weekend, "seasonality_month_x_weekend.png", width = 15, height = 8)
+
 }
 
 month_dst <- primary_predictions %>% filter(analysis == "month_x_dst", outcome %in% c("onset", "offset"))
@@ -549,6 +613,7 @@ if (nrow(month_dst) > 0 && require_cols(month_dst, c("month", "dst_observes", "o
     theme_classic(base_size = 13)
 
   save_plot(p_month_dst, "onset_offset_month_x_dst.png", width = 13, height = 8)
+
 }
 
 # %% [markdown]
@@ -582,6 +647,7 @@ if (nrow(age_main) > 0 && require_cols(age_main, c("age_at_sleep", "outcome", "b
       theme_classic(base_size = 13)
 
     save_plot(p_age_timing, "age_trends_timing.png", width = 15, height = 6)
+
   }
 
   age_duration <- age_main %>% filter(outcome == "duration")
@@ -601,6 +667,7 @@ if (nrow(age_main) > 0 && require_cols(age_main, c("age_at_sleep", "outcome", "b
       theme_classic(base_size = 13)
 
     save_plot(p_age_duration, "age_trends_duration.png", width = 11, height = 8)
+
   }
 }
 
@@ -629,6 +696,7 @@ if (nrow(age_x_employment_duration) > 0 && require_cols(age_x_employment_duratio
     theme_classic(base_size = 12)
 
   save_plot(p_age_emp, "duration_age_x_employment.png", width = 12, height = 9)
+
 }
 
 age_x_dst_onoff <- primary_predictions %>% filter(analysis == "age_x_dst", outcome %in% c("onset", "offset"))
@@ -656,6 +724,197 @@ if (nrow(age_x_dst_onoff) > 0 && require_cols(age_x_dst_onoff, c("age_at_sleep",
     theme_classic(base_size = 13)
 
   save_plot(p_age_dst, "onset_offset_age_x_dst.png", width = 13, height = 8)
+
+}
+
+# %% [markdown]
+# ## Figure 4B: EMMeans-based Marginalized Effects (DST model)
+
+# %%
+if (nrow(emmeans_marginalized) > 0 && require_cols(emmeans_marginalized, c("analysis", "outcome", "estimate", "conf.low", "conf.high"), "emmeans_marginalized")) {
+  emm <- emmeans_marginalized %>%
+    filter(outcome_variant == "primary", batch == "dst") %>%
+    mutate(
+      outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration"))
+    )
+
+  write_table(emm, "emmeans_marginalized_primary.csv")
+
+  emm_emp_wk <- emm %>% filter(analysis == "emm_employment_x_weekend")
+  if (nrow(emm_emp_wk) > 0 && require_cols(emm_emp_wk, c("employment_status", "is_weekend_factor", "outcome"), "emm_employment_x_weekend")) {
+    emm_emp_wk <- emm_emp_wk %>%
+      mutate(
+        employment_clean = clean_employment(employment_status),
+        employment_clean = str_wrap(employment_clean, width = 25),
+        day_type = factor(normalize_weekend_level(is_weekend_factor), levels = c("Weekday", "Weekend"))
+      )
+
+    write_table(emm_emp_wk, "employment_x_weekend_marginalized.csv")
+
+    emm_timing <- emm_emp_wk %>% filter(outcome %in% c("onset", "midpoint", "offset"))
+    if (nrow(emm_timing) > 0) {
+      p_emm_timing <- ggplot(emm_timing, aes(x = estimate, y = employment_clean, color = day_type)) +
+        geom_line(aes(group = employment_clean), color = "gray85", linewidth = 0.6) +
+        geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, linewidth = 0.9, alpha = 0.9) +
+        geom_point(size = 2.4) +
+        facet_wrap(~ outcome, scales = "free_x", ncol = 3) +
+        scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00"), drop = FALSE) +
+        scale_x_continuous(labels = format_time_axis) +
+        labs(
+          title = "Sleep Timing by Employment and Weekend Status (EMMeans marginalized)",
+          subtitle = "DST interaction model, proportional weighting over DST groups",
+          x = "Predicted Clock Time",
+          y = NULL,
+          color = NULL
+        ) +
+        theme_classic(base_size = 13)
+
+      save_plot(p_emm_timing, "employment_weekend_timing_marginalized.png", width = 15, height = 7)
+    }
+
+    emm_duration <- emm_emp_wk %>% filter(outcome == "duration")
+    if (nrow(emm_duration) > 0) {
+      p_emm_duration <- ggplot(emm_duration, aes(x = estimate, y = employment_clean, color = day_type)) +
+        geom_line(aes(group = employment_clean), color = "gray85", linewidth = 0.6) +
+        geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0, linewidth = 0.9, alpha = 0.9) +
+        geom_point(size = 2.4) +
+        scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00"), drop = FALSE) +
+        scale_x_continuous(labels = format_duration_axis) +
+        labs(
+          title = "Sleep Duration by Employment and Weekend Status (EMMeans marginalized)",
+          x = "Predicted Sleep Duration",
+          y = NULL,
+          color = NULL
+        ) +
+        theme_classic(base_size = 13)
+
+      save_plot(p_emm_duration, "employment_weekend_duration_marginalized.png", width = 11, height = 7)
+    }
+  }
+
+  emm_age_main <- emm %>% filter(analysis == "emm_age_main")
+  if (nrow(emm_age_main) > 0 && require_cols(emm_age_main, c("age_at_sleep", "outcome"), "emm_age_main")) {
+    write_table(emm_age_main, "age_main_marginalized.csv")
+
+    emm_age_timing <- emm_age_main %>% filter(outcome %in% c("onset", "midpoint", "offset"))
+    if (nrow(emm_age_timing) > 0) {
+      p_emm_age_timing <- ggplot(emm_age_timing, aes(x = age_at_sleep, y = estimate)) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.14, linewidth = 0, fill = "#8DA0CB") +
+        geom_line(linewidth = 1.0, color = "#1F78B4") +
+        facet_wrap(~ outcome, scales = "free_y", ncol = 3) +
+        scale_y_continuous(labels = format_time_axis) +
+        labs(
+          title = "Age-related Shifts in Sleep Timing (EMMeans marginalized)",
+          x = "Age (years)",
+          y = "Predicted Clock Time"
+        ) +
+        theme_classic(base_size = 13)
+
+      save_plot(p_emm_age_timing, "age_trends_timing_marginalized.png", width = 15, height = 6)
+    }
+
+    emm_age_duration <- emm_age_main %>% filter(outcome == "duration")
+    if (nrow(emm_age_duration) > 0) {
+      p_emm_age_duration <- ggplot(emm_age_duration, aes(x = age_at_sleep, y = estimate)) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.14, linewidth = 0, fill = "#FC8D62") +
+        geom_line(linewidth = 1.0, color = "#D95F02") +
+        scale_y_continuous(labels = format_duration_axis) +
+        labs(
+          title = "Age-related Shifts in Sleep Duration (EMMeans marginalized)",
+          x = "Age (years)",
+          y = "Predicted Sleep Duration"
+        ) +
+        theme_classic(base_size = 13)
+
+      save_plot(p_emm_age_duration, "age_trends_duration_marginalized.png", width = 11, height = 6)
+    }
+  }
+
+  emm_age_emp <- emm %>% filter(analysis == "emm_age_x_employment", outcome == "duration")
+  if (nrow(emm_age_emp) > 0 && require_cols(emm_age_emp, c("age_at_sleep", "employment_status"), "emm_age_x_employment")) {
+    emm_age_emp <- emm_age_emp %>% mutate(employment_clean = clean_employment(employment_status))
+    write_table(emm_age_emp, "duration_age_x_employment_marginalized.csv")
+
+    p_emm_age_emp <- ggplot(emm_age_emp, aes(x = age_at_sleep, y = estimate, color = employment_clean, fill = employment_clean)) +
+      geom_line(linewidth = 0.9) +
+      scale_y_continuous(labels = format_duration_axis) +
+      labs(
+        title = "Duration vs Age Controlling for Employment (EMMeans marginalized)",
+        subtitle = "DST interaction model, proportional weighting over DST groups",
+        x = "Age (years)",
+        y = "Predicted Sleep Duration",
+        color = "Employment",
+        fill = "Employment"
+      ) +
+      theme_classic(base_size = 12)
+
+    save_plot(p_emm_age_emp, "duration_age_x_employment_marginalized.png", width = 12, height = 7)
+  }
+
+  emm_month <- emm %>% filter(analysis == "emm_month_main")
+  if (nrow(emm_month) > 0 && require_cols(emm_month, c("month", "outcome"), "emm_month_main")) {
+    emm_month <- emm_month %>% mutate(month = factor(sprintf("%02d", as.integer(as.character(month))), levels = sprintf("%02d", 1:12)))
+    write_table(emm_month, "month_main_marginalized.csv")
+
+    p_emm_month <- ggplot(emm_month, aes(x = month, y = estimate, group = 1)) +
+      geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0, fill = "#8DA0CB") +
+      geom_line(linewidth = 1.0, color = "#1F78B4") +
+      geom_point(size = 1.7, color = "#1F78B4") +
+      facet_wrap(~ outcome, scales = "free_y", ncol = 2) +
+      labs(
+        title = "Seasonality Across Outcomes (EMMeans marginalized)",
+        x = "Month",
+        y = "Predicted value"
+      ) +
+      theme_classic(base_size = 13)
+
+    save_plot(p_emm_month, "seasonality_month_main_marginalized.png", width = 13, height = 9)
+
+    emm_month_onoff <- emm_month %>% filter(outcome %in% c("onset", "offset"))
+    if (nrow(emm_month_onoff) > 0) {
+      p_emm_month_onoff <- ggplot(emm_month_onoff, aes(x = month, y = estimate, group = outcome, color = outcome, fill = outcome)) +
+        geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0) +
+        geom_line(linewidth = 1.0) +
+        geom_point(size = 1.7) +
+        facet_wrap(~ outcome, scales = "free_y", ncol = 2) +
+        scale_y_continuous(labels = format_time_axis) +
+        labs(
+          title = "Onset/Offset vs Month (EMMeans marginalized)",
+          x = "Month",
+          y = "Predicted Clock Time",
+          color = "Outcome",
+          fill = "Outcome"
+        ) +
+        theme_classic(base_size = 13)
+
+      save_plot(p_emm_month_onoff, "onset_offset_month_marginalized.png", width = 13, height = 8)
+    }
+  }
+
+  emm_month_wk <- emm %>% filter(analysis == "emm_month_x_weekend")
+  if (nrow(emm_month_wk) > 0 && require_cols(emm_month_wk, c("month", "is_weekend_factor", "outcome"), "emm_month_x_weekend")) {
+    emm_month_wk <- emm_month_wk %>%
+      mutate(
+        month = factor(sprintf("%02d", as.integer(as.character(month))), levels = sprintf("%02d", 1:12)),
+        day_type = factor(normalize_weekend_level(is_weekend_factor), levels = c("Weekday", "Weekend"))
+      )
+    write_table(emm_month_wk, "month_x_weekend_marginalized.csv")
+
+    p_emm_month_wk <- ggplot(emm_month_wk, aes(x = month, y = estimate, color = day_type, group = day_type)) +
+      geom_line(linewidth = 0.9) +
+      geom_point(size = 1.5) +
+      facet_wrap(~ outcome, scales = "free_y", ncol = 2) +
+      scale_color_manual(values = c("Weekday" = "#0072B2", "Weekend" = "#D55E00"), drop = FALSE) +
+      labs(
+        title = "Seasonality by Weekend Status (EMMeans marginalized)",
+        x = "Month",
+        y = "Predicted value",
+        color = NULL
+      ) +
+      theme_classic(base_size = 12)
+
+    save_plot(p_emm_month_wk, "seasonality_month_x_weekend_marginalized.png", width = 15, height = 8)
+  }
 }
 
 # %% [markdown]

@@ -52,9 +52,9 @@ PROFILE_OUT = "processed_data/synthetic/LMM_analysis_profile.json"
 
 # Fast defaults for quick model iteration.
 OUTPUT_SYNTHETIC = "processed_data/synthetic/LMM_analysis_synthetic_small.parquet"
-N_PEOPLE = 120
-MIN_NIGHTS = 10
-MAX_NIGHTS = 25
+N_PEOPLE = 60
+MIN_NIGHTS = 8
+MAX_NIGHTS = 16
 SEED = 20260304
 
 

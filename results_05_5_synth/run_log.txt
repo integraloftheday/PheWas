@@ -1,0 +1,504 @@
+2026-03-26 05:08:53 Configuration loaded.
+2026-03-26 05:08:53 MODEL_DIR: models_04_5_synth
+2026-03-26 05:08:53 SUMMARY_DIR: model_summaries_04_5_synth
+2026-03-26 05:08:53 OUTPUT_DIR: results_05_5_synth
+2026-03-26 05:08:53 METHOD_PRIORITY: REML -> ML
+2026-03-26 05:08:53 Age sequence: 18, 85, 1
+2026-03-26 05:08:53 PRED_SCOPE: all
+2026-03-26 05:08:53 RESUME_CHECKPOINTS: FALSE
+2026-03-26 05:08:53 MEM_DIAGNOSTICS: TRUE
+2026-03-26 05:08:54 Wrote: results_05_5_synth/tables/model_inventory.csv
+2026-03-26 05:08:54 Models found: 12 of 12
+2026-03-26 05:08:54 Precomputing: duration_poly_interact_04 [ REML ]
+2026-03-26 05:08:54 MEM [before_load duration_poly_interact_04_REML.rds] R_used=2640869.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:08:55 MEM [after_load duration_poly_interact_04_REML.rds] R_used=9944514.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:08:56 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=4.86MB
+2026-03-26 05:08:56 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:08:56 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:56 Prediction chunk: analysis=weekend_main | rows=2 | size=4.85MB
+2026-03-26 05:08:56 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:08:56 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:57 Prediction chunk: analysis=sex_main | rows=3 | size=4.85MB
+2026-03-26 05:08:57 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:08:57 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:57 Prediction chunk: analysis=month_main | rows=12 | size=4.85MB
+2026-03-26 05:08:57 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:08:57 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:58 Prediction chunk: analysis=month_x_weekend | rows=24 | size=4.86MB
+2026-03-26 05:08:58 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:08:58 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:58 Prediction chunk: analysis=age_main | rows=68 | size=4.88MB
+2026-03-26 05:08:58 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:08:58 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:58 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.15MB
+2026-03-26 05:08:58 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:08:59 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:59 Prediction chunk: analysis=age_x_weekend | rows=136 | size=4.92MB
+2026-03-26 05:08:59 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:08:59 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-03-26 05:08:59 Memory cleanup: finished duration_poly_interact_04_REML.rds
+2026-03-26 05:08:59 MEM [after_model duration_poly_interact_04_REML.rds] R_used=13089860.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:08:59 Checkpoint complete: model__duration_poly_interact_04__REML.done
+2026-03-26 05:08:59 Precomputing: duration_poly_interact_04_dst [ REML ]
+2026-03-26 05:09:00 MEM [before_load duration_poly_interact_04_dst_REML.rds] R_used=13090132.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:00 MEM [after_load duration_poly_interact_04_dst_REML.rds] R_used=17135774.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:00 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=5.49MB
+2026-03-26 05:09:00 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:00 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:01 Prediction chunk: analysis=weekend_main | rows=2 | size=5.48MB
+2026-03-26 05:09:01 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:01 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:01 Prediction chunk: analysis=sex_main | rows=3 | size=5.49MB
+2026-03-26 05:09:01 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:01 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:01 Prediction chunk: analysis=month_main | rows=12 | size=5.49MB
+2026-03-26 05:09:01 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:02 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:02 Prediction chunk: analysis=month_x_weekend | rows=24 | size=5.50MB
+2026-03-26 05:09:02 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:02 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:02 Prediction chunk: analysis=dst_main | rows=2 | size=5.48MB
+2026-03-26 05:09:02 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:03 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:03 Prediction chunk: analysis=month_x_dst | rows=24 | size=5.50MB
+2026-03-26 05:09:03 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:03 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:03 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=5.49MB
+2026-03-26 05:09:03 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 4
+2026-03-26 05:09:04 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:04 Prediction chunk: analysis=age_main | rows=68 | size=5.52MB
+2026-03-26 05:09:04 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:04 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:04 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.80MB
+2026-03-26 05:09:04 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:04 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:05 Prediction chunk: analysis=age_x_weekend | rows=136 | size=5.56MB
+2026-03-26 05:09:05 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:05 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-03-26 05:09:05 Memory cleanup: finished duration_poly_interact_04_dst_REML.rds
+2026-03-26 05:09:05 MEM [after_model duration_poly_interact_04_dst_REML.rds] R_used=14050962.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:05 Checkpoint complete: model__duration_poly_interact_04_dst__REML.done
+2026-03-26 05:09:05 Precomputing: duration_poly_interact_midpoint_adjusted_04 [ REML ]
+2026-03-26 05:09:05 MEM [before_load duration_poly_interact_midpoint_adjusted_04_REML.rds] R_used=14051431.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:06 MEM [after_load duration_poly_interact_midpoint_adjusted_04_REML.rds] R_used=18060496.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:06 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=5.51MB
+2026-03-26 05:09:06 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:06 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:07 Prediction chunk: analysis=weekend_main | rows=2 | size=5.50MB
+2026-03-26 05:09:07 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:07 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:07 Prediction chunk: analysis=sex_main | rows=3 | size=5.50MB
+2026-03-26 05:09:07 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:07 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:07 Prediction chunk: analysis=month_main | rows=12 | size=5.51MB
+2026-03-26 05:09:07 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:08 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:08 Prediction chunk: analysis=month_x_weekend | rows=24 | size=5.52MB
+2026-03-26 05:09:08 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:08 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:08 Prediction chunk: analysis=age_main | rows=68 | size=5.54MB
+2026-03-26 05:09:08 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:08 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:09 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.81MB
+2026-03-26 05:09:09 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:09 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:09 Prediction chunk: analysis=age_x_weekend | rows=136 | size=5.58MB
+2026-03-26 05:09:09 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:09 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-03-26 05:09:10 Memory cleanup: finished duration_poly_interact_midpoint_adjusted_04_REML.rds
+2026-03-26 05:09:10 MEM [after_model duration_poly_interact_midpoint_adjusted_04_REML.rds] R_used=18092533.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:10 Checkpoint complete: model__duration_poly_interact_midpoint_adjusted_04__REML.done
+2026-03-26 05:09:10 Precomputing: duration_poly_interact_midpoint_adjusted_04_dst [ REML ]
+2026-03-26 05:09:10 MEM [before_load duration_poly_interact_midpoint_adjusted_04_dst_REML.rds] R_used=18092598.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:10 MEM [after_load duration_poly_interact_midpoint_adjusted_04_dst_REML.rds] R_used=22221480.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:11 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=6.13MB
+2026-03-26 05:09:11 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:11 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:11 Prediction chunk: analysis=weekend_main | rows=2 | size=6.13MB
+2026-03-26 05:09:11 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:11 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:12 Prediction chunk: analysis=sex_main | rows=3 | size=6.13MB
+2026-03-26 05:09:12 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:12 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:12 Prediction chunk: analysis=month_main | rows=12 | size=6.13MB
+2026-03-26 05:09:12 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:12 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:12 Prediction chunk: analysis=month_x_weekend | rows=24 | size=6.14MB
+2026-03-26 05:09:12 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:13 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:13 Prediction chunk: analysis=dst_main | rows=2 | size=6.13MB
+2026-03-26 05:09:13 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:13 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:13 Prediction chunk: analysis=month_x_dst | rows=24 | size=6.14MB
+2026-03-26 05:09:13 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:14 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=6.13MB
+2026-03-26 05:09:14 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 4
+2026-03-26 05:09:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:14 Prediction chunk: analysis=age_main | rows=68 | size=6.16MB
+2026-03-26 05:09:14 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:15 Prediction chunk: analysis=age_x_employment | rows=544 | size=6.44MB
+2026-03-26 05:09:15 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:15 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:15 Prediction chunk: analysis=age_x_weekend | rows=136 | size=6.20MB
+2026-03-26 05:09:15 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:15 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:09:16 Memory cleanup: finished duration_poly_interact_midpoint_adjusted_04_dst_REML.rds
+2026-03-26 05:09:16 MEM [after_model duration_poly_interact_midpoint_adjusted_04_dst_REML.rds] R_used=14442112.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:16 Checkpoint complete: model__duration_poly_interact_midpoint_adjusted_04_dst__REML.done
+2026-03-26 05:09:16 Precomputing: midpoint_poly_interact_04 [ REML ]
+2026-03-26 05:09:16 MEM [before_load midpoint_poly_interact_04_REML.rds] R_used=14442173.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:16 MEM [after_load midpoint_poly_interact_04_REML.rds] R_used=18366171.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:17 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=4.86MB
+2026-03-26 05:09:17 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:17 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:17 Prediction chunk: analysis=weekend_main | rows=2 | size=4.85MB
+2026-03-26 05:09:17 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:17 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:17 Prediction chunk: analysis=sex_main | rows=3 | size=4.85MB
+2026-03-26 05:09:17 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:18 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:18 Prediction chunk: analysis=month_main | rows=12 | size=4.85MB
+2026-03-26 05:09:18 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:18 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:18 Prediction chunk: analysis=month_x_weekend | rows=24 | size=4.86MB
+2026-03-26 05:09:18 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:18 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:19 Prediction chunk: analysis=age_main | rows=68 | size=4.88MB
+2026-03-26 05:09:19 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:19 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:19 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.15MB
+2026-03-26 05:09:19 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:19 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:20 Prediction chunk: analysis=age_x_weekend | rows=136 | size=4.92MB
+2026-03-26 05:09:20 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:20 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-03-26 05:09:20 Memory cleanup: finished midpoint_poly_interact_04_REML.rds
+2026-03-26 05:09:20 MEM [after_model midpoint_poly_interact_04_REML.rds] R_used=17947679.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:20 Checkpoint complete: model__midpoint_poly_interact_04__REML.done
+2026-03-26 05:09:20 Precomputing: midpoint_poly_interact_04_dst [ REML ]
+2026-03-26 05:09:20 MEM [before_load midpoint_poly_interact_04_dst_REML.rds] R_used=17947746.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:21 MEM [after_load midpoint_poly_interact_04_dst_REML.rds] R_used=21993163.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:21 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=5.49MB
+2026-03-26 05:09:21 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:21 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:21 Prediction chunk: analysis=weekend_main | rows=2 | size=5.48MB
+2026-03-26 05:09:21 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:22 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:22 Prediction chunk: analysis=sex_main | rows=3 | size=5.49MB
+2026-03-26 05:09:22 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:22 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:22 Prediction chunk: analysis=month_main | rows=12 | size=5.49MB
+2026-03-26 05:09:22 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:22 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:23 Prediction chunk: analysis=month_x_weekend | rows=24 | size=5.50MB
+2026-03-26 05:09:23 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:23 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:23 Prediction chunk: analysis=dst_main | rows=2 | size=5.48MB
+2026-03-26 05:09:23 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:23 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:24 Prediction chunk: analysis=month_x_dst | rows=24 | size=5.50MB
+2026-03-26 05:09:24 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:24 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:24 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=5.49MB
+2026-03-26 05:09:24 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 4
+2026-03-26 05:09:24 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:24 Prediction chunk: analysis=age_main | rows=68 | size=5.52MB
+2026-03-26 05:09:24 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:25 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:25 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.80MB
+2026-03-26 05:09:25 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:25 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:26 Prediction chunk: analysis=age_x_weekend | rows=136 | size=5.56MB
+2026-03-26 05:09:26 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:26 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-03-26 05:09:26 Memory cleanup: finished midpoint_poly_interact_04_dst_REML.rds
+2026-03-26 05:09:26 MEM [after_model midpoint_poly_interact_04_dst_REML.rds] R_used=14053557.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:26 Checkpoint complete: model__midpoint_poly_interact_04_dst__REML.done
+2026-03-26 05:09:26 Precomputing: midpoint_poly_interact_duration_adjusted_04 [ REML ]
+2026-03-26 05:09:26 MEM [before_load midpoint_poly_interact_duration_adjusted_04_REML.rds] R_used=14053620.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:27 MEM [after_load midpoint_poly_interact_duration_adjusted_04_REML.rds] R_used=18062680.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:27 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=5.51MB
+2026-03-26 05:09:27 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:27 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:28 Prediction chunk: analysis=weekend_main | rows=2 | size=5.50MB
+2026-03-26 05:09:28 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:28 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:28 Prediction chunk: analysis=sex_main | rows=3 | size=5.50MB
+2026-03-26 05:09:28 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:28 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:29 Prediction chunk: analysis=month_main | rows=12 | size=5.51MB
+2026-03-26 05:09:29 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:29 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:29 Prediction chunk: analysis=month_x_weekend | rows=24 | size=5.52MB
+2026-03-26 05:09:29 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:29 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:29 Prediction chunk: analysis=age_main | rows=68 | size=5.54MB
+2026-03-26 05:09:29 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:30 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:30 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.81MB
+2026-03-26 05:09:30 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:30 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:30 Prediction chunk: analysis=age_x_weekend | rows=136 | size=5.58MB
+2026-03-26 05:09:30 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:30 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:31 Prediction chunk: analysis=duration_covariate_main | rows=21 | size=5.51MB
+2026-03-26 05:09:31 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 21
+2026-03-26 05:09:31 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-03-26 05:09:31 Memory cleanup: finished midpoint_poly_interact_duration_adjusted_04_REML.rds
+2026-03-26 05:09:31 MEM [after_model midpoint_poly_interact_duration_adjusted_04_REML.rds] R_used=18317732.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:31 Checkpoint complete: model__midpoint_poly_interact_duration_adjusted_04__REML.done
+2026-03-26 05:09:31 Precomputing: midpoint_poly_interact_duration_adjusted_04_dst [ REML ]
+2026-03-26 05:09:31 MEM [before_load midpoint_poly_interact_duration_adjusted_04_dst_REML.rds] R_used=18317797.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:32 MEM [after_load midpoint_poly_interact_duration_adjusted_04_dst_REML.rds] R_used=22446679.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:32 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=6.13MB
+2026-03-26 05:09:32 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:32 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:33 Prediction chunk: analysis=weekend_main | rows=2 | size=6.13MB
+2026-03-26 05:09:33 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:33 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:33 Prediction chunk: analysis=sex_main | rows=3 | size=6.13MB
+2026-03-26 05:09:33 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:33 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:34 Prediction chunk: analysis=month_main | rows=12 | size=6.13MB
+2026-03-26 05:09:34 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:34 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:34 Prediction chunk: analysis=month_x_weekend | rows=24 | size=6.14MB
+2026-03-26 05:09:34 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:34 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:34 Prediction chunk: analysis=dst_main | rows=2 | size=6.13MB
+2026-03-26 05:09:34 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:35 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:35 Prediction chunk: analysis=month_x_dst | rows=24 | size=6.14MB
+2026-03-26 05:09:35 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:35 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:35 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=6.13MB
+2026-03-26 05:09:35 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 4
+2026-03-26 05:09:36 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:36 Prediction chunk: analysis=age_main | rows=68 | size=6.16MB
+2026-03-26 05:09:36 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:36 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:36 Prediction chunk: analysis=age_x_employment | rows=544 | size=6.44MB
+2026-03-26 05:09:36 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:36 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:37 Prediction chunk: analysis=age_x_weekend | rows=136 | size=6.20MB
+2026-03-26 05:09:37 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:37 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:37 Prediction chunk: analysis=duration_covariate_main | rows=21 | size=6.14MB
+2026-03-26 05:09:37 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 21
+2026-03-26 05:09:37 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:09:38 Memory cleanup: finished midpoint_poly_interact_duration_adjusted_04_dst_REML.rds
+2026-03-26 05:09:38 MEM [after_model midpoint_poly_interact_duration_adjusted_04_dst_REML.rds] R_used=14691101.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:38 Checkpoint complete: model__midpoint_poly_interact_duration_adjusted_04_dst__REML.done
+2026-03-26 05:09:38 Precomputing: offset_poly_interact_04 [ REML ]
+2026-03-26 05:09:38 MEM [before_load offset_poly_interact_04_REML.rds] R_used=14691162.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:38 MEM [after_load offset_poly_interact_04_REML.rds] R_used=18615164.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:39 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=4.86MB
+2026-03-26 05:09:39 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:39 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:39 Prediction chunk: analysis=weekend_main | rows=2 | size=4.85MB
+2026-03-26 05:09:39 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:39 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:39 Prediction chunk: analysis=sex_main | rows=3 | size=4.85MB
+2026-03-26 05:09:39 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:40 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:40 Prediction chunk: analysis=month_main | rows=12 | size=4.85MB
+2026-03-26 05:09:40 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:40 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:40 Prediction chunk: analysis=month_x_weekend | rows=24 | size=4.86MB
+2026-03-26 05:09:40 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:40 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:41 Prediction chunk: analysis=age_main | rows=68 | size=4.88MB
+2026-03-26 05:09:41 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:41 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:41 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.15MB
+2026-03-26 05:09:41 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:41 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:42 Prediction chunk: analysis=age_x_weekend | rows=136 | size=4.92MB
+2026-03-26 05:09:42 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:42 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-03-26 05:09:42 Memory cleanup: finished offset_poly_interact_04_REML.rds
+2026-03-26 05:09:42 MEM [after_model offset_poly_interact_04_REML.rds] R_used=18196672.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:42 Checkpoint complete: model__offset_poly_interact_04__REML.done
+2026-03-26 05:09:42 Precomputing: offset_poly_interact_04_dst [ REML ]
+2026-03-26 05:09:42 MEM [before_load offset_poly_interact_04_dst_REML.rds] R_used=18196738.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:43 MEM [after_load offset_poly_interact_04_dst_REML.rds] R_used=22242155.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:43 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=5.49MB
+2026-03-26 05:09:43 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:43 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:43 Prediction chunk: analysis=weekend_main | rows=2 | size=5.48MB
+2026-03-26 05:09:43 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:44 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:44 Prediction chunk: analysis=sex_main | rows=3 | size=5.49MB
+2026-03-26 05:09:44 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:44 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:44 Prediction chunk: analysis=month_main | rows=12 | size=5.49MB
+2026-03-26 05:09:44 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:45 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:45 Prediction chunk: analysis=month_x_weekend | rows=24 | size=5.50MB
+2026-03-26 05:09:45 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:45 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:45 Prediction chunk: analysis=dst_main | rows=2 | size=5.48MB
+2026-03-26 05:09:45 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:45 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:46 Prediction chunk: analysis=month_x_dst | rows=24 | size=5.50MB
+2026-03-26 05:09:46 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:46 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:46 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=5.49MB
+2026-03-26 05:09:46 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 4
+2026-03-26 05:09:46 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:47 Prediction chunk: analysis=age_main | rows=68 | size=5.52MB
+2026-03-26 05:09:47 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:47 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:47 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.80MB
+2026-03-26 05:09:47 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:47 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:47 Prediction chunk: analysis=age_x_weekend | rows=136 | size=5.56MB
+2026-03-26 05:09:47 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:48 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:48 Prediction chunk: analysis=age_x_dst | rows=136 | size=5.56MB
+2026-03-26 05:09:48 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:48 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-03-26 05:09:48 Memory cleanup: finished offset_poly_interact_04_dst_REML.rds
+2026-03-26 05:09:48 MEM [after_model offset_poly_interact_04_dst_REML.rds] R_used=18654224.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:48 Checkpoint complete: model__offset_poly_interact_04_dst__REML.done
+2026-03-26 05:09:48 Precomputing: onset_poly_interact_04 [ REML ]
+2026-03-26 05:09:49 MEM [before_load onset_poly_interact_04_REML.rds] R_used=18654283.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:49 MEM [after_load onset_poly_interact_04_REML.rds] R_used=22578285.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:49 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=4.86MB
+2026-03-26 05:09:49 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:49 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:50 Prediction chunk: analysis=weekend_main | rows=2 | size=4.85MB
+2026-03-26 05:09:50 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:50 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:50 Prediction chunk: analysis=sex_main | rows=3 | size=4.85MB
+2026-03-26 05:09:50 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:50 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:51 Prediction chunk: analysis=month_main | rows=12 | size=4.85MB
+2026-03-26 05:09:51 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:51 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:51 Prediction chunk: analysis=month_x_weekend | rows=24 | size=4.86MB
+2026-03-26 05:09:51 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:51 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:51 Prediction chunk: analysis=age_main | rows=68 | size=4.88MB
+2026-03-26 05:09:51 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:52 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:52 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.15MB
+2026-03-26 05:09:52 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:52 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:52 Prediction chunk: analysis=age_x_weekend | rows=136 | size=4.92MB
+2026-03-26 05:09:52 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:52 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-03-26 05:09:53 Memory cleanup: finished onset_poly_interact_04_REML.rds
+2026-03-26 05:09:53 MEM [after_model onset_poly_interact_04_REML.rds] R_used=22382872.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:53 Checkpoint complete: model__onset_poly_interact_04__REML.done
+2026-03-26 05:09:53 Precomputing: onset_poly_interact_04_dst [ REML ]
+2026-03-26 05:09:53 MEM [before_load onset_poly_interact_04_dst_REML.rds] R_used=22382938.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:53 MEM [after_load onset_poly_interact_04_dst_REML.rds] R_used=26428355.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:54 Prediction chunk: analysis=employment_x_weekend | rows=16 | size=5.49MB
+2026-03-26 05:09:54 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 16
+2026-03-26 05:09:54 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:54 Prediction chunk: analysis=weekend_main | rows=2 | size=5.48MB
+2026-03-26 05:09:54 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:54 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:55 Prediction chunk: analysis=sex_main | rows=3 | size=5.49MB
+2026-03-26 05:09:55 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 3
+2026-03-26 05:09:55 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:55 Prediction chunk: analysis=month_main | rows=12 | size=5.49MB
+2026-03-26 05:09:55 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 12
+2026-03-26 05:09:55 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:55 Prediction chunk: analysis=month_x_weekend | rows=24 | size=5.50MB
+2026-03-26 05:09:55 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:56 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:56 Prediction chunk: analysis=dst_main | rows=2 | size=5.48MB
+2026-03-26 05:09:56 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 2
+2026-03-26 05:09:56 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:56 Prediction chunk: analysis=month_x_dst | rows=24 | size=5.50MB
+2026-03-26 05:09:56 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 24
+2026-03-26 05:09:57 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:57 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=5.49MB
+2026-03-26 05:09:57 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 4
+2026-03-26 05:09:57 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:57 Prediction chunk: analysis=age_main | rows=68 | size=5.52MB
+2026-03-26 05:09:57 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 68
+2026-03-26 05:09:57 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:58 Prediction chunk: analysis=age_x_employment | rows=544 | size=5.80MB
+2026-03-26 05:09:58 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 544
+2026-03-26 05:09:58 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:58 Prediction chunk: analysis=age_x_weekend | rows=136 | size=5.56MB
+2026-03-26 05:09:58 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:58 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:59 Prediction chunk: analysis=age_x_dst | rows=136 | size=5.56MB
+2026-03-26 05:09:59 Checkpoint append: results_05_5_synth/tables/predictions_all.csv | rows: 136
+2026-03-26 05:09:59 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-03-26 05:09:59 Memory cleanup: finished onset_poly_interact_04_dst_REML.rds
+2026-03-26 05:09:59 MEM [after_model onset_poly_interact_04_dst_REML.rds] R_used=18655358.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:59 Checkpoint complete: model__onset_poly_interact_04_dst__REML.done
+2026-03-26 05:09:59 Total prediction rows checkpointed: 10154
+2026-03-26 05:09:59 Predictions loaded from checkpoint rows: 10154
+2026-03-26 05:09:59 MEM [after_predictions_reload] R_used=18875559.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:09:59 Wrote: results_05_5_synth/tables/predictions_all.csv
+2026-03-26 05:10:00 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-03-26 05:10:00 Checkpoint append: results_05_5_synth/tables/emmeans_marginalized.csv | rows: 65
+2026-03-26 05:10:00 Memory cleanup: after emmeans append duration_poly_interact_04_dst
+2026-03-26 05:10:00 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-03-26 05:10:00 Checkpoint append: results_05_5_synth/tables/emmeans_marginalized.csv | rows: 65
+2026-03-26 05:10:00 Memory cleanup: after emmeans append duration_poly_interact_midpoint_adjusted_04_dst
+2026-03-26 05:10:00 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-03-26 05:10:00 Checkpoint append: results_05_5_synth/tables/emmeans_marginalized.csv | rows: 65
+2026-03-26 05:10:00 Memory cleanup: after emmeans append midpoint_poly_interact_04_dst
+2026-03-26 05:10:00 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-03-26 05:10:00 Checkpoint append: results_05_5_synth/tables/emmeans_marginalized.csv | rows: 65
+2026-03-26 05:10:00 Memory cleanup: after emmeans append midpoint_poly_interact_duration_adjusted_04_dst
+2026-03-26 05:10:00 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-03-26 05:10:00 Checkpoint append: results_05_5_synth/tables/emmeans_marginalized.csv | rows: 65
+2026-03-26 05:10:01 Memory cleanup: after emmeans append offset_poly_interact_04_dst
+2026-03-26 05:10:01 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-03-26 05:10:01 Checkpoint append: results_05_5_synth/tables/emmeans_marginalized.csv | rows: 65
+2026-03-26 05:10:01 Memory cleanup: after emmeans append onset_poly_interact_04_dst
+2026-03-26 05:10:01 Wrote: results_05_5_synth/tables/emmeans_marginalized.csv
+2026-03-26 05:10:01 MEM [before_derived_load base] R_used=18911305.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:02 MEM [after_derived_load base] R_used=26759209.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:02 Checkpoint append: results_05_5_synth/tables/derived_duration_midpoint_main_grid.csv | rows: 16
+2026-03-26 05:10:03 Checkpoint append: results_05_5_synth/tables/derived_duration_midpoint_age.csv | rows: 136
+2026-03-26 05:10:03 Memory cleanup: released onset/offset models for base
+2026-03-26 05:10:03 MEM [after_releasing_onoff base] R_used=23243584.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:04 Memory cleanup: duration compare cleanup for base
+2026-03-26 05:10:04 MEM [after_duration_compare base] R_used=23244690.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:05 Memory cleanup: duration adjusted compare cleanup for base
+2026-03-26 05:10:05 MEM [after_duration_adjusted_compare base] R_used=23245057.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:06 Memory cleanup: midpoint compare cleanup for base
+2026-03-26 05:10:06 MEM [after_midpoint_compare base] R_used=23245470.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:07 Memory cleanup: midpoint adjusted compare cleanup for base
+2026-03-26 05:10:07 MEM [after_midpoint_adjusted_compare base] R_used=23245818.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:07 Checkpoint append: results_05_5_synth/tables/derived_vs_direct_main_grid.csv | rows: 16
+2026-03-26 05:10:07 Checkpoint append: results_05_5_synth/tables/derived_vs_direct_age.csv | rows: 136
+2026-03-26 05:10:08 Memory cleanup: derived section finished for base
+2026-03-26 05:10:08 MEM [after_derived_batch base] R_used=18932451.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:08 Checkpoint complete: derived__base.done
+2026-03-26 05:10:08 MEM [before_derived_load dst] R_used=18932487.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:09 MEM [after_derived_load dst] R_used=27023310.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:09 Checkpoint append: results_05_5_synth/tables/derived_duration_midpoint_main_grid.csv | rows: 32
+2026-03-26 05:10:10 Checkpoint append: results_05_5_synth/tables/derived_duration_midpoint_age.csv | rows: 272
+2026-03-26 05:10:10 Memory cleanup: released onset/offset models for dst
+2026-03-26 05:10:10 MEM [after_releasing_onoff dst] R_used=23426268.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:11 Memory cleanup: duration compare cleanup for dst
+2026-03-26 05:10:11 MEM [after_duration_compare dst] R_used=23426915.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:12 Memory cleanup: duration adjusted compare cleanup for dst
+2026-03-26 05:10:12 MEM [after_duration_adjusted_compare dst] R_used=23427563.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:13 Memory cleanup: midpoint compare cleanup for dst
+2026-03-26 05:10:13 MEM [after_midpoint_compare dst] R_used=23428211.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:14 Memory cleanup: midpoint adjusted compare cleanup for dst
+2026-03-26 05:10:15 MEM [after_midpoint_adjusted_compare dst] R_used=23428863.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:15 Checkpoint append: results_05_5_synth/tables/derived_vs_direct_main_grid.csv | rows: 32
+2026-03-26 05:10:15 Checkpoint append: results_05_5_synth/tables/derived_vs_direct_age.csv | rows: 272
+2026-03-26 05:10:15 Memory cleanup: derived section finished for dst
+2026-03-26 05:10:15 MEM [after_derived_batch dst] R_used=18932800.0MB | VmRSS=NA | VmHWM=NA | MemAvail=NA
+2026-03-26 05:10:15 Checkpoint complete: derived__dst.done
+2026-03-26 05:10:15 Wrote: results_05_5_synth/tables/derived_duration_midpoint_main_grid.csv
+2026-03-26 05:10:15 Wrote: results_05_5_synth/tables/derived_vs_direct_main_grid.csv
+2026-03-26 05:10:15 Wrote: results_05_5_synth/tables/derived_duration_midpoint_age.csv
+2026-03-26 05:10:15 Wrote: results_05_5_synth/tables/derived_vs_direct_age.csv
+2026-03-26 05:10:15 Wrote: results_05_5_synth/tables/weekend_contrasts.csv
+2026-03-26 05:10:15 Wrote: results_05_5_synth/tables/dst_contrasts.csv

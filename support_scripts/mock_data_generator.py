@@ -81,6 +81,113 @@ def _load_zip3_pool() -> list[str]:
 ZIP3_POOL = _load_zip3_pool()
 
 
+def _build_panel_indices(n_rows: int, min_nights_per_person: int = 10):
+    if n_rows <= 0:
+        return [], []
+
+    max_people = max(1, n_rows // max(1, min_nights_per_person))
+    n_people = int(np.clip(max_people, 1, 600))
+
+    base = n_rows // n_people
+    rem = n_rows % n_people
+    counts = np.array([base] * n_people, dtype=int)
+    if rem > 0:
+        counts[:rem] += 1
+
+    person_ids = []
+    sleep_dates = []
+    global_start = datetime(2022, 1, 1)
+
+    for i, cnt in enumerate(counts):
+        pid = f"SYN_{i + 1:06d}"
+        start_offset = int(rng.integers(0, 120))
+        start_date = global_start + timedelta(days=start_offset)
+        for d in range(int(cnt)):
+            person_ids.append(pid)
+            sleep_dates.append((start_date + timedelta(days=d)).date())
+
+    return person_ids[:n_rows], sleep_dates[:n_rows]
+
+
+def _enforce_ready_for_analysis_panel(df: pl.DataFrame, output_path: str) -> pl.DataFrame:
+    if not output_path.endswith("ready_for_analysis.parquet"):
+        return df
+    if df.height == 0:
+        return df
+
+    person_ids, sleep_dates = _build_panel_indices(df.height, min_nights_per_person=10)
+    out = df
+
+    if "person_id" in out.columns:
+        out = out.with_columns(pl.Series("person_id", person_ids, dtype=pl.Utf8))
+
+    if "sleep_date" in out.columns:
+        out = out.with_columns(pl.Series("sleep_date", sleep_dates, dtype=pl.Date))
+
+    if "sleep_date" in out.columns:
+        weekday = pl.col("sleep_date").dt.weekday()
+        is_weekend_expr = (weekday >= 5)
+        if "is_weekend_or_holiday" in out.columns:
+            out = out.with_columns(is_weekend_expr.alias("is_weekend_or_holiday"))
+        if "is_weekend" in out.columns:
+            out = out.with_columns(is_weekend_expr.alias("is_weekend"))
+        if "year" in out.columns:
+            out = out.with_columns(pl.col("sleep_date").dt.year().alias("year"))
+
+    if "zip3" in out.columns:
+        out = out.with_columns(
+            pl.Series("zip3", rng.choice(ZIP3_POOL, size=out.height).tolist(), dtype=pl.Utf8)
+        )
+    if "zip_code" in out.columns:
+        out = out.with_columns(
+            pl.col("zip3").alias("zip_code") if "zip3" in out.columns else pl.Series("zip_code", rng.choice(ZIP3_POOL, size=out.height).tolist(), dtype=pl.Utf8)
+        )
+
+    if "person_id" in out.columns:
+        pid_codes = out.select(pl.col("person_id").cast(pl.Categorical).to_physical()).to_series().to_numpy()
+    else:
+        pid_codes = np.arange(out.height)
+
+    person_re = rng.normal(0, 0.8, size=(pid_codes.max() + 1) if out.height else 1)
+    weekend_np = (
+        out.select(pl.col("is_weekend_or_holiday").cast(pl.Boolean)).to_series().to_numpy()
+        if "is_weekend_or_holiday" in out.columns
+        else np.zeros(out.height, dtype=bool)
+    )
+
+    onset_linear = np.clip(-0.4 + person_re[pid_codes] * 0.25 + weekend_np.astype(float) * 0.55 + rng.normal(0, 0.45, out.height), -8.0, 11.5)
+    duration_mins = np.clip(430 + person_re[pid_codes] * 20 + weekend_np.astype(float) * 25 + rng.normal(0, 28, out.height), 180, 929)
+    offset_linear = onset_linear + duration_mins / 60.0 + rng.normal(0, 0.15, out.height)
+    midpoint_linear = onset_linear + duration_mins / 120.0 + rng.normal(0, 0.1, out.height)
+
+    metric_series = []
+    if "onset_linear" in out.columns:
+        metric_series.append(pl.Series("onset_linear", onset_linear.tolist(), dtype=pl.Float64))
+    if "offset_linear" in out.columns:
+        metric_series.append(pl.Series("offset_linear", offset_linear.tolist(), dtype=pl.Float64))
+    if "midpoint_linear" in out.columns:
+        metric_series.append(pl.Series("midpoint_linear", midpoint_linear.tolist(), dtype=pl.Float64))
+    if "daily_duration_mins" in out.columns:
+        metric_series.append(pl.Series("daily_duration_mins", duration_mins.tolist(), dtype=pl.Float64))
+    if "daily_sleep_window_mins" in out.columns:
+        metric_series.append(pl.Series("daily_sleep_window_mins", duration_mins.round().astype(int).tolist(), dtype=pl.Int64))
+    if metric_series:
+        out = out.with_columns(metric_series)
+
+    if "daily_start_hour" in out.columns:
+        out = out.with_columns((pl.Series("daily_start_hour", np.mod(onset_linear, 24.0).tolist(), dtype=pl.Float64)))
+    if "daily_end_hour" in out.columns:
+        out = out.with_columns((pl.Series("daily_end_hour", np.mod(offset_linear, 24.0).tolist(), dtype=pl.Float64)))
+    if "daily_midpoint_hour" in out.columns:
+        out = out.with_columns((pl.Series("daily_midpoint_hour", np.mod(midpoint_linear, 24.0).tolist(), dtype=pl.Float64)))
+
+    # Keep deterministic panel ordering by person/date.
+    if "person_id" in out.columns and "sleep_date" in out.columns:
+        out = out.sort(["person_id", "sleep_date"])
+
+    return out
+
+
 def _sample_from_value_distribution(col_name: str, profile_meta: dict, n_rows: int):
     if not profile_meta:
         return None
@@ -283,6 +390,7 @@ def main():
         df = pl.DataFrame(columns)
         
         output_path = file_data.get("filename") or os.path.join(OUTPUT_DIR, filename)
+        df = _enforce_ready_for_analysis_panel(df, output_path)
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
         df.write_parquet(output_path)
         print(f"Saved {output_path} ({n_rows} rows)")

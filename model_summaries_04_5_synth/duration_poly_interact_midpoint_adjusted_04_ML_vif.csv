@@ -1,0 +1,57 @@
+"term","vif"
+"splines::ns(age_at_sleep, df = 3)1",3.57847438423327
+"splines::ns(age_at_sleep, df = 3)2",8.93331322112078
+"splines::ns(age_at_sleep, df = 3)3",5.07856217593997
+"employment_statusHomemaker",247.656962000884
+"employment_statusOut Of Work Less Than One",174.035363814312
+"employment_statusOut Of Work One Or More",134.574080340491
+"employment_statusRetired",31.9399219706375
+"employment_statusSelf Employed",34.3289572184336
+"employment_statusStudent",24.3271530426305
+"employment_statusUnable To Work",21.3478394243619
+"is_weekend_factorWeekend",30.773307944663
+"sex_conceptMale",1.23574730400304
+"sex_conceptOther",1.12667681816967
+"month02",1.77764395519063
+"month03",1.88174251640765
+"month04",1.78973077711974
+"month05",1.8023326867557
+"month06",1.77224357419459
+"month07",1.73155035174086
+"month08",1.6525375085883
+"month09",1.61818509883372
+"month10",1.6416512409476
+"month11",1.66952746933597
+"month12",1.77300114483864
+"midpoint_linear",1.22011672226416
+"splines::ns(age_at_sleep, df = 3)1:employment_statusHomemaker",4.86958204825185
+"splines::ns(age_at_sleep, df = 3)2:employment_statusHomemaker",347.907275806922
+"splines::ns(age_at_sleep, df = 3)3:employment_statusHomemaker",25.8275253284502
+"splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work Less Than One",5.11075477100532
+"splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work Less Than One",168.272476414988
+"splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work Less Than One",4.66217067515361
+"splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work One Or More",2.57185580525621
+"splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work One Or More",141.050711033665
+"splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work One Or More",4.15089846427187
+"splines::ns(age_at_sleep, df = 3)1:employment_statusRetired",2.81900642268783
+"splines::ns(age_at_sleep, df = 3)2:employment_statusRetired",42.6110831539386
+"splines::ns(age_at_sleep, df = 3)3:employment_statusRetired",7.58279072422788
+"splines::ns(age_at_sleep, df = 3)1:employment_statusSelf Employed",2.36997339083336
+"splines::ns(age_at_sleep, df = 3)2:employment_statusSelf Employed",41.1143259762376
+"splines::ns(age_at_sleep, df = 3)3:employment_statusSelf Employed",3.93497492480719
+"splines::ns(age_at_sleep, df = 3)1:employment_statusStudent",2.28069043864686
+"splines::ns(age_at_sleep, df = 3)2:employment_statusStudent",22.6025851724724
+"splines::ns(age_at_sleep, df = 3)3:employment_statusStudent",1.83951007282325
+"splines::ns(age_at_sleep, df = 3)1:employment_statusUnable To Work",1.51777894061609
+"splines::ns(age_at_sleep, df = 3)2:employment_statusUnable To Work",22.816423244581
+"splines::ns(age_at_sleep, df = 3)3:employment_statusUnable To Work",2.20250476214826
+"splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend",2.29098289265003
+"splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend",31.9080705308619
+"splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend",3.20680502709276
+"employment_statusHomemaker:is_weekend_factorWeekend",1.60516658488646
+"employment_statusOut Of Work Less Than One:is_weekend_factorWeekend",1.50588730299472
+"employment_statusOut Of Work One Or More:is_weekend_factorWeekend",1.47649467435506
+"employment_statusRetired:is_weekend_factorWeekend",1.9293868485424
+"employment_statusSelf Employed:is_weekend_factorWeekend",1.64951065914122
+"employment_statusStudent:is_weekend_factorWeekend",1.66625460774771
+"employment_statusUnable To Work:is_weekend_factorWeekend",1.60414107402709

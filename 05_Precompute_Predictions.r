@@ -22,7 +22,7 @@
 
 # %%
 required_packages <- c(
-  "dplyr", "tidyr", "purrr", "readr", "tibble", "marginaleffects"
+  "dplyr", "tidyr", "purrr", "readr", "tibble", "marginaleffects", "emmeans"
 )
 
 missing_packages <- required_packages[
@@ -46,6 +46,7 @@ suppressPackageStartupMessages({
   library(readr)
   library(tibble)
   library(marginaleffects)
+  library(emmeans)
 })
 
 set.seed(123)
@@ -55,6 +56,7 @@ set.seed(123)
 
 # %%
 MODEL_DIR <- Sys.getenv("MODEL_DIR_04", "models_04")
+SUMMARY_DIR <- Sys.getenv("SUMMARY_DIR_04", "model_summaries_04")
 OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR_05", "results_05")
 TABLE_DIR <- file.path(OUTPUT_DIR, "tables")
 CHECKPOINT_DIR <- file.path(TABLE_DIR, "_checkpoints")
@@ -88,6 +90,7 @@ log_msg <- function(txt) {
 
 log_msg("Configuration loaded.")
 log_msg(paste("MODEL_DIR:", MODEL_DIR))
+log_msg(paste("SUMMARY_DIR:", SUMMARY_DIR))
 log_msg(paste("OUTPUT_DIR:", OUTPUT_DIR))
 log_msg(paste("METHOD_PRIORITY:", paste(METHOD_PRIORITY, collapse = " -> ")))
 log_msg(paste("Age sequence:", paste(c(AGE_MIN, AGE_MAX, AGE_BY), collapse = ", ")))
@@ -190,6 +193,23 @@ get_model_values <- function(model, var_name) {
   if (is.character(x)) return(sort(unique(x)))
   if (is.logical(x)) return(sort(unique(x)))
   sort(unique(x))
+}
+
+get_numeric_grid <- function(model, var_name, n = 21L) {
+  frm <- tryCatch(model@frame, error = function(e) NULL)
+  if (is.null(frm) || !var_name %in% names(frm)) return(NULL)
+
+  x <- suppressWarnings(as.numeric(frm[[var_name]]))
+  x <- x[is.finite(x)]
+  if (length(x) < 2) return(NULL)
+
+  p <- seq(0.05, 0.95, length.out = as.integer(n))
+  vals <- suppressWarnings(as.numeric(stats::quantile(x, probs = p, na.rm = TRUE, names = FALSE)))
+  vals <- unique(vals[is.finite(vals)])
+  if (length(vals) < 2) {
+    vals <- sort(unique(c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))))
+  }
+  vals
 }
 
 has_vars <- function(model, vars) {
@@ -329,6 +349,48 @@ safe_predictions <- function(model, grid_args, keep_cols, analysis_name) {
   })
 }
 
+safe_emmeans <- function(model, specs_formula, analysis_name, at = NULL, keep_cols = NULL) {
+  tryCatch({
+    emm_data <- tryCatch(as.data.frame(model@frame), error = function(e) NULL)
+    emm_obj <- emmeans::emmeans(
+      object = model,
+      specs = specs_formula,
+      weights = "proportional",
+      at = at,
+      data = emm_data
+    )
+
+    emm_tbl <- as.data.frame(summary(emm_obj, infer = c(TRUE, TRUE)))
+    if (nrow(emm_tbl) == 0) return(tibble())
+
+    if ("emmean" %in% names(emm_tbl)) {
+      emm_tbl$estimate <- as.numeric(emm_tbl$emmean)
+    } else if ("response" %in% names(emm_tbl)) {
+      emm_tbl$estimate <- as.numeric(emm_tbl$response)
+    } else {
+      return(tibble())
+    }
+
+    emm_tbl$conf.low <- if ("lower.CL" %in% names(emm_tbl)) as.numeric(emm_tbl$lower.CL) else NA_real_
+    emm_tbl$conf.high <- if ("upper.CL" %in% names(emm_tbl)) as.numeric(emm_tbl$upper.CL) else NA_real_
+
+    if (!is.null(keep_cols)) {
+      keep_cols <- keep_cols[keep_cols %in% names(emm_tbl)]
+    } else {
+      keep_cols <- setdiff(names(emm_tbl), c("emmean", "SE", "df", "lower.CL", "upper.CL", "t.ratio", "p.value", "response"))
+    }
+
+    out_cols <- unique(c(keep_cols, "estimate", "conf.low", "conf.high"))
+    tibble::as_tibble(emm_tbl) %>%
+      select(any_of(out_cols)) %>%
+      mutate(analysis = analysis_name, .before = 1) %>%
+      compact_tibble()
+  }, error = function(e) {
+    log_msg(paste("EMMeans failed for", analysis_name, "|", e$message))
+    tibble()
+  })
+}
+
 add_meta <- function(df, reg_row) {
   if (nrow(df) == 0) return(df)
   df %>%
@@ -367,7 +429,7 @@ checkpoint_schemas <- list(
     "outcome", "outcome_type", "batch", "model_method", "model_file",
     "outcome_variant",
     "analysis",
-    "employment_status", "is_weekend_factor", "sex_concept", "month", "dst_observes", "age_at_sleep",
+    "employment_status", "is_weekend_factor", "sex_concept", "month", "dst_observes", "age_at_sleep", "PhotoPeriod", "duration_hours",
     "estimate", "conf.low", "conf.high"
   ),
   derived_duration_midpoint_main_grid.csv = c(
@@ -393,6 +455,13 @@ checkpoint_schemas <- list(
     "duration_adjusted_estimate", "duration_adjusted_minus_derived",
     "midpoint_direct_estimate", "midpoint_direct_minus_derived",
     "midpoint_adjusted_estimate", "midpoint_adjusted_minus_derived"
+  ),
+  emmeans_marginalized.csv = c(
+    "outcome", "outcome_type", "batch", "model_method", "model_file",
+    "outcome_variant",
+    "analysis",
+    "employment_status", "is_weekend_factor", "sex_concept", "month", "age_at_sleep", "PhotoPeriod", "duration_hours",
+    "estimate", "conf.low", "conf.high"
   )
 )
 
@@ -739,6 +808,34 @@ for (i in seq_len(nrow(model_registry))) {
     append_pred(pred_age_dst)
   }
 
+  # Photoperiod main effect (continuous)
+  if (has_vars(model, c("PhotoPeriod"))) {
+    photo_grid <- get_numeric_grid(model, "PhotoPeriod", n = 21L)
+    if (!is.null(photo_grid) && length(photo_grid) >= 2) {
+      pred_photo <- safe_predictions(
+        model = model,
+        grid_args = list(PhotoPeriod = photo_grid),
+        keep_cols = c("PhotoPeriod"),
+        analysis_name = "photoperiod_main"
+      )
+      append_pred(pred_photo)
+    }
+  }
+
+  # Duration covariate main effect (for duration-adjusted timing models)
+  if (has_vars(model, c("duration_hours")) && reg_row$outcome != "duration") {
+    dur_grid <- get_numeric_grid(model, "duration_hours", n = 21L)
+    if (!is.null(dur_grid) && length(dur_grid) >= 2) {
+      pred_duration_cov <- safe_predictions(
+        model = model,
+        grid_args = list(duration_hours = dur_grid),
+        keep_cols = c("duration_hours"),
+        analysis_name = "duration_covariate_main"
+      )
+      append_pred(pred_duration_cov)
+    }
+  }
+
   rm(model)
   run_gc(paste("finished", basename(reg_row$model_path)))
   log_memory(paste("after_model", basename(reg_row$model_path)))
@@ -750,6 +847,45 @@ predictions_all <- read_checkpoint(predictions_csv)
 log_msg(paste("Predictions loaded from checkpoint rows:", nrow(predictions_all)))
 log_memory("after_predictions_reload")
 write_table(predictions_all, "predictions_all.csv")
+
+# %% [markdown]
+# ## Section 1B: EMMeans-based Marginalization (DST models)
+
+# %%
+emmeans_csv <- "emmeans_marginalized.csv"
+if (!RESUME_CHECKPOINTS) {
+  reset_table_files(emmeans_csv)
+}
+
+dst_registry <- model_registry %>%
+  filter(batch == "dst", exists)
+
+for (i in seq_len(nrow(dst_registry))) {
+  reg_row <- dst_registry[i, ]
+  emm_src <- file.path(
+    SUMMARY_DIR,
+    paste0(reg_row$stem_with_suffix, "_", reg_row$model_method, "_emmeans.csv")
+  )
+
+  if (!file.exists(emm_src)) {
+    log_msg(paste("EMMeans source missing:", emm_src))
+    next
+  }
+
+  emm_tbl <- tryCatch(readr::read_csv(emm_src, show_col_types = FALSE), error = function(e) tibble())
+  if (nrow(emm_tbl) == 0) {
+    log_msg(paste("EMMeans source empty:", emm_src))
+    next
+  }
+
+  emm_out <- add_meta(emm_tbl, reg_row)
+  append_checkpoint(emm_out, emmeans_csv)
+  rm(emm_tbl, emm_out)
+  run_gc(paste("after emmeans append", reg_row$stem_with_suffix))
+}
+
+emmeans_marginalized <- read_checkpoint(emmeans_csv)
+write_table(emmeans_marginalized, "emmeans_marginalized.csv")
 
 # %% [markdown]
 # ## Section 2: Derived Predictions (Onset + Offset)

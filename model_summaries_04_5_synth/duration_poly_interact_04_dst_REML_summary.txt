@@ -1,0 +1,383 @@
+[1] "Model: duration_poly_interact_04_dst"
+[1] "Method: REML (for coefficient interpretation)"
+duration_hours ~ splines::ns(age_at_sleep, df = 3) + employment_status + 
+    is_weekend_factor + splines::ns(age_at_sleep, df = 3):employment_status + 
+    splines::ns(age_at_sleep, df = 3):is_weekend_factor + is_weekend_factor:employment_status + 
+    sex_concept + month + dst_observes + is_weekend_factor:dst_observes + 
+    (1 | person_id)
+<environment: 0x11c54ba40>
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: formula_obj
+   Data: df
+Control: lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05))
+
+REML criterion at convergence: 45267.3
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.1599 -0.6637 -0.0079  0.6624  4.1378 
+
+Random effects:
+ Groups    Name        Variance Std.Dev.
+ person_id (Intercept) 0.4913   0.7009  
+ Residual              0.2864   0.5351  
+Number of obs: 27544, groups:  person_id, 295
+
+Fixed effects:
+                                                                                Estimate
+(Intercept)                                                                    8.140e+00
+splines::ns(age_at_sleep, df = 3)1                                            -2.250e-01
+splines::ns(age_at_sleep, df = 3)2                                            -2.396e+00
+splines::ns(age_at_sleep, df = 3)3                                            -1.374e+00
+employment_statusHomemaker                                                    -1.754e+00
+employment_statusOut Of Work Less Than One                                    -4.026e+00
+employment_statusOut Of Work One Or More                                       1.447e+00
+employment_statusRetired                                                      -3.786e-01
+employment_statusSelf Employed                                                -2.314e+00
+employment_statusStudent                                                      -7.767e-01
+employment_statusUnable To Work                                                7.435e-01
+is_weekend_factorWeekend                                                       2.723e-01
+sex_conceptMale                                                               -5.979e-02
+sex_conceptOther                                                              -2.253e-02
+month02                                                                        1.298e-02
+month03                                                                        3.279e-02
+month04                                                                        3.472e-02
+month05                                                                        2.508e-02
+month06                                                                        1.643e-02
+month07                                                                        1.137e-02
+month08                                                                        2.763e-02
+month09                                                                        1.892e-02
+month10                                                                        2.324e-02
+month11                                                                        2.290e-02
+month12                                                                        2.872e-03
+dst_observesNoDST                                                             -6.301e-02
+splines::ns(age_at_sleep, df = 3)1:employment_statusHomemaker                 -1.070e+00
+splines::ns(age_at_sleep, df = 3)2:employment_statusHomemaker                  5.928e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusHomemaker                  4.115e+00
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work Less Than One  1.128e+00
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work Less Than One  8.418e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work Less Than One  2.377e+00
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work One Or More   -1.293e+00
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work One Or More   -2.840e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work One Or More   -9.167e-01
+splines::ns(age_at_sleep, df = 3)1:employment_statusRetired                    3.096e-02
+splines::ns(age_at_sleep, df = 3)2:employment_statusRetired                    1.376e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusRetired                    6.662e-01
+splines::ns(age_at_sleep, df = 3)1:employment_statusSelf Employed              1.101e+00
+splines::ns(age_at_sleep, df = 3)2:employment_statusSelf Employed              5.071e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusSelf Employed              1.842e+00
+splines::ns(age_at_sleep, df = 3)1:employment_statusStudent                    5.893e-02
+splines::ns(age_at_sleep, df = 3)2:employment_statusStudent                    2.384e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusStudent                    1.459e+00
+splines::ns(age_at_sleep, df = 3)1:employment_statusUnable To Work            -3.513e-01
+splines::ns(age_at_sleep, df = 3)2:employment_statusUnable To Work            -1.275e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusUnable To Work            -7.886e-01
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend                    2.423e-02
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend                    5.118e-02
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend                   -3.123e-02
+employment_statusHomemaker:is_weekend_factorWeekend                            3.702e-03
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend           -3.622e-02
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend              4.975e-02
+employment_statusRetired:is_weekend_factorWeekend                              2.049e-02
+employment_statusSelf Employed:is_weekend_factorWeekend                       -1.582e-02
+employment_statusStudent:is_weekend_factorWeekend                              8.235e-03
+employment_statusUnable To Work:is_weekend_factorWeekend                       1.240e-02
+is_weekend_factorWeekend:dst_observesNoDST                                    -8.401e-03
+                                                                              Std. Error
+(Intercept)                                                                    4.439e-01
+splines::ns(age_at_sleep, df = 3)1                                             2.876e-01
+splines::ns(age_at_sleep, df = 3)2                                             9.721e-01
+splines::ns(age_at_sleep, df = 3)3                                             3.550e-01
+employment_statusHomemaker                                                     2.357e+00
+employment_statusOut Of Work Less Than One                                     2.122e+00
+employment_statusOut Of Work One Or More                                       2.794e+00
+employment_statusRetired                                                       5.983e-01
+employment_statusSelf Employed                                                 8.361e-01
+employment_statusStudent                                                       6.936e-01
+employment_statusUnable To Work                                                7.832e-01
+is_weekend_factorWeekend                                                       3.969e-02
+sex_conceptMale                                                                9.193e-02
+sex_conceptOther                                                               2.651e-01
+month02                                                                        1.559e-02
+month03                                                                        1.696e-02
+month04                                                                        1.905e-02
+month05                                                                        2.026e-02
+month06                                                                        2.148e-02
+month07                                                                        2.220e-02
+month08                                                                        2.272e-02
+month09                                                                        2.239e-02
+month10                                                                        2.105e-02
+month11                                                                        1.858e-02
+month12                                                                        1.622e-02
+dst_observesNoDST                                                              1.130e-01
+splines::ns(age_at_sleep, df = 3)1:employment_statusHomemaker                  1.099e+00
+splines::ns(age_at_sleep, df = 3)2:employment_statusHomemaker                  5.669e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusHomemaker                  2.886e+00
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work Less Than One  1.053e+00
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work Less Than One  4.835e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work Less Than One  1.646e+00
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work One Or More    1.376e+00
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work One Or More    5.968e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work One Or More    1.783e+00
+splines::ns(age_at_sleep, df = 3)1:employment_statusRetired                    5.695e-01
+splines::ns(age_at_sleep, df = 3)2:employment_statusRetired                    1.436e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusRetired                    9.838e-01
+splines::ns(age_at_sleep, df = 3)1:employment_statusSelf Employed              6.908e-01
+splines::ns(age_at_sleep, df = 3)2:employment_statusSelf Employed              1.965e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusSelf Employed              9.722e-01
+splines::ns(age_at_sleep, df = 3)1:employment_statusStudent                    6.119e-01
+splines::ns(age_at_sleep, df = 3)2:employment_statusStudent                    1.605e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusStudent                    6.450e-01
+splines::ns(age_at_sleep, df = 3)1:employment_statusUnable To Work             7.453e-01
+splines::ns(age_at_sleep, df = 3)2:employment_statusUnable To Work             1.720e+00
+splines::ns(age_at_sleep, df = 3)3:employment_statusUnable To Work             7.684e-01
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend                    3.167e-02
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend                    8.468e-02
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend                    3.934e-02
+employment_statusHomemaker:is_weekend_factorWeekend                            2.898e-02
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend            3.784e-02
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend              4.337e-02
+employment_statusRetired:is_weekend_factorWeekend                              2.042e-02
+employment_statusSelf Employed:is_weekend_factorWeekend                        2.616e-02
+employment_statusStudent:is_weekend_factorWeekend                              2.709e-02
+employment_statusUnable To Work:is_weekend_factorWeekend                       2.940e-02
+is_weekend_factorWeekend:dst_observesNoDST                                     1.910e-02
+                                                                                      df
+(Intercept)                                                                    2.722e+02
+splines::ns(age_at_sleep, df = 3)1                                             2.672e+02
+splines::ns(age_at_sleep, df = 3)2                                             2.734e+02
+splines::ns(age_at_sleep, df = 3)3                                             2.680e+02
+employment_statusHomemaker                                                     3.287e+02
+employment_statusOut Of Work Less Than One                                     2.836e+02
+employment_statusOut Of Work One Or More                                       3.179e+02
+employment_statusRetired                                                       2.708e+02
+employment_statusSelf Employed                                                 2.728e+02
+employment_statusStudent                                                       2.696e+02
+employment_statusUnable To Work                                                2.685e+02
+is_weekend_factorWeekend                                                       2.722e+04
+sex_conceptMale                                                                2.610e+02
+sex_conceptOther                                                               2.603e+02
+month02                                                                        2.731e+04
+month03                                                                        2.744e+04
+month04                                                                        2.748e+04
+month05                                                                        2.746e+04
+month06                                                                        2.742e+04
+month07                                                                        2.743e+04
+month08                                                                        2.746e+04
+month09                                                                        2.748e+04
+month10                                                                        2.748e+04
+month11                                                                        2.743e+04
+month12                                                                        2.735e+04
+dst_observesNoDST                                                              2.621e+02
+splines::ns(age_at_sleep, df = 3)1:employment_statusHomemaker                  2.828e+02
+splines::ns(age_at_sleep, df = 3)2:employment_statusHomemaker                  3.377e+02
+splines::ns(age_at_sleep, df = 3)3:employment_statusHomemaker                  3.349e+02
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work Less Than One  2.697e+02
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work Less Than One  2.842e+02
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work Less Than One  2.768e+02
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work One Or More    2.805e+02
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work One Or More    3.203e+02
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work One Or More    2.956e+02
+splines::ns(age_at_sleep, df = 3)1:employment_statusRetired                    2.730e+02
+splines::ns(age_at_sleep, df = 3)2:employment_statusRetired                    2.742e+02
+splines::ns(age_at_sleep, df = 3)3:employment_statusRetired                    2.767e+02
+splines::ns(age_at_sleep, df = 3)1:employment_statusSelf Employed              2.698e+02
+splines::ns(age_at_sleep, df = 3)2:employment_statusSelf Employed              2.764e+02
+splines::ns(age_at_sleep, df = 3)3:employment_statusSelf Employed              2.720e+02
+splines::ns(age_at_sleep, df = 3)1:employment_statusStudent                    2.659e+02
+splines::ns(age_at_sleep, df = 3)2:employment_statusStudent                    2.718e+02
+splines::ns(age_at_sleep, df = 3)3:employment_statusStudent                    2.652e+02
+splines::ns(age_at_sleep, df = 3)1:employment_statusUnable To Work             2.690e+02
+splines::ns(age_at_sleep, df = 3)2:employment_statusUnable To Work             2.701e+02
+splines::ns(age_at_sleep, df = 3)3:employment_statusUnable To Work             2.646e+02
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend                    2.722e+04
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend                    2.722e+04
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend                    2.722e+04
+employment_statusHomemaker:is_weekend_factorWeekend                            2.722e+04
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend            2.722e+04
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend              2.723e+04
+employment_statusRetired:is_weekend_factorWeekend                              2.722e+04
+employment_statusSelf Employed:is_weekend_factorWeekend                        2.722e+04
+employment_statusStudent:is_weekend_factorWeekend                              2.722e+04
+employment_statusUnable To Work:is_weekend_factorWeekend                       2.722e+04
+is_weekend_factorWeekend:dst_observesNoDST                                     2.722e+04
+                                                                              t value
+(Intercept)                                                                    18.337
+splines::ns(age_at_sleep, df = 3)1                                             -0.782
+splines::ns(age_at_sleep, df = 3)2                                             -2.465
+splines::ns(age_at_sleep, df = 3)3                                             -3.870
+employment_statusHomemaker                                                     -0.744
+employment_statusOut Of Work Less Than One                                     -1.897
+employment_statusOut Of Work One Or More                                        0.518
+employment_statusRetired                                                       -0.633
+employment_statusSelf Employed                                                 -2.767
+employment_statusStudent                                                       -1.120
+employment_statusUnable To Work                                                 0.949
+is_weekend_factorWeekend                                                        6.861
+sex_conceptMale                                                                -0.650
+sex_conceptOther                                                               -0.085
+month02                                                                         0.832
+month03                                                                         1.934
+month04                                                                         1.823
+month05                                                                         1.238
+month06                                                                         0.765
+month07                                                                         0.512
+month08                                                                         1.216
+month09                                                                         0.845
+month10                                                                         1.104
+month11                                                                         1.233
+month12                                                                         0.177
+dst_observesNoDST                                                              -0.558
+splines::ns(age_at_sleep, df = 3)1:employment_statusHomemaker                  -0.973
+splines::ns(age_at_sleep, df = 3)2:employment_statusHomemaker                   1.046
+splines::ns(age_at_sleep, df = 3)3:employment_statusHomemaker                   1.426
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work Less Than One   1.071
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work Less Than One   1.741
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work Less Than One   1.444
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work One Or More    -0.940
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work One Or More    -0.476
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work One Or More    -0.514
+splines::ns(age_at_sleep, df = 3)1:employment_statusRetired                     0.054
+splines::ns(age_at_sleep, df = 3)2:employment_statusRetired                     0.959
+splines::ns(age_at_sleep, df = 3)3:employment_statusRetired                     0.677
+splines::ns(age_at_sleep, df = 3)1:employment_statusSelf Employed               1.594
+splines::ns(age_at_sleep, df = 3)2:employment_statusSelf Employed               2.581
+splines::ns(age_at_sleep, df = 3)3:employment_statusSelf Employed               1.895
+splines::ns(age_at_sleep, df = 3)1:employment_statusStudent                     0.096
+splines::ns(age_at_sleep, df = 3)2:employment_statusStudent                     1.485
+splines::ns(age_at_sleep, df = 3)3:employment_statusStudent                     2.262
+splines::ns(age_at_sleep, df = 3)1:employment_statusUnable To Work             -0.471
+splines::ns(age_at_sleep, df = 3)2:employment_statusUnable To Work             -0.742
+splines::ns(age_at_sleep, df = 3)3:employment_statusUnable To Work             -1.026
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend                     0.765
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend                     0.604
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend                    -0.794
+employment_statusHomemaker:is_weekend_factorWeekend                             0.128
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend            -0.957
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend               1.147
+employment_statusRetired:is_weekend_factorWeekend                               1.003
+employment_statusSelf Employed:is_weekend_factorWeekend                        -0.605
+employment_statusStudent:is_weekend_factorWeekend                               0.304
+employment_statusUnable To Work:is_weekend_factorWeekend                        0.422
+is_weekend_factorWeekend:dst_observesNoDST                                     -0.440
+                                                                              Pr(>|t|)
+(Intercept)                                                                    < 2e-16
+splines::ns(age_at_sleep, df = 3)1                                            0.434675
+splines::ns(age_at_sleep, df = 3)2                                            0.014322
+splines::ns(age_at_sleep, df = 3)3                                            0.000137
+employment_statusHomemaker                                                    0.457208
+employment_statusOut Of Work Less Than One                                    0.058875
+employment_statusOut Of Work One Or More                                      0.604964
+employment_statusRetired                                                      0.527378
+employment_statusSelf Employed                                                0.006039
+employment_statusStudent                                                      0.263810
+employment_statusUnable To Work                                               0.343277
+is_weekend_factorWeekend                                                      6.99e-12
+sex_conceptMale                                                               0.516027
+sex_conceptOther                                                              0.932332
+month02                                                                       0.405152
+month03                                                                       0.053168
+month04                                                                       0.068330
+month05                                                                       0.215741
+month06                                                                       0.444370
+month07                                                                       0.608674
+month08                                                                       0.223989
+month09                                                                       0.398186
+month10                                                                       0.269466
+month11                                                                       0.217624
+month12                                                                       0.859487
+dst_observesNoDST                                                             0.577513
+splines::ns(age_at_sleep, df = 3)1:employment_statusHomemaker                 0.331183
+splines::ns(age_at_sleep, df = 3)2:employment_statusHomemaker                 0.296507
+splines::ns(age_at_sleep, df = 3)3:employment_statusHomemaker                 0.154830
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work Less Than One 0.285014
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work Less Than One 0.082768
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work Less Than One 0.149967
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work One Or More   0.348193
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work One Or More   0.634463
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work One Or More   0.607615
+splines::ns(age_at_sleep, df = 3)1:employment_statusRetired                   0.956683
+splines::ns(age_at_sleep, df = 3)2:employment_statusRetired                   0.338600
+splines::ns(age_at_sleep, df = 3)3:employment_statusRetired                   0.498848
+splines::ns(age_at_sleep, df = 3)1:employment_statusSelf Employed             0.112041
+splines::ns(age_at_sleep, df = 3)2:employment_statusSelf Employed             0.010362
+splines::ns(age_at_sleep, df = 3)3:employment_statusSelf Employed             0.059178
+splines::ns(age_at_sleep, df = 3)1:employment_statusStudent                   0.923344
+splines::ns(age_at_sleep, df = 3)2:employment_statusStudent                   0.138762
+splines::ns(age_at_sleep, df = 3)3:employment_statusStudent                   0.024522
+splines::ns(age_at_sleep, df = 3)1:employment_statusUnable To Work            0.637810
+splines::ns(age_at_sleep, df = 3)2:employment_statusUnable To Work            0.459003
+splines::ns(age_at_sleep, df = 3)3:employment_statusUnable To Work            0.305673
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend                   0.444261
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend                   0.545533
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend                   0.427253
+employment_statusHomemaker:is_weekend_factorWeekend                           0.898366
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend           0.338513
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend             0.251286
+employment_statusRetired:is_weekend_factorWeekend                             0.315787
+employment_statusSelf Employed:is_weekend_factorWeekend                       0.545324
+employment_statusStudent:is_weekend_factorWeekend                             0.761108
+employment_statusUnable To Work:is_weekend_factorWeekend                      0.673123
+is_weekend_factorWeekend:dst_observesNoDST                                    0.660078
+                                                                                 
+(Intercept)                                                                   ***
+splines::ns(age_at_sleep, df = 3)1                                               
+splines::ns(age_at_sleep, df = 3)2                                            *  
+splines::ns(age_at_sleep, df = 3)3                                            ***
+employment_statusHomemaker                                                       
+employment_statusOut Of Work Less Than One                                    .  
+employment_statusOut Of Work One Or More                                         
+employment_statusRetired                                                         
+employment_statusSelf Employed                                                ** 
+employment_statusStudent                                                         
+employment_statusUnable To Work                                                  
+is_weekend_factorWeekend                                                      ***
+sex_conceptMale                                                                  
+sex_conceptOther                                                                 
+month02                                                                          
+month03                                                                       .  
+month04                                                                       .  
+month05                                                                          
+month06                                                                          
+month07                                                                          
+month08                                                                          
+month09                                                                          
+month10                                                                          
+month11                                                                          
+month12                                                                          
+dst_observesNoDST                                                                
+splines::ns(age_at_sleep, df = 3)1:employment_statusHomemaker                    
+splines::ns(age_at_sleep, df = 3)2:employment_statusHomemaker                    
+splines::ns(age_at_sleep, df = 3)3:employment_statusHomemaker                    
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work Less Than One    
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work Less Than One .  
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work Less Than One    
+splines::ns(age_at_sleep, df = 3)1:employment_statusOut Of Work One Or More      
+splines::ns(age_at_sleep, df = 3)2:employment_statusOut Of Work One Or More      
+splines::ns(age_at_sleep, df = 3)3:employment_statusOut Of Work One Or More      
+splines::ns(age_at_sleep, df = 3)1:employment_statusRetired                      
+splines::ns(age_at_sleep, df = 3)2:employment_statusRetired                      
+splines::ns(age_at_sleep, df = 3)3:employment_statusRetired                      
+splines::ns(age_at_sleep, df = 3)1:employment_statusSelf Employed                
+splines::ns(age_at_sleep, df = 3)2:employment_statusSelf Employed             *  
+splines::ns(age_at_sleep, df = 3)3:employment_statusSelf Employed             .  
+splines::ns(age_at_sleep, df = 3)1:employment_statusStudent                      
+splines::ns(age_at_sleep, df = 3)2:employment_statusStudent                      
+splines::ns(age_at_sleep, df = 3)3:employment_statusStudent                   *  
+splines::ns(age_at_sleep, df = 3)1:employment_statusUnable To Work               
+splines::ns(age_at_sleep, df = 3)2:employment_statusUnable To Work               
+splines::ns(age_at_sleep, df = 3)3:employment_statusUnable To Work               
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend                      
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend                      
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend                      
+employment_statusHomemaker:is_weekend_factorWeekend                              
+employment_statusOut Of Work Less Than One:is_weekend_factorWeekend              
+employment_statusOut Of Work One Or More:is_weekend_factorWeekend                
+employment_statusRetired:is_weekend_factorWeekend                                
+employment_statusSelf Employed:is_weekend_factorWeekend                          
+employment_statusStudent:is_weekend_factorWeekend                                
+employment_statusUnable To Work:is_weekend_factorWeekend                         
+is_weekend_factorWeekend:dst_observesNoDST                                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

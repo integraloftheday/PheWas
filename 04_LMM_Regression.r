@@ -12,6 +12,11 @@ library(arrow)
 library(dplyr)
 library(lme4)
 library(lmerTest)
+if (requireNamespace("emmeans", quietly = TRUE)) {
+  suppressPackageStartupMessages(library(emmeans))
+} else {
+  message("Package 'emmeans' not installed; EMMeans export will be skipped.")
+}
 
 set.seed(123)
 
@@ -196,6 +201,150 @@ fit_save_summarize <- function(formula_obj, model_name, description, df, run_rem
   status_msg <- "Success"
   fit_ml <- NULL
 
+  compute_vif_table <- function(fit_obj, method_label) {
+    out_path <- file.path(SUMMARY_DIR, paste0(model_name, "_", method_label, "_vif.csv"))
+    tryCatch({
+      x <- tryCatch(lme4::getME(fit_obj, "X"), error = function(e) NULL)
+      if (is.null(x)) {
+        write.csv(data.frame(term = character(), vif = numeric()), out_path, row.names = FALSE)
+        return(invisible(NULL))
+      }
+
+      cn <- colnames(x)
+      if (is.null(cn) || length(cn) == 0) {
+        write.csv(data.frame(term = character(), vif = numeric()), out_path, row.names = FALSE)
+        return(invisible(NULL))
+      }
+
+      keep_idx <- which(!grepl("^\\(Intercept\\)$", cn))
+      if (length(keep_idx) == 0) {
+        write.csv(data.frame(term = character(), vif = numeric()), out_path, row.names = FALSE)
+        return(invisible(NULL))
+      }
+
+      x_use <- x[, keep_idx, drop = FALSE]
+      cn_use <- colnames(x_use)
+      if (ncol(x_use) == 1) {
+        vif_tbl <- data.frame(term = cn_use, vif = 1, stringsAsFactors = FALSE)
+        write.csv(vif_tbl, out_path, row.names = FALSE)
+        return(invisible(NULL))
+      }
+
+      vif_vals <- vapply(seq_len(ncol(x_use)), function(j) {
+        y <- x_use[, j]
+        others <- x_use[, -j, drop = FALSE]
+        if (ncol(others) == 0) return(1)
+
+        fit_aux <- tryCatch(stats::lm.fit(x = cbind(1, others), y = y), error = function(e) NULL)
+        if (is.null(fit_aux)) return(NA_real_)
+
+        rss <- sum(fit_aux$residuals^2)
+        tss <- sum((y - mean(y))^2)
+        if (!is.finite(tss) || tss <= 0) return(NA_real_)
+        r2 <- 1 - (rss / tss)
+        if (!is.finite(r2) || r2 >= 1) return(Inf)
+        if (r2 < 0) r2 <- 0
+        1 / (1 - r2)
+      }, FUN.VALUE = numeric(1))
+
+      vif_tbl <- data.frame(term = cn_use, vif = as.numeric(vif_vals), stringsAsFactors = FALSE)
+      write.csv(vif_tbl, out_path, row.names = FALSE)
+      invisible(NULL)
+    }, error = function(e) {
+      warning(paste("VIF export failed for", model_name, method_label, ":", e$message))
+      invisible(NULL)
+    })
+  }
+
+  export_emmeans_table <- function(fit_obj, method_label) {
+    if (!requireNamespace("emmeans", quietly = TRUE)) return(invisible(NULL))
+
+    fit_vars <- tryCatch(names(model.frame(fit_obj)), error = function(e) character())
+
+    make_numeric_grid <- function(x, n = 21L) {
+      xv <- suppressWarnings(as.numeric(x))
+      xv <- xv[is.finite(xv)]
+      if (length(xv) < 2) return(NULL)
+      probs <- seq(0.05, 0.95, length.out = as.integer(n))
+      vals <- suppressWarnings(as.numeric(stats::quantile(xv, probs = probs, na.rm = TRUE, names = FALSE)))
+      vals <- unique(vals[is.finite(vals)])
+      if (length(vals) < 2) {
+        vals <- sort(unique(c(min(xv, na.rm = TRUE), max(xv, na.rm = TRUE))))
+      }
+      vals
+    }
+
+    age_grid <- seq(
+      floor(suppressWarnings(min(df$age_at_sleep, na.rm = TRUE))),
+      ceiling(suppressWarnings(max(df$age_at_sleep, na.rm = TRUE))),
+      by = 1
+    )
+    age_grid <- age_grid[is.finite(age_grid)]
+    if (length(age_grid) == 0) age_grid <- 18:85
+
+    photo_grid <- if ("PhotoPeriod" %in% fit_vars && "PhotoPeriod" %in% names(df)) make_numeric_grid(df$PhotoPeriod, n = 21L) else NULL
+    duration_grid <- if ("duration_hours" %in% fit_vars && "duration_hours" %in% names(df)) make_numeric_grid(df$duration_hours, n = 21L) else NULL
+
+    safe_emm <- function(specs, analysis_name, at = NULL) {
+      out <- tryCatch({
+        as.data.frame(emmeans::emmeans(
+          fit_obj,
+          specs = specs,
+          weights = "proportional",
+          at = at,
+          data = df
+        ))
+      }, error = function(e) {
+        message(paste("EMMeans failed for", model_name, method_label, analysis_name, ":", e$message))
+        NULL
+      })
+      if (is.null(out) || nrow(out) == 0) return(NULL)
+      out$analysis <- analysis_name
+      out
+    }
+
+    emm_parts <- list(
+      safe_emm(~ employment_status * is_weekend_factor, "emm_employment_x_weekend"),
+      safe_emm(~ employment_status, "emm_employment_main"),
+      safe_emm(~ is_weekend_factor, "emm_weekend_main"),
+      safe_emm(~ sex_concept, "emm_sex_main"),
+      safe_emm(~ month, "emm_month_main"),
+      safe_emm(~ month * is_weekend_factor, "emm_month_x_weekend"),
+      safe_emm(~ age_at_sleep, "emm_age_main", at = list(age_at_sleep = age_grid)),
+      safe_emm(~ age_at_sleep * employment_status, "emm_age_x_employment", at = list(age_at_sleep = age_grid))
+    )
+
+    if (!is.null(photo_grid) && length(photo_grid) >= 2) {
+      emm_parts <- append(emm_parts, list(
+        safe_emm(~ PhotoPeriod, "emm_photoperiod_main", at = list(PhotoPeriod = photo_grid))
+      ))
+    }
+
+    if (!is.null(duration_grid) && length(duration_grid) >= 2) {
+      emm_parts <- append(emm_parts, list(
+        safe_emm(~ duration_hours, "emm_duration_covariate_main", at = list(duration_hours = duration_grid))
+      ))
+    }
+
+    emm_parts <- emm_parts[!vapply(emm_parts, is.null, logical(1))]
+    if (length(emm_parts) == 0) return(invisible(NULL))
+
+    emm_tbl <- bind_rows(emm_parts)
+    names(emm_tbl)[names(emm_tbl) == "emmean"] <- "estimate"
+    names(emm_tbl)[names(emm_tbl) == "lower.CL"] <- "conf.low"
+    names(emm_tbl)[names(emm_tbl) == "upper.CL"] <- "conf.high"
+
+    keep <- c(
+      "analysis", "employment_status", "is_weekend_factor", "sex_concept", "month", "age_at_sleep", "PhotoPeriod", "duration_hours",
+      "estimate", "SE", "df", "conf.low", "conf.high", "t.ratio", "p.value"
+    )
+    emm_tbl <- emm_tbl[, intersect(keep, names(emm_tbl)), drop = FALSE]
+
+    out_path <- file.path(SUMMARY_DIR, paste0(model_name, "_", method_label, "_emmeans.csv"))
+    write.csv(emm_tbl, out_path, row.names = FALSE)
+    invisible(NULL)
+  }
+
   if (SKIP_EXISTING_MODELS && file.exists(ml_path)) {
     message(paste("ML exists, skipping fit:", ml_path))
     fit_ml <- tryCatch(readRDS(ml_path), error = function(e) NULL)
@@ -223,6 +372,9 @@ fit_save_summarize <- function(formula_obj, model_name, description, df, run_rem
       print(formula_obj)
       print(summary(fit_obj))
       sink()
+
+      compute_vif_table(fit_obj, "ML")
+      export_emmeans_table(fit_obj, "ML")
 
       list(success = TRUE, fit = fit_obj)
     }, error = function(e) {
@@ -278,6 +430,9 @@ fit_save_summarize <- function(formula_obj, model_name, description, df, run_rem
         print(summary(fit_reml))
         sink()
 
+        compute_vif_table(fit_reml, "REML")
+        export_emmeans_table(fit_reml, "REML")
+
         rm(fit_reml)
       }, error = function(e) {
         if (sink.number() > 0) sink()
@@ -325,7 +480,7 @@ build_rhs <- function(outcome_name, include_dst = FALSE, adjusted_variant = FALS
     rhs_terms <- c(rhs_terms, "deviation")
   }
 
-  if (has_dst_observes) {
+  if (include_dst && has_dst_observes) {
     rhs_terms <- c(
       rhs_terms,
       "dst_observes",
@@ -333,7 +488,7 @@ build_rhs <- function(outcome_name, include_dst = FALSE, adjusted_variant = FALS
     )
   }
 
-  if (has_dst_observes && has_dst_event) {
+  if (include_dst && has_dst_observes && has_dst_event) {
     rhs_terms <- c(
       rhs_terms,
       "post_spring",
@@ -427,21 +582,39 @@ model_performance <- data.frame(
 )
 
 for (m in model_specs) {
-  fml <- build_formula(
+  # Base variant (no explicit DST terms)
+  fml_base <- build_formula(
     m$outcome,
-    include_dst = TRUE,
+    include_dst = FALSE,
     adjusted_variant = isTRUE(m$adjusted_variant)
   )
-  desc <- m$description
 
-  res <- fit_save_summarize(
-    formula_obj = fml,
+  res_base <- fit_save_summarize(
+    formula_obj = fml_base,
     model_name = m$name,
-    description = desc,
+    description = paste0(m$description, " [base: no DST terms]"),
     df = df_clean,
     run_reml = FIT_ALL_REML
   )
-  model_performance <- rbind(model_performance, res)
+  model_performance <- rbind(model_performance, res_base)
+
+  # DST-enhanced variant (explicit DST terms), restricted by configured outcomes
+  if (m$key %in% DST_TARGET_OUTCOMES && has_dst_observes) {
+    fml_dst <- build_formula(
+      m$outcome,
+      include_dst = TRUE,
+      adjusted_variant = isTRUE(m$adjusted_variant)
+    )
+
+    res_dst <- fit_save_summarize(
+      formula_obj = fml_dst,
+      model_name = paste0(m$name, "_dst"),
+      description = paste0(m$description, " [dst: includes DST terms]"),
+      df = df_clean,
+      run_reml = FIT_ALL_REML
+    )
+    model_performance <- rbind(model_performance, res_dst)
+  }
 }
 
 # -------------------------------------------------------------------

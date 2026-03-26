@@ -1,0 +1,545 @@
+outcome,outcome_type,outcome_variant,analysis,employment_status,is_weekend_factor,sex_concept,month,dst_observes,age_at_sleep,employment_clean,estimate,conf.low,conf.high,batch
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,18,Employed For Wages,8.32923983623642,7.3018454521313485,9.35663422034149,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,19,Employed For Wages,8.270939808940978,7.302348334091864,9.239531283790091,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,20,Employed For Wages,8.212639781645539,7.302572457734233,9.122707105556843,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,21,Employed For Wages,8.1543407661075,7.302460597651129,9.00622093456387,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,22,Employed For Wages,8.09611438391864,7.301942763247183,8.890286004590095,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,23,Employed For Wages,8.038147812123633,7.30093964516198,8.775355979085285,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,24,Employed For Wages,7.980638918139812,7.299357029685498,8.661920806594127,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,25,Employed For Wages,7.923785569384504,7.297082357854497,8.55048878091451,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,26,Employed For Wages,7.867785633275038,7.293979403553394,8.441591862996683,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,27,Employed For Wages,7.812836977228738,7.289882019030259,8.335791935427217,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,28,Employed For Wages,7.759137468662938,7.284586095663166,8.233688841662708,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,29,Employed For Wages,7.706884974994961,7.277843289714333,8.135926660275588,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,30,Employed For Wages,7.656277363642138,7.269353889920348,8.043200837363928,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,31,Employed For Wages,7.607512502021794,7.2587683798951375,7.95625662414845,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,32,Employed For Wages,7.56078825755126,7.24570419693532,7.8758723181672,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,33,Employed For Wages,7.516302497647861,7.229792694505926,7.802812300789796,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,34,Employed For Wages,7.474253089728928,7.210770227788136,7.737735951669721,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,35,Employed For Wages,7.43483790121179,7.188614572185974,7.681061230237605,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,36,Employed For Wages,7.398254799513771,7.163688288909391,7.632821310118152,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,37,Employed For Wages,7.364701652052201,7.1368131139761095,7.592590190128292,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,38,Employed For Wages,7.33437632624441,7.109218091686309,7.559534560802511,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,39,Employed For Wages,7.3074766895077214,7.082368488135041,7.532584890880402,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,40,Employed For Wages,7.284200609259467,7.057763837554219,7.510637380964715,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,41,Employed For Wages,7.264745952916974,7.036785585354123,7.492706320479826,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,42,Employed For Wages,7.249310587897569,7.020614888909014,7.478006286886124,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,43,Employed For Wages,7.238092381618582,7.010204454631016,7.465980308606148,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,44,Employed For Wages,7.231289201497339,7.006272220596168,7.45630618239851,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,45,Employed For Wages,7.229015876462643,7.009150792786906,7.44888096013838,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,46,Employed For Wages,7.2307918205767026,7.01793568606377,7.443647955089635,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,47,Employed For Wages,7.235876574353792,7.031091508098788,7.440661640608797,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,48,Employed For Wages,7.243528595109844,7.046941741021234,7.440115449198453,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,49,Employed For Wages,7.253006340160781,7.06374343096107,7.442269249360493,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,50,Employed For Wages,7.263568266822532,7.079800154833411,7.447336378811654,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,51,Employed For Wages,7.2744728324110275,7.093619496160649,7.455326168661406,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,52,Employed For Wages,7.284978494242195,7.10408085726723,7.46587613121716,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,53,Employed For Wages,7.294343709631963,7.110538671297867,7.478148747966058,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,54,Employed For Wages,7.301826935896257,7.112801031998294,7.490852839794219,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,55,Employed For Wages,7.306686630351006,7.110997067112304,7.502376193589708,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,56,Employed For Wages,7.308192218357505,7.105409378979676,7.510975057735335,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,57,Employed For Wages,7.30598659294059,7.096513929165045,7.5154592567161345,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,58,Employed For Wages,7.300169226434246,7.084859621108894,7.515478831759598,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,59,Employed For Wages,7.290867392203923,7.070809098469114,7.510925685938732,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,60,Employed For Wages,7.278208363615075,7.0545742417467485,7.501842485483402,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,61,Employed For Wages,7.262319414033152,7.036250620367106,7.488388207699199,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,62,Employed For Wages,7.243327816823611,7.0158407065193265,7.470814927127896,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,63,Employed For Wages,7.2213608453519,6.993266208082863,7.449455482620937,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,64,Employed For Wages,7.196545772983472,6.968377256339224,7.424714289627721,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,65,Employed For Wages,7.169009873083783,6.94095885643425,7.397060889733316,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,66,Employed For Wages,7.138880419018282,6.910737035652284,7.36702380238428,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,67,Employed For Wages,7.1062846841524205,6.8773928409585805,7.335176527346261,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,68,Employed For Wages,7.071349941851656,6.840581698340795,7.3021181853625166,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,69,Employed For Wages,7.034203465481435,6.799962361611748,7.268444569351122,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,70,Employed For Wages,6.994972528407213,6.755233414210166,7.2347116426042595,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,71,Employed For Wages,6.953784403994443,6.706170245250942,7.2013985627379435,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,72,Employed For Wages,6.910766365608577,6.652654214590906,7.168878516626248,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,73,Employed For Wages,6.866045686615065,6.594686611024904,7.137404762205226,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,74,Employed For Wages,6.819749640379364,6.53238469722848,7.107114583530247,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,75,Employed For Wages,6.772005500266923,6.465962725619039,7.078048274914807,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,76,Employed For Wages,6.722940539643194,6.395705987688682,7.050175091597705,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,77,Employed For Wages,6.672682031873632,6.321944381338386,7.0234196824088775,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,78,Employed For Wages,6.621357250323687,6.245030382781186,6.9976841178661875,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,79,Employed For Wages,6.5690934683588145,6.1653230145205615,6.972863922197067,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,80,Employed For Wages,6.516017959344462,6.083178037202863,6.948857881486061,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,81,Employed For Wages,6.462257996646089,5.99894194959531,6.9255740436968685,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,82,Employed For Wages,6.407940853629141,5.912949668131563,6.902932039126719,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,83,Employed For Wages,6.3531938036590745,5.825523868823991,6.880863738494158,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,84,Employed For Wages,6.298144120101341,5.736975384101292,6.85931285610139,pooled
+duration,Duration,primary,age_x_employment,Employed For Wages,NA,NA,NA,NA,85,Employed For Wages,6.242919076321392,5.647604788520457,6.838233364122328,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,18,Homemaker,6.159556094258679,0.7920623951608299,11.527049793356529,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,19,Homemaker,6.255822854930027,1.1944181955456408,11.317227514314414,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,20,Homemaker,6.352089615601378,1.596383908498594,11.107795322704163,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,21,Homemaker,6.4483537417228165,1.997871196558893,10.89883628688674,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,22,Homemaker,6.544428735367471,2.3982084510481405,10.690649019686802,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,23,Homemaker,6.639827199789084,2.7957862291915565,10.483868170386613,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,24,Homemaker,6.734033901212282,3.188891248210598,10.279176554213963,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,25,Homemaker,6.8265336058616795,3.5757857829438886,10.07728142877947,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,26,Homemaker,6.9168110799619,3.95470068679712,9.87892147312668,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,27,Homemaker,7.004351089737561,4.323822171266204,9.684880008208918,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,28,Homemaker,7.088638401413289,4.681275544006642,9.496001258819936,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,29,Homemaker,7.169157781213697,5.025100899052449,9.313214663374945,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,30,Homemaker,7.2453939953634094,5.353214284306426,9.137573706420394,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,31,Homemaker,7.316831810087042,5.663351663114749,8.970311957059335,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,32,Homemaker,7.382955991609223,5.952984756298301,8.812927226920145,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,33,Homemaker,7.443251306154564,6.219196127191196,8.667306485117932,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,34,Homemaker,7.497202519947691,6.458511938303577,8.535893101591805,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,35,Homemaker,7.544294399213226,6.666732986382385,8.421855812044067,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,36,Homemaker,7.584011710175783,6.838937837217555,8.329085583134011,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,37,Homemaker,7.615839219059985,6.970141395431646,8.261537042688323,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,38,Homemaker,7.639261692090456,7.057268478145765,8.221254906035147,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,39,Homemaker,7.65376389549181,7.102057277206852,8.205470513776769,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,40,Homemaker,7.658830595488673,7.1121472506774435,8.205513940299902,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,41,Homemaker,7.653946558305661,7.098402558678835,8.209490557932487,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,42,Homemaker,7.638596550167396,7.071020410521553,8.206172689813238,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,43,Homemaker,7.612265337298498,7.03749061283007,8.187040061766927,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,44,Homemaker,7.574437685923589,7.002348320559413,8.146527051287764,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,45,Homemaker,7.524849775999147,6.967349224718837,8.082350327279459,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,46,Homemaker,7.465040511450637,6.931289294759836,7.998791728141438,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,47,Homemaker,7.397335609398899,6.890740281983587,7.90393093681421,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,48,Homemaker,7.324064066539634,6.840830481619365,7.807297651459903,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,49,Homemaker,7.247554879568538,6.776372204420976,7.7187375547161,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,50,Homemaker,7.170137045181311,6.69404407281381,7.646230017548811,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,51,Homemaker,7.094139560073654,6.594767602946151,7.593511517201158,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,52,Homemaker,7.021891420941268,6.484229806569191,7.559553035313344,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,53,Homemaker,6.95572162447985,6.371110204483639,7.540333044476061,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,54,Homemaker,6.897959167385101,6.264874645861,7.531043688909201,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,55,Homemaker,6.85093304635272,6.174516937146176,7.527349155559264,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,56,Homemaker,6.816936752689957,6.108085879147194,7.525787626232719,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,57,Homemaker,6.797054800714836,6.069907014191605,7.524202587238067,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,58,Homemaker,6.790893681525679,6.059838991839456,7.521948371211902,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,59,Homemaker,6.797969889654554,6.0765940491240995,7.519345730185008,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,60,Homemaker,6.817799919633536,6.118017214209474,7.5175826250575986,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,61,Homemaker,6.849900265994693,6.180927077590716,7.51887345439867,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,62,Homemaker,6.893787423270103,6.2607265371987015,7.526848309341505,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,63,Homemaker,6.948977885991834,6.350812070548906,7.547143701434762,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,64,Homemaker,7.014988148691957,6.442051721377133,7.587924576006781,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,65,Homemaker,7.0913347059025496,6.52322550775536,7.6594439040497395,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,66,Homemaker,7.177534052155679,6.583675614169264,7.7713924901420945,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,67,Homemaker,7.273102681983418,6.6173926090558215,7.928812754911014,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,68,Homemaker,7.377557089917841,6.624633623344698,8.130480556490983,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,69,Homemaker,7.490413770491019,6.609557418671696,8.371270122310342,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,70,Homemaker,7.6111892182350225,6.577080228806976,8.64529820766307,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,71,Homemaker,7.739399927681925,6.531311798350991,8.947488057012858,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,72,Homemaker,7.874562393363801,6.475287483785609,9.273837302941994,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,73,Homemaker,8.016193109812717,6.411171185189211,9.621215034436222,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,74,Homemaker,8.16380857156075,6.340515758703203,9.987101384418295,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,75,Homemaker,8.31692527313997,6.264463869994154,10.369386676285789,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,76,Homemaker,8.475059709082451,6.183887080196214,10.766232337968688,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,77,Homemaker,8.637728373920263,6.099474304919374,11.175982442921152,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,78,Homemaker,8.804447762185479,6.011791059844129,11.59710446452683,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,79,Homemaker,8.974734368410171,5.921317424514568,12.028151312305775,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,80,Homemaker,9.14810468712641,5.828473402055684,12.467735972197136,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,81,Homemaker,9.324075212866273,5.733634886926762,12.91451553880578,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,82,Homemaker,9.502162440161824,5.637147271544963,13.367177608778684,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,83,Homemaker,9.68188286354514,5.539330910916642,13.82443481617364,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,84,Homemaker,9.862752977548295,5.440490278975198,14.285015676121391,pooled
+duration,Duration,primary,age_x_employment,Homemaker,NA,NA,NA,NA,85,Homemaker,10.04428927670336,5.34091473704418,14.74766381636254,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,18,Out Of Work Less Than One,3.6201048925678063,-1.2323776021639334,8.472587387299548,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,19,Out Of Work Less Than One,3.816189309533158,-0.7444579302349972,8.376836549301313,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,20,Out Of Work Less Than One,4.012273726498512,-0.2571579714580938,8.281705424455117,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,21,Out Of Work Less Than One,4.208354825299095,0.22937785860334925,8.18733179199484,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,22,Out Of Work Less Than One,4.404197715395206,0.7143841570967222,8.09401127369369,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,23,Out Of Work Less Than One,4.599188529991128,1.1961028173504888,8.002274242631767,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,24,Out Of Work Less Than One,4.7926783420901895,1.6726406884647664,7.912715995715613,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,25,Out Of Work Less Than One,4.984018224695709,2.1420405544652814,7.825995894926137,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,26,Out Of Work Less Than One,5.172559250811016,2.602255585772434,7.742862915849598,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,27,Out Of Work Less Than One,5.357652493439429,3.0511119044309125,7.664193082447944,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,28,Out Of Work Less Than One,5.538649025584277,3.486252911042853,7.591045140125701,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,29,Out Of Work Less Than One,5.71489992024888,3.905052704434099,7.52474713606366,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,30,Out Of Work Less Than One,5.885756250436567,4.304486688878871,7.467025811994263,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,31,Out Of Work Less Than One,6.050569089150656,4.680941897360529,7.420196280940783,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,32,Out Of Work Less Than One,6.208689509394476,5.0299574989376765,7.387421519851275,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,33,Out Of Work Less Than One,6.3594685841713465,5.345958692112078,7.372978476230615,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,34,Out Of Work Less Than One,6.502257386484595,5.6222417454943265,7.382273027474863,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,35,Out Of Work Less Than One,6.636406989337548,5.851876414838748,7.420937563836348,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,36,Out Of Work Less Than One,6.761268465733523,6.03030730245718,7.4922296290098656,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,37,Out Of Work Less Than One,6.876192888675847,6.158823598451785,7.593562178899909,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,38,Out Of Work Less Than One,6.980531331167849,6.245462386896211,7.715600275439487,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,39,Out Of Work Less Than One,7.073634866212846,6.301739128951399,7.845530603474292,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,40,Out Of Work Less Than One,7.154854566814166,6.3385343449330325,7.971174788695299,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,41,Out Of Work Less Than One,7.223541505975128,6.364162778929408,8.0829202330208485,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,42,Out Of Work Less Than One,7.279046756699063,6.384336825509672,8.173756687888453,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,43,Out Of Work Less Than One,7.320721391989292,6.4027623449714195,8.238680439007165,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,44,Out Of Work Less Than One,7.347916484849137,6.421691370572865,8.27414159912541,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,45,Out Of Work Less Than One,7.360195394789845,6.442159694239619,8.278231095340072,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,46,Out Of Work Less Than One,7.358643649476671,6.463614884485266,8.253672414468076,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,47,Out Of Work Less Than One,7.345011138956336,6.484518054445861,8.20550422346681,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,48,Out Of Work Less Than One,7.321050522454033,6.502802882844927,8.13929816206314,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,49,Out Of Work Less Than One,7.288514459194957,6.515997968158816,8.061030950231098,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,50,Out Of Work Less Than One,7.249155608404302,6.521390802919528,7.976920413889076,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,51,Out Of Work Less Than One,7.204726629307267,6.516348665917419,7.893104592697115,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,52,Out Of Work Less Than One,7.156980181129044,6.498884299841514,7.8150760624165745,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,53,Out Of Work Less Than One,7.107668923094829,6.468431519587561,7.746906326602097,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,54,Out Of Work Less Than One,7.058545514429817,6.426539018831383,7.690552010028251,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,55,Out Of Work Less Than One,7.011362614359203,6.3770522874231785,7.645672941295227,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,56,Out Of Work Less Than One,6.967848763515384,6.325563555359663,7.610133971671106,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,57,Out Of Work Less Than One,6.928911251870617,6.27704838438852,7.580774119352714,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,58,Out Of Work Less Than One,6.894453357281375,6.234139369934009,7.554767344628741,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,59,Out Of Work Less Than One,6.864317223488169,6.198283060205536,7.530351386770803,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,60,Out Of Work Less Than One,6.838344994231522,6.170027224341676,7.506662764121368,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,61,Out Of Work Less Than One,6.816378813251948,6.149181904116565,7.483575722387331,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,62,Out Of Work Less Than One,6.7982608242899705,6.134923220394135,7.461598428185806,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,63,Out Of Work Less Than One,6.783833171086104,6.12584925839523,7.441817083776978,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,64,Out Of Work Less Than One,6.7729379973808665,6.120014356189897,7.425861638571836,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,65,Out Of Work Less Than One,6.765417446914777,6.11498113307316,7.415853760756395,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,66,Out Of Work Less Than One,6.761113663428357,6.107938866208333,7.41428846064838,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,67,Out Of Work Less Than One,6.759868790662118,6.095934043136175,7.423803538188061,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,68,Out Of Work Less Than One,6.761524972356583,6.076214927916979,7.446835016796188,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,69,Out Of Work Less Than One,6.765924352252269,6.046610657591308,7.4852380469132305,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,70,Out Of Work Less Than One,6.772909074089694,6.005802572020082,7.5400155761593055,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,71,Out Of Work Less Than One,6.782321281609376,5.953376627658406,7.611265935560347,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,72,Out Of Work Less Than One,6.794003118551835,5.889664033934101,7.698342203169569,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,73,Out Of Work Less Than One,6.807796728657585,5.815478023517329,7.80011543379784,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,74,Out Of Work Less Than One,6.823544255667148,5.731863569583508,7.915224941750788,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,75,Out Of Work Less Than One,6.841087843321042,5.639918666859428,8.042257019782657,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,76,Out Of Work Less Than One,6.860269635359784,5.5406938416426526,8.179845429076916,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,77,Out Of Work Less Than One,6.880931775523892,5.435147813027872,8.32671573801991,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,78,Out Of Work Less Than One,6.902916407553884,5.32413756132762,8.481695253780149,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,79,Out Of Work Less Than One,6.926065675190281,5.208424241139143,8.643707109241419,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,80,Out Of Work Less Than One,6.950221722173595,5.08868599961418,8.81175744473301,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,81,Out Of Work Less Than One,6.975226692244353,4.965532162746287,8.984921221742418,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,82,Out Of Work Less Than One,7.000922729143065,4.839515620719763,9.162329837566368,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,83,Out Of Work Less Than One,7.027151976610253,4.71114375975122,9.343160193469286,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,84,Out Of Work Less Than One,7.053756578386435,4.580887659499368,9.526625497273502,pooled
+duration,Duration,primary,age_x_employment,Out Of Work Less Than One,NA,NA,NA,NA,85,Out Of Work Less Than One,7.080578678212131,4.449189083782192,9.71196827264207,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,18,Out Of Work One Or More,9.959875748646873,3.5947447703791573,16.325006726914584,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,19,Out Of Work One Or More,9.833180105574762,3.8252419045367336,15.84111830661279,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,20,Out Of Work One Or More,9.70648446250266,4.055106475854018,15.357862449151302,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,21,Out Of Work One Or More,9.579790422754131,4.28420981333617,14.875371032172094,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,22,Out Of Work One Or More,9.453211484472575,4.5120857999839385,14.394337168961211,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,23,Out Of Work One Or More,9.327044265570706,4.73775069607969,13.916337835061722,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,24,Out Of Work One Or More,9.201602324906249,4.960141661466102,13.443062988346396,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,25,Out Of Work One Or More,9.077199221336924,5.178159349628764,12.976239093045084,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,26,Out Of Work One Or More,8.95414851372046,5.390645585406615,12.517651442034303,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,27,Out Of Work One Or More,8.832763760914576,5.596370780031039,12.069156741798112,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,28,Out Of Work One Or More,8.713358521777,5.7940081965868035,11.632708846967196,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,29,Out Of Work One Or More,8.596246355165453,5.982090539718234,11.210402170612673,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,30,Out Of Work One Or More,8.48174081993766,6.158962257487001,10.804519382388316,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,31,Out Of Work One Or More,8.370155474951344,6.322699179340557,10.417611770562132,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,32,Out Of Work One Or More,8.261803879064233,6.471003214773053,10.052604543355416,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,33,Out Of Work One Or More,8.156999591134046,6.6010743607104,9.712924821557692,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,34,Out Of Work One Or More,8.056056170018511,6.709476241989664,9.402636098047358,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,35,Out Of Work One Or More,7.959287174575347,6.792116206691489,9.126458142459205,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,36,Out Of Work One Or More,7.867006163662284,6.844587278092629,8.889425049231939,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,37,Out Of Work One Or More,7.779526696137039,6.8633002561873075,8.695753136086772,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,38,Out Of Work One Or More,7.697162330857342,6.847577893553238,8.546746768161446,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,39,Out Of Work One Or More,7.620226626680913,6.801695566032771,8.438757687329055,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,40,Out Of Work One Or More,7.549033142465479,6.734886833204053,8.363179451726905,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,41,Out Of Work One Or More,7.483895437068763,6.65884389941874,8.308946974718786,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,42,Out Of Work One Or More,7.425127069348487,6.5847584124663125,8.265495726230661,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,43,Out Of Work One Or More,7.3730415981623745,6.5217059667214565,8.224377229603293,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,44,Out Of Work One Or More,7.3279525823681535,6.47634837714923,8.179556787587078,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,45,Out Of Work One Or More,7.290070128113537,6.4527425715702345,8.12739768465684,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,46,Out Of Work One Or More,7.258862549605912,6.449918864060233,8.067806235151592,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,47,Out Of Work One Or More,7.233474400068205,6.4639366057892405,8.00301219434717,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,48,Out Of Work One Or More,7.213048883231016,6.4895562424381605,7.936541524023872,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,49,Out Of Work One Or More,7.196729202824926,6.520431531095828,7.873026874554024,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,50,Out Of Work One Or More,7.183658562580522,6.549365123347087,7.817952001813957,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,51,Out Of Work One Or More,7.172980166228398,6.568998917393085,7.776961415063711,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,52,Out Of Work One Or More,7.163837217499143,6.573245615398095,7.754428819600191,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,53,Out Of Work One Or More,7.155372920123342,6.559125653716155,7.751620186530529,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,54,Out Of Work One Or More,7.1467304778315865,6.527748775932626,7.7657121797305475,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,55,Out Of Work One Or More,7.1370530943544646,6.483522885806748,7.790583302902181,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,56,Out Of Work One Or More,7.125495800481694,6.4323037639185205,7.818687837044868,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,57,Out Of Work One Or More,7.111616344532967,6.379233127973176,7.843999561092758,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,58,Out Of Work One Or More,7.095464813280735,6.327410940483769,7.863518686077701,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,59,Out Of Work One Or More,7.0771212718966865,6.2785121761862905,7.875730367607082,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,60,Out Of Work One Or More,7.056665785552516,6.233270901007858,7.8800606700971745,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,61,Out Of Work One Or More,7.034178419419918,6.1917692030493,7.876587635790536,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,62,Out Of Work One Or More,7.00973923867059,6.153607427979838,7.865871049361341,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,63,Out Of Work One Or More,6.98342830847622,6.118000756467006,7.8488558604854335,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,64,Out Of Work One Or More,6.955325694008503,6.083832199895003,7.826819188122004,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,65,Out Of Work One Or More,6.925511460439137,6.04968601716027,7.801336903718004,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,66,Out Of Work One Or More,6.89406567293981,6.013881131809767,7.774250214069853,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,67,Out Of Work One Or More,6.861068396682218,5.974522442692203,7.747614350672233,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,68,Out Of Work One Or More,6.826599696838059,5.929586630356573,7.7236127633195455,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,69,Out Of Work One Or More,6.790739638579023,5.877050710510965,7.70442856664708,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,70,Out Of Work One Or More,6.753568287076801,5.815055148409678,7.692081425743924,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,71,Out Of Work One Or More,6.715165707503092,5.742075503130648,7.688255911875537,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,72,Out Of Work One Or More,6.675611965029587,5.6570589027500064,7.694165027309167,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,73,Out Of Work One Or More,6.634987124827981,5.559489636010973,7.710484613644988,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,74,Out Of Work One Or More,6.593371252069969,5.449369652750766,7.737372851389171,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,75,Out Of Work One Or More,6.550844411927244,5.327131788521133,7.774557035333355,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,76,Out Of Work One Or More,6.507486669571495,5.193520284173624,7.821453054969367,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,77,Out Of Work One Or More,6.463378090174424,5.04947205113867,7.877284129210178,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,78,Out Of Work One Or More,6.4185987389077175,4.896019645883577,7.941177831931858,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,79,Out Of Work One Or More,6.373228680943075,4.7342224683673155,8.012234893518835,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,80,Out Of Work One Or More,6.327347981452187,4.565124088906449,8.089571873997924,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,81,Out Of Work One Or More,6.281036705606751,4.389728858246853,8.17234455296665,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,82,Out Of Work One Or More,6.234374918578455,4.208992332379697,8.259757504777212,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,83,Out Of Work One Or More,6.187442685538998,4.023819941995675,8.351065429082322,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,84,Out Of Work One Or More,6.140320071660072,3.8350686323341394,8.445571510986003,pooled
+duration,Duration,primary,age_x_employment,Out Of Work One Or More,NA,NA,NA,NA,85,Out Of Work One Or More,6.09308714211337,3.643551897457117,8.542622386769622,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,18,Retired,7.848931782946582,6.923408169560137,8.774455396333027,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,19,Retired,7.828480305405096,6.957544195715112,8.69941641509508,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,20,Retired,7.808028827863614,6.99105787415244,8.624999781574788,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,21,Retired,7.787577638676772,7.023817949525387,8.551337327828156,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,22,Retired,7.767147150266068,7.055612179558082,8.478682120974053,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,23,Retired,7.746790708789206,7.086125566096718,8.407455851481695,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,24,Retired,7.726564707200077,7.1150120338234935,8.33811738057666,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,25,Retired,7.706525538452569,7.141897376080613,8.2711537008245255,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,26,Retired,7.686729595500573,7.16637685398083,8.207082337020315,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,27,Retired,7.667233271297971,7.188022629316434,8.146443913279509,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,28,Retired,7.64809295879866,7.206393718633289,8.08979219896403,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,29,Retired,7.629365050956525,7.22105799945019,8.03767210246286,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,30,Retired,7.611105940725456,7.231641609787445,7.990570271663467,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,31,Retired,7.593372021059339,7.237883575953444,7.948860466165233,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,32,Retired,7.5762196849120675,7.239712568428657,7.912726801395478,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,33,Retired,7.559705325237525,7.237322675141998,7.882087975333052,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,34,Retired,7.543885334989605,7.231195784298036,7.856574885681175,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,35,Retired,7.528816107122195,7.22208992837834,7.835542285866049,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,36,Retired,7.514554034589184,7.210953306860341,7.818154762318027,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,37,Retired,7.501155510344459,7.198822131547602,7.803488889141316,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,38,Retired,7.488676927341913,7.186715527424013,7.790638327259813,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,39,Retired,7.47717467853543,7.175551527846792,7.778797829224069,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,40,Retired,7.466705156878903,7.16609185609654,7.767318457661266,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,41,Retired,7.457324755326217,7.158911289301658,7.755738221350777,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,42,Retired,7.449089866831264,7.154354579909281,7.743825153753248,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,43,Retired,7.442056884347933,7.152499538223652,7.731614230472213,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,44,Retired,7.436282200830108,7.153083787722409,7.719480613937808,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,45,Retired,7.431796859335569,7.155335135375003,7.708258583296136,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,46,Retired,7.428450135343216,7.157563268933369,7.6993370017530625,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,47,Retired,7.426011970428356,7.157842151207767,7.694181789648946,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,48,Retired,7.424251975488736,7.154599011031072,7.6939049399464,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,49,Retired,7.422939761422092,7.1469300065239,7.698949516320284,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,50,Retired,7.421844939126166,7.134759287884487,7.708930590367846,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,51,Retired,7.420737119498702,7.118762754749924,7.722711484247481,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,52,Retired,7.419385913437443,7.100117851937354,7.738653974937533,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,53,Retired,7.417560931840126,7.080213800469939,7.754908063210313,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,54,Retired,7.415031785604495,7.060459476287938,7.7696040949210525,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,55,Retired,7.411568085628291,7.042143785629426,7.780992385627156,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,56,Retired,7.406942901060975,7.0263766567817925,7.787509145340158,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,57,Retired,7.401047056326315,7.013722349528327,7.788371763124304,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,58,Retired,7.3939153364289725,7.004065133715341,7.783765539142604,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,59,Retired,7.385591292107312,6.996996819799749,7.7741857644148755,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,60,Retired,7.376118474099704,6.991855995203261,7.760380952996146,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,61,Retired,7.365540433144506,6.987695258757363,7.74338560753165,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,62,Retired,7.353900719980095,6.983263286977431,7.72453815298276,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,63,Retired,7.341242885344832,6.976969845591557,7.705515925098108,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,64,Retired,7.327610479977085,6.9669010432825464,7.688319916671623,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,65,Retired,7.313047054615221,6.950946608753355,7.675147500477086,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,66,Retired,7.297596159997606,6.9270606289584675,7.668131691036744,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,67,Retired,7.281301346862605,6.8936144781169775,7.668988215608233,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,68,Retired,7.26420616594859,6.8496976102623135,7.678714721634866,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,69,Retired,7.246354167993922,6.795196413617573,7.697511922370271,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,70,Retired,7.227788903736968,6.730631718565509,7.724946088908427,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,71,Retired,7.208553923916099,6.656888575323328,7.760219272508871,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,72,Retired,7.1886927792696795,6.574977513281228,7.802408045258131,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,73,Retired,7.1682490205360745,6.485885149513342,7.850612891558807,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,74,Retired,7.147266198453652,6.390510114749365,7.904022282157939,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,75,Retired,7.12578786376078,6.289642353094069,7.961933374427491,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,76,Retired,7.1038575671958215,6.183975975212575,8.023739159179067,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,77,Retired,7.081518859497146,6.074117720372721,8.088919998621572,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,78,Retired,7.05881529140312,5.960614744529235,8.157015838277005,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,79,Retired,7.0357904136521094,5.843956544675325,8.227624282628895,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,80,Retired,7.012487776982481,5.724592933988436,8.300382619976526,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,81,Retired,6.988950932132604,5.602944463597163,8.374957400668045,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,82,Retired,6.9652234298408375,5.479407519702033,8.451039339979642,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,83,Retired,6.941348820845557,5.354357546660004,8.528340095031112,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,84,Retired,6.917370655885125,5.228156509813013,8.606584801957236,pooled
+duration,Duration,primary,age_x_employment,Retired,NA,NA,NA,NA,85,Retired,6.893332485697909,5.101155467276442,8.685509504119375,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,18,Self Employed,5.647048376879387,3.985531926693132,7.308564827065642,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,19,Self Employed,5.725901134351462,4.16536591439672,7.286436354306204,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,20,Self Employed,5.804753891823539,4.344298426689502,7.265209356957577,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,21,Self Employed,5.883605611697356,4.522127877190348,7.245083346204364,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,22,Self Employed,5.962382843125303,4.69840034534085,7.226365340909756,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,23,Self Employed,6.040893628455425,4.872287291880295,7.209499965030555,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,24,Self Employed,6.118935046624982,5.042876657073826,7.194993436176137,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,25,Self Employed,6.196304176571226,5.209190662116315,7.183417691026136,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,26,Self Employed,6.272798097231415,5.370174695468827,7.175421498994003,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,27,Self Employed,6.348213887542801,5.524687705869343,7.17174006921626,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,28,Self Employed,6.4223486264426475,5.6715031193114855,7.173194133573809,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,29,Self Employed,6.494999392868204,5.809331234225352,7.180667551511055,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,30,Self Employed,6.565963265756729,5.936881649609315,7.195044881904142,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,31,Self Employed,6.635037324045473,6.052985779433808,7.217088868657138,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,32,Self Employed,6.702018646671699,6.156787812413997,7.247249480929401,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,33,Self Employed,6.766704312572658,6.2479700962352265,7.28543852891009,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,34,Self Employed,6.828891400685606,6.32693039057789,7.330852410793322,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,35,Self Employed,6.888376989947804,6.394807340518715,7.381946639376893,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,36,Self Employed,6.944958159296503,6.4533182024107205,7.436598116182285,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,37,Self Employed,6.998431987668958,6.504473740303974,7.492390235033943,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,38,Self Employed,7.04859555400243,6.550292713948835,7.546898394056026,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,39,Self Employed,7.095245937234167,6.59259971823445,7.597892156233884,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,40,Self Employed,7.138180216301433,6.632921835167392,7.643438597435474,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,41,Self Employed,7.177195470141476,6.672455130031668,7.681935810251284,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,42,Self Employed,7.212088777691558,6.7120605116696055,7.71211704371351,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,43,Self Employed,7.242657217888933,6.752256566809864,7.733057868968002,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,44,Self Employed,7.268697869670853,6.793180778147169,7.744214961194537,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,45,Self Employed,7.2900613549344015,6.83442179786174,7.745700912007063,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,46,Self Employed,7.306982217235695,6.874514681959095,7.739449752512295,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,47,Self Employed,7.319862565788443,6.911337485811777,7.728387645765109,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,48,Self Employed,7.329105208249298,6.942453511356807,7.715756905141789,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,49,Self Employed,7.335112952274906,6.965355917365783,7.704869987184028,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,50,Self Employed,7.338288605521913,6.97794843205564,7.698628778988186,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,51,Self Employed,7.339034975646971,6.979198633765913,7.698871317528029,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,52,Self Employed,7.337754870306728,6.969633803069444,7.705875937544011,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,53,Self Employed,7.334851097157831,6.951312419710962,7.7183897746047,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,54,Self Employed,7.330726463856928,6.927291372077053,7.7341615556368035,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,55,Self Employed,7.325783778060669,6.900972407592837,7.7505951485285,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,56,Self Employed,7.320420839795869,6.875618976091424,7.765222703500314,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,57,Self Employed,7.3148649366826515,6.853413517450686,7.776316355914617,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,58,Self Employed,7.309134898034168,6.835110641838059,7.783159154230277,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,59,Self Employed,7.3032368601749935,6.8209163602809015,7.785557360069085,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,60,Self Employed,7.2971769594297085,6.810671658126315,7.783682260733101,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,61,Self Employed,7.290961332122887,6.8039219733837015,7.778000690862072,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,62,Self Employed,7.284596114579115,6.799944923019747,7.769247306138483,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,63,Self Employed,7.278087443122965,6.7977529731782855,7.758421913067645,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,64,Self Employed,7.271441454079018,6.796085988148233,7.746796920009803,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,65,Self Employed,7.264664283771852,6.7934137729918485,7.735914794551856,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,66,Self Employed,7.257762068526047,6.787973343431374,7.727550793620719,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,67,Self Employed,7.250740944666179,6.777870649172468,7.723611240159889,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,68,Self Employed,7.243607048516829,6.761261752912591,7.725952344121066,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,69,Self Employed,7.236366516402573,6.736588282587821,7.736144750217326,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,70,Self Employed,7.229025484647991,6.702792844467143,7.755258124828839,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,71,Self Employed,7.221590089577664,6.659425599689685,7.7837545794656435,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,72,Self Employed,7.214066467516168,6.606603617319143,7.821529317713193,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,73,Self Employed,7.206460754788079,6.544863086829233,7.868058422746925,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,74,Self Employed,7.198779087717981,6.474980956231531,7.922577219204432,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,75,Self Employed,7.1910276026304505,6.397827104373326,7.984228100887575,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,76,Self Employed,7.183212435850063,6.3142686734955475,8.052156198204578,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,77,Self Employed,7.175339723701402,6.2251204930062745,8.12555895439653,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,78,Self Employed,7.167415602509043,6.131126500091866,8.203704704926219,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,79,Self Employed,7.159446208597566,6.032958888599223,8.285933528595908,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,80,Self Employed,7.151437678291544,5.93122491174056,8.37165044484253,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,81,Self Employed,7.143396147915568,5.826476448321097,8.460315847510039,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,82,Self Employed,7.135327753794203,5.719219354136677,8.55143615345173,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,83,Self Employed,7.127238632252037,5.609922638422173,8.6445546260819,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,84,Self Employed,7.119134919613644,5.4990248744568015,8.739244964770487,pooled
+duration,Duration,primary,age_x_employment,Self Employed,NA,NA,NA,NA,85,Self Employed,7.1110227522036045,5.386940647714679,8.83510485669253,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,18,Student,7.395063966667758,6.131089413095194,8.659038520240323,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,19,Student,7.395372084332013,6.214451133712626,8.576293034951401,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,20,Student,7.395680201996272,6.2963874755828355,8.494972928409709,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,21,Student,7.395988217589533,6.376554337372708,8.415422097806358,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,22,Student,7.396288905578117,6.45439992298151,8.338177888174723,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,23,Student,7.396563382633582,6.5290975687088,8.264029196558365,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,24,Student,7.39679168693083,6.599698921678746,8.193884452182914,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,25,Student,7.396953856644759,6.665141278412831,8.128766434876686,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,26,Student,7.397029929950266,6.72425316135614,8.069806698544392,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,27,Student,7.396999945022247,6.775790730467995,8.0182091595765,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,28,Student,7.396843940035609,6.818537690811516,7.975150189259702,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,29,Student,7.396541953165243,6.8514735616805895,7.941610344649896,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,30,Student,7.396074022586051,6.874013628682387,7.918134416489715,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,31,Student,7.395420186472929,6.886227655851746,7.904612717094112,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,32,Student,7.394560483000779,6.888950977736576,7.900169988264983,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,33,Student,7.393474950344498,6.883689649321058,7.9032602513679375,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,34,Student,7.392143626678984,6.8723721315013515,7.911915121856617,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,35,Student,7.390546550179138,6.8570594890742385,7.924033611284038,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,36,Student,7.388663759019856,6.8397152979075395,7.937612220132173,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,37,Student,7.386475291376037,6.8220812286295605,7.9508693541225135,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,38,Student,7.383961185422583,6.8056426714640565,7.96227969938111,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,39,Student,7.381101479334388,6.79162737066102,7.9705755880077565,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,40,Student,7.377876211286354,6.781042517100044,7.974709905472665,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,41,Student,7.374265419453378,6.774696282892682,7.973834556014074,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,42,Student,7.370249142010358,6.77322166291894,7.967276621101777,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,43,Student,7.365807417132195,6.77708044804123,7.95453438622316,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,44,Student,7.360920282993783,6.786547558617236,7.935293007370331,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,45,Student,7.355580170464845,6.801563270321928,7.909597070607761,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,46,Student,7.349868370350555,6.82105399202246,7.878682748678649,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,47,Student,7.343904957080741,6.843404259580012,7.84440565458147,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,48,Student,7.33781016674216,6.866809128551902,7.808811204932417,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,49,Student,7.331704235421561,6.889302314545242,7.774106156297879,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,50,Student,7.325707399205694,6.908848325056492,7.742566473354896,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,51,Student,7.319939894181317,6.923536034011005,7.716343754351629,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,52,Student,7.31452195643518,6.931902824689153,7.697141088181207,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,53,Student,7.309573822054036,6.933316698229538,7.685830945878534,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,54,Student,7.305215727124637,6.928239082384734,7.682192371864541,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,55,Student,7.301567907733736,6.918181319486637,7.684954495980835,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,56,Student,7.298748700891567,6.905369855637039,7.692127546146095,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,57,Student,7.296811779062817,6.891953106699588,7.701670451426046,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,58,Student,7.295731759692374,6.879362923667275,7.712100595717473,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,59,Student,7.295478446579282,6.868539414860187,7.722417478298377,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,60,Student,7.296021643522587,6.860041465167118,7.732001821878056,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,61,Student,7.2973311543213315,6.8541403378106205,7.740521970832043,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,62,Student,7.299376782774565,6.850881073896248,7.747872491652882,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,63,Student,7.302128332681329,6.850133056070183,7.754123609292476,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,64,Student,7.305555607840671,6.851618142577229,7.759493073104113,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,65,Student,7.309628412051636,6.854935193069705,7.764321631033567,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,66,Student,7.314316549113269,6.859569829922991,7.769063268303547,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,67,Student,7.319589822824613,6.864911558233367,7.774268087415858,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,68,Student,7.325418036984717,6.87026608778278,7.780569986186653,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,69,Student,7.331770995392625,6.874885170019377,7.788656820765873,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,70,Student,7.338618501847378,6.877988436292057,7.7992485674026995,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,71,Student,7.345930360148029,6.878819032025605,7.813041688270452,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,72,Student,7.353676374093617,6.876687536094915,7.830665212092319,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,73,Student,7.361826347483189,6.871023953919693,7.852628741046685,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,74,Student,7.370350084115791,6.861418997379207,7.879281170852375,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,75,Student,7.37921738779047,6.847640311531733,7.910794464049206,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,76,Student,7.3883980623062655,6.829632300475743,7.947163824136788,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,77,Student,7.397861911462227,6.807491615380695,7.98823220754376,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,78,Student,7.407578739057399,6.781432450403406,8.033725027711393,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,79,Student,7.4175183488908285,6.751749698856706,8.083286998924951,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,80,Student,7.427650544761556,6.718785621434041,8.13651546808907,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,81,Student,7.437945130468633,6.682903755813985,8.192986505123281,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,82,Student,7.448371909811098,6.64447023043786,8.252273589184338,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,83,Student,7.458900686588001,6.603843419938773,8.31395795323723,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,84,Student,7.469501264598387,6.561365995501928,8.377636533694846,pooled
+duration,Duration,primary,age_x_employment,Student,NA,NA,NA,NA,85,Student,7.480143447641299,6.517363671079844,8.442923224202755,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,18,Unable To Work,9.14256201557516,7.650975859078035,10.634148172072283,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,19,Unable To Work,9.058284566159973,7.651356156435463,10.465212975884484,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,20,Unable To Work,8.97400711674479,7.650688794960728,10.297325438528851,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,21,Unable To Work,8.889730984732436,7.648763410300614,10.13069855916426,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,22,Unable To Work,8.805549428138603,7.64531519985342,9.965783656423785,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,23,Unable To Work,8.721706168993727,7.640035003111156,9.803377334876298,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,24,Unable To Work,8.638458849193961,7.632579585971568,9.644338112416357,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,25,Unable To Work,8.556065110635457,7.622567255938962,9.489562965331952,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,26,Unable To Work,8.474782595214373,7.609582785664092,9.339982404764656,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,27,Unable To Work,8.394868944826857,7.59318498313432,9.196552906519395,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,28,Unable To Work,8.316581801369066,7.572924644851373,9.06023895788676,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,29,Unable To Work,8.240178806737154,7.548386260283038,8.931971353191269,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,30,Unable To Work,8.165917602827273,7.519241327139627,8.81259387851492,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,31,Unable To Work,8.094055831535574,7.485331219859043,8.702780443212104,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,32,Unable To Work,8.024851134758217,7.446760579867371,8.602941689649063,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,33,Unable To Work,7.958561154391349,7.403978290898285,8.513144017884413,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,34,Unable To Work,7.895443532331128,7.357820054205197,8.433067010457059,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,35,Unable To Work,7.835755910473708,7.3094894534430095,8.362022367504407,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,36,Unable To Work,7.779755930715237,7.260471774274723,8.29904008715575,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,37,Unable To Work,7.727701234951876,7.212409102908491,8.242993366995263,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,38,Unable To Work,7.679849465079776,7.1669721046432375,8.192726825516313,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,39,Unable To Work,7.636458262995087,7.1257487286436945,8.14716779734648,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,40,Unable To Work,7.597785270593963,7.090168734263916,8.10540180692401,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,41,Unable To Work,7.564088129772563,7.061451794963016,8.06672446458211,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,42,Unable To Work,7.535624482427035,7.040570081827633,8.030678883026436,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,43,Unable To Work,7.512651970453536,7.028203507552956,7.997100433354117,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,44,Unable To Work,7.495428235748218,7.0246737436186395,7.966182727877796,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,45,Unable To Work,7.484104145807468,7.029639949205024,7.938568342409911,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,46,Unable To Work,7.478064958515544,7.040841465278118,7.915288451752971,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,47,Unable To Work,7.476361775360213,7.055090270059729,7.897633280660697,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,48,Unable To Work,7.478044305007013,7.069107938608945,7.886980671405081,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,49,Unable To Work,7.48216225612147,7.0798473841185645,7.884477128124375,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,50,Unable To Work,7.487765337369115,7.084908466001734,7.890622208736497,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,51,Unable To Work,7.493903257415485,7.082898792175491,7.904907722655479,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,52,Unable To Work,7.499625724926109,7.073542688913565,7.925708760938654,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,53,Unable To Work,7.50398244856652,7.057475866930239,7.950489030202802,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,54,Unable To Work,7.506023137002248,7.035865101219816,7.976181172784681,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,55,Unable To Work,7.504797498898826,7.010045713848253,7.999549283949399,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,56,Unable To Work,7.499369257977741,6.981281353346484,8.017457162608999,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,57,Unable To Work,7.4892793579233645,6.950648379058142,8.027910336788587,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,58,Unable To Work,7.474652163107399,6.918897839337783,8.030406486877016,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,59,Unable To Work,7.455647562281578,6.886450735070882,8.024844389492273,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,60,Unable To Work,7.432425444197622,6.853487413974792,8.011363474420452,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,61,Unable To Work,7.405145697607268,6.820008848568484,7.990282546646052,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,62,Unable To Work,7.373968211262244,6.785867689485078,7.96206873303941,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,63,Unable To Work,7.339052873914276,6.7507888355815355,7.927316912247016,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,64,Unable To Work,7.300559574315092,6.714375596192261,7.886743552437923,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,65,Unable To Work,7.258648201216426,6.676113077411424,7.841183325021428,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,66,Unable To Work,7.213478643370002,6.635368184463846,7.791589102276158,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,67,Unable To Work,7.165210789527549,6.591395186227467,7.739026392827632,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,68,Unable To Work,7.1140045284408,6.5433490848187885,7.6846599720628115,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,69,Unable To Work,7.06001974886148,6.490315502479692,7.629723995243268,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,70,Unable To Work,7.003416339541317,6.4313617274738295,7.575470951608805,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,71,Unable To Work,6.944354189232045,6.365607315999559,7.523101062464531,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,72,Unable To Work,6.88299318668539,6.292307322993886,7.473679050376893,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,73,Unable To Work,6.819493220653078,6.210931497653872,7.428054943652283,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,74,Unable To Work,6.754014179886845,6.121217821733205,7.386810538040485,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,75,Unable To Work,6.686715953138413,6.023187039135882,7.350244867140944,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,76,Unable To Work,6.617758429159511,5.917117907843089,7.318398950475933,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,77,Unable To Work,6.5473014967018734,5.803492906842549,7.291110086561198,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,78,Unable To Work,6.475505044517225,5.682933822933859,7.26807626610059,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,79,Unable To Work,6.402528961357296,5.556141695885193,7.248916226829399,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,80,Unable To Work,6.328533135973813,5.423849477953641,7.233216793993985,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,81,Unable To Work,6.253677457118511,5.286789786445823,7.220565127791199,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,82,Unable To Work,6.17812181354311,5.145675017766798,7.210568609319423,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,83,Unable To Work,6.102026093999346,5.001188283587539,7.202863904411152,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,84,Unable To Work,6.025550187238945,4.853979696777701,7.197120677700189,pooled
+duration,Duration,primary,age_x_employment,Unable To Work,NA,NA,NA,NA,85,Unable To Work,5.948853982013636,4.704666004495863,7.19304195953141,pooled

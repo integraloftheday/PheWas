@@ -1,0 +1,391 @@
+outcome,outcome_type,batch,model_method,model_file,outcome_variant,analysis,employment_status,is_weekend_factor,sex_concept,month,age_at_sleep,PhotoPeriod,duration_hours,estimate,conf.low,conf.high,SE,df
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekday,NA,NA,NA,NA,NA,7.22943658180612,NA,NA,0.0796724252255103,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekday,NA,NA,NA,NA,NA,7.02522392430824,NA,NA,0.252498478625186,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekday,NA,NA,NA,NA,NA,7.14345773143081,NA,NA,0.343984079372083,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekday,NA,NA,NA,NA,NA,7.12221454661907,NA,NA,0.302196113079079,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,7.37232079466052,NA,NA,0.153607251731768,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekday,NA,NA,NA,NA,NA,7.2907917788897,NA,NA,0.179444590981705,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,7.27030205651465,NA,NA,0.196028571779082,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekday,NA,NA,NA,NA,NA,7.44752941706986,NA,NA,0.209262899187206,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekend,NA,NA,NA,NA,NA,7.54219982762338,NA,NA,0.0800645276647043,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekend,NA,NA,NA,NA,NA,7.3416889466377,NA,NA,0.253181613399273,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekend,NA,NA,NA,NA,NA,7.42000377657726,NA,NA,0.344851059621921,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekend,NA,NA,NA,NA,NA,7.48473026514092,NA,NA,0.303412013755801,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,7.70557270205167,NA,NA,0.154094555112725,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekend,NA,NA,NA,NA,NA,7.58773665036551,NA,NA,0.180155832710909,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,7.59130066554792,NA,NA,0.19675631840155,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekend,NA,NA,NA,NA,NA,7.77269681808357,NA,NA,0.210088817732973,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Employed For Wages,NA,NA,NA,NA,NA,NA,7.31882628454671,NA,NA,0.079596302298261,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Homemaker,NA,NA,NA,NA,NA,NA,7.11567158466951,NA,NA,0.252395714146672,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work Less Than One,NA,NA,NA,NA,NA,NA,7.22249665709906,NA,NA,0.343832683880882,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work One Or More,NA,NA,NA,NA,NA,NA,7.22582337022557,NA,NA,0.301936508231436,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Retired,NA,NA,NA,NA,NA,NA,7.46756610094126,NA,NA,0.153519335077987,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Self Employed,NA,NA,NA,NA,NA,NA,7.37566063343047,NA,NA,0.179306032426374,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Student,NA,NA,NA,NA,NA,NA,7.36204540357838,NA,NA,0.19588414164011,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Unable To Work,NA,NA,NA,NA,NA,NA,7.54046419350006,NA,NA,0.209106049558233,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekday,NA,NA,NA,NA,NA,7.25775688164183,NA,NA,0.057072246939402,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekend,NA,NA,NA,NA,NA,7.5745209781619796,NA,NA,0.0574059659202606,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Female,NA,NA,NA,NA,7.37172636381146,NA,NA,0.0668008733545014,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Male,NA,NA,NA,NA,7.31193878296686,NA,NA,0.0811584370809702,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Other,NA,NA,NA,NA,7.34919735436393,NA,NA,0.26389590584979,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,01,NA,NA,NA,7.32934888739188,NA,NA,0.0583462694262687,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,02,NA,NA,NA,7.34232694757719,NA,NA,0.0582333960815917,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,03,NA,NA,NA,7.36214061686061,NA,NA,0.0582296649524495,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,04,NA,NA,NA,7.36406980827935,NA,NA,0.0585942745623534,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,05,NA,NA,NA,7.3544325930898,NA,NA,0.0586844091004781,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,06,NA,NA,NA,7.34578046803912,NA,NA,0.0587076553968279,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,07,NA,NA,NA,7.34071591708451,NA,NA,0.0587341217166627,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,08,NA,NA,NA,7.35698248402116,NA,NA,0.0589690325216088,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,09,NA,NA,NA,7.34826348321953,NA,NA,0.0591316103309387,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,10,NA,NA,NA,7.35259327897924,NA,NA,0.0589680165084145,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,11,NA,NA,NA,7.35225200830249,NA,NA,0.0587853615341125,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,12,NA,NA,NA,7.332220808902,NA,NA,0.0584883690980002,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,01,NA,NA,NA,7.23880720908343,NA,NA,0.0584099201446165,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,02,NA,NA,NA,7.25178526926874,NA,NA,0.058295476242055,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,03,NA,NA,NA,7.27159893855216,NA,NA,0.0582839156511974,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,04,NA,NA,NA,7.2735281299709,NA,NA,0.0586596837086126,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,05,NA,NA,NA,7.26389091478136,NA,NA,0.0587464329256632,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,06,NA,NA,NA,7.25523878973067,NA,NA,0.0587652028975741,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,07,NA,NA,NA,7.25017423877606,NA,NA,0.0588047962273494,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,08,NA,NA,NA,7.26644080571271,NA,NA,0.0590218354405718,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,09,NA,NA,NA,7.25772180491109,NA,NA,0.0591867835845862,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,10,NA,NA,NA,7.26205160067079,NA,NA,0.0590412039399941,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,11,NA,NA,NA,7.26171032999404,NA,NA,0.0588415121157608,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,12,NA,NA,NA,7.24167913059355,NA,NA,0.058551274278667,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,01,NA,NA,NA,7.55557130560358,NA,NA,0.0587289395649111,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,02,NA,NA,NA,7.56854936578889,NA,NA,0.0586210282810265,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,03,NA,NA,NA,7.58836303507231,NA,NA,0.0586367993333001,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,04,NA,NA,NA,7.59029222649104,NA,NA,0.0589703104982947,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,05,NA,NA,NA,7.5806550113015,NA,NA,0.0590680375973717,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,06,NA,NA,NA,7.57200288625082,NA,NA,0.0591021954230761,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,07,NA,NA,NA,7.56693833529621,NA,NA,0.059095774780035,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,08,NA,NA,NA,7.58320490223286,NA,NA,0.0593729974287124,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,09,NA,NA,NA,7.57448590143123,NA,NA,0.0595282089431105,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,10,NA,NA,NA,7.57881569719094,NA,NA,0.0593213035008658,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,11,NA,NA,NA,7.57847442651418,NA,NA,0.0591826567066524,Inf
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,12,NA,NA,NA,7.5584432271137,NA,NA,0.0588715984536504,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Employed For Wages,Weekday,NA,NA,NA,NA,NA,7.3094950402793,NA,NA,0.0738425905174464,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Homemaker,Weekday,NA,NA,NA,NA,NA,6.96352242949425,NA,NA,0.23416657745816,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work Less Than One,Weekday,NA,NA,NA,NA,NA,7.07921430791407,NA,NA,0.318879967122139,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work One Or More,Weekday,NA,NA,NA,NA,NA,7.21353321071269,NA,NA,0.280159192447987,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,7.42896748120401,NA,NA,0.142392177034964,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Self Employed,Weekday,NA,NA,NA,NA,NA,7.38076239564289,NA,NA,0.166290863363096,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,7.18928367454386,NA,NA,0.181665841061383,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Unable To Work,Weekday,NA,NA,NA,NA,NA,7.31875763012116,NA,NA,0.193925588013173,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Employed For Wages,Weekend,NA,NA,NA,NA,NA,7.43483711509495,NA,NA,0.0742411724400109,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Homemaker,Weekend,NA,NA,NA,NA,NA,7.09426834170537,NA,NA,0.23488034077393,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work Less Than One,Weekend,NA,NA,NA,NA,NA,7.17342564376773,NA,NA,0.319765409844529,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work One Or More,Weekend,NA,NA,NA,NA,NA,7.37832507332804,NA,NA,0.281357995927757,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,7.57165103621427,NA,NA,0.142889448933329,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Self Employed,Weekend,NA,NA,NA,NA,NA,7.48549321001878,NA,NA,0.166993263628462,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,7.31099100118101,NA,NA,0.182457428195764,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Unable To Work,Weekend,NA,NA,NA,NA,NA,7.45164927614865,NA,NA,0.194821279608634,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Employed For Wages,NA,NA,NA,NA,NA,NA,7.34532028492648,NA,NA,0.0737532399878552,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Homemaker,NA,NA,NA,NA,NA,NA,7.00089207611562,NA,NA,0.234072001336486,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Out Of Work Less Than One,NA,NA,NA,NA,NA,NA,7.10614247235835,NA,NA,0.318736453159318,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Out Of Work One Or More,NA,NA,NA,NA,NA,NA,7.26063309700812,NA,NA,0.27989939239679,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Retired,NA,NA,NA,NA,NA,NA,7.4697488735455,NA,NA,0.142301122678194,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Self Employed,NA,NA,NA,NA,NA,NA,7.41069699832878,NA,NA,0.166146803349841,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Student,NA,NA,NA,NA,NA,NA,7.22407011808513,NA,NA,0.181537101792005,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Unable To Work,NA,NA,NA,NA,NA,NA,7.35674052160902,NA,NA,0.193787854546969,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_weekend_main,NA,Weekday,NA,NA,NA,NA,NA,7.29112064162951,NA,NA,0.0528998313579492,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_weekend_main,NA,Weekend,NA,NA,NA,NA,NA,7.41815218925911,NA,NA,0.0533094477234815,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_sex_main,NA,NA,Female,NA,NA,NA,NA,7.32845390003495,NA,NA,0.0619068854217117,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_sex_main,NA,NA,Male,NA,NA,NA,NA,7.31832913385267,NA,NA,0.0752052287455743,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_sex_main,NA,NA,Other,NA,NA,NA,NA,7.43122602063562,NA,NA,0.244499360093647,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,01,NA,NA,NA,7.31351216210531,NA,NA,0.0541535636691459,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,02,NA,NA,NA,7.32172172252363,NA,NA,0.0540486357645226,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,03,NA,NA,NA,7.34324534549575,NA,NA,0.054039474398401,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,04,NA,NA,NA,7.3432876342957,NA,NA,0.0543877536134735,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,05,NA,NA,NA,7.33228703605968,NA,NA,0.0544702965336076,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,06,NA,NA,NA,7.3185987603741,NA,NA,0.0544994098633415,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,07,NA,NA,NA,7.31610615627781,NA,NA,0.0545288931182567,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,08,NA,NA,NA,7.33118059477341,NA,NA,0.0547597663984948,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,09,NA,NA,NA,7.32893589260992,NA,NA,0.0549141701132035,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,10,NA,NA,NA,7.33147438659367,NA,NA,0.0547580888809113,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,11,NA,NA,NA,7.32853391594001,NA,NA,0.0545839719096287,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,12,NA,NA,NA,7.31964116093904,NA,NA,0.0542921973162134,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,01,NA,NA,NA,7.27719758063906,NA,NA,0.0542204590246467,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,02,NA,NA,NA,7.28540714105738,NA,NA,0.0541121910934611,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,03,NA,NA,NA,7.3069307640295,NA,NA,0.0540959586988011,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,04,NA,NA,NA,7.30697305282945,NA,NA,0.0544544498315179,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,05,NA,NA,NA,7.29597245459344,NA,NA,0.0545331556807311,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,06,NA,NA,NA,7.28228417890785,NA,NA,0.0545560119834829,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,07,NA,NA,NA,7.27979157481156,NA,NA,0.0545993561726485,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,08,NA,NA,NA,7.29486601330716,NA,NA,0.0548122353564043,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,09,NA,NA,NA,7.29262131114368,NA,NA,0.0549713777269374,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,10,NA,NA,NA,7.29515980512743,NA,NA,0.0548323550917531,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,11,NA,NA,NA,7.29221933447376,NA,NA,0.054640559145162,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,12,NA,NA,NA,7.28332657947279,NA,NA,0.054359584901182,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,01,NA,NA,NA,7.40422912826866,NA,NA,0.0546066285025015,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,02,NA,NA,NA,7.41243868868699,NA,NA,0.0545111963024211,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,03,NA,NA,NA,7.4339623116591,NA,NA,0.0545196913289381,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,04,NA,NA,NA,7.43400460045906,NA,NA,0.054838678153571,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,05,NA,NA,NA,7.42300400222304,NA,NA,0.054929814723324,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,06,NA,NA,NA,7.40931572653745,NA,NA,0.0549741210312617,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,07,NA,NA,NA,7.40682312244117,NA,NA,0.0549688681920683,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,08,NA,NA,NA,7.42189756093676,NA,NA,0.0552418299065787,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,09,NA,NA,NA,7.41965285877328,NA,NA,0.0553827592217869,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,10,NA,NA,NA,7.42219135275703,NA,NA,0.0551860695749808,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,11,NA,NA,NA,7.41925088210336,NA,NA,0.0550577651647665,Inf
+duration,Duration,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,12,NA,NA,NA,7.4103581271024,NA,NA,0.0547424837734382,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekday,NA,NA,NA,NA,NA,3.14704077453373,NA,NA,0.123615633919119,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekday,NA,NA,NA,NA,NA,3.74110252305714,NA,NA,0.387097070371938,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekday,NA,NA,NA,NA,NA,3.73021021802649,NA,NA,0.53038497985832,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekday,NA,NA,NA,NA,NA,3.05604666702655,NA,NA,0.465926668854947,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,3.22616582867975,NA,NA,0.237083313185764,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekday,NA,NA,NA,NA,NA,3.08462420569425,NA,NA,0.27831992948553,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,3.76312114940898,NA,NA,0.303835142892072,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekday,NA,NA,NA,NA,NA,3.94309084625583,NA,NA,0.324599891119079,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekend,NA,NA,NA,NA,NA,3.86502042220824,NA,NA,0.123940885982255,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekend,NA,NA,NA,NA,NA,4.45256756551245,NA,NA,0.387711591217394,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekend,NA,NA,NA,NA,NA,4.42867173843495,NA,NA,0.531105986301564,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekend,NA,NA,NA,NA,NA,3.81358186755591,NA,NA,0.466924700082298,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,3.95621301496072,NA,NA,0.23749901303549,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekend,NA,NA,NA,NA,NA,3.82095798286728,NA,NA,0.278909564128555,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,4.52654596204415,NA,NA,0.304434624413156,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekend,NA,NA,NA,NA,NA,4.67967093098802,NA,NA,0.325288896248486,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Employed For Wages,NA,NA,NA,NA,NA,NA,3.35223738725468,NA,NA,0.123551934700795,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Homemaker,NA,NA,NA,NA,NA,NA,3.94443727939247,NA,NA,0.387021709487606,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work Less Than One,NA,NA,NA,NA,NA,NA,3.92982860326274,NA,NA,0.530256754182441,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work One Or More,NA,NA,NA,NA,NA,NA,3.27254814875975,NA,NA,0.465703379529252,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Retired,NA,NA,NA,NA,NA,NA,3.43481131098791,NA,NA,0.237012045767911,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Self Employed,NA,NA,NA,NA,NA,NA,3.29506637851585,NA,NA,0.278203822459554,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Student,NA,NA,NA,NA,NA,NA,3.98130586620233,NA,NA,0.303712840911265,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Unable To Work,NA,NA,NA,NA,NA,NA,4.15360341310538,NA,NA,0.324469695590925,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekday,NA,NA,NA,NA,NA,3.324899634889,NA,NA,0.0882891111562331,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekend,NA,NA,NA,NA,NA,4.05173473328706,NA,NA,0.0885685822645917,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Female,NA,NA,NA,NA,3.62135527689038,NA,NA,0.103557271460528,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Male,NA,NA,NA,NA,3.42243409358873,NA,NA,0.12584408612016,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Other,NA,NA,NA,NA,3.1569905467339,NA,NA,0.410190679681047,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,01,NA,NA,NA,3.51275447775149,NA,NA,0.0893009234642674,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,02,NA,NA,NA,3.53084175676376,NA,NA,0.0891398224968047,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,03,NA,NA,NA,3.52448439141676,NA,NA,0.0892004811295927,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,04,NA,NA,NA,3.53207666856981,NA,NA,0.0896332184985515,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,05,NA,NA,NA,3.53807172567174,NA,NA,0.0897858711753332,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,06,NA,NA,NA,3.55780366232473,NA,NA,0.0897367547046899,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,07,NA,NA,NA,3.54765440426066,NA,NA,0.0897099258348424,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,08,NA,NA,NA,3.55203287925435,NA,NA,0.0899091107302956,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,09,NA,NA,NA,3.52715526001724,NA,NA,0.0901011795490012,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,10,NA,NA,NA,3.53412529107818,NA,NA,0.0899094794991788,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,11,NA,NA,NA,3.54338061792785,NA,NA,0.0896950335991471,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,12,NA,NA,NA,3.50035062661714,NA,NA,0.0894295034252813,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,01,NA,NA,NA,3.3050191333157,NA,NA,0.0893544378780926,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,02,NA,NA,NA,3.32310641232796,NA,NA,0.0891919995422979,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,03,NA,NA,NA,3.31674904698097,NA,NA,0.0892460141100147,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,04,NA,NA,NA,3.32434132413402,NA,NA,0.0896882404355556,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,05,NA,NA,NA,3.33033638123595,NA,NA,0.0898380337812426,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,06,NA,NA,NA,3.35006831788894,NA,NA,0.0897851889375927,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,07,NA,NA,NA,3.33991905982487,NA,NA,0.0897694961182186,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,08,NA,NA,NA,3.34429753481855,NA,NA,0.0899536394780414,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,09,NA,NA,NA,3.31941991558145,NA,NA,0.0901477524437713,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,10,NA,NA,NA,3.32638994664239,NA,NA,0.0899712920728738,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,11,NA,NA,NA,3.33564527349206,NA,NA,0.0897423787211083,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,12,NA,NA,NA,3.29261528218134,NA,NA,0.0894824487956932,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,01,NA,NA,NA,4.03185423171376,NA,NA,0.089624586193539,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,02,NA,NA,NA,4.04994151072602,NA,NA,0.0894676539767856,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,03,NA,NA,NA,4.04358414537903,NA,NA,0.0895445652857546,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,04,NA,NA,NA,4.05117642253208,NA,NA,0.0899514482459914,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,05,NA,NA,NA,4.05717147963401,NA,NA,0.0901104541697362,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,06,NA,NA,NA,4.076903416287,NA,NA,0.0900708735834182,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,07,NA,NA,NA,4.06675415822293,NA,NA,0.0900164203034089,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,08,NA,NA,NA,4.07113263321661,NA,NA,0.0902520945606021,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,09,NA,NA,NA,4.04625501397951,NA,NA,0.0904380952481444,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,10,NA,NA,NA,4.05322504504045,NA,NA,0.0902093829411359,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,11,NA,NA,NA,4.06248037189012,NA,NA,0.0900320686453363,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,12,NA,NA,NA,4.0194503805794,NA,NA,0.0897539403323564,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Employed For Wages,Weekday,NA,NA,NA,NA,NA,3.16365674575112,NA,NA,0.116199275059682,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Homemaker,Weekday,NA,NA,NA,NA,NA,3.81992171388593,NA,NA,0.364157751037648,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work Less Than One,Weekday,NA,NA,NA,NA,NA,3.75627617167008,NA,NA,0.498768678319907,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work One Or More,Weekday,NA,NA,NA,NA,NA,3.09815934685033,NA,NA,0.438142496531205,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,3.18943900316877,NA,NA,0.222935867054762,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Self Employed,Weekday,NA,NA,NA,NA,NA,3.08012343882093,NA,NA,0.261626885241587,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,3.78186403317939,NA,NA,0.285624039353271,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Unable To Work,Weekday,NA,NA,NA,NA,NA,3.88996887868394,NA,NA,0.305132160746645,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Employed For Wages,Weekend,NA,NA,NA,NA,NA,3.77569539660476,NA,NA,0.116527001277954,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Homemaker,Weekend,NA,NA,NA,NA,NA,4.42420071177767,NA,NA,0.36474777408495,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work Less Than One,Weekend,NA,NA,NA,NA,NA,4.36107032459113,NA,NA,0.499469326518987,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Out Of Work One Or More,Weekend,NA,NA,NA,NA,NA,3.7329374522208,NA,NA,0.43911358441911,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,3.80660051663237,NA,NA,0.223356051883462,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Self Employed,Weekend,NA,NA,NA,NA,NA,3.71587928916584,NA,NA,0.262206987242606,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,4.43655946809711,NA,NA,0.286211052781005,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_x_weekend,Unable To Work,Weekend,NA,NA,NA,NA,NA,4.51641062293568,NA,NA,0.305814987727738,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Employed For Wages,NA,NA,NA,NA,NA,NA,3.33857475775273,NA,NA,0.116137295010933,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Homemaker,NA,NA,NA,NA,NA,NA,3.99262203825626,NA,NA,0.364081893920612,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Out Of Work Less Than One,NA,NA,NA,NA,NA,NA,3.92912372594132,NA,NA,0.498644115532847,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Out Of Work One Or More,NA,NA,NA,NA,NA,NA,3.27957623287011,NA,NA,0.437925629624697,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Retired,NA,NA,NA,NA,NA,NA,3.36582111531798,NA,NA,0.22286946633954,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Self Employed,NA,NA,NA,NA,NA,NA,3.26181976168499,NA,NA,0.261515118854993,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Student,NA,NA,NA,NA,NA,NA,3.96897323760594,NA,NA,0.285505414640035,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_employment_main,Unable To Work,NA,NA,NA,NA,NA,NA,4.06900325545573,NA,NA,0.305008503772034,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_weekend_main,NA,Weekday,NA,NA,NA,NA,NA,3.33108445505423,NA,NA,0.0830074855019845,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_weekend_main,NA,Weekend,NA,NA,NA,NA,NA,3.95062530682372,NA,NA,0.0833010759099394,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_sex_main,NA,NA,Female,NA,NA,NA,NA,3.58859628763303,NA,NA,0.0973521260656415,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_sex_main,NA,NA,Male,NA,NA,NA,NA,3.410754232612,NA,NA,0.118299309904854,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_sex_main,NA,NA,Other,NA,NA,NA,NA,3.13274153959044,NA,NA,0.385538182647659,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,01,NA,NA,NA,3.49463006536122,NA,NA,0.0839928542757204,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,02,NA,NA,NA,3.50847065372127,NA,NA,0.0838411987174998,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,03,NA,NA,NA,3.49555023254975,NA,NA,0.083896785823372,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,04,NA,NA,NA,3.50257230878906,NA,NA,0.084308493898723,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,05,NA,NA,NA,3.51181594514845,NA,NA,0.0844512416075485,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,06,NA,NA,NA,3.53431575321461,NA,NA,0.0844077173217491,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,07,NA,NA,NA,3.52576061679011,NA,NA,0.0843846675543892,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,08,NA,NA,NA,3.52454919519139,NA,NA,0.0845783022203056,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,09,NA,NA,NA,3.50242382111824,NA,NA,0.0847606437609654,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,10,NA,NA,NA,3.50779161020285,NA,NA,0.0845783347292009,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,11,NA,NA,NA,3.51718411782021,NA,NA,0.0843742250266068,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_main,NA,NA,NA,12,NA,NA,NA,3.48103445272364,NA,NA,0.0841170102158028,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,01,NA,NA,NA,3.31756297385342,NA,NA,0.0840444514662226,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,02,NA,NA,NA,3.33140356221347,NA,NA,0.0838909147793448,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,03,NA,NA,NA,3.31848314104195,NA,NA,0.0839391640936473,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,04,NA,NA,NA,3.32550521728126,NA,NA,0.084360001445108,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,05,NA,NA,NA,3.33474885364064,NA,NA,0.0845004266207296,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,06,NA,NA,NA,3.35724866170681,NA,NA,0.0844536646911118,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,07,NA,NA,NA,3.34869352528231,NA,NA,0.0844416245005768,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,08,NA,NA,NA,3.34748210368359,NA,NA,0.0846199178347139,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,09,NA,NA,NA,3.32535672961044,NA,NA,0.084804617931225,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,10,NA,NA,NA,3.33072451869505,NA,NA,0.0846368628385837,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,11,NA,NA,NA,3.34011702631241,NA,NA,0.0844187423469557,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekday,NA,12,NA,NA,NA,3.30396736121584,NA,NA,0.0841678930139478,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,01,NA,NA,NA,3.93710382562291,NA,NA,0.0843255942608788,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,02,NA,NA,NA,3.95094441398296,NA,NA,0.0841794680734894,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,03,NA,NA,NA,3.93802399281143,NA,NA,0.0842530335962068,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,04,NA,NA,NA,3.94504606905075,NA,NA,0.0846397471462883,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,05,NA,NA,NA,3.95428970541013,NA,NA,0.0847875062811801,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,06,NA,NA,NA,3.9767895134763,NA,NA,0.084752280374708,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,07,NA,NA,NA,3.9682343770518,NA,NA,0.0847019205639898,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,08,NA,NA,NA,3.96702295545308,NA,NA,0.084932734203580093,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,09,NA,NA,NA,3.94489758137993,NA,NA,0.085108209737958,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,10,NA,NA,NA,3.95026537046454,NA,NA,0.0848906290854092,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,11,NA,NA,NA,3.9596578780819,NA,NA,0.0847225230092714,Inf
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,adjusted,emm_month_x_weekend,NA,Weekend,NA,12,NA,NA,NA,3.92350821298533,NA,NA,0.0844508620116718,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekday,NA,NA,NA,NA,NA,6.76753234802154,NA,NA,0.143372720157526,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekday,NA,NA,NA,NA,NA,7.17282580533855,NA,NA,0.449775073794301,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekday,NA,NA,NA,NA,NA,7.40295915355825,NA,NA,0.615743433184543,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekday,NA,NA,NA,NA,NA,6.70267605983552,NA,NA,0.540883652732661,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,6.92764605683388,NA,NA,0.275193600016552,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekday,NA,NA,NA,NA,NA,6.72496792326685,NA,NA,0.322819815710343,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,7.43416353195664,NA,NA,0.352449232015359,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekday,NA,NA,NA,NA,NA,7.67064458607451,NA,NA,0.376497433714359,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekend,NA,NA,NA,NA,NA,7.63872839486935,NA,NA,0.143779259468146,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekend,NA,NA,NA,NA,NA,8.03786771381069,NA,NA,0.45053414456821,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekend,NA,NA,NA,NA,NA,8.23258051216379,NA,NA,0.61664422391968,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekend,NA,NA,NA,NA,NA,7.6427275227506,NA,NA,0.542132853114802,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,7.82342472334015,NA,NA,0.275710995169256,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekend,NA,NA,NA,NA,NA,7.61909019079655,NA,NA,0.323556867002379,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,8.35936695801764,NA,NA,0.353199333378093,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekend,NA,NA,NA,NA,NA,8.57099156878401,NA,NA,0.377357872246548,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Employed For Wages,NA,NA,NA,NA,NA,NA,7.01652079063345,NA,NA,0.143293214646821,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Homemaker,NA,NA,NA,NA,NA,NA,7.42005541200458,NA,NA,0.449679035341273,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work Less Than One,NA,NA,NA,NA,NA,NA,7.64006566377679,NA,NA,0.615583675230987,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work One Or More,NA,NA,NA,NA,NA,NA,6.97134319237197,NA,NA,0.540605992680405,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Retired,NA,NA,NA,NA,NA,NA,7.18366014502927,NA,NA,0.27510421453849,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Self Employed,NA,NA,NA,NA,NA,NA,6.980508617157,NA,NA,0.32267492767253,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Student,NA,NA,NA,NA,NA,NA,7.69858713609796,NA,NA,0.352296855239936,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Unable To Work,NA,NA,NA,NA,NA,NA,7.92796428656847,NA,NA,0.376334733492905,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekday,NA,NA,NA,NA,NA,6.96255127256077,NA,NA,0.102444614670933,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekend,NA,NA,NA,NA,NA,7.84668658308732,NA,NA,0.102793439003609,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Female,NA,NA,NA,NA,7.31187643144076,NA,NA,0.120126268305047,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Male,NA,NA,NA,NA,7.09282657366142,NA,NA,0.145973152792557,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Other,NA,NA,NA,NA,6.83929675900879,NA,NA,0.475630746577044,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,01,NA,NA,NA,7.19222639644103,NA,NA,0.103718431570743,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,02,NA,NA,NA,7.21681879624154,NA,NA,0.103529835580075,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,03,NA,NA,NA,7.21248288498099,NA,NA,0.103593702979367,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,04,NA,NA,NA,7.21825904635068,NA,NA,0.104110049623744,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,05,NA,NA,NA,7.21481692863604,NA,NA,0.104286043225024,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,06,NA,NA,NA,7.23839509989304,NA,NA,0.104237852976832,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,07,NA,NA,NA,7.23376205971441,NA,NA,0.104213669173851,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,08,NA,NA,NA,7.23305652608742,NA,NA,0.104461971276535,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,09,NA,NA,NA,7.20309912920062,NA,NA,0.104691019122121,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,10,NA,NA,NA,7.22477378296289,NA,NA,0.104461898113532,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,11,NA,NA,NA,7.23414016130944,NA,NA,0.104205698685027,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,12,NA,NA,NA,7.17115446698649,NA,NA,0.103877082733677,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,01,NA,NA,NA,6.93952640152498,NA,NA,0.103785222753508,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,02,NA,NA,NA,6.9641188013255,NA,NA,0.103594960171262,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,03,NA,NA,NA,6.95978289006494,NA,NA,0.103650543691686,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,04,NA,NA,NA,6.96555905143464,NA,NA,0.104178718766025,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,05,NA,NA,NA,6.96211693372,NA,NA,0.10435114531041,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,06,NA,NA,NA,6.985695104977,NA,NA,0.104298298314617,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,07,NA,NA,NA,6.98106206479837,NA,NA,0.104287999623549,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,08,NA,NA,NA,6.98035653117137,NA,NA,0.104517534190369,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,09,NA,NA,NA,6.95039913428458,NA,NA,0.104749126613434,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,10,NA,NA,NA,6.97207378804684,NA,NA,0.104539011730609,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,11,NA,NA,NA,6.9814401663934,NA,NA,0.104264775299479,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,12,NA,NA,NA,6.91845447207045,NA,NA,0.103943157030943,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,01,NA,NA,NA,7.82366171205154,NA,NA,0.104122071661447,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,02,NA,NA,NA,7.84825411185205,NA,NA,0.103938678641094,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,03,NA,NA,NA,7.8439182005915,NA,NA,0.104022841204728,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,04,NA,NA,NA,7.84969436196119,NA,NA,0.104506889580729,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,05,NA,NA,NA,7.84625224424655,NA,NA,0.104690814521451,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,06,NA,NA,NA,7.86983041550355,NA,NA,0.10465448343342,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,07,NA,NA,NA,7.86519737532492,NA,NA,0.104595825415429,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,08,NA,NA,NA,7.86449184169792,NA,NA,0.104889554984313,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,09,NA,NA,NA,7.83453444481113,NA,NA,0.105111017244948,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,10,NA,NA,NA,7.85620909857339,NA,NA,0.104835780482157,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,11,NA,NA,NA,7.86557547691995,NA,NA,0.104625902695482,Inf
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,12,NA,NA,NA,7.802589782597,NA,NA,0.104281655074155,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekday,NA,NA,NA,NA,NA,-0.471016872930314,NA,NA,0.114429573864686,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekday,NA,NA,NA,NA,NA,0.1576354969497,NA,NA,0.357883756725057,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekday,NA,NA,NA,NA,NA,0.185260262313176,NA,NA,0.490643572785708,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekday,NA,NA,NA,NA,NA,-0.519414004893638,NA,NA,0.431034917437454,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,-0.464694900426803,NA,NA,0.219344178310143,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekday,NA,NA,NA,NA,NA,-0.565628727655981,NA,NA,0.25762815609196,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,0.160637632573912,NA,NA,0.281227327343164,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekday,NA,NA,NA,NA,NA,0.206770650144785,NA,NA,0.300468186476565,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Employed For Wages,Weekend,NA,NA,NA,NA,NA,0.0922855611574226,NA,NA,0.114716164290303,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Homemaker,Weekend,NA,NA,NA,NA,NA,0.719802406001089,NA,NA,0.358429661282237,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work Less Than One,Weekend,NA,NA,NA,NA,NA,0.745106033353187,NA,NA,0.491279083564861,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Out Of Work One Or More,Weekend,NA,NA,NA,NA,NA,0.0829770685093978,NA,NA,0.431913497544734,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,0.100503844923899,NA,NA,0.219711546945343,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Self Employed,Weekend,NA,NA,NA,NA,NA,0.033151830920828,NA,NA,0.25814767687883,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,0.769368208284576,NA,NA,0.281755157927452,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Unable To Work,Weekend,NA,NA,NA,NA,NA,0.801165294858246,NA,NA,0.301075669103727,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Employed For Wages,NA,NA,NA,NA,NA,NA,-0.31002738465755,NA,NA,0.114373389829293,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Homemaker,NA,NA,NA,NA,NA,NA,0.318300455267259,NA,NA,0.357818256086191,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work Less Than One,NA,NA,NA,NA,NA,NA,0.345261845724201,NA,NA,0.490530335327333,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Out Of Work One Or More,NA,NA,NA,NA,NA,NA,-0.347253090223475,NA,NA,0.430837476497579,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Retired,NA,NA,NA,NA,NA,NA,-0.30316345157235,NA,NA,0.219281532345336,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Self Employed,NA,NA,NA,NA,NA,NA,-0.394499688265806,NA,NA,0.257525732738235,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Student,NA,NA,NA,NA,NA,NA,0.334610359695633,NA,NA,0.28111931985827,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_main,Unable To Work,NA,NA,NA,NA,NA,NA,0.376646207327137,NA,NA,0.300353448674056,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekday,NA,NA,NA,NA,NA,-0.309207901752643,NA,NA,0.0817036169331984,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_weekend_main,NA,Weekend,NA,NA,NA,NA,NA,0.264582146671017,NA,NA,0.0819501092350599,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Female,NA,NA,NA,NA,-0.0690447219627856,NA,NA,0.0958517645282642,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Male,NA,NA,NA,NA,-0.235582297764364,NA,NA,0.116483487888209,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_sex_main,NA,NA,Other,NA,NA,NA,NA,-0.526328271442167,NA,NA,0.37977460065255503,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,01,NA,NA,NA,-0.157552537505932,NA,NA,0.0825906298382815,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,02,NA,NA,NA,-0.147294824174554,NA,NA,0.0824424034413788,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,03,NA,NA,NA,-0.1547319804659,NA,NA,0.0825017013141631,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,04,NA,NA,NA,-0.158373961308046,NA,NA,0.0828950475102025,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,05,NA,NA,NA,-0.142191371690192,NA,NA,0.0830368424422415,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,06,NA,NA,NA,-0.116450625651559,NA,NA,0.0829870545384914,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,07,NA,NA,NA,-0.127341532679769,NA,NA,0.0829588107917236,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,08,NA,NA,NA,-0.120745574656499,NA,NA,0.0831346326175821,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,09,NA,NA,NA,-0.153243461761797,NA,NA,0.083309316083195,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,10,NA,NA,NA,-0.147611060751026,NA,NA,0.0831352612744646,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,11,NA,NA,NA,-0.145897726030518,NA,NA,0.0829404909823116,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_main,NA,NA,NA,12,NA,NA,NA,-0.164400951906324,NA,NA,0.0827049507724804,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,01,NA,NA,NA,-0.32154327189662,NA,NA,0.0826378282101432,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,02,NA,NA,NA,-0.311285558565243,NA,NA,0.0824884210742649,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,03,NA,NA,NA,-0.318722714856589,NA,NA,0.0825418550887806,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,04,NA,NA,NA,-0.322364695698734,NA,NA,0.082943577083152,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,05,NA,NA,NA,-0.306182106080881,NA,NA,0.0830828494054832,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,06,NA,NA,NA,-0.280441360042248,NA,NA,0.0830297745751142,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,07,NA,NA,NA,-0.291332267070458,NA,NA,0.0830113588932656,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,08,NA,NA,NA,-0.284736309047188,NA,NA,0.0831739114310831,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,09,NA,NA,NA,-0.317234196152486,NA,NA,0.0833504008464537,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,10,NA,NA,NA,-0.311601795141715,NA,NA,0.0831897938841075,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,11,NA,NA,NA,-0.309888460421207,NA,NA,0.082982254545973,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekday,NA,12,NA,NA,NA,-0.328391686297012,NA,NA,0.0827516502041014,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,01,NA,NA,NA,0.25224677652704,NA,NA,0.0828762467534962,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,02,NA,NA,NA,0.262504489858418,NA,NA,0.0827316971672694,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,03,NA,NA,NA,0.255067333567072,NA,NA,0.0828053257692903,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,04,NA,NA,NA,0.251425352724926,NA,NA,0.0831758814951474,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,05,NA,NA,NA,0.26760794234278,NA,NA,0.0833232791905158,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,06,NA,NA,NA,0.293348688381413,NA,NA,0.0832819205216415,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,07,NA,NA,NA,0.282457781353203,NA,NA,0.0832293102614636,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,08,NA,NA,NA,0.289053739376472,NA,NA,0.0834373665402053,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,09,NA,NA,NA,0.256555852271175,NA,NA,0.0836067030337172,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,10,NA,NA,NA,0.262188253281946,NA,NA,0.0833999681957518,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,11,NA,NA,NA,0.263901588002454,NA,NA,0.0832379577190178,Inf
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_month_x_weekend,NA,Weekend,NA,12,NA,NA,NA,0.245398362126648,NA,NA,0.0829912653460441,Inf

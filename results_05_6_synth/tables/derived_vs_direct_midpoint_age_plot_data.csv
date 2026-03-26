@@ -1,0 +1,1225 @@
+batch,age_at_sleep,is_weekend_factor,dst_observes,series,estimate,facet_key
+base,18,Weekday,NA,Derived from Onset+Offset,3.0081979324349293,All | Weekday | AllDST
+base,19,Weekday,NA,Derived from Onset+Offset,3.023811675217222,All | Weekday | AllDST
+base,20,Weekday,NA,Derived from Onset+Offset,3.039425417999517,All | Weekday | AllDST
+base,21,Weekday,NA,Derived from Onset+Offset,3.05503884855806,All | Weekday | AllDST
+base,22,Weekday,NA,Derived from Onset+Offset,3.0706298647941157,All | Weekday | AllDST
+base,23,Weekday,NA,Derived from Onset+Offset,3.0861407047197096,All | Weekday | AllDST
+base,24,Weekday,NA,Derived from Onset+Offset,3.101510307346303,All | Weekday | AllDST
+base,25,Weekday,NA,Derived from Onset+Offset,3.1166776116853545,All | Weekday | AllDST
+base,26,Weekday,NA,Derived from Onset+Offset,3.131581556748323,All | Weekday | AllDST
+base,27,Weekday,NA,Derived from Onset+Offset,3.146161081546669,All | Weekday | AllDST
+base,28,Weekday,NA,Derived from Onset+Offset,3.1603551250918533,All | Weekday | AllDST
+base,29,Weekday,NA,Derived from Onset+Offset,3.1741026263953347,All | Weekday | AllDST
+base,30,Weekday,NA,Derived from Onset+Offset,3.1873425244685727,All | Weekday | AllDST
+base,31,Weekday,NA,Derived from Onset+Offset,3.2000137583230273,All | Weekday | AllDST
+base,32,Weekday,NA,Derived from Onset+Offset,3.2120552669701588,All | Weekday | AllDST
+base,33,Weekday,NA,Derived from Onset+Offset,3.223405989421427,All | Weekday | AllDST
+base,34,Weekday,NA,Derived from Onset+Offset,3.2340048646882904,All | Weekday | AllDST
+base,35,Weekday,NA,Derived from Onset+Offset,3.2437908317822104,All | Weekday | AllDST
+base,36,Weekday,NA,Derived from Onset+Offset,3.252702829714646,All | Weekday | AllDST
+base,37,Weekday,NA,Derived from Onset+Offset,3.260679797497057,All | Weekday | AllDST
+base,38,Weekday,NA,Derived from Onset+Offset,3.267660674140904,All | Weekday | AllDST
+base,39,Weekday,NA,Derived from Onset+Offset,3.2735843986576447,All | Weekday | AllDST
+base,40,Weekday,NA,Derived from Onset+Offset,3.278389910058741,All | Weekday | AllDST
+base,41,Weekday,NA,Derived from Onset+Offset,3.2820161473556517,All | Weekday | AllDST
+base,42,Weekday,NA,Derived from Onset+Offset,3.284402049559837,All | Weekday | AllDST
+base,43,Weekday,NA,Derived from Onset+Offset,3.285486555682757,All | Weekday | AllDST
+base,44,Weekday,NA,Derived from Onset+Offset,3.2852086047358697,All | Weekday | AllDST
+base,45,Weekday,NA,Derived from Onset+Offset,3.283526252589977,All | Weekday | AllDST
+base,46,Weekday,NA,Derived from Onset+Offset,3.2805346296515028,All | Weekday | AllDST
+base,47,Weekday,NA,Derived from Onset+Offset,3.276388693596732,All | Weekday | AllDST
+base,48,Weekday,NA,Derived from Onset+Offset,3.2712436514724637,All | Weekday | AllDST
+base,49,Weekday,NA,Derived from Onset+Offset,3.265254710325497,All | Weekday | AllDST
+base,50,Weekday,NA,Derived from Onset+Offset,3.2585770772026303,All | Weekday | AllDST
+base,51,Weekday,NA,Derived from Onset+Offset,3.2513659591506627,All | Weekday | AllDST
+base,52,Weekday,NA,Derived from Onset+Offset,3.243776563216394,All | Weekday | AllDST
+base,53,Weekday,NA,Derived from Onset+Offset,3.235964096446622,All | Weekday | AllDST
+base,54,Weekday,NA,Derived from Onset+Offset,3.2280837658881456,All | Weekday | AllDST
+base,55,Weekday,NA,Derived from Onset+Offset,3.2202907785877644,All | Weekday | AllDST
+base,56,Weekday,NA,Derived from Onset+Offset,3.2127382415610266,All | Weekday | AllDST
+base,57,Weekday,NA,Derived from Onset+Offset,3.205507754664456,All | Weekday | AllDST
+base,58,Weekday,NA,Derived from Onset+Offset,3.1985934973633228,All | Weekday | AllDST
+base,59,Weekday,NA,Derived from Onset+Offset,3.191984326111102,All | Weekday | AllDST
+base,60,Weekday,NA,Derived from Onset+Offset,3.1856690973612687,All | Weekday | AllDST
+base,61,Weekday,NA,Derived from Onset+Offset,3.179636667567298,All | Weekday | AllDST
+base,62,Weekday,NA,Derived from Onset+Offset,3.1738758931826623,All | Weekday | AllDST
+base,63,Weekday,NA,Derived from Onset+Offset,3.1683756306608397,All | Weekday | AllDST
+base,64,Weekday,NA,Derived from Onset+Offset,3.1631247364553032,All | Weekday | AllDST
+base,65,Weekday,NA,Derived from Onset+Offset,3.1581120670195277,All | Weekday | AllDST
+base,66,Weekday,NA,Derived from Onset+Offset,3.153326478806989,All | Weekday | AllDST
+base,67,Weekday,NA,Derived from Onset+Offset,3.148756828271161,All | Weekday | AllDST
+base,68,Weekday,NA,Derived from Onset+Offset,3.144391971865518,All | Weekday | AllDST
+base,69,Weekday,NA,Derived from Onset+Offset,3.140220766043536,All | Weekday | AllDST
+base,70,Weekday,NA,Derived from Onset+Offset,3.136232067258689,All | Weekday | AllDST
+base,71,Weekday,NA,Derived from Onset+Offset,3.132414731964453,All | Weekday | AllDST
+base,72,Weekday,NA,Derived from Onset+Offset,3.128757616614301,All | Weekday | AllDST
+base,73,Weekday,NA,Derived from Onset+Offset,3.125249577661709,All | Weekday | AllDST
+base,74,Weekday,NA,Derived from Onset+Offset,3.121879471560152,All | Weekday | AllDST
+base,75,Weekday,NA,Derived from Onset+Offset,3.1186361547631036,All | Weekday | AllDST
+base,76,Weekday,NA,Derived from Onset+Offset,3.1155084837240397,All | Weekday | AllDST
+base,77,Weekday,NA,Derived from Onset+Offset,3.112485314896435,All | Weekday | AllDST
+base,78,Weekday,NA,Derived from Onset+Offset,3.109555504733765,All | Weekday | AllDST
+base,79,Weekday,NA,Derived from Onset+Offset,3.1067079096895025,All | Weekday | AllDST
+base,80,Weekday,NA,Derived from Onset+Offset,3.103931386217124,All | Weekday | AllDST
+base,81,Weekday,NA,Derived from Onset+Offset,3.101214790770103,All | Weekday | AllDST
+base,82,Weekday,NA,Derived from Onset+Offset,3.098546979801915,All | Weekday | AllDST
+base,83,Weekday,NA,Derived from Onset+Offset,3.095916809766036,All | Weekday | AllDST
+base,84,Weekday,NA,Derived from Onset+Offset,3.093313137115939,All | Weekday | AllDST
+base,85,Weekday,NA,Derived from Onset+Offset,3.090724818305099,All | Weekday | AllDST
+base,18,Weekday,NA,Direct Midpoint Model,2.9922537096194115,All | Weekday | AllDST
+base,19,Weekday,NA,Direct Midpoint Model,3.00844643731766,All | Weekday | AllDST
+base,20,Weekday,NA,Direct Midpoint Model,3.024639165015909,All | Weekday | AllDST
+base,21,Weekday,NA,Direct Midpoint Model,3.040831575097603,All | Weekday | AllDST
+base,22,Weekday,NA,Direct Midpoint Model,3.0570011837112707,All | Weekday | AllDST
+base,23,Weekday,NA,Direct Midpoint Model,3.073089231190063,All | Weekday | AllDST
+base,24,Weekday,NA,Direct Midpoint Model,3.08903360188544,All | Weekday | AllDST
+base,25,Weekday,NA,Direct Midpoint Model,3.10477218014886,All | Weekday | AllDST
+base,26,Weekday,NA,Direct Midpoint Model,3.120242850331782,All | Weekday | AllDST
+base,27,Weekday,NA,Direct Midpoint Model,3.135383496785666,All | Weekday | AllDST
+base,28,Weekday,NA,Direct Midpoint Model,3.150132003861971,All | Weekday | AllDST
+base,29,Weekday,NA,Direct Midpoint Model,3.164426255912155,All | Weekday | AllDST
+base,30,Weekday,NA,Direct Midpoint Model,3.1782041372876786,All | Weekday | AllDST
+base,31,Weekday,NA,Direct Midpoint Model,3.1914035323400003,All | Weekday | AllDST
+base,32,Weekday,NA,Direct Midpoint Model,3.203962325420579,All | Weekday | AllDST
+base,33,Weekday,NA,Direct Midpoint Model,3.2158184008808743,All | Weekday | AllDST
+base,34,Weekday,NA,Direct Midpoint Model,3.2269096430723447,All | Weekday | AllDST
+base,35,Weekday,NA,Direct Midpoint Model,3.2371739363464505,All | Weekday | AllDST
+base,36,Weekday,NA,Direct Midpoint Model,3.24654916505465,All | Weekday | AllDST
+base,37,Weekday,NA,Direct Midpoint Model,3.2549732135484017,All | Weekday | AllDST
+base,38,Weekday,NA,Direct Midpoint Model,3.2623839661791663,All | Weekday | AllDST
+base,39,Weekday,NA,Direct Midpoint Model,3.2687193072984018,All | Weekday | AllDST
+base,40,Weekday,NA,Direct Midpoint Model,3.2739171212575684,All | Weekday | AllDST
+base,41,Weekday,NA,Direct Midpoint Model,3.2779152924081236,All | Weekday | AllDST
+base,42,Weekday,NA,Direct Midpoint Model,3.280651705101528,All | Weekday | AllDST
+base,43,Weekday,NA,Direct Midpoint Model,3.2820642436892404,All | Weekday | AllDST
+base,44,Weekday,NA,Direct Midpoint Model,3.282090792522719,All | Weekday | AllDST
+base,45,Weekday,NA,Direct Midpoint Model,3.280688482401972,All | Weekday | AllDST
+base,46,Weekday,NA,Direct Midpoint Model,3.277952447862352,All | Weekday | AllDST
+base,47,Weekday,NA,Direct Midpoint Model,3.2740380562656752,All | Weekday | AllDST
+base,48,Weekday,NA,Direct Midpoint Model,3.2691009260347,All | Weekday | AllDST
+base,49,Weekday,NA,Direct Midpoint Model,3.263296675592187,All | Weekday | AllDST
+base,50,Weekday,NA,Direct Midpoint Model,3.256780923360895,All | Weekday | AllDST
+base,51,Weekday,NA,Direct Midpoint Model,3.2497092877635834,All | Weekday | AllDST
+base,52,Weekday,NA,Direct Midpoint Model,3.242237387223011,All | Weekday | AllDST
+base,53,Weekday,NA,Direct Midpoint Model,3.234520840161938,All | Weekday | AllDST
+base,54,Weekday,NA,Direct Midpoint Model,3.226715265003124,All | Weekday | AllDST
+base,55,Weekday,NA,Direct Midpoint Model,3.218976280169327,All | Weekday | AllDST
+base,56,Weekday,NA,Direct Midpoint Model,3.2114574073752555,All | Weekday | AllDST
+base,57,Weekday,NA,Direct Midpoint Model,3.204240774333228,All | Weekday | AllDST
+base,58,Weekday,NA,Direct Midpoint Model,3.197321226702869,All | Weekday | AllDST
+base,59,Weekday,NA,Direct Midpoint Model,3.190688295555415,All | Weekday | AllDST
+base,60,Weekday,NA,Direct Midpoint Model,3.184331511962108,All | Weekday | AllDST
+base,61,Weekday,NA,Direct Midpoint Model,3.1782404069941834,All | Weekday | AllDST
+base,62,Weekday,NA,Direct Midpoint Model,3.1724045117228825,All | Weekday | AllDST
+base,63,Weekday,NA,Direct Midpoint Model,3.1668133572194423,All | Weekday | AllDST
+base,64,Weekday,NA,Direct Midpoint Model,3.1614564745551013,All | Weekday | AllDST
+base,65,Weekday,NA,Direct Midpoint Model,3.1563233948010985,All | Weekday | AllDST
+base,66,Weekday,NA,Direct Midpoint Model,3.151403649028673,All | Weekday | AllDST
+base,67,Weekday,NA,Direct Midpoint Model,3.146686768309063,All | Weekday | AllDST
+base,68,Weekday,NA,Direct Midpoint Model,3.1421622837135073,All | Weekday | AllDST
+base,69,Weekday,NA,Direct Midpoint Model,3.137819726313245,All | Weekday | AllDST
+base,70,Weekday,NA,Direct Midpoint Model,3.1336486271795128,All | Weekday | AllDST
+base,71,Weekday,NA,Direct Midpoint Model,3.129638517383551,All | Weekday | AllDST
+base,72,Weekday,NA,Direct Midpoint Model,3.125778927996598,All | Weekday | AllDST
+base,73,Weekday,NA,Direct Midpoint Model,3.122059390089892,All | Weekday | AllDST
+base,74,Weekday,NA,Direct Midpoint Model,3.118469434734672,All | Weekday | AllDST
+base,75,Weekday,NA,Direct Midpoint Model,3.1149985930021766,All | Weekday | AllDST
+base,76,Weekday,NA,Direct Midpoint Model,3.111636395963645,All | Weekday | AllDST
+base,77,Weekday,NA,Direct Midpoint Model,3.108372374690314,All | Weekday | AllDST
+base,78,Weekday,NA,Direct Midpoint Model,3.105196060253423,All | Weekday | AllDST
+base,79,Weekday,NA,Direct Midpoint Model,3.1020969837242123,All | Weekday | AllDST
+base,80,Weekday,NA,Direct Midpoint Model,3.099064676173918,All | Weekday | AllDST
+base,81,Weekday,NA,Direct Midpoint Model,3.0960886686737807,All | Weekday | AllDST
+base,82,Weekday,NA,Direct Midpoint Model,3.093158492295038,All | Weekday | AllDST
+base,83,Weekday,NA,Direct Midpoint Model,3.0902636781089288,All | Weekday | AllDST
+base,84,Weekday,NA,Direct Midpoint Model,3.087393757186691,All | Weekday | AllDST
+base,85,Weekday,NA,Direct Midpoint Model,3.0845382605995644,All | Weekday | AllDST
+base,18,Weekday,NA,Midpoint Model Adjusted for Duration,2.6641249366212874,All | Weekday | AllDST
+base,19,Weekday,NA,Midpoint Model Adjusted for Duration,2.6990800365571386,All | Weekday | AllDST
+base,20,Weekday,NA,Midpoint Model Adjusted for Duration,2.7340351364929902,All | Weekday | AllDST
+base,21,Weekday,NA,Midpoint Model Adjusted for Duration,2.768989593274532,All | Weekday | AllDST
+base,22,Weekday,NA,Midpoint Model Adjusted for Duration,2.803897878462583,All | Weekday | AllDST
+base,23,Weekday,NA,Midpoint Model Adjusted for Duration,2.8386410072861543,All | Weekday | AllDST
+base,24,Weekday,NA,Midpoint Model Adjusted for Duration,2.873093199314333,All | Weekday | AllDST
+base,25,Weekday,NA,Midpoint Model Adjusted for Duration,2.9071286741162057,All | Weekday | AllDST
+base,26,Weekday,NA,Midpoint Model Adjusted for Duration,2.9406216512608605,All | Weekday | AllDST
+base,27,Weekday,NA,Midpoint Model Adjusted for Duration,2.973446350317384,All | Weekday | AllDST
+base,28,Weekday,NA,Midpoint Model Adjusted for Duration,3.005476990854864,All | Weekday | AllDST
+base,29,Weekday,NA,Midpoint Model Adjusted for Duration,3.0365877924423867,All | Weekday | AllDST
+base,30,Weekday,NA,Midpoint Model Adjusted for Duration,3.0666529746490405,All | Weekday | AllDST
+base,31,Weekday,NA,Midpoint Model Adjusted for Duration,3.0955467570439112,All | Weekday | AllDST
+base,32,Weekday,NA,Midpoint Model Adjusted for Duration,3.1231433591960873,All | Weekday | AllDST
+base,33,Weekday,NA,Midpoint Model Adjusted for Duration,3.149317000674655,All | Weekday | AllDST
+base,34,Weekday,NA,Midpoint Model Adjusted for Duration,3.1739419010487024,All | Weekday | AllDST
+base,35,Weekday,NA,Midpoint Model Adjusted for Duration,3.1968922798873156,All | Weekday | AllDST
+base,36,Weekday,NA,Midpoint Model Adjusted for Duration,3.218042356759583,All | Weekday | AllDST
+base,37,Weekday,NA,Midpoint Model Adjusted for Duration,3.2372663512345907,All | Weekday | AllDST
+base,38,Weekday,NA,Midpoint Model Adjusted for Duration,3.254438482881427,All | Weekday | AllDST
+base,39,Weekday,NA,Midpoint Model Adjusted for Duration,3.2694329712691776,All | Weekday | AllDST
+base,40,Weekday,NA,Midpoint Model Adjusted for Duration,3.2821240359669313,All | Weekday | AllDST
+base,41,Weekday,NA,Midpoint Model Adjusted for Duration,3.292385896543774,All | Weekday | AllDST
+base,42,Weekday,NA,Midpoint Model Adjusted for Duration,3.300092772568793,All | Weekday | AllDST
+base,43,Weekday,NA,Midpoint Model Adjusted for Duration,3.305118883611077,All | Weekday | AllDST
+base,44,Weekday,NA,Midpoint Model Adjusted for Duration,3.3073384492397113,All | Weekday | AllDST
+base,45,Weekday,NA,Midpoint Model Adjusted for Duration,3.3066718707561056,All | Weekday | AllDST
+base,46,Weekday,NA,Midpoint Model Adjusted for Duration,3.3033706885572496,All | Weekday | AllDST
+base,47,Weekday,NA,Midpoint Model Adjusted for Duration,3.2978309713286516,All | Weekday | AllDST
+base,48,Weekday,NA,Midpoint Model Adjusted for Duration,3.2904493901749756,All | Weekday | AllDST
+base,49,Weekday,NA,Midpoint Model Adjusted for Duration,3.281622616200888,All | Weekday | AllDST
+base,50,Weekday,NA,Midpoint Model Adjusted for Duration,3.271747320511053,All | Weekday | AllDST
+base,51,Weekday,NA,Midpoint Model Adjusted for Duration,3.261220174210136,All | Weekday | AllDST
+base,52,Weekday,NA,Midpoint Model Adjusted for Duration,3.2504378484028007,All | Weekday | AllDST
+base,53,Weekday,NA,Midpoint Model Adjusted for Duration,3.2397970141937136,All | Weekday | AllDST
+base,54,Weekday,NA,Midpoint Model Adjusted for Duration,3.229694342687538,All | Weekday | AllDST
+base,55,Weekday,NA,Midpoint Model Adjusted for Duration,3.2205265049889413,All | Weekday | AllDST
+base,56,Weekday,NA,Midpoint Model Adjusted for Duration,3.2126845035912237,All | Weekday | AllDST
+base,57,Weekday,NA,Midpoint Model Adjusted for Duration,3.20636632181518,All | Weekday | AllDST
+base,58,Weekday,NA,Midpoint Model Adjusted for Duration,3.201533969244006,All | Weekday | AllDST
+base,59,Weekday,NA,Midpoint Model Adjusted for Duration,3.1981350870627403,All | Weekday | AllDST
+base,60,Weekday,NA,Midpoint Model Adjusted for Duration,3.1961173164564216,All | Weekday | AllDST
+base,61,Weekday,NA,Midpoint Model Adjusted for Duration,3.195428298610087,All | Weekday | AllDST
+base,62,Weekday,NA,Midpoint Model Adjusted for Duration,3.196015674708776,All | Weekday | AllDST
+base,63,Weekday,NA,Midpoint Model Adjusted for Duration,3.197827085937526,All | Weekday | AllDST
+base,64,Weekday,NA,Midpoint Model Adjusted for Duration,3.2008101734813756,All | Weekday | AllDST
+base,65,Weekday,NA,Midpoint Model Adjusted for Duration,3.204912578525363,All | Weekday | AllDST
+base,66,Weekday,NA,Midpoint Model Adjusted for Duration,3.2100819422545257,All | Weekday | AllDST
+base,67,Weekday,NA,Midpoint Model Adjusted for Duration,3.2162659058539034,All | Weekday | AllDST
+base,68,Weekday,NA,Midpoint Model Adjusted for Duration,3.2234121105085327,All | Weekday | AllDST
+base,69,Weekday,NA,Midpoint Model Adjusted for Duration,3.2314681974034527,All | Weekday | AllDST
+base,70,Weekday,NA,Midpoint Model Adjusted for Duration,3.240381807723702,All | Weekday | AllDST
+base,71,Weekday,NA,Midpoint Model Adjusted for Duration,3.2501005826543174,All | Weekday | AllDST
+base,72,Weekday,NA,Midpoint Model Adjusted for Duration,3.260572163380339,All | Weekday | AllDST
+base,73,Weekday,NA,Midpoint Model Adjusted for Duration,3.2717441910868037,All | Weekday | AllDST
+base,74,Weekday,NA,Midpoint Model Adjusted for Duration,3.2835643069587497,All | Weekday | AllDST
+base,75,Weekday,NA,Midpoint Model Adjusted for Duration,3.295980152181216,All | Weekday | AllDST
+base,76,Weekday,NA,Midpoint Model Adjusted for Duration,3.3089393679392405,All | Weekday | AllDST
+base,77,Weekday,NA,Midpoint Model Adjusted for Duration,3.3223895954178615,All | Weekday | AllDST
+base,78,Weekday,NA,Midpoint Model Adjusted for Duration,3.336278475802117,All | Weekday | AllDST
+base,79,Weekday,NA,Midpoint Model Adjusted for Duration,3.3505536502770448,All | Weekday | AllDST
+base,80,Weekday,NA,Midpoint Model Adjusted for Duration,3.365162760027684,All | Weekday | AllDST
+base,81,Weekday,NA,Midpoint Model Adjusted for Duration,3.380053446239073,All | Weekday | AllDST
+base,82,Weekday,NA,Midpoint Model Adjusted for Duration,3.3951733500962487,All | Weekday | AllDST
+base,83,Weekday,NA,Midpoint Model Adjusted for Duration,3.4104701127842505,All | Weekday | AllDST
+base,84,Weekday,NA,Midpoint Model Adjusted for Duration,3.4258913754881157,All | Weekday | AllDST
+base,85,Weekday,NA,Midpoint Model Adjusted for Duration,3.441384779392884,All | Weekday | AllDST
+base,18,Weekend,NA,Derived from Onset+Offset,3.639205517382518,All | Weekend | AllDST
+base,19,Weekend,NA,Derived from Onset+Offset,3.6577197650283577,All | Weekend | AllDST
+base,20,Weekend,NA,Derived from Onset+Offset,3.6762340126741977,All | Weekend | AllDST
+base,21,Weekend,NA,Derived from Onset+Offset,3.694747938068784,All | Weekend | AllDST
+base,22,Weekend,NA,Derived from Onset+Offset,3.7132387292736713,All | Weekend | AllDST
+base,23,Weekend,NA,Derived from Onset+Offset,3.7316467691941178,All | Weekend | AllDST
+base,24,Weekend,NA,Derived from Onset+Offset,3.749909035782817,All | Weekend | AllDST
+base,25,Weekend,NA,Derived from Onset+Offset,3.76796250699246,All | Weekend | AllDST
+base,26,Weekend,NA,Derived from Onset+Offset,3.785744160775739,All | Weekend | AllDST
+base,27,Weekend,NA,Derived from Onset+Offset,3.803190975085345,All | Weekend | AllDST
+base,28,Weekend,NA,Derived from Onset+Offset,3.820239927873972,All | Weekend | AllDST
+base,29,Weekend,NA,Derived from Onset+Offset,3.83682799709431,All | Weekend | AllDST
+base,30,Weekend,NA,Derived from Onset+Offset,3.8528921606990503,All | Weekend | AllDST
+base,31,Weekend,NA,Derived from Onset+Offset,3.868369396640889,All | Weekend | AllDST
+base,32,Weekend,NA,Derived from Onset+Offset,3.883196682872514,All | Weekend | AllDST
+base,33,Weekend,NA,Derived from Onset+Offset,3.89731099734662,All | Weekend | AllDST
+base,34,Weekend,NA,Derived from Onset+Offset,3.910649318015896,All | Weekend | AllDST
+base,35,Weekend,NA,Derived from Onset+Offset,3.923148622833037,All | Weekend | AllDST
+base,36,Weekend,NA,Derived from Onset+Offset,3.934745889750733,All | Weekend | AllDST
+base,37,Weekend,NA,Derived from Onset+Offset,3.945378096721676,All | Weekend | AllDST
+base,38,Weekend,NA,Derived from Onset+Offset,3.95498222169856,All | Weekend | AllDST
+base,39,Weekend,NA,Derived from Onset+Offset,3.963495242634074,All | Weekend | AllDST
+base,40,Weekend,NA,Derived from Onset+Offset,3.970854137480913,All | Weekend | AllDST
+base,41,Weekend,NA,Derived from Onset+Offset,3.9769958841917674,All | Weekend | AllDST
+base,42,Weekend,NA,Derived from Onset+Offset,3.9818574607193287,All | Weekend | AllDST
+base,43,Weekend,NA,Derived from Onset+Offset,3.9853758450162906,All | Weekend | AllDST
+base,44,Weekend,NA,Derived from Onset+Offset,3.987488015035344,All | Weekend | AllDST
+base,45,Weekend,NA,Derived from Onset+Offset,3.988147783165392,All | Weekend | AllDST
+base,46,Weekend,NA,Derived from Onset+Offset,3.9874296705626744,All | Weekend | AllDST
+base,47,Weekend,NA,Derived from Onset+Offset,3.985460882683728,All | Weekend | AllDST
+base,48,Weekend,NA,Derived from Onset+Offset,3.982368844582458,All | Weekend | AllDST
+base,49,Weekend,NA,Derived from Onset+Offset,3.978280981312768,All | Weekend | AllDST
+base,50,Weekend,NA,Derived from Onset+Offset,3.9733247179285622,All | Weekend | AllDST
+base,51,Weekend,NA,Derived from Onset+Offset,3.9676274794837463,All | Weekend | AllDST
+base,52,Weekend,NA,Derived from Onset+Offset,3.9613166910322257,All | Weekend | AllDST
+base,53,Weekend,NA,Derived from Onset+Offset,3.9545197776279024,All | Weekend | AllDST
+base,54,Weekend,NA,Derived from Onset+Offset,3.947364164324685,All | Weekend | AllDST
+base,55,Weekend,NA,Derived from Onset+Offset,3.939977276176474,All | Weekend | AllDST
+base,56,Weekend,NA,Derived from Onset+Offset,3.9324849424591046,All | Weekend | AllDST
+base,57,Weekend,NA,Derived from Onset+Offset,3.9249586553729983,All | Weekend | AllDST
+base,58,Weekend,NA,Derived from Onset+Offset,3.91740347784833,All | Weekend | AllDST
+base,59,Weekend,NA,Derived from Onset+Offset,3.9098204279490343,All | Weekend | AllDST
+base,60,Weekend,NA,Derived from Onset+Offset,3.902210523739046,All | Weekend | AllDST
+base,61,Weekend,NA,Derived from Onset+Offset,3.894574783282301,All | Weekend | AllDST
+base,62,Weekend,NA,Derived from Onset+Offset,3.886914224642731,All | Weekend | AllDST
+base,63,Weekend,NA,Derived from Onset+Offset,3.879229865884275,All | Weekend | AllDST
+base,64,Weekend,NA,Derived from Onset+Offset,3.871522725070864,All | Weekend | AllDST
+base,65,Weekend,NA,Derived from Onset+Offset,3.8637938202664346,All | Weekend | AllDST
+base,66,Weekend,NA,Derived from Onset+Offset,3.856044169534923,All | Weekend | AllDST
+base,67,Weekend,NA,Derived from Onset+Offset,3.848274790940263,All | Weekend | AllDST
+base,68,Weekend,NA,Derived from Onset+Offset,3.840486702546389,All | Weekend | AllDST
+base,69,Weekend,NA,Derived from Onset+Offset,3.8326809224172353,All | Weekend | AllDST
+base,70,Weekend,NA,Derived from Onset+Offset,3.824858468616737,All | Weekend | AllDST
+base,71,Weekend,NA,Derived from Onset+Offset,3.817020359208831,All | Weekend | AllDST
+base,72,Weekend,NA,Derived from Onset+Offset,3.8091676122574505,All | Weekend | AllDST
+base,73,Weekend,NA,Derived from Onset+Offset,3.8013012458265303,All | Weekend | AllDST
+base,74,Weekend,NA,Derived from Onset+Offset,3.7934222779800058,All | Weekend | AllDST
+base,75,Weekend,NA,Derived from Onset+Offset,3.785531726781811,All | Weekend | AllDST
+base,76,Weekend,NA,Derived from Onset+Offset,3.777630610295882,All | Weekend | AllDST
+base,77,Weekend,NA,Derived from Onset+Offset,3.7697199465861537,All | Weekend | AllDST
+base,78,Weekend,NA,Derived from Onset+Offset,3.7618007537165594,All | Weekend | AllDST
+base,79,Weekend,NA,Derived from Onset+Offset,3.753874049751035,All | Weekend | AllDST
+base,80,Weekend,NA,Derived from Onset+Offset,3.745940852753516,All | Weekend | AllDST
+base,81,Weekend,NA,Derived from Onset+Offset,3.738002180787937,All | Weekend | AllDST
+base,82,Weekend,NA,Derived from Onset+Offset,3.7300590519182313,All | Weekend | AllDST
+base,83,Weekend,NA,Derived from Onset+Offset,3.722112484208335,All | Weekend | AllDST
+base,84,Weekend,NA,Derived from Onset+Offset,3.714163495722184,All | Weekend | AllDST
+base,85,Weekend,NA,Derived from Onset+Offset,3.70621310452371,All | Weekend | AllDST
+base,18,Weekend,NA,Direct Midpoint Model,3.63881608504489,All | Weekend | AllDST
+base,19,Weekend,NA,Direct Midpoint Model,3.657408159953404,All | Weekend | AllDST
+base,20,Weekend,NA,Direct Midpoint Model,3.6760002348619185,All | Weekend | AllDST
+base,21,Weekend,NA,Direct Midpoint Model,3.6945919839436936,All | Weekend | AllDST
+base,22,Weekend,NA,Direct Midpoint Model,3.7131603421540498,All | Weekend | AllDST
+base,23,Weekend,NA,Direct Midpoint Model,3.731645030926261,All | Weekend | AllDST
+base,24,Weekend,NA,Direct Midpoint Model,3.749982328961924,All | Weekend | AllDST
+base,25,Weekend,NA,Direct Midpoint Model,3.7681085149626385,All | Weekend | AllDST
+base,26,Weekend,NA,Direct Midpoint Model,3.785959867629999,All | Weekend | AllDST
+base,27,Weekend,NA,Direct Midpoint Model,3.8034726656656073,All | Weekend | AllDST
+base,28,Weekend,NA,Direct Midpoint Model,3.8205831877710574,All | Weekend | AllDST
+base,29,Weekend,NA,Direct Midpoint Model,3.8372277126479473,All | Weekend | AllDST
+base,30,Weekend,NA,Direct Midpoint Model,3.8533425189978754,All | Weekend | AllDST
+base,31,Weekend,NA,Direct Midpoint Model,3.868863885522439,All | Weekend | AllDST
+base,32,Weekend,NA,Direct Midpoint Model,3.883728090923237,All | Weekend | AllDST
+base,33,Weekend,NA,Direct Midpoint Model,3.897871413901864,All | Weekend | AllDST
+base,34,Weekend,NA,Direct Midpoint Model,3.911230133159918,All | Weekend | AllDST
+base,35,Weekend,NA,Direct Midpoint Model,3.923740527399,All | Weekend | AllDST
+base,36,Weekend,NA,Direct Midpoint Model,3.935338875320704,All | Weekend | AllDST
+base,37,Weekend,NA,Direct Midpoint Model,3.945961455626629,All | Weekend | AllDST
+base,38,Weekend,NA,Direct Midpoint Model,3.955544547018372,All | Weekend | AllDST
+base,39,Weekend,NA,Direct Midpoint Model,3.96402442819753,All | Weekend | AllDST
+base,40,Weekend,NA,Direct Midpoint Model,3.971337377865703,All | Weekend | AllDST
+base,41,Weekend,NA,Direct Midpoint Model,3.977419674724486,All | Weekend | AllDST
+base,42,Weekend,NA,Direct Midpoint Model,3.982207597475477,All | Weekend | AllDST
+base,43,Weekend,NA,Direct Midpoint Model,3.9856374248202746,All | Weekend | AllDST
+base,44,Weekend,NA,Direct Midpoint Model,3.987645435460475,All | Weekend | AllDST
+base,45,Weekend,NA,Direct Midpoint Model,3.988185150462489,All | Weekend | AllDST
+base,46,Weekend,NA,Direct Midpoint Model,3.9873337246501066,All | Weekend | AllDST
+base,47,Weekend,NA,Direct Midpoint Model,3.985222273782562,All | Weekend | AllDST
+base,48,Weekend,NA,Direct Midpoint Model,3.981982138537691,All | Weekend | AllDST
+base,49,Weekend,NA,Direct Midpoint Model,3.977744659593331,All | Weekend | AllDST
+base,50,Weekend,NA,Direct Midpoint Model,3.972641177627321,All | Weekend | AllDST
+base,51,Weekend,NA,Direct Midpoint Model,3.966803033317497,All | Weekend | AllDST
+base,52,Weekend,NA,Direct Midpoint Model,3.9603615673416943,All | Weekend | AllDST
+base,53,Weekend,NA,Direct Midpoint Model,3.953448120377755,All | Weekend | AllDST
+base,54,Weekend,NA,Direct Midpoint Model,3.946194033103514,All | Weekend | AllDST
+base,55,Weekend,NA,Direct Midpoint Model,3.938730646196808,All | Weekend | AllDST
+base,56,Weekend,NA,Direct Midpoint Model,3.931187643201409,All | Weekend | AllDST
+base,57,Weekend,NA,Direct Midpoint Model,3.9236382813821025,All | Weekend | AllDST
+base,58,Weekend,NA,Direct Midpoint Model,3.9160868345976287,All | Weekend | AllDST
+base,59,Weekend,NA,Direct Midpoint Model,3.9085333763196273,All | Weekend | AllDST
+base,60,Weekend,NA,Direct Midpoint Model,3.9009779800197353,All | Weekend | AllDST
+base,61,Weekend,NA,Direct Midpoint Model,3.89342071916959,All | Weekend | AllDST
+base,62,Weekend,NA,Direct Midpoint Model,3.8858616672408313,All | Weekend | AllDST
+base,63,Weekend,NA,Direct Midpoint Model,3.878300897705096,All | Weekend | AllDST
+base,64,Weekend,NA,Direct Midpoint Model,3.8707384840340207,All | Weekend | AllDST
+base,65,Weekend,NA,Direct Midpoint Model,3.863174499699245,All | Weekend | AllDST
+base,66,Weekend,NA,Direct Midpoint Model,3.8556090181724065,All | Weekend | AllDST
+base,67,Weekend,NA,Direct Midpoint Model,3.848042112925142,All | Weekend | AllDST
+base,68,Weekend,NA,Direct Midpoint Model,3.840473857429093,All | Weekend | AllDST
+base,69,Weekend,NA,Direct Midpoint Model,3.832904325155892,All | Weekend | AllDST
+base,70,Weekend,NA,Direct Midpoint Model,3.8253335895771814,All | Weekend | AllDST
+base,71,Weekend,NA,Direct Midpoint Model,3.817761724164596,All | Weekend | AllDST
+base,72,Weekend,NA,Direct Midpoint Model,3.810188802389777,All | Weekend | AllDST
+base,73,Weekend,NA,Direct Midpoint Model,3.802614897724359,All | Weekend | AllDST
+base,74,Weekend,NA,Direct Midpoint Model,3.795040083639982,All | Weekend | AllDST
+base,75,Weekend,NA,Direct Midpoint Model,3.787464433608282,All | Weekend | AllDST
+base,76,Weekend,NA,Direct Midpoint Model,3.7798880211009,All | Weekend | AllDST
+base,77,Weekend,NA,Direct Midpoint Model,3.7723109195894713,All | Weekend | AllDST
+base,78,Weekend,NA,Direct Midpoint Model,3.764733202545634,All | Weekend | AllDST
+base,79,Weekend,NA,Direct Midpoint Model,3.757154943441027,All | Weekend | AllDST
+base,80,Weekend,NA,Direct Midpoint Model,3.749576215747288,All | Weekend | AllDST
+base,81,Weekend,NA,Direct Midpoint Model,3.741997092936055,All | Weekend | AllDST
+base,82,Weekend,NA,Direct Midpoint Model,3.7344176484789657,All | Weekend | AllDST
+base,83,Weekend,NA,Direct Midpoint Model,3.726837955847658,All | Weekend | AllDST
+base,84,Weekend,NA,Direct Midpoint Model,3.7192580885137696,All | Weekend | AllDST
+base,85,Weekend,NA,Direct Midpoint Model,3.7116781199489384,All | Weekend | AllDST
+base,18,Weekend,NA,Midpoint Model Adjusted for Duration,3.222080610016064,All | Weekend | AllDST
+base,19,Weekend,NA,Midpoint Model Adjusted for Duration,3.2586629917464736,All | Weekend | AllDST
+base,20,Weekend,NA,Midpoint Model Adjusted for Duration,3.295245373476883,All | Weekend | AllDST
+base,21,Weekend,NA,Midpoint Model Adjusted for Duration,3.331827113122775,All | Weekend | AllDST
+base,22,Weekend,NA,Midpoint Model Adjusted for Duration,3.368362757974789,All | Weekend | AllDST
+base,23,Weekend,NA,Midpoint Model Adjusted for Duration,3.404733521175491,All | Weekend | AllDST
+base,24,Weekend,NA,Midpoint Model Adjusted for Duration,3.4408138315111008,All | Weekend | AllDST
+base,25,Weekend,NA,Midpoint Model Adjusted for Duration,3.4764781177678357,All | Weekend | AllDST
+base,26,Weekend,NA,Midpoint Model Adjusted for Duration,3.5116008087319144,All | Weekend | AllDST
+base,27,Weekend,NA,Midpoint Model Adjusted for Duration,3.546056333189554,All | Weekend | AllDST
+base,28,Weekend,NA,Midpoint Model Adjusted for Duration,3.5797191199269736,All | Weekend | AllDST
+base,29,Weekend,NA,Midpoint Model Adjusted for Duration,3.612463597730392,All | Weekend | AllDST
+base,30,Weekend,NA,Midpoint Model Adjusted for Duration,3.6441641953860264,All | Weekend | AllDST
+base,31,Weekend,NA,Midpoint Model Adjusted for Duration,3.674695341680096,All | Weekend | AllDST
+base,32,Weekend,NA,Midpoint Model Adjusted for Duration,3.7039314653988167,All | Weekend | AllDST
+base,33,Weekend,NA,Midpoint Model Adjusted for Duration,3.731746995328409,All | Weekend | AllDST
+base,34,Weekend,NA,Midpoint Model Adjusted for Duration,3.758016360255091,All | Weekend | AllDST
+base,35,Weekend,NA,Midpoint Model Adjusted for Duration,3.78261398896508,All | Weekend | AllDST
+base,36,Weekend,NA,Midpoint Model Adjusted for Duration,3.805414310244595,All | Weekend | AllDST
+base,37,Weekend,NA,Midpoint Model Adjusted for Duration,3.826291752879852,All | Weekend | AllDST
+base,38,Weekend,NA,Midpoint Model Adjusted for Duration,3.845120745657072,All | Weekend | AllDST
+base,39,Weekend,NA,Midpoint Model Adjusted for Duration,3.861775717362472,All | Weekend | AllDST
+base,40,Weekend,NA,Midpoint Model Adjusted for Duration,3.876131096782271,All | Weekend | AllDST
+base,41,Weekend,NA,Midpoint Model Adjusted for Duration,3.888061312702686,All | Weekend | AllDST
+base,42,Weekend,NA,Midpoint Model Adjusted for Duration,3.897440793909936,All | Weekend | AllDST
+base,43,Weekend,NA,Midpoint Model Adjusted for Duration,3.904143969190238,All | Weekend | AllDST
+base,44,Weekend,NA,Midpoint Model Adjusted for Duration,3.908045267329812,All | Weekend | AllDST
+base,45,Weekend,NA,Midpoint Model Adjusted for Duration,3.9090631119378063,All | Weekend | AllDST
+base,46,Weekend,NA,Midpoint Model Adjusted for Duration,3.907431384817409,All | Weekend | AllDST
+base,47,Weekend,NA,Midpoint Model Adjusted for Duration,3.903521652006292,All | Weekend | AllDST
+base,48,Weekend,NA,Midpoint Model Adjusted for Duration,3.897706053434075,All | Weekend | AllDST
+base,49,Weekend,NA,Midpoint Model Adjusted for Duration,3.890356729030372,All | Weekend | AllDST
+base,50,Weekend,NA,Midpoint Model Adjusted for Duration,3.881845818724804,All | Weekend | AllDST
+base,51,Weekend,NA,Midpoint Model Adjusted for Duration,3.872545462446984,All | Weekend | AllDST
+base,52,Weekend,NA,Midpoint Model Adjusted for Duration,3.8628278001265337,All | Weekend | AllDST
+base,53,Weekend,NA,Midpoint Model Adjusted for Duration,3.853064971693066,All | Weekend | AllDST
+base,54,Weekend,NA,Midpoint Model Adjusted for Duration,3.843629117076201,All | Weekend | AllDST
+base,55,Weekend,NA,Midpoint Model Adjusted for Duration,3.834892376205555,All | Weekend | AllDST
+base,56,Weekend,NA,Midpoint Model Adjusted for Duration,3.827221646325413,All | Weekend | AllDST
+base,57,Weekend,NA,Midpoint Model Adjusted for Duration,3.8208053085109586,All | Weekend | AllDST
+base,58,Weekend,NA,Midpoint Model Adjusted for Duration,3.815613500607461,All | Weekend | AllDST
+base,59,Weekend,NA,Midpoint Model Adjusted for Duration,3.8116030716694342,All | Weekend | AllDST
+base,60,Weekend,NA,Midpoint Model Adjusted for Duration,3.8087308707513894,All | Weekend | AllDST
+base,61,Weekend,NA,Midpoint Model Adjusted for Duration,3.806953746907839,All | Weekend | AllDST
+base,62,Weekend,NA,Midpoint Model Adjusted for Duration,3.806228549193296,All | Weekend | AllDST
+base,63,Weekend,NA,Midpoint Model Adjusted for Duration,3.8065121266622737,All | Weekend | AllDST
+base,64,Weekend,NA,Midpoint Model Adjusted for Duration,3.8077613283692826,All | Weekend | AllDST
+base,65,Weekend,NA,Midpoint Model Adjusted for Duration,3.809933003368837,All | Weekend | AllDST
+base,66,Weekend,NA,Midpoint Model Adjusted for Duration,3.812984000715449,All | Weekend | AllDST
+base,67,Weekend,NA,Midpoint Model Adjusted for Duration,3.816871169463632,All | Weekend | AllDST
+base,68,Weekend,NA,Midpoint Model Adjusted for Duration,3.821551358667898,All | Weekend | AllDST
+base,69,Weekend,NA,Midpoint Model Adjusted for Duration,3.8269814173827585,All | Weekend | AllDST
+base,70,Weekend,NA,Midpoint Model Adjusted for Duration,3.833118194662728,All | Weekend | AllDST
+base,71,Weekend,NA,Midpoint Model Adjusted for Duration,3.8399185395623174,All | Weekend | AllDST
+base,72,Weekend,NA,Midpoint Model Adjusted for Duration,3.84733930113604,All | Weekend | AllDST
+base,73,Weekend,NA,Midpoint Model Adjusted for Duration,3.855337328438409,All | Weekend | AllDST
+base,74,Weekend,NA,Midpoint Model Adjusted for Duration,3.863869470523936,All | Weekend | AllDST
+base,75,Weekend,NA,Midpoint Model Adjusted for Duration,3.872892576447134,All | Weekend | AllDST
+base,76,Weekend,NA,Midpoint Model Adjusted for Duration,3.8823634952625152,All | Weekend | AllDST
+base,77,Weekend,NA,Midpoint Model Adjusted for Duration,3.892239076024593,All | Weekend | AllDST
+base,78,Weekend,NA,Midpoint Model Adjusted for Duration,3.90247616778788,All | Weekend | AllDST
+base,79,Weekend,NA,Midpoint Model Adjusted for Duration,3.9130316196068873,All | Weekend | AllDST
+base,80,Weekend,NA,Midpoint Model Adjusted for Duration,3.923862280536129,All | Weekend | AllDST
+base,81,Weekend,NA,Midpoint Model Adjusted for Duration,3.9349249996301174,All | Weekend | AllDST
+base,82,Weekend,NA,Midpoint Model Adjusted for Duration,3.946176625943364,All | Weekend | AllDST
+base,83,Weekend,NA,Midpoint Model Adjusted for Duration,3.957574008530383,All | Weekend | AllDST
+base,84,Weekend,NA,Midpoint Model Adjusted for Duration,3.9690739964456863,All | Weekend | AllDST
+base,85,Weekend,NA,Midpoint Model Adjusted for Duration,3.980633438743787,All | Weekend | AllDST
+dst,18,Weekday,DST,Derived from Onset+Offset,2.9991320828664936,All | Weekday | DST
+dst,19,Weekday,DST,Derived from Onset+Offset,3.0106349313752014,All | Weekday | DST
+dst,20,Weekday,DST,Derived from Onset+Offset,3.0221377798839075,All | Weekday | DST
+dst,21,Weekday,DST,Derived from Onset+Offset,3.0336404283399485,All | Weekday | DST
+dst,22,Weekday,DST,Derived from Onset+Offset,3.0451287151563817,All | Weekday | DST
+dst,23,Weekday,DST,Derived from Onset+Offset,3.0565656302092257,All | Weekday | DST
+dst,24,Weekday,DST,Derived from Onset+Offset,3.067912049589562,All | Weekday | DST
+dst,25,Weekday,DST,Derived from Onset+Offset,3.0791288493884728,All | Weekday | DST
+dst,26,Weekday,DST,Derived from Onset+Offset,3.090176905697039,All | Weekday | DST
+dst,27,Weekday,DST,Derived from Onset+Offset,3.1010170946063456,All | Weekday | DST
+dst,28,Weekday,DST,Derived from Onset+Offset,3.1116102922074727,All | Weekday | DST
+dst,29,Weekday,DST,Derived from Onset+Offset,3.1219173745915025,All | Weekday | DST
+dst,30,Weekday,DST,Derived from Onset+Offset,3.131899217849518,All | Weekday | DST
+dst,31,Weekday,DST,Derived from Onset+Offset,3.1415166980726017,All | Weekday | DST
+dst,32,Weekday,DST,Derived from Onset+Offset,3.1507306913518356,All | Weekday | DST
+dst,33,Weekday,DST,Derived from Onset+Offset,3.159502073778301,All | Weekday | DST
+dst,34,Weekday,DST,Derived from Onset+Offset,3.1677917214430806,All | Weekday | DST
+dst,35,Weekday,DST,Derived from Onset+Offset,3.175560510437256,All | Weekday | DST
+dst,36,Weekday,DST,Derived from Onset+Offset,3.182769316851912,All | Weekday | DST
+dst,37,Weekday,DST,Derived from Onset+Offset,3.189379016778128,All | Weekday | DST
+dst,38,Weekday,DST,Derived from Onset+Offset,3.195350486306987,All | Weekday | DST
+dst,39,Weekday,DST,Derived from Onset+Offset,3.200644601529572,All | Weekday | DST
+dst,40,Weekday,DST,Derived from Onset+Offset,3.205222238536964,All | Weekday | DST
+dst,41,Weekday,DST,Derived from Onset+Offset,3.2090442734202465,All | Weekday | DST
+dst,42,Weekday,DST,Derived from Onset+Offset,3.2120715822705006,All | Weekday | DST
+dst,43,Weekday,DST,Derived from Onset+Offset,3.2142650411788094,All | Weekday | DST
+dst,44,Weekday,DST,Derived from Onset+Offset,3.215585526236254,All | Weekday | DST
+dst,45,Weekday,DST,Derived from Onset+Offset,3.2160046544993697,All | Weekday | DST
+dst,46,Weekday,DST,Derived from Onset+Offset,3.215571059485672,All | Weekday | DST
+dst,47,Weekday,DST,Derived from Onset+Offset,3.214366989158819,All | Weekday | DST
+dst,48,Weekday,DST,Derived from Onset+Offset,3.212474831593351,All | Weekday | DST
+dst,49,Weekday,DST,Derived from Onset+Offset,3.2099769748638103,All | Weekday | DST
+dst,50,Weekday,DST,Derived from Onset+Offset,3.206955807044737,All | Weekday | DST
+dst,51,Weekday,DST,Derived from Onset+Offset,3.203493716210673,All | Weekday | DST
+dst,52,Weekday,DST,Derived from Onset+Offset,3.1996730904361597,All | Weekday | DST
+dst,53,Weekday,DST,Derived from Onset+Offset,3.195576317795738,All | Weekday | DST
+dst,54,Weekday,DST,Derived from Onset+Offset,3.191285786363951,All | Weekday | DST
+dst,55,Weekday,DST,Derived from Onset+Offset,3.186883884215337,All | Weekday | DST
+dst,56,Weekday,DST,Derived from Onset+Offset,3.182451951490267,All | Weekday | DST
+dst,57,Weekday,DST,Derived from Onset+Offset,3.1780356456241408,All | Weekday | DST
+dst,58,Weekday,DST,Derived from Onset+Offset,3.1736370005037275,All | Weekday | DST
+dst,59,Weekday,DST,Derived from Onset+Offset,3.169255393785815,All | Weekday | DST
+dst,60,Weekday,DST,Derived from Onset+Offset,3.1648902031271944,All | Weekday | DST
+dst,61,Weekday,DST,Derived from Onset+Offset,3.160540806184655,All | Weekday | DST
+dst,62,Weekday,DST,Derived from Onset+Offset,3.156206580614989,All | Weekday | DST
+dst,63,Weekday,DST,Derived from Onset+Offset,3.1518869040749853,All | Weekday | DST
+dst,64,Weekday,DST,Derived from Onset+Offset,3.1475811542214327,All | Weekday | DST
+dst,65,Weekday,DST,Derived from Onset+Offset,3.1432887087111228,All | Weekday | DST
+dst,66,Weekday,DST,Derived from Onset+Offset,3.139008945200845,All | Weekday | DST
+dst,67,Weekday,DST,Derived from Onset+Offset,3.1347412413473896,All | Weekday | DST
+dst,68,Weekday,DST,Derived from Onset+Offset,3.130484974807546,All | Weekday | DST
+dst,69,Weekday,DST,Derived from Onset+Offset,3.1262395232381057,All | Weekday | DST
+dst,70,Weekday,DST,Derived from Onset+Offset,3.1220042642958563,All | Weekday | DST
+dst,71,Weekday,DST,Derived from Onset+Offset,3.11777857563759,All | Weekday | DST
+dst,72,Weekday,DST,Derived from Onset+Offset,3.113561834920096,All | Weekday | DST
+dst,73,Weekday,DST,Derived from Onset+Offset,3.109353419800165,All | Weekday | DST
+dst,74,Weekday,DST,Derived from Onset+Offset,3.1051527079345855,All | Weekday | DST
+dst,75,Weekday,DST,Derived from Onset+Offset,3.1009590769801494,All | Weekday | DST
+dst,76,Weekday,DST,Derived from Onset+Offset,3.0967719045936453,All | Weekday | DST
+dst,77,Weekday,DST,Derived from Onset+Offset,3.092590568431864,All | Weekday | DST
+dst,78,Weekday,DST,Derived from Onset+Offset,3.088414446151596,All | Weekday | DST
+dst,79,Weekday,DST,Derived from Onset+Offset,3.0842429154096296,All | Weekday | DST
+dst,80,Weekday,DST,Derived from Onset+Offset,3.0800753538627563,All | Weekday | DST
+dst,81,Weekday,DST,Derived from Onset+Offset,3.075911139167766,All | Weekday | DST
+dst,82,Weekday,DST,Derived from Onset+Offset,3.071749648981448,All | Weekday | DST
+dst,83,Weekday,DST,Derived from Onset+Offset,3.067590260960593,All | Weekday | DST
+dst,84,Weekday,DST,Derived from Onset+Offset,3.0634323527619904,All | Weekday | DST
+dst,85,Weekday,DST,Derived from Onset+Offset,3.0592753020424315,All | Weekday | DST
+dst,18,Weekday,DST,Direct Midpoint Model,2.977398961662832,All | Weekday | DST
+dst,19,Weekday,DST,Direct Midpoint Model,2.9897255420930717,All | Weekday | DST
+dst,20,Weekday,DST,Direct Midpoint Model,3.002052122523312,All | Weekday | DST
+dst,21,Weekday,DST,Direct Midpoint Model,3.01437849518702,All | Weekday | DST
+dst,22,Weekday,DST,Direct Midpoint Model,3.026689952438193,All | Weekday | DST
+dst,23,Weekday,DST,Direct Midpoint Model,3.0389480570731195,All | Weekday | DST
+dst,24,Weekday,DST,Direct Midpoint Model,3.051112176597358,All | Weekday | DST
+dst,25,Weekday,DST,Direct Midpoint Model,3.063141678516465,All | Weekday | DST
+dst,26,Weekday,DST,Direct Midpoint Model,3.074995930336,All | Weekday | DST
+dst,27,Weekday,DST,Direct Midpoint Model,3.0866342995615197,All | Weekday | DST
+dst,28,Weekday,DST,Direct Midpoint Model,3.098016153698582,All | Weekday | DST
+dst,29,Weekday,DST,Direct Midpoint Model,3.1091008602527457,All | Weekday | DST
+dst,30,Weekday,DST,Direct Midpoint Model,3.119847786729568,All | Weekday | DST
+dst,31,Weekday,DST,Direct Midpoint Model,3.130216300634607,All | Weekday | DST
+dst,32,Weekday,DST,Direct Midpoint Model,3.140165769473421,All | Weekday | DST
+dst,33,Weekday,DST,Direct Midpoint Model,3.149655560751567,All | Weekday | DST
+dst,34,Weekday,DST,Direct Midpoint Model,3.158645041974603,All | Weekday | DST
+dst,35,Weekday,DST,Direct Midpoint Model,3.167093580648088,All | Weekday | DST
+dst,36,Weekday,DST,Direct Midpoint Model,3.1749605442775786,All | Weekday | DST
+dst,37,Weekday,DST,Direct Midpoint Model,3.1822053003686332,All | Weekday | DST
+dst,38,Weekday,DST,Direct Midpoint Model,3.18878721642681,All | Weekday | DST
+dst,39,Weekday,DST,Direct Midpoint Model,3.1946656599576664,All | Weekday | DST
+dst,40,Weekday,DST,Direct Midpoint Model,3.1997999984667604,All | Weekday | DST
+dst,41,Weekday,DST,Direct Midpoint Model,3.20414959945965,All | Weekday | DST
+dst,42,Weekday,DST,Direct Midpoint Model,3.2076738304418937,All | Weekday | DST
+dst,43,Weekday,DST,Direct Midpoint Model,3.210332058919048,All | Weekday | DST
+dst,44,Weekday,DST,Direct Midpoint Model,3.2120836523966716,All | Weekday | DST
+dst,45,Weekday,DST,Direct Midpoint Model,3.2128989305034605,All | Weekday | DST
+dst,46,Weekday,DST,Direct Midpoint Model,3.2128267434031987,All | Weekday | DST
+dst,47,Weekday,DST,Direct Midpoint Model,3.2119502165354823,All | Weekday | DST
+dst,48,Weekday,DST,Direct Midpoint Model,3.2103526182052446,All | Weekday | DST
+dst,49,Weekday,DST,Direct Midpoint Model,3.208117216717419,All | Weekday | DST
+dst,50,Weekday,DST,Direct Midpoint Model,3.205327280376938,All | Weekday | DST
+dst,51,Weekday,DST,Direct Midpoint Model,3.202066077488736,All | Weekday | DST
+dst,52,Weekday,DST,Direct Midpoint Model,3.198416876357746,All | Weekday | DST
+dst,53,Weekday,DST,Direct Midpoint Model,3.194462945288902,All | Weekday | DST
+dst,54,Weekday,DST,Direct Midpoint Model,3.1902875525871357,All | Weekday | DST
+dst,55,Weekday,DST,Direct Midpoint Model,3.185973966557382,All | Weekday | DST
+dst,56,Weekday,DST,Direct Midpoint Model,3.1816044072327365,All | Weekday | DST
+dst,57,Weekday,DST,Direct Midpoint Model,3.177225400443663,All | Weekday | DST
+dst,58,Weekday,DST,Direct Midpoint Model,3.1728398344156368,All | Weekday | DST
+dst,59,Weekday,DST,Direct Midpoint Model,3.168447940288264,All | Weekday | DST
+dst,60,Weekday,DST,Direct Midpoint Model,3.164049949201153,All | Weekday | DST
+dst,61,Weekday,DST,Direct Midpoint Model,3.15964609229391,All | Weekday | DST
+dst,62,Weekday,DST,Direct Midpoint Model,3.155236600706141,All | Weekday | DST
+dst,63,Weekday,DST,Direct Midpoint Model,3.1508217055774557,All | Weekday | DST
+dst,64,Weekday,DST,Direct Midpoint Model,3.14640163804746,All | Weekday | DST
+dst,65,Weekday,DST,Direct Midpoint Model,3.1419766292557596,All | Weekday | DST
+dst,66,Weekday,DST,Direct Midpoint Model,3.137546910341963,All | Weekday | DST
+dst,67,Weekday,DST,Direct Midpoint Model,3.133112712445678,All | Weekday | DST
+dst,68,Weekday,DST,Direct Midpoint Model,3.1286742667065104,All | Weekday | DST
+dst,69,Weekday,DST,Direct Midpoint Model,3.124231804264068,All | Weekday | DST
+dst,70,Weekday,DST,Direct Midpoint Model,3.1197855562579573,All | Weekday | DST
+dst,71,Weekday,DST,Direct Midpoint Model,3.115335753827786,All | Weekday | DST
+dst,72,Weekday,DST,Direct Midpoint Model,3.110882628113161,All | Weekday | DST
+dst,73,Weekday,DST,Direct Midpoint Model,3.106426410253689,All | Weekday | DST
+dst,74,Weekday,DST,Direct Midpoint Model,3.1019673313889786,All | Weekday | DST
+dst,75,Weekday,DST,Direct Midpoint Model,3.0975056226586344,All | Weekday | DST
+dst,76,Weekday,DST,Direct Midpoint Model,3.093041515202266,All | Weekday | DST
+dst,77,Weekday,DST,Direct Midpoint Model,3.088575240159479,All | Weekday | DST
+dst,78,Weekday,DST,Direct Midpoint Model,3.084107028669881,All | Weekday | DST
+dst,79,Weekday,DST,Direct Midpoint Model,3.0796371118730788,All | Weekday | DST
+dst,80,Weekday,DST,Direct Midpoint Model,3.0751657209086805,All | Weekday | DST
+dst,81,Weekday,DST,Direct Midpoint Model,3.0706930869162914,All | Weekday | DST
+dst,82,Weekday,DST,Direct Midpoint Model,3.0662194410355195,All | Weekday | DST
+dst,83,Weekday,DST,Direct Midpoint Model,3.0617450144059735,All | Weekday | DST
+dst,84,Weekday,DST,Direct Midpoint Model,3.0572700381672577,All | Weekday | DST
+dst,85,Weekday,DST,Direct Midpoint Model,3.0527947434589815,All | Weekday | DST
+dst,18,Weekday,DST,Midpoint Model Adjusted for Duration,2.6455326243974833,All | Weekday | DST
+dst,19,Weekday,DST,Midpoint Model Adjusted for Duration,2.67626021768269,All | Weekday | DST
+dst,20,Weekday,DST,Midpoint Model Adjusted for Duration,2.706987810967897,All | Weekday | DST
+dst,21,Weekday,DST,Midpoint Model Adjusted for Duration,2.7377148770917556,All | Weekday | DST
+dst,22,Weekday,DST,Midpoint Model Adjusted for Duration,2.768404098674831,All | Weekday | DST
+dst,23,Weekday,DST,Midpoint Model Adjusted for Duration,2.7989579498645845,All | Weekday | DST
+dst,24,Weekday,DST,Midpoint Model Adjusted for Duration,2.8292733347466794,All | Weekday | DST
+dst,25,Weekday,DST,Midpoint Model Adjusted for Duration,2.8592471574067764,All | Weekday | DST
+dst,26,Weekday,DST,Midpoint Model Adjusted for Duration,2.8887763219305382,All | Weekday | DST
+dst,27,Weekday,DST,Midpoint Model Adjusted for Duration,2.9177577324036266,All | Weekday | DST
+dst,28,Weekday,DST,Midpoint Model Adjusted for Duration,2.9460882929117034,All | Weekday | DST
+dst,29,Weekday,DST,Midpoint Model Adjusted for Duration,2.9736649075404307,All | Weekday | DST
+dst,30,Weekday,DST,Midpoint Model Adjusted for Duration,3.0003844803754705,All | Weekday | DST
+dst,31,Weekday,DST,Midpoint Model Adjusted for Duration,3.0261439155024847,All | Weekday | DST
+dst,32,Weekday,DST,Midpoint Model Adjusted for Duration,3.0508401170071355,All | Weekday | DST
+dst,33,Weekday,DST,Midpoint Model Adjusted for Duration,3.0743699889750844,All | Weekday | DST
+dst,34,Weekday,DST,Midpoint Model Adjusted for Duration,3.096630435491994,All | Weekday | DST
+dst,35,Weekday,DST,Midpoint Model Adjusted for Duration,3.1175183606435257,All | Weekday | DST
+dst,36,Weekday,DST,Midpoint Model Adjusted for Duration,3.136930668515342,All | Weekday | DST
+dst,37,Weekday,DST,Midpoint Model Adjusted for Duration,3.1547642631931043,All | Weekday | DST
+dst,38,Weekday,DST,Midpoint Model Adjusted for Duration,3.170916048762475,All | Weekday | DST
+dst,39,Weekday,DST,Midpoint Model Adjusted for Duration,3.1852829293091163,All | Weekday | DST
+dst,40,Weekday,DST,Midpoint Model Adjusted for Duration,3.1977618089186897,All | Weekday | DST
+dst,41,Weekday,DST,Midpoint Model Adjusted for Duration,3.2082495916768567,All | Weekday | DST
+dst,42,Weekday,DST,Midpoint Model Adjusted for Duration,3.216643181669281,All | Weekday | DST
+dst,43,Weekday,DST,Midpoint Model Adjusted for Duration,3.2228394829816227,All | Weekday | DST
+dst,44,Weekday,DST,Midpoint Model Adjusted for Duration,3.2267353996995443,All | Weekday | DST
+dst,45,Weekday,DST,Midpoint Model Adjusted for Duration,3.2282653457547164,All | Weekday | DST
+dst,46,Weekday,DST,Midpoint Model Adjusted for Duration,3.2276326937310307,All | Weekday | DST
+dst,47,Weekday,DST,Midpoint Model Adjusted for Duration,3.2251582053524923,All | Weekday | DST
+dst,48,Weekday,DST,Midpoint Model Adjusted for Duration,3.22116313164155,All | Weekday | DST
+dst,49,Weekday,DST,Midpoint Model Adjusted for Duration,3.215968723620654,All | Weekday | DST
+dst,50,Weekday,DST,Midpoint Model Adjusted for Duration,3.2098962323122535,All | Weekday | DST
+dst,51,Weekday,DST,Midpoint Model Adjusted for Duration,3.2032669087387977,All | Weekday | DST
+dst,52,Weekday,DST,Midpoint Model Adjusted for Duration,3.1964020039227368,All | Weekday | DST
+dst,53,Weekday,DST,Midpoint Model Adjusted for Duration,3.1896227688865193,All | Weekday | DST
+dst,54,Weekday,DST,Midpoint Model Adjusted for Duration,3.183250454652595,All | Weekday | DST
+dst,55,Weekday,DST,Midpoint Model Adjusted for Duration,3.1776063122434137,All | Weekday | DST
+dst,56,Weekday,DST,Midpoint Model Adjusted for Duration,3.1730070141083138,All | Weekday | DST
+dst,57,Weekday,DST,Midpoint Model Adjusted for Duration,3.1696133298949167,All | Weekday | DST
+dst,58,Weekday,DST,Midpoint Model Adjusted for Duration,3.1673954317762822,All | Weekday | DST
+dst,59,Weekday,DST,Midpoint Model Adjusted for Duration,3.1663118864797504,All | Weekday | DST
+dst,60,Weekday,DST,Midpoint Model Adjusted for Duration,3.1663212607326625,All | Weekday | DST
+dst,61,Weekday,DST,Midpoint Model Adjusted for Duration,3.1673821212623596,All | Weekday | DST
+dst,62,Weekday,DST,Midpoint Model Adjusted for Duration,3.1694530347961827,All | Weekday | DST
+dst,63,Weekday,DST,Midpoint Model Adjusted for Duration,3.1724925680614717,All | Weekday | DST
+dst,64,Weekday,DST,Midpoint Model Adjusted for Duration,3.1764592877855686,All | Weekday | DST
+dst,65,Weekday,DST,Midpoint Model Adjusted for Duration,3.1813117606958135,All | Weekday | DST
+dst,66,Weekday,DST,Midpoint Model Adjusted for Duration,3.1870085535195476,All | Weekday | DST
+dst,67,Weekday,DST,Midpoint Model Adjusted for Duration,3.1935082329841116,All | Weekday | DST
+dst,68,Weekday,DST,Midpoint Model Adjusted for Duration,3.200769365816847,All | Weekday | DST
+dst,69,Weekday,DST,Midpoint Model Adjusted for Duration,3.2087505187450933,All | Weekday | DST
+dst,70,Weekday,DST,Midpoint Model Adjusted for Duration,3.217410258496193,All | Weekday | DST
+dst,71,Weekday,DST,Midpoint Model Adjusted for Duration,3.2267071517974855,All | Weekday | DST
+dst,72,Weekday,DST,Midpoint Model Adjusted for Duration,3.236599765376313,All | Weekday | DST
+dst,73,Weekday,DST,Midpoint Model Adjusted for Duration,3.2470466659600152,All | Weekday | DST
+dst,74,Weekday,DST,Midpoint Model Adjusted for Duration,3.2580064202759336,All | Weekday | DST
+dst,75,Weekday,DST,Midpoint Model Adjusted for Duration,3.2694375950514094,All | Weekday | DST
+dst,76,Weekday,DST,Midpoint Model Adjusted for Duration,3.281298757013783,All | Weekday | DST
+dst,77,Weekday,DST,Midpoint Model Adjusted for Duration,3.2935484728903948,All | Weekday | DST
+dst,78,Weekday,DST,Midpoint Model Adjusted for Duration,3.306145309408586,All | Weekday | DST
+dst,79,Weekday,DST,Midpoint Model Adjusted for Duration,3.3190478332956985,All | Weekday | DST
+dst,80,Weekday,DST,Midpoint Model Adjusted for Duration,3.332214611279072,All | Weekday | DST
+dst,81,Weekday,DST,Midpoint Model Adjusted for Duration,3.3456042100860475,All | Weekday | DST
+dst,82,Weekday,DST,Midpoint Model Adjusted for Duration,3.359175196443966,All | Weekday | DST
+dst,83,Weekday,DST,Midpoint Model Adjusted for Duration,3.3728861370801684,All | Weekday | DST
+dst,84,Weekday,DST,Midpoint Model Adjusted for Duration,3.386695598721996,All | Weekday | DST
+dst,85,Weekday,DST,Midpoint Model Adjusted for Duration,3.400562148096789,All | Weekday | DST
+dst,18,Weekday,NoDST,Derived from Onset+Offset,3.1512073186565073,All | Weekday | NoDST
+dst,19,Weekday,NoDST,Derived from Onset+Offset,3.1627101671652147,All | Weekday | NoDST
+dst,20,Weekday,NoDST,Derived from Onset+Offset,3.1742130156739217,All | Weekday | NoDST
+dst,21,Weekday,NoDST,Derived from Onset+Offset,3.1857156641299618,All | Weekday | NoDST
+dst,22,Weekday,NoDST,Derived from Onset+Offset,3.197203950946395,All | Weekday | NoDST
+dst,23,Weekday,NoDST,Derived from Onset+Offset,3.2086408659992394,All | Weekday | NoDST
+dst,24,Weekday,NoDST,Derived from Onset+Offset,3.2199872853795757,All | Weekday | NoDST
+dst,25,Weekday,NoDST,Derived from Onset+Offset,3.2312040851784865,All | Weekday | NoDST
+dst,26,Weekday,NoDST,Derived from Onset+Offset,3.242252141487053,All | Weekday | NoDST
+dst,27,Weekday,NoDST,Derived from Onset+Offset,3.253092330396359,All | Weekday | NoDST
+dst,28,Weekday,NoDST,Derived from Onset+Offset,3.263685527997486,All | Weekday | NoDST
+dst,29,Weekday,NoDST,Derived from Onset+Offset,3.273992610381516,All | Weekday | NoDST
+dst,30,Weekday,NoDST,Derived from Onset+Offset,3.283974453639532,All | Weekday | NoDST
+dst,31,Weekday,NoDST,Derived from Onset+Offset,3.293591933862615,All | Weekday | NoDST
+dst,32,Weekday,NoDST,Derived from Onset+Offset,3.3028059271418493,All | Weekday | NoDST
+dst,33,Weekday,NoDST,Derived from Onset+Offset,3.3115773095683143,All | Weekday | NoDST
+dst,34,Weekday,NoDST,Derived from Onset+Offset,3.319866957233094,All | Weekday | NoDST
+dst,35,Weekday,NoDST,Derived from Onset+Offset,3.3276357462272697,All | Weekday | NoDST
+dst,36,Weekday,NoDST,Derived from Onset+Offset,3.3348445526419255,All | Weekday | NoDST
+dst,37,Weekday,NoDST,Derived from Onset+Offset,3.341454252568141,All | Weekday | NoDST
+dst,38,Weekday,NoDST,Derived from Onset+Offset,3.3474257220970003,All | Weekday | NoDST
+dst,39,Weekday,NoDST,Derived from Onset+Offset,3.3527198373195852,All | Weekday | NoDST
+dst,40,Weekday,NoDST,Derived from Onset+Offset,3.3572974743269777,All | Weekday | NoDST
+dst,41,Weekday,NoDST,Derived from Onset+Offset,3.3611195092102606,All | Weekday | NoDST
+dst,42,Weekday,NoDST,Derived from Onset+Offset,3.3641468180605143,All | Weekday | NoDST
+dst,43,Weekday,NoDST,Derived from Onset+Offset,3.366340276968823,All | Weekday | NoDST
+dst,44,Weekday,NoDST,Derived from Onset+Offset,3.3676607620262677,All | Weekday | NoDST
+dst,45,Weekday,NoDST,Derived from Onset+Offset,3.3680798902893834,All | Weekday | NoDST
+dst,46,Weekday,NoDST,Derived from Onset+Offset,3.367646295275686,All | Weekday | NoDST
+dst,47,Weekday,NoDST,Derived from Onset+Offset,3.366442224948832,All | Weekday | NoDST
+dst,48,Weekday,NoDST,Derived from Onset+Offset,3.3645500673833646,All | Weekday | NoDST
+dst,49,Weekday,NoDST,Derived from Onset+Offset,3.3620522106538235,All | Weekday | NoDST
+dst,50,Weekday,NoDST,Derived from Onset+Offset,3.3590310428347507,All | Weekday | NoDST
+dst,51,Weekday,NoDST,Derived from Onset+Offset,3.3555689520006866,All | Weekday | NoDST
+dst,52,Weekday,NoDST,Derived from Onset+Offset,3.351748326226174,All | Weekday | NoDST
+dst,53,Weekday,NoDST,Derived from Onset+Offset,3.347651553585752,All | Weekday | NoDST
+dst,54,Weekday,NoDST,Derived from Onset+Offset,3.3433610221539647,All | Weekday | NoDST
+dst,55,Weekday,NoDST,Derived from Onset+Offset,3.338959120005351,All | Weekday | NoDST
+dst,56,Weekday,NoDST,Derived from Onset+Offset,3.3345271872802806,All | Weekday | NoDST
+dst,57,Weekday,NoDST,Derived from Onset+Offset,3.330110881414155,All | Weekday | NoDST
+dst,58,Weekday,NoDST,Derived from Onset+Offset,3.325712236293741,All | Weekday | NoDST
+dst,59,Weekday,NoDST,Derived from Onset+Offset,3.321330629575828,All | Weekday | NoDST
+dst,60,Weekday,NoDST,Derived from Onset+Offset,3.3169654389172076,All | Weekday | NoDST
+dst,61,Weekday,NoDST,Derived from Onset+Offset,3.312616041974669,All | Weekday | NoDST
+dst,62,Weekday,NoDST,Derived from Onset+Offset,3.3082818164050027,All | Weekday | NoDST
+dst,63,Weekday,NoDST,Derived from Onset+Offset,3.303962139864999,All | Weekday | NoDST
+dst,64,Weekday,NoDST,Derived from Onset+Offset,3.299656390011447,All | Weekday | NoDST
+dst,65,Weekday,NoDST,Derived from Onset+Offset,3.295363944501136,All | Weekday | NoDST
+dst,66,Weekday,NoDST,Derived from Onset+Offset,3.291084180990859,All | Weekday | NoDST
+dst,67,Weekday,NoDST,Derived from Onset+Offset,3.286816477137403,All | Weekday | NoDST
+dst,68,Weekday,NoDST,Derived from Onset+Offset,3.282560210597559,All | Weekday | NoDST
+dst,69,Weekday,NoDST,Derived from Onset+Offset,3.278314759028119,All | Weekday | NoDST
+dst,70,Weekday,NoDST,Derived from Onset+Offset,3.2740795000858705,All | Weekday | NoDST
+dst,71,Weekday,NoDST,Derived from Onset+Offset,3.2698538114276032,All | Weekday | NoDST
+dst,72,Weekday,NoDST,Derived from Onset+Offset,3.26563707071011,All | Weekday | NoDST
+dst,73,Weekday,NoDST,Derived from Onset+Offset,3.261428655590178,All | Weekday | NoDST
+dst,74,Weekday,NoDST,Derived from Onset+Offset,3.2572279437245992,All | Weekday | NoDST
+dst,75,Weekday,NoDST,Derived from Onset+Offset,3.253034312770162,All | Weekday | NoDST
+dst,76,Weekday,NoDST,Derived from Onset+Offset,3.2488471403836585,All | Weekday | NoDST
+dst,77,Weekday,NoDST,Derived from Onset+Offset,3.244665804221878,All | Weekday | NoDST
+dst,78,Weekday,NoDST,Derived from Onset+Offset,3.240489681941609,All | Weekday | NoDST
+dst,79,Weekday,NoDST,Derived from Onset+Offset,3.236318151199643,All | Weekday | NoDST
+dst,80,Weekday,NoDST,Derived from Onset+Offset,3.2321505896527696,All | Weekday | NoDST
+dst,81,Weekday,NoDST,Derived from Onset+Offset,3.2279863749577795,All | Weekday | NoDST
+dst,82,Weekday,NoDST,Derived from Onset+Offset,3.2238248847714615,All | Weekday | NoDST
+dst,83,Weekday,NoDST,Derived from Onset+Offset,3.2196654967506064,All | Weekday | NoDST
+dst,84,Weekday,NoDST,Derived from Onset+Offset,3.215507588552004,All | Weekday | NoDST
+dst,85,Weekday,NoDST,Derived from Onset+Offset,3.2113505378324447,All | Weekday | NoDST
+dst,18,Weekday,NoDST,Direct Midpoint Model,3.1322275071813586,All | Weekday | NoDST
+dst,19,Weekday,NoDST,Direct Midpoint Model,3.1445540876115983,All | Weekday | NoDST
+dst,20,Weekday,NoDST,Direct Midpoint Model,3.1568806680418384,All | Weekday | NoDST
+dst,21,Weekday,NoDST,Direct Midpoint Model,3.1692070407055466,All | Weekday | NoDST
+dst,22,Weekday,NoDST,Direct Midpoint Model,3.1815184979567195,All | Weekday | NoDST
+dst,23,Weekday,NoDST,Direct Midpoint Model,3.193776602591646,All | Weekday | NoDST
+dst,24,Weekday,NoDST,Direct Midpoint Model,3.2059407221158844,All | Weekday | NoDST
+dst,25,Weekday,NoDST,Direct Midpoint Model,3.2179702240349917,All | Weekday | NoDST
+dst,26,Weekday,NoDST,Direct Midpoint Model,3.2298244758545267,All | Weekday | NoDST
+dst,27,Weekday,NoDST,Direct Midpoint Model,3.2414628450800462,All | Weekday | NoDST
+dst,28,Weekday,NoDST,Direct Midpoint Model,3.2528446992171087,All | Weekday | NoDST
+dst,29,Weekday,NoDST,Direct Midpoint Model,3.263929405771272,All | Weekday | NoDST
+dst,30,Weekday,NoDST,Direct Midpoint Model,3.2746763322480947,All | Weekday | NoDST
+dst,31,Weekday,NoDST,Direct Midpoint Model,3.2850448461531334,All | Weekday | NoDST
+dst,32,Weekday,NoDST,Direct Midpoint Model,3.2949943149919476,All | Weekday | NoDST
+dst,33,Weekday,NoDST,Direct Midpoint Model,3.3044841062700936,All | Weekday | NoDST
+dst,34,Weekday,NoDST,Direct Midpoint Model,3.31347358749313,All | Weekday | NoDST
+dst,35,Weekday,NoDST,Direct Midpoint Model,3.3219221261666143,All | Weekday | NoDST
+dst,36,Weekday,NoDST,Direct Midpoint Model,3.329789089796105,All | Weekday | NoDST
+dst,37,Weekday,NoDST,Direct Midpoint Model,3.33703384588716,All | Weekday | NoDST
+dst,38,Weekday,NoDST,Direct Midpoint Model,3.3436157619453364,All | Weekday | NoDST
+dst,39,Weekday,NoDST,Direct Midpoint Model,3.349494205476193,All | Weekday | NoDST
+dst,40,Weekday,NoDST,Direct Midpoint Model,3.354628543985287,All | Weekday | NoDST
+dst,41,Weekday,NoDST,Direct Midpoint Model,3.3589781449781766,All | Weekday | NoDST
+dst,42,Weekday,NoDST,Direct Midpoint Model,3.36250237596042,All | Weekday | NoDST
+dst,43,Weekday,NoDST,Direct Midpoint Model,3.3651606044375746,All | Weekday | NoDST
+dst,44,Weekday,NoDST,Direct Midpoint Model,3.366912197915198,All | Weekday | NoDST
+dst,45,Weekday,NoDST,Direct Midpoint Model,3.367727476021987,All | Weekday | NoDST
+dst,46,Weekday,NoDST,Direct Midpoint Model,3.3676552889217253,All | Weekday | NoDST
+dst,47,Weekday,NoDST,Direct Midpoint Model,3.366778762054009,All | Weekday | NoDST
+dst,48,Weekday,NoDST,Direct Midpoint Model,3.365181163723771,All | Weekday | NoDST
+dst,49,Weekday,NoDST,Direct Midpoint Model,3.3629457622359453,All | Weekday | NoDST
+dst,50,Weekday,NoDST,Direct Midpoint Model,3.3601558258954647,All | Weekday | NoDST
+dst,51,Weekday,NoDST,Direct Midpoint Model,3.3568946230072627,All | Weekday | NoDST
+dst,52,Weekday,NoDST,Direct Midpoint Model,3.3532454218762724,All | Weekday | NoDST
+dst,53,Weekday,NoDST,Direct Midpoint Model,3.3492914908074285,All | Weekday | NoDST
+dst,54,Weekday,NoDST,Direct Midpoint Model,3.3451160981056622,All | Weekday | NoDST
+dst,55,Weekday,NoDST,Direct Midpoint Model,3.3408025120759084,All | Weekday | NoDST
+dst,56,Weekday,NoDST,Direct Midpoint Model,3.336432952751263,All | Weekday | NoDST
+dst,57,Weekday,NoDST,Direct Midpoint Model,3.3320539459621896,All | Weekday | NoDST
+dst,58,Weekday,NoDST,Direct Midpoint Model,3.3276683799341633,All | Weekday | NoDST
+dst,59,Weekday,NoDST,Direct Midpoint Model,3.3232764858067907,All | Weekday | NoDST
+dst,60,Weekday,NoDST,Direct Midpoint Model,3.3188784947196797,All | Weekday | NoDST
+dst,61,Weekday,NoDST,Direct Midpoint Model,3.314474637812436,All | Weekday | NoDST
+dst,62,Weekday,NoDST,Direct Midpoint Model,3.3100651462246677,All | Weekday | NoDST
+dst,63,Weekday,NoDST,Direct Midpoint Model,3.305650251095982,All | Weekday | NoDST
+dst,64,Weekday,NoDST,Direct Midpoint Model,3.3012301835659863,All | Weekday | NoDST
+dst,65,Weekday,NoDST,Direct Midpoint Model,3.296805174774286,All | Weekday | NoDST
+dst,66,Weekday,NoDST,Direct Midpoint Model,3.2923754558604896,All | Weekday | NoDST
+dst,67,Weekday,NoDST,Direct Midpoint Model,3.2879412579642047,All | Weekday | NoDST
+dst,68,Weekday,NoDST,Direct Midpoint Model,3.283502812225037,All | Weekday | NoDST
+dst,69,Weekday,NoDST,Direct Midpoint Model,3.2790603497825948,All | Weekday | NoDST
+dst,70,Weekday,NoDST,Direct Midpoint Model,3.274614101776484,All | Weekday | NoDST
+dst,71,Weekday,NoDST,Direct Midpoint Model,3.2701642993463125,All | Weekday | NoDST
+dst,72,Weekday,NoDST,Direct Midpoint Model,3.2657111736316877,All | Weekday | NoDST
+dst,73,Weekday,NoDST,Direct Midpoint Model,3.2612549557722157,All | Weekday | NoDST
+dst,74,Weekday,NoDST,Direct Midpoint Model,3.256795876907505,All | Weekday | NoDST
+dst,75,Weekday,NoDST,Direct Midpoint Model,3.252334168177161,All | Weekday | NoDST
+dst,76,Weekday,NoDST,Direct Midpoint Model,3.2478700607207927,All | Weekday | NoDST
+dst,77,Weekday,NoDST,Direct Midpoint Model,3.2434037856780056,All | Weekday | NoDST
+dst,78,Weekday,NoDST,Direct Midpoint Model,3.2389355741884076,All | Weekday | NoDST
+dst,79,Weekday,NoDST,Direct Midpoint Model,3.2344656573916053,All | Weekday | NoDST
+dst,80,Weekday,NoDST,Direct Midpoint Model,3.229994266427207,All | Weekday | NoDST
+dst,81,Weekday,NoDST,Direct Midpoint Model,3.225521632434818,All | Weekday | NoDST
+dst,82,Weekday,NoDST,Direct Midpoint Model,3.221047986554046,All | Weekday | NoDST
+dst,83,Weekday,NoDST,Direct Midpoint Model,3.2165735599245,All | Weekday | NoDST
+dst,84,Weekday,NoDST,Direct Midpoint Model,3.2120985836857843,All | Weekday | NoDST
+dst,85,Weekday,NoDST,Direct Midpoint Model,3.207623288977508,All | Weekday | NoDST
+dst,18,Weekday,NoDST,Midpoint Model Adjusted for Duration,2.8214875071269523,All | Weekday | NoDST
+dst,19,Weekday,NoDST,Midpoint Model Adjusted for Duration,2.852215100412159,All | Weekday | NoDST
+dst,20,Weekday,NoDST,Midpoint Model Adjusted for Duration,2.882942693697366,All | Weekday | NoDST
+dst,21,Weekday,NoDST,Midpoint Model Adjusted for Duration,2.9136697598212247,All | Weekday | NoDST
+dst,22,Weekday,NoDST,Midpoint Model Adjusted for Duration,2.9443589814043,All | Weekday | NoDST
+dst,23,Weekday,NoDST,Midpoint Model Adjusted for Duration,2.974912832594054,All | Weekday | NoDST
+dst,24,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.0052282174761484,All | Weekday | NoDST
+dst,25,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.0352020401362454,All | Weekday | NoDST
+dst,26,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.0647312046600073,All | Weekday | NoDST
+dst,27,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.0937126151330956,All | Weekday | NoDST
+dst,28,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.1220431756411724,All | Weekday | NoDST
+dst,29,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.1496197902698997,All | Weekday | NoDST
+dst,30,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.1763393631049395,All | Weekday | NoDST
+dst,31,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.2020987982319538,All | Weekday | NoDST
+dst,32,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.226794999736605,All | Weekday | NoDST
+dst,33,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.2503248717045534,All | Weekday | NoDST
+dst,34,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.2725853182214633,All | Weekday | NoDST
+dst,35,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.293473243372995,All | Weekday | NoDST
+dst,36,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.312885551244811,All | Weekday | NoDST
+dst,37,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3307191459225733,All | Weekday | NoDST
+dst,38,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3468709314919445,All | Weekday | NoDST
+dst,39,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3612378120385853,All | Weekday | NoDST
+dst,40,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3737166916481587,All | Weekday | NoDST
+dst,41,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.384204474406326,All | Weekday | NoDST
+dst,42,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.39259806439875,All | Weekday | NoDST
+dst,43,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3987943657110917,All | Weekday | NoDST
+dst,44,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.4026902824290137,All | Weekday | NoDST
+dst,45,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.404220228484186,All | Weekday | NoDST
+dst,46,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.4035875764604997,All | Weekday | NoDST
+dst,47,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.4011130880819613,All | Weekday | NoDST
+dst,48,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3971180143710193,All | Weekday | NoDST
+dst,49,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3919236063501232,All | Weekday | NoDST
+dst,50,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3858511150417225,All | Weekday | NoDST
+dst,51,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3792217914682667,All | Weekday | NoDST
+dst,52,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.372356886652206,All | Weekday | NoDST
+dst,53,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3655776516159883,All | Weekday | NoDST
+dst,54,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3592053373820643,All | Weekday | NoDST
+dst,55,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.353561194972883,All | Weekday | NoDST
+dst,56,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.348961896837783,All | Weekday | NoDST
+dst,57,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3455682126243858,All | Weekday | NoDST
+dst,58,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3433503145057513,All | Weekday | NoDST
+dst,59,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3422667692092194,All | Weekday | NoDST
+dst,60,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.342276143462132,All | Weekday | NoDST
+dst,61,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.343337003991829,All | Weekday | NoDST
+dst,62,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3454079175256517,All | Weekday | NoDST
+dst,63,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3484474507909407,All | Weekday | NoDST
+dst,64,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3524141705150377,All | Weekday | NoDST
+dst,65,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3572666434252825,All | Weekday | NoDST
+dst,66,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3629634362490166,All | Weekday | NoDST
+dst,67,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3694631157135806,All | Weekday | NoDST
+dst,68,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.376724248546316,All | Weekday | NoDST
+dst,69,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.3847054014745623,All | Weekday | NoDST
+dst,70,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.393365141225662,All | Weekday | NoDST
+dst,71,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.402662034526955,All | Weekday | NoDST
+dst,72,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.412554648105782,All | Weekday | NoDST
+dst,73,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.4230015486894843,All | Weekday | NoDST
+dst,74,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.4339613030054026,All | Weekday | NoDST
+dst,75,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.4453924777808784,All | Weekday | NoDST
+dst,76,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.457253639743252,All | Weekday | NoDST
+dst,77,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.469503355619864,All | Weekday | NoDST
+dst,78,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.482100192138055,All | Weekday | NoDST
+dst,79,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.4950027160251675,All | Weekday | NoDST
+dst,80,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.508169494008541,All | Weekday | NoDST
+dst,81,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.5215590928155165,All | Weekday | NoDST
+dst,82,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.535130079173435,All | Weekday | NoDST
+dst,83,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.5488410198096374,All | Weekday | NoDST
+dst,84,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.562650481451465,All | Weekday | NoDST
+dst,85,Weekday,NoDST,Midpoint Model Adjusted for Duration,3.576517030826258,All | Weekday | NoDST
+dst,18,Weekend,DST,Derived from Onset+Offset,3.634883311489762,All | Weekend | DST
+dst,19,Weekend,DST,Derived from Onset+Offset,3.648929344923002,All | Weekend | DST
+dst,20,Weekend,DST,Derived from Onset+Offset,3.66297537835624,All | Weekend | DST
+dst,21,Weekend,DST,Derived from Onset+Offset,3.677021211173394,All | Weekend | DST
+dst,22,Weekend,DST,Derived from Onset+Offset,3.6910526419034952,All | Weekend | DST
+dst,23,Weekend,DST,Derived from Onset+Offset,3.705032556188991,All | Weekend | DST
+dst,24,Weekend,DST,Derived from Onset+Offset,3.718921719934225,All | Weekend | DST
+dst,25,Weekend,DST,Derived from Onset+Offset,3.732680899043547,All | Weekend | DST
+dst,26,Weekend,DST,Derived from Onset+Offset,3.746270859421301,All | Weekend | DST
+dst,27,Weekend,DST,Derived from Onset+Offset,3.759652366971837,All | Weekend | DST
+dst,28,Weekend,DST,Derived from Onset+Offset,3.772786187599499,All | Weekend | DST
+dst,29,Weekend,DST,Derived from Onset+Offset,3.785633087208636,All | Weekend | DST
+dst,30,Weekend,DST,Derived from Onset+Offset,3.798153831703592,All | Weekend | DST
+dst,31,Weekend,DST,Derived from Onset+Offset,3.8103091869887176,All | Weekend | DST
+dst,32,Weekend,DST,Derived from Onset+Offset,3.8220599189683577,All | Weekend | DST
+dst,33,Weekend,DST,Derived from Onset+Offset,3.8333667935468574,All | Weekend | DST
+dst,34,Weekend,DST,Derived from Onset+Offset,3.844190576628565,All | Weekend | DST
+dst,35,Weekend,DST,Derived from Onset+Offset,3.854492034117828,All | Weekend | DST
+dst,36,Weekend,DST,Derived from Onset+Offset,3.864231931918992,All | Weekend | DST
+dst,37,Weekend,DST,Derived from Onset+Offset,3.8733710359364046,All | Weekend | DST
+dst,38,Weekend,DST,Derived from Onset+Offset,3.881870112074413,All | Weekend | DST
+dst,39,Weekend,DST,Derived from Onset+Offset,3.8896899262373617,All | Weekend | DST
+dst,40,Weekend,DST,Derived from Onset+Offset,3.8967912443296,All | Weekend | DST
+dst,41,Weekend,DST,Derived from Onset+Offset,3.9031348322554753,All | Weekend | DST
+dst,42,Weekend,DST,Derived from Onset+Offset,3.908681455919331,All | Weekend | DST
+dst,43,Weekend,DST,Derived from Onset+Offset,3.913391881225517,All | Weekend | DST
+dst,44,Weekend,DST,Derived from Onset+Offset,3.917226874078377,All | Weekend | DST
+dst,45,Weekend,DST,Derived from Onset+Offset,3.920154875647387,All | Weekend | DST
+dst,46,Weekend,DST,Derived from Onset+Offset,3.92219936142457,All | Weekend | DST
+dst,47,Weekend,DST,Derived from Onset+Offset,3.923407827069165,All | Weekend | DST
+dst,48,Weekend,DST,Derived from Onset+Offset,3.923827868360664,All | Weekend | DST
+dst,49,Weekend,DST,Derived from Onset+Offset,3.92350708107856,All | Weekend | DST
+dst,50,Weekend,DST,Derived from Onset+Offset,3.922493061002346,All | Weekend | DST
+dst,51,Weekend,DST,Derived from Onset+Offset,3.920833403911515,All | Weekend | DST
+dst,52,Weekend,DST,Derived from Onset+Offset,3.9185757055855586,All | Weekend | DST
+dst,53,Weekend,DST,Derived from Onset+Offset,3.915767561803972,All | Weekend | DST
+dst,54,Weekend,DST,Derived from Onset+Offset,3.912456568346247,All | Weekend | DST
+dst,55,Weekend,DST,Derived from Onset+Offset,3.908690320991875,All | Weekend | DST
+dst,56,Weekend,DST,Derived from Onset+Offset,3.904515975723832,All | Weekend | DST
+dst,57,Weekend,DST,Derived from Onset+Offset,3.899965713224352,All | Weekend | DST
+dst,58,Weekend,DST,Derived from Onset+Offset,3.895053406265416,All | Weekend | DST
+dst,59,Weekend,DST,Derived from Onset+Offset,3.88979181285366,All | Weekend | DST
+dst,60,Weekend,DST,Derived from Onset+Offset,3.884193690995726,All | Weekend | DST
+dst,61,Weekend,DST,Derived from Onset+Offset,3.878271798698253,All | Weekend | DST
+dst,62,Weekend,DST,Derived from Onset+Offset,3.872038893967881,All | Weekend | DST
+dst,63,Weekend,DST,Derived from Onset+Offset,3.865507734811247,All | Weekend | DST
+dst,64,Weekend,DST,Derived from Onset+Offset,3.8586910792349927,All | Weekend | DST
+dst,65,Weekend,DST,Derived from Onset+Offset,3.8516016852457553,All | Weekend | DST
+dst,66,Weekend,DST,Derived from Onset+Offset,3.844252310850177,All | Weekend | DST
+dst,67,Weekend,DST,Derived from Onset+Offset,3.8366557140548943,All | Weekend | DST
+dst,68,Weekend,DST,Derived from Onset+Offset,3.828824652866547,All | Weekend | DST
+dst,69,Weekend,DST,Derived from Onset+Offset,3.8207718852917782,All | Weekend | DST
+dst,70,Weekend,DST,Derived from Onset+Offset,3.8125101693372225,All | Weekend | DST
+dst,71,Weekend,DST,Derived from Onset+Offset,3.80405226300952,All | Weekend | DST
+dst,72,Weekend,DST,Derived from Onset+Offset,3.795410924315312,All | Weekend | DST
+dst,73,Weekend,DST,Derived from Onset+Offset,3.786598911261237,All | Weekend | DST
+dst,74,Weekend,DST,Derived from Onset+Offset,3.7776289818539337,All | Weekend | DST
+dst,75,Weekend,DST,Derived from Onset+Offset,3.768513894100043,All | Weekend | DST
+dst,76,Weekend,DST,Derived from Onset+Offset,3.759266406006201,All | Weekend | DST
+dst,77,Weekend,DST,Derived from Onset+Offset,3.749899275579051,All | Weekend | DST
+dst,78,Weekend,DST,Derived from Onset+Offset,3.7404252608252304,All | Weekend | DST
+dst,79,Weekend,DST,Derived from Onset+Offset,3.7308571197513776,All | Weekend | DST
+dst,80,Weekend,DST,Derived from Onset+Offset,3.721207610364134,All | Weekend | DST
+dst,81,Weekend,DST,Derived from Onset+Offset,3.7114894906701386,All | Weekend | DST
+dst,82,Weekend,DST,Derived from Onset+Offset,3.701715518676029,All | Weekend | DST
+dst,83,Weekend,DST,Derived from Onset+Offset,3.691898452388446,All | Weekend | DST
+dst,84,Weekend,DST,Derived from Onset+Offset,3.682051049814029,All | Weekend | DST
+dst,85,Weekend,DST,Derived from Onset+Offset,3.672186068959416,All | Weekend | DST
+dst,18,Weekend,DST,Direct Midpoint Model,3.6263295651255536,All | Weekend | DST
+dst,19,Weekend,DST,Direct Midpoint Model,3.6407958541165537,All | Weekend | DST
+dst,20,Weekend,DST,Direct Midpoint Model,3.655262143107555,All | Weekend | DST
+dst,21,Weekend,DST,Direct Midpoint Model,3.6697282239375326,All | Weekend | DST
+dst,22,Weekend,DST,Direct Midpoint Model,3.6841793610347664,All | Weekend | DST
+dst,23,Weekend,DST,Direct Midpoint Model,3.6985770442140105,All | Weekend | DST
+dst,24,Weekend,DST,Direct Midpoint Model,3.7128805638310456,All | Weekend | DST
+dst,25,Weekend,DST,Direct Midpoint Model,3.7270492102416504,All | Weekend | DST
+dst,26,Weekend,DST,Direct Midpoint Model,3.741042273801607,All | Weekend | DST
+dst,27,Weekend,DST,Direct Midpoint Model,3.754819044866693,All | Weekend | DST
+dst,28,Weekend,DST,Direct Midpoint Model,3.768338813792689,All | Weekend | DST
+dst,29,Weekend,DST,Direct Midpoint Model,3.781560870935375,All | Weekend | DST
+dst,30,Weekend,DST,Direct Midpoint Model,3.794444506650532,All | Weekend | DST
+dst,31,Weekend,DST,Direct Midpoint Model,3.8069490112939377,All | Weekend | DST
+dst,32,Weekend,DST,Direct Midpoint Model,3.8190336752213736,All | Weekend | DST
+dst,33,Weekend,DST,Direct Midpoint Model,3.830657788788619,All | Weekend | DST
+dst,34,Weekend,DST,Direct Midpoint Model,3.841780642351453,All | Weekend | DST
+dst,35,Weekend,DST,Direct Midpoint Model,3.852361526265658,All | Weekend | DST
+dst,36,Weekend,DST,Direct Midpoint Model,3.862359730887011,All | Weekend | DST
+dst,37,Weekend,DST,Direct Midpoint Model,3.8717345465712927,All | Weekend | DST
+dst,38,Weekend,DST,Direct Midpoint Model,3.880445263674285,All | Weekend | DST
+dst,39,Weekend,DST,Direct Midpoint Model,3.8884511725517648,All | Weekend | DST
+dst,40,Weekend,DST,Direct Midpoint Model,3.8957115635595136,All | Weekend | DST
+dst,41,Weekend,DST,Direct Midpoint Model,3.902185727053312,All | Weekend | DST
+dst,42,Weekend,DST,Direct Midpoint Model,3.9078329533889375,All | Weekend | DST
+dst,43,Weekend,DST,Direct Midpoint Model,3.912612532922172,All | Weekend | DST
+dst,44,Weekend,DST,Direct Midpoint Model,3.9164837560087946,All | Weekend | DST
+dst,45,Weekend,DST,Direct Midpoint Model,3.919414185747139,All | Weekend | DST
+dst,46,Weekend,DST,Direct Midpoint Model,3.9214307036792126,All | Weekend | DST
+dst,47,Weekend,DST,Direct Midpoint Model,3.922586081352929,All | Weekend | DST
+dst,48,Weekend,DST,Direct Midpoint Model,3.922933198230272,All | Weekend | DST
+dst,49,Weekend,DST,Direct Midpoint Model,3.9225249337732246,All | Weekend | DST
+dst,50,Weekend,DST,Direct Midpoint Model,3.9214141674437686,All | Weekend | DST
+dst,51,Weekend,DST,Direct Midpoint Model,3.919653778703889,All | Weekend | DST
+dst,52,Weekend,DST,Direct Midpoint Model,3.9172966470155672,All | Weekend | DST
+dst,53,Weekend,DST,Direct Midpoint Model,3.914395651840788,All | Weekend | DST
+dst,54,Weekend,DST,Direct Midpoint Model,3.911003672641532,All | Weekend | DST
+dst,55,Weekend,DST,Direct Midpoint Model,3.907173588879784,All | Weekend | DST
+dst,56,Weekend,DST,Direct Midpoint Model,3.902957762724927,All | Weekend | DST
+dst,57,Weekend,DST,Direct Midpoint Model,3.898390942263598,All | Weekend | DST
+dst,58,Weekend,DST,Direct Midpoint Model,3.893486341654556,All | Weekend | DST
+dst,59,Weekend,DST,Direct Midpoint Model,3.888255863859591,All | Weekend | DST
+dst,60,Weekend,DST,Direct Midpoint Model,3.8827114118404946,All | Weekend | DST
+dst,61,Weekend,DST,Direct Midpoint Model,3.876864888559054,All | Weekend | DST
+dst,62,Weekend,DST,Direct Midpoint Model,3.8707281969770615,All | Weekend | DST
+dst,63,Weekend,DST,Direct Midpoint Model,3.864313240056305,All | Weekend | DST
+dst,64,Weekend,DST,Direct Midpoint Model,3.857631920758576,All | Weekend | DST
+dst,65,Weekend,DST,Direct Midpoint Model,3.8506961420456625,All | Weekend | DST
+dst,66,Weekend,DST,Direct Midpoint Model,3.843517806879357,All | Weekend | DST
+dst,67,Weekend,DST,Direct Midpoint Model,3.8361088182214464,All | Weekend | DST
+dst,68,Weekend,DST,Direct Midpoint Model,3.8284810790337223,All | Weekend | DST
+dst,69,Weekend,DST,Direct Midpoint Model,3.820646492277975,All | Weekend | DST
+dst,70,Weekend,DST,Direct Midpoint Model,3.8126169609159937,All | Weekend | DST
+dst,71,Weekend,DST,Direct Midpoint Model,3.804404387909567,All | Weekend | DST
+dst,72,Weekend,DST,Direct Midpoint Model,3.7960206762204862,All | Weekend | DST
+dst,73,Weekend,DST,Direct Midpoint Model,3.7874777288105417,All | Weekend | DST
+dst,74,Weekend,DST,Direct Midpoint Model,3.778787448641523,All | Weekend | DST
+dst,75,Weekend,DST,Direct Midpoint Model,3.7699617386752178,All | Weekend | DST
+dst,76,Weekend,DST,Direct Midpoint Model,3.76101250187342,All | Weekend | DST
+dst,77,Weekend,DST,Direct Midpoint Model,3.7519516411979152,All | Weekend | DST
+dst,78,Weekend,DST,Direct Midpoint Model,3.742791059610497,All | Weekend | DST
+dst,79,Weekend,DST,Direct Midpoint Model,3.733542660072952,All | Weekend | DST
+dst,80,Weekend,DST,Direct Midpoint Model,3.724218345547073,All | Weekend | DST
+dst,81,Weekend,DST,Direct Midpoint Model,3.7148300189946473,All | Weekend | DST
+dst,82,Weekend,DST,Direct Midpoint Model,3.7053895833774657,All | Weekend | DST
+dst,83,Weekend,DST,Direct Midpoint Model,3.69590894165732,All | Weekend | DST
+dst,84,Weekend,DST,Direct Midpoint Model,3.6863999967959966,All | Weekend | DST
+dst,85,Weekend,DST,Direct Midpoint Model,3.676874651755289,All | Weekend | DST
+dst,18,Weekend,DST,Midpoint Model Adjusted for Duration,3.204312372689067,All | Weekend | DST
+dst,19,Weekend,DST,Midpoint Model Adjusted for Duration,3.2364039168642194,All | Weekend | DST
+dst,20,Weekend,DST,Midpoint Model Adjusted for Duration,3.2684954610393713,All | Weekend | DST
+dst,21,Weekend,DST,Midpoint Model Adjusted for Duration,3.30058648810507,All | Weekend | DST
+dst,22,Weekend,DST,Midpoint Model Adjusted for Duration,3.3326403922485257,All | Weekend | DST
+dst,23,Weekend,DST,Midpoint Model Adjusted for Duration,3.3645615072371533,All | Weekend | DST
+dst,24,Weekend,DST,Midpoint Model Adjusted for Duration,3.3962487029863353,All | Weekend | DST
+dst,25,Weekend,DST,Midpoint Model Adjusted for Duration,3.427600849411457,All | Weekend | DST
+dst,26,Weekend,DST,Midpoint Model Adjusted for Duration,3.458516816427901,All | Weekend | DST
+dst,27,Weekend,DST,Midpoint Model Adjusted for Duration,3.4888954739510503,All | Weekend | DST
+dst,28,Weekend,DST,Midpoint Model Adjusted for Duration,3.5186356918962884,All | Weekend | DST
+dst,29,Weekend,DST,Midpoint Model Adjusted for Duration,3.547636340179,All | Weekend | DST
+dst,30,Weekend,DST,Midpoint Model Adjusted for Duration,3.5757962887145665,All | Weekend | DST
+dst,31,Weekend,DST,Midpoint Model Adjusted for Duration,3.6030144074183728,All | Weekend | DST
+dst,32,Weekend,DST,Midpoint Model Adjusted for Duration,3.629189566205802,All | Weekend | DST
+dst,33,Weekend,DST,Midpoint Model Adjusted for Duration,3.6542206349922375,All | Weekend | DST
+dst,34,Weekend,DST,Midpoint Model Adjusted for Duration,3.6780064836930624,All | Weekend | DST
+dst,35,Weekend,DST,Midpoint Model Adjusted for Duration,3.700445982223661,All | Weekend | DST
+dst,36,Weekend,DST,Midpoint Model Adjusted for Duration,3.721438000499416,All | Weekend | DST
+dst,37,Weekend,DST,Midpoint Model Adjusted for Duration,3.740881408435709,All | Weekend | DST
+dst,38,Weekend,DST,Midpoint Model Adjusted for Duration,3.758675075947928,All | Weekend | DST
+dst,39,Weekend,DST,Midpoint Model Adjusted for Duration,3.774717872951452,All | Weekend | DST
+dst,40,Weekend,DST,Midpoint Model Adjusted for Duration,3.7889086693616663,All | Weekend | DST
+dst,41,Weekend,DST,Midpoint Model Adjusted for Duration,3.801146335093955,All | Weekend | DST
+dst,42,Weekend,DST,Midpoint Model Adjusted for Duration,3.8113297400637,All | Weekend | DST
+dst,43,Weekend,DST,Midpoint Model Adjusted for Duration,3.8193577541862864,All | Weekend | DST
+dst,44,Weekend,DST,Midpoint Model Adjusted for Duration,3.825129247377096,All | Weekend | DST
+dst,45,Weekend,DST,Midpoint Model Adjusted for Duration,3.8285776088466617,All | Weekend | DST
+dst,46,Weekend,DST,Midpoint Model Adjusted for Duration,3.829883743167132,All | Weekend | DST
+dst,47,Weekend,DST,Midpoint Model Adjusted for Duration,3.829336584956261,All | Weekend | DST
+dst,48,Weekend,DST,Midpoint Model Adjusted for Duration,3.8272255191199025,All | Weekend | DST
+dst,49,Weekend,DST,Midpoint Model Adjusted for Duration,3.823839930563913,All | Weekend | DST
+dst,50,Weekend,DST,Midpoint Model Adjusted for Duration,3.819469204194149,All | Weekend | DST
+dst,51,Weekend,DST,Midpoint Model Adjusted for Duration,3.814402724916466,All | Weekend | DST
+dst,52,Weekend,DST,Midpoint Model Adjusted for Duration,3.80892987763672,All | Weekend | DST
+dst,53,Weekend,DST,Midpoint Model Adjusted for Duration,3.803340047260767,All | Weekend | DST
+dst,54,Weekend,DST,Midpoint Model Adjusted for Duration,3.797922618694462,All | Weekend | DST
+dst,55,Weekend,DST,Midpoint Model Adjusted for Duration,3.7929669768436622,All | Weekend | DST
+dst,56,Weekend,DST,Midpoint Model Adjusted for Duration,3.788758464454275,All | Weekend | DST
+dst,57,Weekend,DST,Midpoint Model Adjusted for Duration,3.7854447866184313,All | Weekend | DST
+dst,58,Weekend,DST,Midpoint Model Adjusted for Duration,3.783005380835075,All | Weekend | DST
+dst,59,Weekend,DST,Midpoint Model Adjusted for Duration,3.7814094388198662,All | Weekend | DST
+dst,60,Weekend,DST,Midpoint Model Adjusted for Duration,3.780626152288468,All | Weekend | DST
+dst,61,Weekend,DST,Midpoint Model Adjusted for Duration,3.780624712956541,All | Weekend | DST
+dst,62,Weekend,DST,Midpoint Model Adjusted for Duration,3.781374312539746,All | Weekend | DST
+dst,63,Weekend,DST,Midpoint Model Adjusted for Duration,3.782844142753744,All | Weekend | DST
+dst,64,Weekend,DST,Midpoint Model Adjusted for Duration,3.7850033953141984,All | Weekend | DST
+dst,65,Weekend,DST,Midpoint Model Adjusted for Duration,3.787821261936768,All | Weekend | DST
+dst,66,Weekend,DST,Midpoint Model Adjusted for Duration,3.791266934337115,All | Weekend | DST
+dst,67,Weekend,DST,Midpoint Model Adjusted for Duration,3.795309604230901,All | Weekend | DST
+dst,68,Weekend,DST,Midpoint Model Adjusted for Duration,3.7999184633337872,All | Weekend | DST
+dst,69,Weekend,DST,Midpoint Model Adjusted for Duration,3.8050627033614344,All | Weekend | DST
+dst,70,Weekend,DST,Midpoint Model Adjusted for Duration,3.810711516029504,All | Weekend | DST
+dst,71,Weekend,DST,Midpoint Model Adjusted for Duration,3.8168340930536577,All | Weekend | DST
+dst,72,Weekend,DST,Midpoint Model Adjusted for Duration,3.823399626149556,All | Weekend | DST
+dst,73,Weekend,DST,Midpoint Model Adjusted for Duration,3.830377307032861,All | Weekend | DST
+dst,74,Weekend,DST,Midpoint Model Adjusted for Duration,3.8377363274192327,All | Weekend | DST
+dst,75,Weekend,DST,Midpoint Model Adjusted for Duration,3.8454458790243335,All | Weekend | DST
+dst,76,Weekend,DST,Midpoint Model Adjusted for Duration,3.853475153563825,All | Weekend | DST
+dst,77,Weekend,DST,Midpoint Model Adjusted for Duration,3.861793342753367,All | Weekend | DST
+dst,78,Weekend,DST,Midpoint Model Adjusted for Duration,3.870369638308623,All | Weekend | DST
+dst,79,Weekend,DST,Midpoint Model Adjusted for Duration,3.879173231945252,All | Weekend | DST
+dst,80,Weekend,DST,Midpoint Model Adjusted for Duration,3.888173315378915,All | Weekend | DST
+dst,81,Weekend,DST,Midpoint Model Adjusted for Duration,3.897339080325276,All | Weekend | DST
+dst,82,Weekend,DST,Midpoint Model Adjusted for Duration,3.9066397184999944,All | Weekend | DST
+dst,83,Weekend,DST,Midpoint Model Adjusted for Duration,3.9160444216187313,All | Weekend | DST
+dst,84,Weekend,DST,Midpoint Model Adjusted for Duration,3.92552238139715,All | Weekend | DST
+dst,85,Weekend,DST,Midpoint Model Adjusted for Duration,3.935042789550908,All | Weekend | DST
+dst,18,Weekend,NoDST,Derived from Onset+Offset,3.7837102532982425,All | Weekend | NoDST
+dst,19,Weekend,NoDST,Derived from Onset+Offset,3.7977562867314822,All | Weekend | NoDST
+dst,20,Weekend,NoDST,Derived from Onset+Offset,3.8118023201647206,All | Weekend | NoDST
+dst,21,Weekend,NoDST,Derived from Onset+Offset,3.8258481529818753,All | Weekend | NoDST
+dst,22,Weekend,NoDST,Derived from Onset+Offset,3.839879583711976,All | Weekend | NoDST
+dst,23,Weekend,NoDST,Derived from Onset+Offset,3.8538594979974703,All | Weekend | NoDST
+dst,24,Weekend,NoDST,Derived from Onset+Offset,3.8677486617427057,All | Weekend | NoDST
+dst,25,Weekend,NoDST,Derived from Onset+Offset,3.881507840852028,All | Weekend | NoDST
+dst,26,Weekend,NoDST,Derived from Onset+Offset,3.8950978012297814,All | Weekend | NoDST
+dst,27,Weekend,NoDST,Derived from Onset+Offset,3.9084793087803176,All | Weekend | NoDST
+dst,28,Weekend,NoDST,Derived from Onset+Offset,3.92161312940798,All | Weekend | NoDST
+dst,29,Weekend,NoDST,Derived from Onset+Offset,3.934460029017116,All | Weekend | NoDST
+dst,30,Weekend,NoDST,Derived from Onset+Offset,3.946980773512073,All | Weekend | NoDST
+dst,31,Weekend,NoDST,Derived from Onset+Offset,3.9591361287971982,All | Weekend | NoDST
+dst,32,Weekend,NoDST,Derived from Onset+Offset,3.970886860776838,All | Weekend | NoDST
+dst,33,Weekend,NoDST,Derived from Onset+Offset,3.982193735355338,All | Weekend | NoDST
+dst,34,Weekend,NoDST,Derived from Onset+Offset,3.993017518437046,All | Weekend | NoDST
+dst,35,Weekend,NoDST,Derived from Onset+Offset,4.003318975926309,All | Weekend | NoDST
+dst,36,Weekend,NoDST,Derived from Onset+Offset,4.013058873727473,All | Weekend | NoDST
+dst,37,Weekend,NoDST,Derived from Onset+Offset,4.022197977744885,All | Weekend | NoDST
+dst,38,Weekend,NoDST,Derived from Onset+Offset,4.030697053882893,All | Weekend | NoDST
+dst,39,Weekend,NoDST,Derived from Onset+Offset,4.038516868045843,All | Weekend | NoDST
+dst,40,Weekend,NoDST,Derived from Onset+Offset,4.045618186138081,All | Weekend | NoDST
+dst,41,Weekend,NoDST,Derived from Onset+Offset,4.0519617740639555,All | Weekend | NoDST
+dst,42,Weekend,NoDST,Derived from Onset+Offset,4.057508397727812,All | Weekend | NoDST
+dst,43,Weekend,NoDST,Derived from Onset+Offset,4.062218823033997,All | Weekend | NoDST
+dst,44,Weekend,NoDST,Derived from Onset+Offset,4.066053815886858,All | Weekend | NoDST
+dst,45,Weekend,NoDST,Derived from Onset+Offset,4.068981817455868,All | Weekend | NoDST
+dst,46,Weekend,NoDST,Derived from Onset+Offset,4.07102630323305,All | Weekend | NoDST
+dst,47,Weekend,NoDST,Derived from Onset+Offset,4.072234768877645,All | Weekend | NoDST
+dst,48,Weekend,NoDST,Derived from Onset+Offset,4.072654810169144,All | Weekend | NoDST
+dst,49,Weekend,NoDST,Derived from Onset+Offset,4.07233402288704,All | Weekend | NoDST
+dst,50,Weekend,NoDST,Derived from Onset+Offset,4.071320002810826,All | Weekend | NoDST
+dst,51,Weekend,NoDST,Derived from Onset+Offset,4.069660345719996,All | Weekend | NoDST
+dst,52,Weekend,NoDST,Derived from Onset+Offset,4.067402647394039,All | Weekend | NoDST
+dst,53,Weekend,NoDST,Derived from Onset+Offset,4.064594503612453,All | Weekend | NoDST
+dst,54,Weekend,NoDST,Derived from Onset+Offset,4.061283510154727,All | Weekend | NoDST
+dst,55,Weekend,NoDST,Derived from Onset+Offset,4.0575172628003555,All | Weekend | NoDST
+dst,56,Weekend,NoDST,Derived from Onset+Offset,4.053342917532313,All | Weekend | NoDST
+dst,57,Weekend,NoDST,Derived from Onset+Offset,4.048792655032833,All | Weekend | NoDST
+dst,58,Weekend,NoDST,Derived from Onset+Offset,4.0438803480738965,All | Weekend | NoDST
+dst,59,Weekend,NoDST,Derived from Onset+Offset,4.038618754662141,All | Weekend | NoDST
+dst,60,Weekend,NoDST,Derived from Onset+Offset,4.033020632804208,All | Weekend | NoDST
+dst,61,Weekend,NoDST,Derived from Onset+Offset,4.027098740506734,All | Weekend | NoDST
+dst,62,Weekend,NoDST,Derived from Onset+Offset,4.020865835776362,All | Weekend | NoDST
+dst,63,Weekend,NoDST,Derived from Onset+Offset,4.014334676619728,All | Weekend | NoDST
+dst,64,Weekend,NoDST,Derived from Onset+Offset,4.007518021043474,All | Weekend | NoDST
+dst,65,Weekend,NoDST,Derived from Onset+Offset,4.0004286270542355,All | Weekend | NoDST
+dst,66,Weekend,NoDST,Derived from Onset+Offset,3.993079252658658,All | Weekend | NoDST
+dst,67,Weekend,NoDST,Derived from Onset+Offset,3.985482655863375,All | Weekend | NoDST
+dst,68,Weekend,NoDST,Derived from Onset+Offset,3.9776515946750286,All | Weekend | NoDST
+dst,69,Weekend,NoDST,Derived from Onset+Offset,3.9695988271002585,All | Weekend | NoDST
+dst,70,Weekend,NoDST,Derived from Onset+Offset,3.961337111145703,All | Weekend | NoDST
+dst,71,Weekend,NoDST,Derived from Onset+Offset,3.9528792048180015,All | Weekend | NoDST
+dst,72,Weekend,NoDST,Derived from Onset+Offset,3.944237866123793,All | Weekend | NoDST
+dst,73,Weekend,NoDST,Derived from Onset+Offset,3.935425853069718,All | Weekend | NoDST
+dst,74,Weekend,NoDST,Derived from Onset+Offset,3.926455923662415,All | Weekend | NoDST
+dst,75,Weekend,NoDST,Derived from Onset+Offset,3.917340835908523,All | Weekend | NoDST
+dst,76,Weekend,NoDST,Derived from Onset+Offset,3.9080933478146815,All | Weekend | NoDST
+dst,77,Weekend,NoDST,Derived from Onset+Offset,3.898726217387531,All | Weekend | NoDST
+dst,78,Weekend,NoDST,Derived from Onset+Offset,3.889252202633711,All | Weekend | NoDST
+dst,79,Weekend,NoDST,Derived from Onset+Offset,3.8796840615598582,All | Weekend | NoDST
+dst,80,Weekend,NoDST,Derived from Onset+Offset,3.8700345521726143,All | Weekend | NoDST
+dst,81,Weekend,NoDST,Derived from Onset+Offset,3.86031643247862,All | Weekend | NoDST
+dst,82,Weekend,NoDST,Derived from Onset+Offset,3.85054246048451,All | Weekend | NoDST
+dst,83,Weekend,NoDST,Derived from Onset+Offset,3.840725394196926,All | Weekend | NoDST
+dst,84,Weekend,NoDST,Derived from Onset+Offset,3.8308779916225086,All | Weekend | NoDST
+dst,85,Weekend,NoDST,Derived from Onset+Offset,3.821013010767897,All | Weekend | NoDST
+dst,18,Weekend,NoDST,Direct Midpoint Model,3.781189001629129,All | Weekend | NoDST
+dst,19,Weekend,NoDST,Direct Midpoint Model,3.7956552906201297,All | Weekend | NoDST
+dst,20,Weekend,NoDST,Direct Midpoint Model,3.8101215796111303,All | Weekend | NoDST
+dst,21,Weekend,NoDST,Direct Midpoint Model,3.824587660441108,All | Weekend | NoDST
+dst,22,Weekend,NoDST,Direct Midpoint Model,3.839038797538342,All | Weekend | NoDST
+dst,23,Weekend,NoDST,Direct Midpoint Model,3.853436480717586,All | Weekend | NoDST
+dst,24,Weekend,NoDST,Direct Midpoint Model,3.867740000334621,All | Weekend | NoDST
+dst,25,Weekend,NoDST,Direct Midpoint Model,3.881908646745226,All | Weekend | NoDST
+dst,26,Weekend,NoDST,Direct Midpoint Model,3.8959017103051825,All | Weekend | NoDST
+dst,27,Weekend,NoDST,Direct Midpoint Model,3.909678481370269,All | Weekend | NoDST
+dst,28,Weekend,NoDST,Direct Midpoint Model,3.923198250296265,All | Weekend | NoDST
+dst,29,Weekend,NoDST,Direct Midpoint Model,3.9364203074389503,All | Weekend | NoDST
+dst,30,Weekend,NoDST,Direct Midpoint Model,3.9493039431541073,All | Weekend | NoDST
+dst,31,Weekend,NoDST,Direct Midpoint Model,3.9618084477975137,All | Weekend | NoDST
+dst,32,Weekend,NoDST,Direct Midpoint Model,3.973893111724949,All | Weekend | NoDST
+dst,33,Weekend,NoDST,Direct Midpoint Model,3.9855172252921944,All | Weekend | NoDST
+dst,34,Weekend,NoDST,Direct Midpoint Model,3.996640078855029,All | Weekend | NoDST
+dst,35,Weekend,NoDST,Direct Midpoint Model,4.0072209627692335,All | Weekend | NoDST
+dst,36,Weekend,NoDST,Direct Midpoint Model,4.017219167390587,All | Weekend | NoDST
+dst,37,Weekend,NoDST,Direct Midpoint Model,4.026593983074869,All | Weekend | NoDST
+dst,38,Weekend,NoDST,Direct Midpoint Model,4.03530470017786,All | Weekend | NoDST
+dst,39,Weekend,NoDST,Direct Midpoint Model,4.043310609055341,All | Weekend | NoDST
+dst,40,Weekend,NoDST,Direct Midpoint Model,4.050571000063089,All | Weekend | NoDST
+dst,41,Weekend,NoDST,Direct Midpoint Model,4.057045163556887,All | Weekend | NoDST
+dst,42,Weekend,NoDST,Direct Midpoint Model,4.062692389892512,All | Weekend | NoDST
+dst,43,Weekend,NoDST,Direct Midpoint Model,4.067471969425748,All | Weekend | NoDST
+dst,44,Weekend,NoDST,Direct Midpoint Model,4.071343192512369,All | Weekend | NoDST
+dst,45,Weekend,NoDST,Direct Midpoint Model,4.074273622250715,All | Weekend | NoDST
+dst,46,Weekend,NoDST,Direct Midpoint Model,4.076290140182788,All | Weekend | NoDST
+dst,47,Weekend,NoDST,Direct Midpoint Model,4.077445517856505,All | Weekend | NoDST
+dst,48,Weekend,NoDST,Direct Midpoint Model,4.0777926347338465,All | Weekend | NoDST
+dst,49,Weekend,NoDST,Direct Midpoint Model,4.077384370276799,All | Weekend | NoDST
+dst,50,Weekend,NoDST,Direct Midpoint Model,4.076273603947344,All | Weekend | NoDST
+dst,51,Weekend,NoDST,Direct Midpoint Model,4.074513215207465,All | Weekend | NoDST
+dst,52,Weekend,NoDST,Direct Midpoint Model,4.072156083519142,All | Weekend | NoDST
+dst,53,Weekend,NoDST,Direct Midpoint Model,4.069255088344363,All | Weekend | NoDST
+dst,54,Weekend,NoDST,Direct Midpoint Model,4.065863109145107,All | Weekend | NoDST
+dst,55,Weekend,NoDST,Direct Midpoint Model,4.062033025383361,All | Weekend | NoDST
+dst,56,Weekend,NoDST,Direct Midpoint Model,4.057817199228504,All | Weekend | NoDST
+dst,57,Weekend,NoDST,Direct Midpoint Model,4.0532503787671725,All | Weekend | NoDST
+dst,58,Weekend,NoDST,Direct Midpoint Model,4.048345778158131,All | Weekend | NoDST
+dst,59,Weekend,NoDST,Direct Midpoint Model,4.0431153003631675,All | Weekend | NoDST
+dst,60,Weekend,NoDST,Direct Midpoint Model,4.03757084834407,All | Weekend | NoDST
+dst,61,Weekend,NoDST,Direct Midpoint Model,4.03172432506263,All | Weekend | NoDST
+dst,62,Weekend,NoDST,Direct Midpoint Model,4.025587633480637,All | Weekend | NoDST
+dst,63,Weekend,NoDST,Direct Midpoint Model,4.019172676559881,All | Weekend | NoDST
+dst,64,Weekend,NoDST,Direct Midpoint Model,4.012491357262151,All | Weekend | NoDST
+dst,65,Weekend,NoDST,Direct Midpoint Model,4.005555578549238,All | Weekend | NoDST
+dst,66,Weekend,NoDST,Direct Midpoint Model,3.998377243382932,All | Weekend | NoDST
+dst,67,Weekend,NoDST,Direct Midpoint Model,3.990968254725022,All | Weekend | NoDST
+dst,68,Weekend,NoDST,Direct Midpoint Model,3.983340515537298,All | Weekend | NoDST
+dst,69,Weekend,NoDST,Direct Midpoint Model,3.9755059287815504,All | Weekend | NoDST
+dst,70,Weekend,NoDST,Direct Midpoint Model,3.967476397419569,All | Weekend | NoDST
+dst,71,Weekend,NoDST,Direct Midpoint Model,3.9592638244131426,All | Weekend | NoDST
+dst,72,Weekend,NoDST,Direct Midpoint Model,3.9508801127240623,All | Weekend | NoDST
+dst,73,Weekend,NoDST,Direct Midpoint Model,3.9423371653141177,All | Weekend | NoDST
+dst,74,Weekend,NoDST,Direct Midpoint Model,3.9336468851450985,All | Weekend | NoDST
+dst,75,Weekend,NoDST,Direct Midpoint Model,3.924821175178794,All | Weekend | NoDST
+dst,76,Weekend,NoDST,Direct Midpoint Model,3.9158719383769953,All | Weekend | NoDST
+dst,77,Weekend,NoDST,Direct Midpoint Model,3.906811077701491,All | Weekend | NoDST
+dst,78,Weekend,NoDST,Direct Midpoint Model,3.897650496114072,All | Weekend | NoDST
+dst,79,Weekend,NoDST,Direct Midpoint Model,3.888402096576528,All | Weekend | NoDST
+dst,80,Weekend,NoDST,Direct Midpoint Model,3.879077782050649,All | Weekend | NoDST
+dst,81,Weekend,NoDST,Direct Midpoint Model,3.869689455498223,All | Weekend | NoDST
+dst,82,Weekend,NoDST,Direct Midpoint Model,3.8602490198810417,All | Weekend | NoDST
+dst,83,Weekend,NoDST,Direct Midpoint Model,3.850768378160895,All | Weekend | NoDST
+dst,84,Weekend,NoDST,Direct Midpoint Model,3.841259433299572,All | Weekend | NoDST
+dst,85,Weekend,NoDST,Direct Midpoint Model,3.8317340882588646,All | Weekend | NoDST
+dst,18,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.383136452447278,All | Weekend | NoDST
+dst,19,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.4152279966224297,All | Weekend | NoDST
+dst,20,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.447319540797581,All | Weekend | NoDST
+dst,21,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.47941056786328,All | Weekend | NoDST
+dst,22,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.5114644720067356,All | Weekend | NoDST
+dst,23,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.543385586995363,All | Weekend | NoDST
+dst,24,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.575072782744545,All | Weekend | NoDST
+dst,25,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.606424929169667,All | Weekend | NoDST
+dst,26,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.637340896186111,All | Weekend | NoDST
+dst,27,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.66771955370926,All | Weekend | NoDST
+dst,28,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.6974597716544984,All | Weekend | NoDST
+dst,29,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.7264604199372098,All | Weekend | NoDST
+dst,30,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.754620368472776,All | Weekend | NoDST
+dst,31,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.781838487176582,All | Weekend | NoDST
+dst,32,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.808013645964012,All | Weekend | NoDST
+dst,33,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.8330447147504474,All | Weekend | NoDST
+dst,34,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.856830563451272,All | Weekend | NoDST
+dst,35,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.8792700619818703,All | Weekend | NoDST
+dst,36,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9002620802576256,All | Weekend | NoDST
+dst,37,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.919705488193919,All | Weekend | NoDST
+dst,38,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9374991557061376,All | Weekend | NoDST
+dst,39,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.953541952709662,All | Weekend | NoDST
+dst,40,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.967732749119876,All | Weekend | NoDST
+dst,41,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.979970414852165,All | Weekend | NoDST
+dst,42,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.99015381982191,All | Weekend | NoDST
+dst,43,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.998181833944496,All | Weekend | NoDST
+dst,44,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.003953327135305,All | Weekend | NoDST
+dst,45,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.007401688604872,All | Weekend | NoDST
+dst,46,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.0087078229253414,All | Weekend | NoDST
+dst,47,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.008160664714469,All | Weekend | NoDST
+dst,48,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.006049598878112,All | Weekend | NoDST
+dst,49,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.002664010322123,All | Weekend | NoDST
+dst,50,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.998293283952359,All | Weekend | NoDST
+dst,51,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.993226804674676,All | Weekend | NoDST
+dst,52,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9877539573949297,All | Weekend | NoDST
+dst,53,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9821641270189767,All | Weekend | NoDST
+dst,54,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.976746698452672,All | Weekend | NoDST
+dst,55,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.971791056601872,All | Weekend | NoDST
+dst,56,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9675825442124855,All | Weekend | NoDST
+dst,57,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.964268866376641,All | Weekend | NoDST
+dst,58,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.961829460593285,All | Weekend | NoDST
+dst,59,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9602335185780766,All | Weekend | NoDST
+dst,60,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9594502320466782,All | Weekend | NoDST
+dst,61,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.959448792714751,All | Weekend | NoDST
+dst,62,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.960198392297956,All | Weekend | NoDST
+dst,63,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.961668222511954,All | Weekend | NoDST
+dst,64,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.963827475072408,All | Weekend | NoDST
+dst,65,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.966645341694978,All | Weekend | NoDST
+dst,66,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.9700910140953254,All | Weekend | NoDST
+dst,67,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.974133683989111,All | Weekend | NoDST
+dst,68,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.978742543091997,All | Weekend | NoDST
+dst,69,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.983886783119644,All | Weekend | NoDST
+dst,70,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.989535595787714,All | Weekend | NoDST
+dst,71,Weekend,NoDST,Midpoint Model Adjusted for Duration,3.995658172811867,All | Weekend | NoDST
+dst,72,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.002223705907766,All | Weekend | NoDST
+dst,73,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.00920138679107,All | Weekend | NoDST
+dst,74,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.016560407177441,All | Weekend | NoDST
+dst,75,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.0242699587825435,All | Weekend | NoDST
+dst,76,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.032299233322035,All | Weekend | NoDST
+dst,77,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.040617422511577,All | Weekend | NoDST
+dst,78,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.049193718066832,All | Weekend | NoDST
+dst,79,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.057997311703461,All | Weekend | NoDST
+dst,80,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.066997395137125,All | Weekend | NoDST
+dst,81,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.076163160083486,All | Weekend | NoDST
+dst,82,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.085463798258204,All | Weekend | NoDST
+dst,83,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.094868501376941,All | Weekend | NoDST
+dst,84,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.104346461155358,All | Weekend | NoDST
+dst,85,Weekend,NoDST,Midpoint Model Adjusted for Duration,4.113866869309116,All | Weekend | NoDST

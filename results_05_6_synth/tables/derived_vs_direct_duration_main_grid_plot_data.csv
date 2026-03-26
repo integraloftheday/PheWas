@@ -1,0 +1,97 @@
+batch,strata,series,difference
+base,Overall | Employed For Wages | Weekday | AllDST,Direct Duration Model,0.4144577286687525
+base,Overall | Employed For Wages | Weekday | AllDST,Duration Model Adjusted for Midpoint,0.5633482985652147
+base,Overall | Employed For Wages | Weekend | AllDST,Direct Duration Model,0.31470912893239955
+base,Overall | Employed For Wages | Weekend | AllDST,Duration Model Adjusted for Midpoint,0.30579317156258945
+base,Overall | Homemaker | Weekday | AllDST,Direct Duration Model,1.6263128637830295
+base,Overall | Homemaker | Weekday | AllDST,Duration Model Adjusted for Midpoint,3.6240122324964466
+base,Overall | Homemaker | Weekend | AllDST,Direct Duration Model,1.5383012315950635
+base,Overall | Homemaker | Weekend | AllDST,Duration Model Adjusted for Midpoint,3.3830845363475968
+base,Overall | Out Of Work Less Than One | Weekday | AllDST,Direct Duration Model,-22.08463525373966
+base,Overall | Out Of Work Less Than One | Weekday | AllDST,Duration Model Adjusted for Midpoint,-23.97671640698681
+base,Overall | Out Of Work Less Than One | Weekend | AllDST,Direct Duration Model,-22.18259745661135
+base,Overall | Out Of Work Less Than One | Weekend | AllDST,Duration Model Adjusted for Midpoint,-24.22752753003731
+base,Overall | Out Of Work One Or More | Weekday | AllDST,Direct Duration Model,4.019638457536756
+base,Overall | Out Of Work One Or More | Weekday | AllDST,Duration Model Adjusted for Midpoint,1.9497222991461312
+base,Overall | Out Of Work One Or More | Weekend | AllDST,Direct Duration Model,3.9399099258568846
+base,Overall | Out Of Work One Or More | Weekend | AllDST,Duration Model Adjusted for Midpoint,1.70185741765685
+base,Overall | Retired | Weekday | AllDST,Direct Duration Model,0.22451214318023105
+base,Overall | Retired | Weekday | AllDST,Duration Model Adjusted for Midpoint,0.34774873772439996
+base,Overall | Retired | Weekend | AllDST,Direct Duration Model,0.12154434354553524
+base,Overall | Retired | Weekend | AllDST,Duration Model Adjusted for Midpoint,0.08270138302894736
+base,Overall | Self Employed | Weekday | AllDST,Direct Duration Model,-0.37335070362223544
+base,Overall | Self Employed | Weekday | AllDST,Duration Model Adjusted for Midpoint,0.07764632399198046
+base,Overall | Self Employed | Weekend | AllDST,Direct Duration Model,-0.4764949440618311
+base,Overall | Self Employed | Weekend | AllDST,Duration Model Adjusted for Midpoint,-0.1881385814172276
+base,Overall | Student | Weekday | AllDST,Direct Duration Model,-0.04094007869678862
+base,Overall | Student | Weekday | AllDST,Duration Model Adjusted for Midpoint,-0.07430303927409643
+base,Overall | Student | Weekend | AllDST,Direct Duration Model,-0.14093698914800878
+base,Overall | Student | Weekend | AllDST,Duration Model Adjusted for Midpoint,-0.3440912346251803
+base,Overall | Unable To Work | Weekday | AllDST,Direct Duration Model,0.07042080758451519
+base,Overall | Unable To Work | Weekday | AllDST,Duration Model Adjusted for Midpoint,0.260139992789858
+base,Overall | Unable To Work | Weekend | AllDST,Direct Duration Model,-0.01481515931642718
+base,Overall | Unable To Work | Weekend | AllDST,Duration Model Adjusted for Midpoint,0.01230952342340607
+dst,Overall | Employed For Wages | Weekday | DST,Direct Duration Model,0.43935467683478
+dst,Overall | Employed For Wages | Weekday | DST,Duration Model Adjusted for Midpoint,0.5535916175585207
+dst,Overall | Employed For Wages | Weekday | NoDST,Direct Duration Model,0.4553628890975894
+dst,Overall | Employed For Wages | Weekday | NoDST,Duration Model Adjusted for Midpoint,0.529426264388217
+dst,Overall | Employed For Wages | Weekend | DST,Direct Duration Model,0.34237705707226596
+dst,Overall | Employed For Wages | Weekend | DST,Duration Model Adjusted for Midpoint,0.29720143061148363
+dst,Overall | Employed For Wages | Weekend | NoDST,Direct Duration Model,0.36130209458556095
+dst,Overall | Employed For Wages | Weekend | NoDST,Duration Model Adjusted for Midpoint,0.27595026457224314
+dst,Overall | Homemaker | Weekday | DST,Direct Duration Model,1.680191665466353
+dst,Overall | Homemaker | Weekday | DST,Duration Model Adjusted for Midpoint,3.1073613797026276
+dst,Overall | Homemaker | Weekday | NoDST,Direct Duration Model,1.696199877729164
+dst,Overall | Homemaker | Weekday | NoDST,Duration Model Adjusted for Midpoint,3.083196026532325
+dst,Overall | Homemaker | Weekend | DST,Direct Duration Model,1.5919344355553655
+dst,Overall | Homemaker | Weekend | DST,Duration Model Adjusted for Midpoint,2.86139364349038
+dst,Overall | Homemaker | Weekend | NoDST,Direct Duration Model,1.6108594730686607
+dst,Overall | Homemaker | Weekend | NoDST,Duration Model Adjusted for Midpoint,2.840142477451141
+dst,Overall | Out Of Work Less Than One | Weekday | DST,Direct Duration Model,-22.01296614610508
+dst,Overall | Out Of Work Less Than One | Weekday | DST,Duration Model Adjusted for Midpoint,-23.91231942924667
+dst,Overall | Out Of Work Less Than One | Weekday | NoDST,Direct Duration Model,-21.996957933842268
+dst,Overall | Out Of Work Less Than One | Weekday | NoDST,Duration Model Adjusted for Midpoint,-23.936484782416972
+dst,Overall | Out Of Work Less Than One | Weekend | DST,Direct Duration Model,-22.10804294134386
+dst,Overall | Out Of Work Less Than One | Weekend | DST,Duration Model Adjusted for Midpoint,-24.16172232996116
+dst,Overall | Out Of Work Less Than One | Weekend | NoDST,Direct Duration Model,-22.08911790383057
+dst,Overall | Out Of Work Less Than One | Weekend | NoDST,Duration Model Adjusted for Midpoint,-24.182973496000397
+dst,Overall | Out Of Work One Or More | Weekday | DST,Direct Duration Model,3.965643833347368
+dst,Overall | Out Of Work One Or More | Weekday | DST,Duration Model Adjusted for Midpoint,1.9389988813210532
+dst,Overall | Out Of Work One Or More | Weekday | NoDST,Direct Duration Model,3.9816520456101774
+dst,Overall | Out Of Work One Or More | Weekday | NoDST,Duration Model Adjusted for Midpoint,1.9148335281507496
+dst,Overall | Out Of Work One Or More | Weekend | DST,Direct Duration Model,3.888651909537481
+dst,Overall | Out Of Work One Or More | Weekend | DST,Duration Model Adjusted for Midpoint,1.692291705421745
+dst,Overall | Out Of Work One Or More | Weekend | NoDST,Direct Duration Model,3.9075769470507744
+dst,Overall | Out Of Work One Or More | Weekend | NoDST,Duration Model Adjusted for Midpoint,1.6710405393825027
+dst,Overall | Retired | Weekday | DST,Direct Duration Model,0.1843578058237174
+dst,Overall | Retired | Weekday | DST,Duration Model Adjusted for Midpoint,0.3250715968569775
+dst,Overall | Retired | Weekday | NoDST,Direct Duration Model,0.20036601808652857
+dst,Overall | Retired | Weekday | NoDST,Duration Model Adjusted for Midpoint,0.3009062436866756
+dst,Overall | Retired | Weekend | DST,Direct Duration Model,0.08518253923959485
+dst,Overall | Retired | Weekend | DST,Duration Model Adjusted for Midpoint,0.0633365817090521
+dst,Overall | Retired | Weekend | NoDST,Direct Duration Model,0.10410757675288984
+dst,Overall | Retired | Weekend | NoDST,Duration Model Adjusted for Midpoint,0.04208541566981161
+dst,Overall | Self Employed | Weekday | DST,Direct Duration Model,-0.4037769047405497
+dst,Overall | Self Employed | Weekday | DST,Duration Model Adjusted for Midpoint,0.09401739289148114
+dst,Overall | Self Employed | Weekday | NoDST,Direct Duration Model,-0.3877686924777395
+dst,Overall | Self Employed | Weekday | NoDST,Duration Model Adjusted for Midpoint,0.06985203972117748
+dst,Overall | Self Employed | Weekend | DST,Direct Duration Model,-0.5040209950373331
+dst,Overall | Self Employed | Weekend | DST,Duration Model Adjusted for Midpoint,-0.17043215068814987
+dst,Overall | Self Employed | Weekend | NoDST,Direct Duration Model,-0.4850959575240381
+dst,Overall | Self Employed | Weekend | NoDST,Duration Model Adjusted for Midpoint,-0.19168331672738947
+dst,Overall | Student | Weekday | DST,Direct Duration Model,-0.03484381228245059
+dst,Overall | Student | Weekday | DST,Duration Model Adjusted for Midpoint,-0.09591501450896356
+dst,Overall | Student | Weekday | NoDST,Direct Duration Model,-0.01883560001964035
+dst,Overall | Student | Weekday | NoDST,Duration Model Adjusted for Midpoint,-0.12008036767926632
+dst,Overall | Student | Weekend | DST,Direct Duration Model,-0.13216530641920876
+dst,Overall | Student | Weekend | DST,Duration Model Adjusted for Midpoint,-0.36451918722475973
+dst,Overall | Student | Weekend | NoDST,Direct Duration Model,-0.11324026890591464
+dst,Overall | Student | Weekend | NoDST,Duration Model Adjusted for Midpoint,-0.38577035326399933
+dst,Overall | Unable To Work | Weekday | DST,Direct Duration Model,0.05704696841071666
+dst,Overall | Unable To Work | Weekday | DST,Duration Model Adjusted for Midpoint,0.2387484627320422
+dst,Overall | Unable To Work | Weekday | NoDST,Direct Duration Model,0.07305518067352601
+dst,Overall | Unable To Work | Weekday | NoDST,Duration Model Adjusted for Midpoint,0.21458310956173857
+dst,Overall | Unable To Work | Weekend | DST,Direct Duration Model,-0.02558522139131014
+dst,Overall | Unable To Work | Weekend | DST,Duration Model Adjusted for Midpoint,-0.00815087823912641
+dst,Overall | Unable To Work | Weekend | NoDST,Direct Duration Model,-0.00666018387801514
+dst,Overall | Unable To Work | Weekend | NoDST,Duration Model Adjusted for Midpoint,-0.0294020442783669

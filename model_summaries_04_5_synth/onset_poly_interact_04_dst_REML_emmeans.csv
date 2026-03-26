@@ -1,0 +1,66 @@
+"analysis","employment_status","is_weekend_factor","sex_concept","month","estimate","SE","df"
+"emm_employment_x_weekend","Employed For Wages","Weekday",NA,NA,-0.471016872930314,0.114429573864686,Inf
+"emm_employment_x_weekend","Homemaker","Weekday",NA,NA,0.1576354969497,0.357883756725057,Inf
+"emm_employment_x_weekend","Out Of Work Less Than One","Weekday",NA,NA,0.185260262313176,0.490643572785708,Inf
+"emm_employment_x_weekend","Out Of Work One Or More","Weekday",NA,NA,-0.519414004893638,0.431034917437454,Inf
+"emm_employment_x_weekend","Retired","Weekday",NA,NA,-0.464694900426803,0.219344178310143,Inf
+"emm_employment_x_weekend","Self Employed","Weekday",NA,NA,-0.565628727655981,0.25762815609196,Inf
+"emm_employment_x_weekend","Student","Weekday",NA,NA,0.160637632573912,0.281227327343164,Inf
+"emm_employment_x_weekend","Unable To Work","Weekday",NA,NA,0.206770650144785,0.300468186476565,Inf
+"emm_employment_x_weekend","Employed For Wages","Weekend",NA,NA,0.0922855611574226,0.114716164290303,Inf
+"emm_employment_x_weekend","Homemaker","Weekend",NA,NA,0.719802406001089,0.358429661282237,Inf
+"emm_employment_x_weekend","Out Of Work Less Than One","Weekend",NA,NA,0.745106033353187,0.491279083564861,Inf
+"emm_employment_x_weekend","Out Of Work One Or More","Weekend",NA,NA,0.0829770685093978,0.431913497544734,Inf
+"emm_employment_x_weekend","Retired","Weekend",NA,NA,0.100503844923899,0.219711546945343,Inf
+"emm_employment_x_weekend","Self Employed","Weekend",NA,NA,0.033151830920828,0.25814767687883,Inf
+"emm_employment_x_weekend","Student","Weekend",NA,NA,0.769368208284576,0.281755157927452,Inf
+"emm_employment_x_weekend","Unable To Work","Weekend",NA,NA,0.801165294858246,0.301075669103727,Inf
+"emm_employment_main","Employed For Wages",NA,NA,NA,-0.31002738465755,0.114373389829293,Inf
+"emm_employment_main","Homemaker",NA,NA,NA,0.318300455267259,0.357818256086191,Inf
+"emm_employment_main","Out Of Work Less Than One",NA,NA,NA,0.345261845724201,0.490530335327333,Inf
+"emm_employment_main","Out Of Work One Or More",NA,NA,NA,-0.347253090223475,0.430837476497579,Inf
+"emm_employment_main","Retired",NA,NA,NA,-0.30316345157235,0.219281532345336,Inf
+"emm_employment_main","Self Employed",NA,NA,NA,-0.394499688265806,0.257525732738235,Inf
+"emm_employment_main","Student",NA,NA,NA,0.334610359695633,0.28111931985827,Inf
+"emm_employment_main","Unable To Work",NA,NA,NA,0.376646207327137,0.300353448674056,Inf
+"emm_weekend_main",NA,"Weekday",NA,NA,-0.309207901752643,0.0817036169331984,Inf
+"emm_weekend_main",NA,"Weekend",NA,NA,0.264582146671017,0.0819501092350599,Inf
+"emm_sex_main",NA,NA,"Female",NA,-0.0690447219627856,0.0958517645282642,Inf
+"emm_sex_main",NA,NA,"Male",NA,-0.235582297764364,0.116483487888209,Inf
+"emm_sex_main",NA,NA,"Other",NA,-0.526328271442167,0.379774600652555,Inf
+"emm_month_main",NA,NA,NA,"01",-0.157552537505932,0.0825906298382815,Inf
+"emm_month_main",NA,NA,NA,"02",-0.147294824174554,0.0824424034413788,Inf
+"emm_month_main",NA,NA,NA,"03",-0.1547319804659,0.0825017013141631,Inf
+"emm_month_main",NA,NA,NA,"04",-0.158373961308046,0.0828950475102025,Inf
+"emm_month_main",NA,NA,NA,"05",-0.142191371690192,0.0830368424422415,Inf
+"emm_month_main",NA,NA,NA,"06",-0.116450625651559,0.0829870545384914,Inf
+"emm_month_main",NA,NA,NA,"07",-0.127341532679769,0.0829588107917236,Inf
+"emm_month_main",NA,NA,NA,"08",-0.120745574656499,0.0831346326175821,Inf
+"emm_month_main",NA,NA,NA,"09",-0.153243461761797,0.083309316083195,Inf
+"emm_month_main",NA,NA,NA,"10",-0.147611060751026,0.0831352612744646,Inf
+"emm_month_main",NA,NA,NA,"11",-0.145897726030518,0.0829404909823116,Inf
+"emm_month_main",NA,NA,NA,"12",-0.164400951906324,0.0827049507724804,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"01",-0.32154327189662,0.0826378282101432,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"02",-0.311285558565243,0.0824884210742649,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"03",-0.318722714856589,0.0825418550887806,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"04",-0.322364695698734,0.082943577083152,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"05",-0.306182106080881,0.0830828494054832,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"06",-0.280441360042248,0.0830297745751142,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"07",-0.291332267070458,0.0830113588932656,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"08",-0.284736309047188,0.0831739114310831,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"09",-0.317234196152486,0.0833504008464537,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"10",-0.311601795141715,0.0831897938841075,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"11",-0.309888460421207,0.082982254545973,Inf
+"emm_month_x_weekend",NA,"Weekday",NA,"12",-0.328391686297012,0.0827516502041014,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"01",0.25224677652704,0.0828762467534962,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"02",0.262504489858418,0.0827316971672694,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"03",0.255067333567072,0.0828053257692903,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"04",0.251425352724926,0.0831758814951474,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"05",0.26760794234278,0.0833232791905158,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"06",0.293348688381413,0.0832819205216415,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"07",0.282457781353203,0.0832293102614636,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"08",0.289053739376472,0.0834373665402053,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"09",0.256555852271175,0.0836067030337172,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"10",0.262188253281946,0.0833999681957518,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"11",0.263901588002454,0.0832379577190178,Inf
+"emm_month_x_weekend",NA,"Weekend",NA,"12",0.245398362126648,0.0829912653460441,Inf

@@ -212,6 +212,27 @@ get_numeric_grid <- function(model, var_name, n = 21L) {
   vals
 }
 
+get_age_grid <- function(model) {
+  frm <- tryCatch(model@frame, error = function(e) NULL)
+  if (is.null(frm) || !"age_at_sleep" %in% names(frm)) {
+    return(seq(AGE_MIN, AGE_MAX, by = AGE_BY))
+  }
+
+  x <- suppressWarnings(as.numeric(frm$age_at_sleep))
+  x <- x[is.finite(x)]
+  if (length(x) == 0) {
+    return(seq(AGE_MIN, AGE_MAX, by = AGE_BY))
+  }
+
+  lo <- max(AGE_MIN, floor(min(x, na.rm = TRUE)))
+  hi <- min(AGE_MAX, ceiling(max(x, na.rm = TRUE)))
+  if (!is.finite(lo) || !is.finite(hi) || lo > hi) {
+    return(seq(AGE_MIN, AGE_MAX, by = AGE_BY))
+  }
+
+  seq(lo, hi, by = AGE_BY)
+}
+
 has_vars <- function(model, vars) {
   frm_names <- character()
   if (!inherits(model, "phewas_marginal_model")) {
@@ -257,6 +278,25 @@ normalize_dst_level <- function(x) {
 compact_tibble <- function(df) {
   if (is.null(df) || nrow(df) == 0) return(tibble())
   tibble::as_tibble(as.data.frame(df, stringsAsFactors = FALSE))
+}
+
+collapse_employment_status <- function(x) {
+  x_chr <- trimws(as.character(x))
+  out <- rep(NA_character_, length(x_chr))
+
+  out[x_chr %in% c("Employed For Wages", "Self Employed", "Working")] <- "Working"
+  out[x_chr %in% c("Student")] <- "Student"
+  out[x_chr %in% c("Retired")] <- "Retired"
+  out[x_chr %in% c(
+    "Homemaker",
+    "Unable To Work",
+    "Out Of Work Less Than One",
+    "Out Of Work One Or More",
+    "Out Of Work",
+    "Not Working"
+  )] <- "Not Working"
+
+  out
 }
 
 safe_predictions <- function(model, grid_args, keep_cols, analysis_name) {
@@ -327,6 +367,13 @@ safe_predictions <- function(model, grid_args, keep_cols, analysis_name) {
         )
     } else {
       newdata <- do.call(datagrid, c(list(model = model), grid_args))
+      frm <- tryCatch(model@frame, error = function(e) NULL)
+      if (!is.null(frm) && "age_centered" %in% names(frm) && "age_at_sleep" %in% names(newdata) && !"age_centered" %in% names(newdata)) {
+        age_center <- suppressWarnings(mean(as.numeric(frm$age_at_sleep), na.rm = TRUE))
+        if (!is.finite(age_center)) age_center <- 0
+        newdata$age_centered <- as.numeric(newdata$age_at_sleep) - age_center
+      }
+
       pred <- predictions(
         model,
         newdata = newdata,
@@ -429,7 +476,7 @@ checkpoint_schemas <- list(
     "outcome", "outcome_type", "batch", "model_method", "model_file",
     "outcome_variant",
     "analysis",
-    "employment_status", "is_weekend_factor", "sex_concept", "month", "dst_observes", "age_at_sleep", "PhotoPeriod", "duration_hours",
+    "employment_status", "is_weekend_factor", "sex_concept", "month", "dst_observes", "age_at_sleep", "deviation", "duration_hours",
     "estimate", "conf.low", "conf.high"
   ),
   derived_duration_midpoint_main_grid.csv = c(
@@ -460,7 +507,7 @@ checkpoint_schemas <- list(
     "outcome", "outcome_type", "batch", "model_method", "model_file",
     "outcome_variant",
     "analysis",
-    "employment_status", "is_weekend_factor", "sex_concept", "month", "age_at_sleep", "PhotoPeriod", "duration_hours",
+    "employment_status", "is_weekend_factor", "sex_concept", "month", "age_at_sleep", "deviation", "duration_hours",
     "estimate", "conf.low", "conf.high"
   )
 )
@@ -638,6 +685,7 @@ for (i in seq_len(nrow(model_registry))) {
   model <- safe_read_model(reg_row$model_path)
   if (is.null(model)) next
   log_memory(paste("after_load", basename(reg_row$model_path)))
+  age_grid <- if (has_vars(model, c("age_at_sleep"))) get_age_grid(model) else NULL
 
   append_pred <- function(pred_obj) {
     if (nrow(pred_obj) == 0) return(invisible(NULL))
@@ -657,10 +705,12 @@ for (i in seq_len(nrow(model_registry))) {
 
   # Employment x Weekend
   if (has_vars(model, c("employment_status", "is_weekend_factor"))) {
+    employment_levels <- collapse_employment_status(get_model_values(model, "employment_status"))
+    employment_levels <- unique(employment_levels[!is.na(employment_levels)])
     pred_emp_wk <- safe_predictions(
       model = model,
       grid_args = list(
-        employment_status = get_model_values(model, "employment_status"),
+        employment_status = employment_levels,
         is_weekend_factor = get_model_values(model, "is_weekend_factor")
       ),
       keep_cols = c("employment_status", "is_weekend_factor"),
@@ -759,7 +809,7 @@ for (i in seq_len(nrow(model_registry))) {
   if (has_vars(model, c("age_at_sleep"))) {
     pred_age <- safe_predictions(
       model = model,
-      grid_args = list(age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY)),
+      grid_args = list(age_at_sleep = age_grid),
       keep_cols = c("age_at_sleep"),
       analysis_name = "age_main"
     )
@@ -768,11 +818,13 @@ for (i in seq_len(nrow(model_registry))) {
 
   # Age x Employment
   if (has_vars(model, c("age_at_sleep", "employment_status"))) {
+    employment_levels <- collapse_employment_status(get_model_values(model, "employment_status"))
+    employment_levels <- unique(employment_levels[!is.na(employment_levels)])
     pred_age_emp <- safe_predictions(
       model = model,
       grid_args = list(
-        age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY),
-        employment_status = get_model_values(model, "employment_status")
+        age_at_sleep = age_grid,
+        employment_status = employment_levels
       ),
       keep_cols = c("age_at_sleep", "employment_status"),
       analysis_name = "age_x_employment"
@@ -785,7 +837,7 @@ for (i in seq_len(nrow(model_registry))) {
     pred_age_wk <- safe_predictions(
       model = model,
       grid_args = list(
-        age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY),
+        age_at_sleep = age_grid,
         is_weekend_factor = get_model_values(model, "is_weekend_factor")
       ),
       keep_cols = c("age_at_sleep", "is_weekend_factor"),
@@ -799,7 +851,7 @@ for (i in seq_len(nrow(model_registry))) {
     pred_age_dst <- safe_predictions(
       model = model,
       grid_args = list(
-        age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY),
+        age_at_sleep = age_grid,
         dst_observes = get_model_values(model, "dst_observes")
       ),
       keep_cols = c("age_at_sleep", "dst_observes"),
@@ -808,17 +860,17 @@ for (i in seq_len(nrow(model_registry))) {
     append_pred(pred_age_dst)
   }
 
-  # Photoperiod main effect (continuous)
-  if (has_vars(model, c("PhotoPeriod"))) {
-    photo_grid <- get_numeric_grid(model, "PhotoPeriod", n = 21L)
-    if (!is.null(photo_grid) && length(photo_grid) >= 2) {
-      pred_photo <- safe_predictions(
+  # Deviation main effect (continuous)
+  if (has_vars(model, c("deviation"))) {
+    dev_grid <- get_numeric_grid(model, "deviation", n = 21L)
+    if (!is.null(dev_grid) && length(dev_grid) >= 2) {
+      pred_dev <- safe_predictions(
         model = model,
-        grid_args = list(PhotoPeriod = photo_grid),
-        keep_cols = c("PhotoPeriod"),
-        analysis_name = "photoperiod_main"
+        grid_args = list(deviation = dev_grid),
+        keep_cols = c("deviation"),
+        analysis_name = "deviation_main"
       )
-      append_pred(pred_photo)
+      append_pred(pred_dev)
     }
   }
 
@@ -931,8 +983,8 @@ for (b in available_batches) {
   }
 
   shared_emp <- ordered_intersection(
-    get_model_values(onset_model, "employment_status"),
-    get_model_values(offset_model, "employment_status")
+    collapse_employment_status(get_model_values(onset_model, "employment_status")),
+    collapse_employment_status(get_model_values(offset_model, "employment_status"))
   )
   shared_weekend <- ordered_intersection(
     get_model_values(onset_model, "is_weekend_factor"),
@@ -942,6 +994,13 @@ for (b in available_batches) {
     get_model_values(onset_model, "dst_observes"),
     get_model_values(offset_model, "dst_observes")
   )
+
+  onset_age_grid <- get_age_grid(onset_model)
+  offset_age_grid <- get_age_grid(offset_model)
+  shared_age_grid <- ordered_intersection(onset_age_grid, offset_age_grid)
+  if (is.null(shared_age_grid) || length(shared_age_grid) == 0) {
+    shared_age_grid <- seq(AGE_MIN, AGE_MAX, by = AGE_BY)
+  }
 
   # 2A. Derived main-grid predictions (employment/weekend and optional DST)
   grid_main <- list()
@@ -1007,34 +1066,15 @@ for (b in available_batches) {
   }
 
   # 2B. Derived age-based predictions
-  grid_age <- list(age_at_sleep = seq(AGE_MIN, AGE_MAX, by = AGE_BY))
   key_age <- c("age_at_sleep")
 
-  if (!is.null(shared_weekend) && length(shared_weekend) > 0) {
-    grid_age$is_weekend_factor <- shared_weekend
-    key_age <- c(key_age, "is_weekend_factor")
-  }
+  onset_age <- predictions_all %>%
+    filter(batch == b, outcome == "onset", outcome_variant == "primary", analysis == "age_main") %>%
+    transmute(age_at_sleep, onset_estimate = estimate)
 
-  if (!is.null(shared_dst) && length(shared_dst) > 0) {
-    grid_age$dst_observes <- shared_dst
-    key_age <- c(key_age, "dst_observes")
-  }
-
-  onset_age <- safe_predictions(
-    model = onset_model,
-    grid_args = grid_age,
-    keep_cols = key_age,
-    analysis_name = "onset_age_for_derived"
-  ) %>%
-    rename(onset_estimate = estimate)
-
-  offset_age <- safe_predictions(
-    model = offset_model,
-    grid_args = grid_age,
-    keep_cols = key_age,
-    analysis_name = "offset_age_for_derived"
-  ) %>%
-    rename(offset_estimate = estimate)
+  offset_age <- predictions_all %>%
+    filter(batch == b, outcome == "offset", outcome_variant == "primary", analysis == "age_main") %>%
+    transmute(age_at_sleep, offset_estimate = estimate)
 
   if (nrow(onset_age) > 0 && nrow(offset_age) > 0) {
     derived_age <- onset_age %>%
@@ -1080,13 +1120,9 @@ for (b in available_batches) {
         }
       }
       if (nrow(compare_age) > 0) {
-        duration_age <- safe_predictions(
-          model = duration_model,
-          grid_args = grid_age,
-          keep_cols = key_age,
-          analysis_name = "duration_age_direct"
-        ) %>%
-          rename(duration_direct_estimate = estimate)
+        duration_age <- predictions_all %>%
+          filter(batch == b, outcome == "duration", outcome_variant == "primary", analysis == "age_main") %>%
+          transmute(age_at_sleep, duration_direct_estimate = estimate)
         if (nrow(duration_age) > 0) {
           compare_age <- compare_age %>%
             left_join(duration_age %>% select(all_of(c(key_age, "duration_direct_estimate"))), by = key_age) %>%
@@ -1119,13 +1155,9 @@ for (b in available_batches) {
         }
       }
       if (nrow(compare_age) > 0) {
-        duration_adjusted_age <- safe_predictions(
-          model = duration_adjusted_model,
-          grid_args = grid_age,
-          keep_cols = key_age,
-          analysis_name = "duration_age_adjusted"
-        ) %>%
-          rename(duration_adjusted_estimate = estimate)
+        duration_adjusted_age <- predictions_all %>%
+          filter(batch == b, outcome == "duration", outcome_variant == "adjusted", analysis == "age_main") %>%
+          transmute(age_at_sleep, duration_adjusted_estimate = estimate)
         if (nrow(duration_adjusted_age) > 0) {
           compare_age <- compare_age %>%
             left_join(duration_adjusted_age %>% select(all_of(c(key_age, "duration_adjusted_estimate"))), by = key_age) %>%
@@ -1158,13 +1190,9 @@ for (b in available_batches) {
         }
       }
       if (nrow(compare_age) > 0) {
-        midpoint_age <- safe_predictions(
-          model = midpoint_model,
-          grid_args = grid_age,
-          keep_cols = key_age,
-          analysis_name = "midpoint_age_direct"
-        ) %>%
-          rename(midpoint_direct_estimate = estimate)
+        midpoint_age <- predictions_all %>%
+          filter(batch == b, outcome == "midpoint", outcome_variant == "primary", analysis == "age_main") %>%
+          transmute(age_at_sleep, midpoint_direct_estimate = estimate)
         if (nrow(midpoint_age) > 0) {
           compare_age <- compare_age %>%
             left_join(midpoint_age %>% select(all_of(c(key_age, "midpoint_direct_estimate"))), by = key_age) %>%
@@ -1197,13 +1225,9 @@ for (b in available_batches) {
         }
       }
       if (nrow(compare_age) > 0) {
-        midpoint_adjusted_age <- safe_predictions(
-          model = midpoint_adjusted_model,
-          grid_args = grid_age,
-          keep_cols = key_age,
-          analysis_name = "midpoint_age_adjusted"
-        ) %>%
-          rename(midpoint_adjusted_estimate = estimate)
+        midpoint_adjusted_age <- predictions_all %>%
+          filter(batch == b, outcome == "midpoint", outcome_variant == "adjusted", analysis == "age_main") %>%
+          transmute(age_at_sleep, midpoint_adjusted_estimate = estimate)
         if (nrow(midpoint_adjusted_age) > 0) {
           compare_age <- compare_age %>%
             left_join(midpoint_adjusted_age %>% select(all_of(c(key_age, "midpoint_adjusted_estimate"))), by = key_age) %>%

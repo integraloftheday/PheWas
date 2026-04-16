@@ -1,0 +1,49 @@
+batch,derived_midpoint_linear,series,duration_estimate
+base,13.902995037661086,Direct Duration Model,3.7420727507016034
+base,13.902995037661086,Duration Model Adjusted for Midpoint,3.6630161558927785
+base,2.0256941968387068,Direct Duration Model,9.044464191087211
+base,2.0256941968387068,Duration Model Adjusted for Midpoint,9.055023530819186
+base,9.71243856305879,Direct Duration Model,1.5134918209788524
+base,9.71243856305879,Duration Model Adjusted for Midpoint,1.4396462843233415
+base,5.176059069311023,Direct Duration Model,4.178631479657543
+base,5.176059069311023,Duration Model Adjusted for Midpoint,4.178962893656345
+base,12.76786147514219,Direct Duration Model,5.0251496681211165
+base,12.76786147514219,Duration Model Adjusted for Midpoint,4.9334996423518
+base,2.0039360880983175,Direct Duration Model,6.855469132146036
+base,2.0039360880983175,Duration Model Adjusted for Midpoint,6.871184826940716
+base,12.130598579701072,Direct Duration Model,4.1028855548012775
+base,12.130598579701072,Duration Model Adjusted for Midpoint,4.032227560618894
+base,4.80976635521062,Direct Duration Model,8.738761874089928
+base,4.80976635521062,Duration Model Adjusted for Midpoint,8.74384156983437
+dst,14.820082965436455,Direct Duration Model,2.8405877539161044
+dst,14.820082965436455,Duration Model Adjusted for Midpoint,2.743688687319759
+dst,12.843984116456667,Direct Duration Model,6.419968554507224
+dst,12.843984116456667,Duration Model Adjusted for Midpoint,6.345144995647872
+dst,2.3077975853843355,Direct Duration Model,9.102464653428765
+dst,2.3077975853843355,Duration Model Adjusted for Midpoint,9.110334686906231
+dst,0.3316987364045403,Direct Duration Model,12.681845454019886
+dst,0.3316987364045403,Duration Model Adjusted for Midpoint,12.711790995234344
+dst,10.365673161537153,Direct Duration Model,0.9147926884821036
+dst,10.365673161537153,Duration Model Adjusted for Midpoint,0.8263502023559601
+dst,8.389574312557357,Direct Duration Model,4.494173489073224
+dst,8.389574312557357,Duration Model Adjusted for Midpoint,4.427806510684072
+dst,5.209157482398027,Direct Duration Model,4.357408119460054
+dst,5.209157482398027,Duration Model Adjusted for Midpoint,4.356578853827083
+dst,3.2330586334182314,Direct Duration Model,7.936788920051173
+dst,3.2330586334182314,Duration Model Adjusted for Midpoint,7.958035162155197
+dst,13.441256798065249,Direct Duration Model,4.33947893609521
+dst,13.441256798065249,Duration Model Adjusted for Midpoint,4.231150581519314
+dst,11.465157949085452,Direct Duration Model,7.918859736686329
+dst,11.465157949085452,Duration Model Adjusted for Midpoint,7.832606889847427
+dst,1.985937402921337,Direct Duration Model,6.686766652692997
+dst,1.985937402921337,Duration Model Adjusted for Midpoint,6.702571048753147
+dst,0.00983855394154176,Direct Duration Model,10.266147453284118
+dst,0.00983855394154176,Duration Model Adjusted for Midpoint,10.30402735708126
+dst,12.876190077819963,Direct Duration Model,3.291811043537283
+dst,12.876190077819963,Duration Model Adjusted for Midpoint,3.2058253022182295
+dst,10.900091228840168,Direct Duration Model,6.871191844128402
+dst,10.900091228840168,Duration Model Adjusted for Midpoint,6.807281610546343
+dst,4.632104273563698,Direct Duration Model,8.682351828437811
+dst,4.632104273563698,Duration Model Adjusted for Midpoint,8.688247307279658
+dst,2.6560054245839027,Direct Duration Model,12.26173262902893
+dst,2.6560054245839027,Duration Model Adjusted for Midpoint,12.289703615607772

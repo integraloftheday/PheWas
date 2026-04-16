@@ -2,9 +2,9 @@
 # Mixed-effects regression with:
 # - spline age base model (df=3)
 # - weekend interaction terms
-# - age x employment interaction
+# - reduced-rank age x employment interaction
 # - month-based seasonality controls
-# - optional environmental controls (PhotoPeriod, deviation)
+# - deviation environmental control (PhotoPeriod excluded by design)
 # - optional DST DiD-style event encoding
 # - cross-adjustment between duration and midpoint outcomes
 
@@ -59,6 +59,23 @@ normalize_zip3 <- function(x) {
     if (nchar(digits) == 4) return(substr(sprintf("%05d", as.integer(digits)), 1, 3))
     substr(digits, 1, 3)
   }, FUN.VALUE = character(1))
+}
+
+collapse_employment_status <- function(x) {
+  x_chr <- trimws(as.character(x))
+  out <- rep(NA_character_, length(x_chr))
+
+  out[x_chr %in% c("Employed For Wages", "Self Employed")] <- "Working"
+  out[x_chr %in% c("Student")] <- "Student"
+  out[x_chr %in% c("Retired")] <- "Retired"
+  out[x_chr %in% c(
+    "Homemaker",
+    "Unable To Work",
+    "Out Of Work Less Than One",
+    "Out Of Work One Or More"
+  )] <- "Not Working"
+
+  out
 }
 
 get_dst_dates <- function(year) {
@@ -139,7 +156,12 @@ df_clean <- df_clean %>%
   mutate(
     duration_hours = .data[[duration_source_col]] / 60,
     sex_concept = as.factor(sex_concept),
-    employment_status = as.factor(employment_status),
+    employment_status_original = employment_status,
+    employment_status = collapse_employment_status(employment_status),
+    employment_status = factor(
+      employment_status,
+      levels = c("Working", "Student", "Retired", "Not Working")
+    ),
     month = as.factor(month),
     is_weekend_factor = factor(
       ifelse(is_weekend %in% c(TRUE, 1), "Weekend", "Weekday"),
@@ -164,15 +186,19 @@ df_clean <- df_clean %>%
     }
   )
 
+age_center <- suppressWarnings(mean(df_clean$age_at_sleep, na.rm = TRUE))
+if (!is.finite(age_center)) age_center <- 0
+
+df_clean <- df_clean %>%
+  mutate(age_centered = age_at_sleep - age_center)
+
 message("Seasonality: using month factor only")
 
-has_photoperiod <- "PhotoPeriod" %in% names(df_clean) && any(!is.na(df_clean$PhotoPeriod))
 has_deviation <- "deviation" %in% names(df_clean) && any(!is.na(df_clean$deviation))
 has_dst_observes <- "dst_observes" %in% names(df_clean) && n_distinct(na.omit(df_clean$dst_observes)) >= 2
 has_dst_event <- all(c("post_spring", "post_fall") %in% names(df_clean)) &&
   any(!is.na(df_clean$post_spring)) && any(!is.na(df_clean$post_fall))
 
-if (!has_photoperiod) message("PhotoPeriod not available/non-varying; excluding from model RHS.")
 if (!has_deviation) message("deviation not available/non-varying; excluding from model RHS.")
 if (!has_dst_observes) message("dst_observes not available/non-varying; excluding DST terms.")
 if (!has_dst_event) message("DST event indicators not available; excluding post_spring/post_fall DiD terms.")
@@ -180,8 +206,8 @@ if (!has_dst_event) message("DST event indicators not available; excluding post_
 cols_needed <- c(
   "person_id",
   "onset_linear", "offset_linear", "midpoint_linear", "duration_hours",
-  "age_at_sleep", "sex_concept", "employment_status", "is_weekend_factor",
-  "month", "dst_observes", "PhotoPeriod", "deviation", "post_spring", "post_fall"
+  "age_at_sleep", "age_centered", "sex_concept", "employment_status", "is_weekend_factor",
+  "month", "dst_observes", "deviation", "post_spring", "post_fall"
 )
 
 df_clean <- df_clean[, intersect(names(df_clean), cols_needed)]
@@ -282,7 +308,7 @@ fit_save_summarize <- function(formula_obj, model_name, description, df, run_rem
     age_grid <- age_grid[is.finite(age_grid)]
     if (length(age_grid) == 0) age_grid <- 18:85
 
-    photo_grid <- if ("PhotoPeriod" %in% fit_vars && "PhotoPeriod" %in% names(df)) make_numeric_grid(df$PhotoPeriod, n = 21L) else NULL
+    deviation_grid <- if ("deviation" %in% fit_vars && "deviation" %in% names(df)) make_numeric_grid(df$deviation, n = 21L) else NULL
     duration_grid <- if ("duration_hours" %in% fit_vars && "duration_hours" %in% names(df)) make_numeric_grid(df$duration_hours, n = 21L) else NULL
 
     safe_emm <- function(specs, analysis_name, at = NULL) {
@@ -314,9 +340,9 @@ fit_save_summarize <- function(formula_obj, model_name, description, df, run_rem
       safe_emm(~ age_at_sleep * employment_status, "emm_age_x_employment", at = list(age_at_sleep = age_grid))
     )
 
-    if (!is.null(photo_grid) && length(photo_grid) >= 2) {
+    if (!is.null(deviation_grid) && length(deviation_grid) >= 2) {
       emm_parts <- append(emm_parts, list(
-        safe_emm(~ PhotoPeriod, "emm_photoperiod_main", at = list(PhotoPeriod = photo_grid))
+        safe_emm(~ deviation, "emm_deviation_main", at = list(deviation = deviation_grid))
       ))
     }
 
@@ -335,7 +361,7 @@ fit_save_summarize <- function(formula_obj, model_name, description, df, run_rem
     names(emm_tbl)[names(emm_tbl) == "upper.CL"] <- "conf.high"
 
     keep <- c(
-      "analysis", "employment_status", "is_weekend_factor", "sex_concept", "month", "age_at_sleep", "PhotoPeriod", "duration_hours",
+      "analysis", "employment_status", "is_weekend_factor", "sex_concept", "month", "age_at_sleep", "deviation", "duration_hours",
       "estimate", "SE", "df", "conf.low", "conf.high", "t.ratio", "p.value"
     )
     emm_tbl <- emm_tbl[, intersect(keep, names(emm_tbl)), drop = FALSE]
@@ -466,16 +492,13 @@ build_rhs <- function(outcome_name, include_dst = FALSE, adjusted_variant = FALS
     "splines::ns(age_at_sleep, df = 3)",
     "employment_status",
     "is_weekend_factor",
-    "splines::ns(age_at_sleep, df = 3):employment_status",  # age x employment interaction
+    "age_centered:employment_status",            # reduced-rank age x employment interaction
     "splines::ns(age_at_sleep, df = 3):is_weekend_factor",  # weekend interaction with age
     "is_weekend_factor:employment_status",      # weekend interaction with employment
     "sex_concept",
     "month"                                     # month-based seasonality
   )
 
-  if (has_photoperiod) {
-    rhs_terms <- c(rhs_terms, "PhotoPeriod")
-  }
   if (has_deviation) {
     rhs_terms <- c(rhs_terms, "deviation")
   }
@@ -532,42 +555,42 @@ model_specs <- list(
     name = "onset_poly_interact_04",
     outcome = "onset_linear",
     adjusted_variant = FALSE,
-    description = "High-level: spline age(df=3) + weekend/employment interactions + month factor + optional environment + DST DiD terms"
+    description = "High-level: spline age(df=3) + reduced age-employment deviation + weekend/employment interactions + month factor + optional environment + DST DiD terms"
   ),
   list(
     key = "offset",
     name = "offset_poly_interact_04",
     outcome = "offset_linear",
     adjusted_variant = FALSE,
-    description = "High-level: spline age(df=3) + weekend/employment interactions + month factor + optional environment + DST DiD terms"
+    description = "High-level: spline age(df=3) + reduced age-employment deviation + weekend/employment interactions + month factor + optional environment + DST DiD terms"
   ),
   list(
     key = "midpoint",
     name = "midpoint_poly_interact_04",
     outcome = "midpoint_linear",
     adjusted_variant = FALSE,
-    description = "High-level: spline age(df=3) + weekend/employment interactions + month factor + optional environment + DST DiD terms"
+    description = "High-level: spline age(df=3) + reduced age-employment deviation + weekend/employment interactions + month factor + optional environment + DST DiD terms"
   ),
   list(
     key = "duration",
     name = "duration_poly_interact_04",
     outcome = "duration_hours",
     adjusted_variant = FALSE,
-    description = "High-level: spline age(df=3) + weekend/employment interactions + month factor + optional environment + DST DiD terms"
+    description = "High-level: spline age(df=3) + reduced age-employment deviation + weekend/employment interactions + month factor + optional environment + DST DiD terms"
   ),
   list(
     key = "midpoint",
     name = "midpoint_poly_interact_duration_adjusted_04",
     outcome = "midpoint_linear",
     adjusted_variant = TRUE,
-    description = "High-level: spline age(df=3) + weekend/employment interactions + month factor + optional environment + DST DiD terms + duration adjustment"
+    description = "High-level: spline age(df=3) + reduced age-employment deviation + weekend/employment interactions + month factor + optional environment + DST DiD terms + duration adjustment"
   ),
   list(
     key = "duration",
     name = "duration_poly_interact_midpoint_adjusted_04",
     outcome = "duration_hours",
     adjusted_variant = TRUE,
-    description = "High-level: spline age(df=3) + weekend/employment interactions + month factor + optional environment + DST DiD terms + midpoint adjustment"
+    description = "High-level: spline age(df=3) + reduced age-employment deviation + weekend/employment interactions + month factor + optional environment + DST DiD terms + midpoint adjustment"
   )
 )
 

@@ -1,0 +1,9 @@
+batch,analysis,employment_status,is_weekend_factor,dst_observes,onset_estimate,offset_estimate,derived_duration_hours,derived_midpoint_linear
+base,derived_duration_midpoint_main_grid,Working,Weekday,NA,33.363424002269596,18.442566073052582,9.079142070782986,13.902995037661086
+base,derived_duration_midpoint_main_grid,Working,Weekend,NA,19.740135256534757,32.31125313714266,12.5711178806079,2.0256941968387068
+base,derived_duration_midpoint_main_grid,Student,Weekday,NA,31.633179110677336,11.791698015440245,4.158518904762907,9.71243856305879
+base,derived_duration_midpoint_main_grid,Student,Weekend,NA,24.258040273171506,34.094077865450544,9.836037592279038,5.176059069311023
+base,derived_duration_midpoint_main_grid,Retired,Weekday,NA,33.30926069322039,16.226462257063993,6.917201563843605,12.76786147514219
+base,derived_duration_midpoint_main_grid,Retired,Weekend,NA,19.83060117986951,32.177270996327124,12.346669816457613,2.0039360880983175
+base,derived_duration_midpoint_main_grid,Not Working,Weekday,NA,32.39510791377443,15.866089245627705,7.470981331853274,12.130598579701072
+base,derived_duration_midpoint_main_grid,Not Working,Weekend,NA,22.72394057738099,34.895592133040246,12.171651555659256,4.80976635521062

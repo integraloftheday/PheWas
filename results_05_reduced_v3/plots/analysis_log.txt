@@ -1,0 +1,65 @@
+2026-04-16 00:17:43 Configuration loaded.
+2026-04-16 00:17:43 PRECOMP_TABLE_DIR: results_05_reduced_v3/tables
+2026-04-16 00:17:43 OUTPUT_DIR: results_05_reduced_v3/plots
+2026-04-16 00:17:43 NOTEBOOK_INLINE: TRUE
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/predictions_all.csv | rows: 6842
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/model_inventory.csv | rows: 12
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/derived_duration_midpoint_main_grid.csv | rows: 24
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/derived_vs_direct_main_grid.csv | rows: 24
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/derived_duration_midpoint_age.csv | rows: 136
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/derived_vs_direct_age.csv | rows: 136
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/weekend_contrasts.csv | rows: 60
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/dst_contrasts.csv | rows: 90
+2026-04-16 00:17:43 Loaded: results_05_reduced_v3/tables/emmeans_marginalized.csv | rows: 342
+2026-04-16 00:17:43 Wrote table: results_05_reduced_v3/plots/tables/predictions_all_input_copy.csv
+2026-04-16 00:17:43 Wrote table: results_05_reduced_v3/plots/tables/model_inventory.csv
+2026-04-16 00:17:43 Plot provenance label: Model origin: results_05_reduced_v3/tables/predictions_all.csv | Methods: REML | Batches: base, dst | Model files: 12
+2026-04-16 00:17:43 Wrote table: results_05_reduced_v3/plots/tables/employment_x_weekend_plot_data.csv
+2026-04-16 00:17:44 Saved plot: results_05_reduced_v3/plots/employment_weekend_timing.png
+2026-04-16 00:17:44 Saved plot: results_05_reduced_v3/plots/employment_weekend_duration.png
+2026-04-16 00:17:44 Wrote table: results_05_reduced_v3/plots/tables/main_effects.csv
+2026-04-16 00:17:45 Saved plot: results_05_reduced_v3/plots/main_effects_timing.png
+2026-04-16 00:17:45 Saved plot: results_05_reduced_v3/plots/main_effects_duration.png
+2026-04-16 00:17:46 Wrote table: results_05_reduced_v3/plots/tables/duration_covariate_main.csv
+2026-04-16 00:17:46 Saved plot: results_05_reduced_v3/plots/duration_covariate_main_effect.png
+2026-04-16 00:17:46 Saved plot: results_05_reduced_v3/plots/seasonality_month_main.png
+2026-04-16 00:17:47 Wrote table: results_05_reduced_v3/plots/tables/month_x_weekend.csv
+2026-04-16 00:17:47 Saved plot: results_05_reduced_v3/plots/seasonality_month_x_weekend.png
+2026-04-16 00:17:47 Wrote table: results_05_reduced_v3/plots/tables/onset_offset_month_x_dst.csv
+2026-04-16 00:17:47 Saved plot: results_05_reduced_v3/plots/onset_offset_month_x_dst.png
+2026-04-16 00:17:48 Wrote table: results_05_reduced_v3/plots/tables/age_main.csv
+2026-04-16 00:17:48 Saved plot: results_05_reduced_v3/plots/age_trends_timing.png
+2026-04-16 00:17:48 Saved plot: results_05_reduced_v3/plots/age_trends_duration.png
+2026-04-16 00:17:48 Wrote table: results_05_reduced_v3/plots/tables/duration_age_x_employment.csv
+2026-04-16 00:17:49 Saved plot: results_05_reduced_v3/plots/duration_age_x_employment.png
+2026-04-16 00:17:49 Wrote table: results_05_reduced_v3/plots/tables/onset_offset_age_x_dst.csv
+2026-04-16 00:17:49 Saved plot: results_05_reduced_v3/plots/onset_offset_age_x_dst.png
+2026-04-16 00:17:49 Wrote table: results_05_reduced_v3/plots/tables/emmeans_marginalized_primary.csv
+2026-04-16 00:17:49 Wrote table: results_05_reduced_v3/plots/tables/employment_x_weekend_marginalized.csv
+2026-04-16 00:17:50 Saved plot: results_05_reduced_v3/plots/employment_weekend_timing_marginalized.png
+2026-04-16 00:17:50 Saved plot: results_05_reduced_v3/plots/employment_weekend_duration_marginalized.png
+2026-04-16 00:17:50 Wrote table: results_05_reduced_v3/plots/tables/month_main_marginalized.csv
+2026-04-16 00:17:51 Saved plot: results_05_reduced_v3/plots/seasonality_month_main_marginalized.png
+2026-04-16 00:17:51 Saved plot: results_05_reduced_v3/plots/onset_offset_month_marginalized.png
+2026-04-16 00:17:51 Wrote table: results_05_reduced_v3/plots/tables/month_x_weekend_marginalized.csv
+2026-04-16 00:17:52 Saved plot: results_05_reduced_v3/plots/seasonality_month_x_weekend_marginalized.png
+2026-04-16 00:17:52 Wrote table: results_05_reduced_v3/plots/tables/derived_vs_direct_duration_age_plot_data.csv
+2026-04-16 00:17:52 Saved plot: results_05_reduced_v3/plots/derived_vs_direct_duration_age.png
+2026-04-16 00:17:52 Wrote table: results_05_reduced_v3/plots/tables/derived_vs_direct_midpoint_age_plot_data.csv
+2026-04-16 00:17:53 Saved plot: results_05_reduced_v3/plots/derived_vs_direct_midpoint_age.png
+2026-04-16 00:17:53 Wrote table: results_05_reduced_v3/plots/tables/derived_vs_direct_duration_main_grid_plot_data.csv
+2026-04-16 00:17:53 Saved plot: results_05_reduced_v3/plots/derived_vs_direct_duration_main_grid.png
+2026-04-16 00:17:53 Wrote table: results_05_reduced_v3/plots/tables/derived_vs_direct_midpoint_main_grid_plot_data.csv
+2026-04-16 00:17:53 Saved plot: results_05_reduced_v3/plots/derived_vs_direct_midpoint_main_grid.png
+2026-04-16 00:17:54 Wrote table: results_05_reduced_v3/plots/tables/derived_vs_direct_main_grid.csv
+2026-04-16 00:17:54 Wrote table: results_05_reduced_v3/plots/tables/duration_vs_midpoint_plot_data.csv
+2026-04-16 00:17:55 Saved plot: results_05_reduced_v3/plots/duration_vs_midpoint.png
+2026-04-16 00:17:55 Wrote table: results_05_reduced_v3/plots/tables/midpoint_vs_duration_plot_data.csv
+2026-04-16 00:17:55 Saved plot: results_05_reduced_v3/plots/midpoint_vs_duration.png
+2026-04-16 00:17:55 Wrote table: results_05_reduced_v3/plots/tables/derived_midpoint_duration_main_grid.csv
+2026-04-16 00:17:55 Wrote table: results_05_reduced_v3/plots/tables/derived_midpoint_duration_age.csv
+2026-04-16 00:17:55 Wrote table: results_05_reduced_v3/plots/tables/derived_vs_direct_age.csv
+2026-04-16 00:17:55 Wrote table: results_05_reduced_v3/plots/tables/weekend_contrasts.csv
+2026-04-16 00:17:56 Saved plot: results_05_reduced_v3/plots/weekend_contrasts.png
+2026-04-16 00:17:56 Wrote table: results_05_reduced_v3/plots/tables/dst_contrasts.csv
+2026-04-16 00:17:56 Saved plot: results_05_reduced_v3/plots/dst_contrasts.png

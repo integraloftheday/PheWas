@@ -1,0 +1,61 @@
+outcome,outcome_type,outcome_variant,batch,model_method,model_file,estimate_Weekday,estimate_Weekend,weekend_minus_weekday,contrast_scope,employment_status
+duration,Duration,adjusted,base,REML,duration_poly_interact_midpoint_adjusted_04_REML.rds,4.032227560618894,8.74384156983437,4.7116140092154755,overall,NA
+duration,Duration,adjusted,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,3.2058253022182295,8.688247307279658,5.482422005061428,overall,NA
+duration,Duration,primary,base,REML,duration_poly_interact_04_REML.rds,4.1028855548012775,8.738761874089928,4.63587631928865,overall,NA
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,3.291811043537283,8.682351828437811,5.390540784900528,overall,NA
+midpoint,ClockTime,adjusted,base,REML,midpoint_poly_interact_duration_adjusted_04_REML.rds,32.1235047501907,23.046883469427534,-9.076621280763163,overall,NA
+midpoint,ClockTime,adjusted,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,32.988820958426395,23.182516744655302,-9.806304213771092,overall,NA
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_REML.rds,32.24515334697852,22.89610865602394,-9.349044690954578,overall,NA
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,33.118877888474856,23.05349334330199,-10.065384545172865,overall,NA
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_REML.rds,15.866089245627704,34.895592133040246,19.02950288741254,overall,NA
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,16.209032233593287,34.95804079539907,18.749008561805784,overall,NA
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_REML.rds,32.39510791377443,22.72394057738099,-9.671167336393442,overall,NA
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,33.543347922046635,22.306167751728328,-11.237180170318307,overall,NA
+duration,Duration,adjusted,base,REML,duration_poly_interact_midpoint_adjusted_04_REML.rds,4.032227560618894,8.74384156983437,4.7116140092154755,by_employment,Not Working
+duration,Duration,adjusted,base,REML,duration_poly_interact_midpoint_adjusted_04_REML.rds,4.9334996423518,6.871184826940716,1.9376851845889167,by_employment,Retired
+duration,Duration,adjusted,base,REML,duration_poly_interact_midpoint_adjusted_04_REML.rds,1.4396462843233415,4.178962893656345,2.7393166093330032,by_employment,Student
+duration,Duration,adjusted,base,REML,duration_poly_interact_midpoint_adjusted_04_REML.rds,3.6630161558927785,9.055023530819186,5.392007374926408,by_employment,Working
+duration,Duration,adjusted,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,3.2058253022182295,8.688247307279658,5.482422005061428,by_employment,Not Working
+duration,Duration,adjusted,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,4.231150581519314,6.702571048753147,2.471420467233833,by_employment,Retired
+duration,Duration,adjusted,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,0.8263502023559601,4.356578853827083,3.5302286514711225,by_employment,Student
+duration,Duration,adjusted,dst,REML,duration_poly_interact_midpoint_adjusted_04_dst_REML.rds,2.743688687319759,9.110334686906231,6.366645999586472,by_employment,Working
+duration,Duration,primary,base,REML,duration_poly_interact_04_REML.rds,4.1028855548012775,8.738761874089928,4.63587631928865,by_employment,Not Working
+duration,Duration,primary,base,REML,duration_poly_interact_04_REML.rds,5.0251496681211165,6.855469132146036,1.8303194640249192,by_employment,Retired
+duration,Duration,primary,base,REML,duration_poly_interact_04_REML.rds,1.5134918209788524,4.178631479657543,2.665139658678691,by_employment,Student
+duration,Duration,primary,base,REML,duration_poly_interact_04_REML.rds,3.7420727507016034,9.044464191087211,5.302391440385608,by_employment,Working
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,3.291811043537283,8.682351828437811,5.390540784900528,by_employment,Not Working
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,4.33947893609521,6.686766652692997,2.347287716597787,by_employment,Retired
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,0.9147926884821036,4.357408119460054,3.44261543097795,by_employment,Student
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,2.8405877539161044,9.102464653428765,6.261876899512661,by_employment,Working
+midpoint,ClockTime,adjusted,base,REML,midpoint_poly_interact_duration_adjusted_04_REML.rds,32.1235047501907,23.046883469427534,-9.076621280763163,by_employment,Not Working
+midpoint,ClockTime,adjusted,base,REML,midpoint_poly_interact_duration_adjusted_04_REML.rds,34.46829222372026,21.674473892505535,-12.793818331214727,by_employment,Retired
+midpoint,ClockTime,adjusted,base,REML,midpoint_poly_interact_duration_adjusted_04_REML.rds,32.18820523900091,23.4696459041294,-8.718559334871507,by_employment,Student
+midpoint,ClockTime,adjusted,base,REML,midpoint_poly_interact_duration_adjusted_04_REML.rds,33.046494726308595,22.485163627167257,-10.561331099141338,by_employment,Working
+midpoint,ClockTime,adjusted,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,32.988820958426395,23.182516744655302,-9.806304213771092,by_employment,Not Working
+midpoint,ClockTime,adjusted,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,35.29022664112922,21.957069632417323,-13.3331570087119,by_employment,Retired
+midpoint,ClockTime,adjusted,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,32.936640424837016,23.747542364016823,-9.189098060820193,by_employment,Student
+midpoint,ClockTime,adjusted,dst,REML,midpoint_poly_interact_duration_adjusted_04_dst_REML.rds,34.03747607380387,23.011133177036847,-11.026342896767027,by_employment,Working
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_REML.rds,32.24515334697852,22.89610865602394,-9.349044690954578,by_employment,Not Working
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_REML.rds,34.591173919466165,21.559078563789814,-13.03209535567635,by_employment,Retired
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_REML.rds,32.34079713557078,23.424193423420693,-8.916603712150089,by_employment,Student
+midpoint,ClockTime,primary,base,REML,midpoint_poly_interact_04_REML.rds,33.20756832478121,22.356794067348783,-10.850774257432423,by_employment,Working
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,33.118877888474856,23.05349334330199,-10.065384545172865,by_employment,Not Working
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,35.42000272996743,21.86121020866647,-13.558792521300958,by_employment,Retired
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,33.088823390898064,23.707870094768484,-9.38095329612958,by_employment,Student
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,34.20408809749472,22.901022313850778,-11.303065783643941,by_employment,Working
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_REML.rds,15.866089245627704,34.895592133040246,19.02950288741254,by_employment,Not Working
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_REML.rds,16.226462257063993,32.177270996327124,15.950808739263131,by_employment,Retired
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_REML.rds,11.791698015440245,34.094077865450544,22.302379850010297,by_employment,Student
+offset,ClockTime,primary,base,REML,offset_poly_interact_04_REML.rds,18.442566073052586,32.31125313714266,13.868687064090071,by_employment,Working
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,16.209032233593287,34.95804079539907,18.749008561805784,by_employment,Not Working
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,16.53947438185011,32.28692610267805,15.747451720827943,by_employment,Retired
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,12.09714805657931,34.22502977602099,22.127881719441678,by_employment,Student
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,18.844247684718063,32.54718998461405,13.702942299895987,by_employment,Working
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_REML.rds,32.39510791377443,22.72394057738099,-9.671167336393442,by_employment,Not Working
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_REML.rds,33.30926069322039,19.83060117986951,-13.478659513350877,by_employment,Retired
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_REML.rds,31.633179110677336,24.258040273171503,-7.375138837505833,by_employment,Student
+onset,ClockTime,primary,base,REML,onset_poly_interact_04_REML.rds,33.363424002269596,19.740135256534757,-13.62328874573484,by_employment,Working
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,33.543347922046635,22.306167751728328,-11.237180170318307,by_employment,Not Working
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,34.34303921428039,19.684948703164626,-14.658090511115763,by_employment,Retired
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,32.634198266495,24.193285188775068,-8.44091307771993,by_employment,Student
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,34.79591824615485,20.068405186154617,-14.72751306000023,by_employment,Working

@@ -1,0 +1,49 @@
+batch,strata,series,difference
+base,Overall | Working | Weekday | AllDST,Direct Duration Model,-5.337069320081382
+base,Overall | Working | Weekday | AllDST,Duration Model Adjusted for Midpoint,-5.416125914890207
+base,Overall | Working | Weekend | AllDST,Direct Duration Model,-3.526653689520689
+base,Overall | Working | Weekend | AllDST,Duration Model Adjusted for Midpoint,-3.5160943497887143
+base,Overall | Student | Weekday | AllDST,Direct Duration Model,-2.645027083784055
+base,Overall | Student | Weekday | AllDST,Duration Model Adjusted for Midpoint,-2.7188726204395657
+base,Overall | Student | Weekend | AllDST,Direct Duration Model,-5.657406112621494
+base,Overall | Student | Weekend | AllDST,Duration Model Adjusted for Midpoint,-5.657074698622693
+base,Overall | Retired | Weekday | AllDST,Direct Duration Model,-1.8920518957224888
+base,Overall | Retired | Weekday | AllDST,Duration Model Adjusted for Midpoint,-1.9837019214918057
+base,Overall | Retired | Weekend | AllDST,Direct Duration Model,-5.491200684311577
+base,Overall | Retired | Weekend | AllDST,Duration Model Adjusted for Midpoint,-5.475484989516897
+base,Overall | Not Working | Weekday | AllDST,Direct Duration Model,-3.3680957770519964
+base,Overall | Not Working | Weekday | AllDST,Duration Model Adjusted for Midpoint,-3.4387537712343796
+base,Overall | Not Working | Weekend | AllDST,Direct Duration Model,-3.4328896815693284
+base,Overall | Not Working | Weekend | AllDST,Duration Model Adjusted for Midpoint,-3.4278099858248865
+dst,Overall | Working | Weekday | DST,Direct Duration Model,-5.2077416846471145
+dst,Overall | Working | Weekday | DST,Duration Model Adjusted for Midpoint,-5.3046407512434595
+dst,Overall | Working | Weekday | NoDST,Direct Duration Model,-4.0501732017839815
+dst,Overall | Working | Weekday | NoDST,Duration Model Adjusted for Midpoint,-4.1249967606433335
+dst,Overall | Working | Weekend | DST,Direct Duration Model,-3.376320145030668
+dst,Overall | Working | Weekend | DST,Duration Model Adjusted for Midpoint,-3.3684501115532015
+dst,Overall | Working | Weekend | NoDST,Direct Duration Model,-2.218751662167538
+dst,Overall | Working | Weekend | NoDST,Duration Model Adjusted for Midpoint,-2.1888061209530782
+dst,Overall | Student | Weekday | DST,Direct Duration Model,-2.548157101602209
+dst,Overall | Student | Weekday | DST,Duration Model Adjusted for Midpoint,-2.636599587728353
+dst,Overall | Student | Weekday | NoDST,Direct Duration Model,-1.3905886187390832
+dst,Overall | Student | Weekday | NoDST,Duration Model Adjusted for Midpoint,-1.4569555971282346
+dst,Overall | Student | Weekend | DST,Direct Duration Model,-5.674336467785867
+dst,Overall | Student | Weekend | DST,Duration Model Adjusted for Midpoint,-5.675165733418838
+dst,Overall | Student | Weekend | NoDST,Direct Duration Model,-4.516767984922735
+dst,Overall | Student | Weekend | NoDST,Duration Model Adjusted for Midpoint,-4.4955217428187115
+dst,Overall | Retired | Weekday | DST,Direct Duration Model,-1.856956231474511
+dst,Overall | Retired | Weekday | DST,Duration Model Adjusted for Midpoint,-1.965284586050407
+dst,Overall | Retired | Weekday | NoDST,Direct Duration Model,-0.6993877486113824
+dst,Overall | Retired | Weekday | NoDST,Duration Model Adjusted for Midpoint,-0.7856405954502845
+dst,Overall | Retired | Weekend | DST,Direct Duration Model,-5.91521074682043
+dst,Overall | Retired | Weekend | DST,Duration Model Adjusted for Midpoint,-5.899406350760279
+dst,Overall | Retired | Weekend | NoDST,Direct Duration Model,-4.757642263957299
+dst,Overall | Retired | Weekend | NoDST,Duration Model Adjusted for Midpoint,-4.719762360160157
+dst,Overall | Not Working | Weekday | DST,Direct Duration Model,-3.373873268009369
+dst,Overall | Not Working | Weekday | DST,Duration Model Adjusted for Midpoint,-3.4598590093284227
+dst,Overall | Not Working | Weekday | NoDST,Direct Duration Model,-2.2163047851462405
+dst,Overall | Not Working | Weekday | NoDST,Duration Model Adjusted for Midpoint,-2.2802150187283
+dst,Overall | Not Working | Weekend | DST,Direct Duration Model,-3.969521215232932
+dst,Overall | Not Working | Weekend | DST,Duration Model Adjusted for Midpoint,-3.9636257363910854
+dst,Overall | Not Working | Weekend | NoDST,Direct Duration Model,-2.8119527323698
+dst,Overall | Not Working | Weekend | NoDST,Duration Model Adjusted for Midpoint,-2.7839817457909586

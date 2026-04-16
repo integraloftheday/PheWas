@@ -118,10 +118,22 @@ clean_level_label <- function(x, unknown = "All") {
 }
 
 clean_employment <- function(x) {
-  x %>%
+  sx <- x %>%
     as.character() %>%
     str_replace_all("_", " ") %>%
-    str_to_title()
+    str_squish()
+
+  dplyr::case_when(
+    sx %in% c("Working", "Employed For Wages", "Self Employed") ~ "Working",
+    sx %in% c("Student") ~ "Student",
+    sx %in% c("Retired") ~ "Retired",
+    sx %in% c("Not Working", "Out Of Work", "Out Of Work Less Than One", "Out Of Work One Or More", "Homemaker", "Unable To Work") ~ "Not Working",
+    TRUE ~ str_to_title(sx)
+  )
+}
+
+employment_levels_ordered <- function(x) {
+  factor(clean_employment(x), levels = c("Working", "Student", "Retired", "Not Working"))
 }
 
 normalize_outcome_variant <- function(x) {
@@ -305,7 +317,7 @@ if (require_cols(
     mutate(
       outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
       day_type = factor(normalize_weekend_level(is_weekend_factor), levels = c("Weekday", "Weekend")),
-      employment_clean = clean_employment(employment_status),
+      employment_clean = employment_levels_ordered(employment_status),
       employment_clean = str_wrap(employment_clean, width = 25),
       batch = factor(batch, levels = c("base", "dst"))
     )
@@ -391,7 +403,7 @@ if (require_cols(primary_predictions, c("analysis", "employment_status", "outcom
       outcome,
       batch,
       category = "Employment",
-      term = clean_employment(employment_status),
+      term = employment_levels_ordered(employment_status),
       estimate,
       conf.low,
       conf.high
@@ -465,34 +477,34 @@ if (nrow(main_effects) > 0) {
 }
 
 # %% [markdown]
-# ## Figure 2B: Continuous Main Effects (Photoperiod, Duration Covariate)
+# ## Figure 2B: Continuous Main Effects (Deviation, Duration Covariate)
 
 # %%
-photoperiod_main <- predictions_all %>% filter(analysis == "photoperiod_main")
-if (nrow(photoperiod_main) > 0 && require_cols(photoperiod_main, c("PhotoPeriod", "outcome", "batch", "estimate", "conf.low", "conf.high"), "photoperiod_main")) {
-  photoperiod_main <- photoperiod_main %>%
+deviation_main <- predictions_all %>% filter(analysis == "deviation_main")
+if (nrow(deviation_main) > 0 && require_cols(deviation_main, c("deviation", "outcome", "batch", "estimate", "conf.low", "conf.high"), "deviation_main")) {
+  deviation_main <- deviation_main %>%
     mutate(
       outcome = factor(outcome, levels = c("onset", "midpoint", "offset", "duration")),
       batch = factor(batch, levels = c("base", "dst"))
     )
 
-  write_table(photoperiod_main, "photoperiod_main.csv")
+  write_table(deviation_main, "deviation_main.csv")
 
-  p_photo <- ggplot(photoperiod_main, aes(x = PhotoPeriod, y = estimate, color = batch, fill = batch)) +
+  p_dev <- ggplot(deviation_main, aes(x = deviation, y = estimate, color = batch, fill = batch)) +
     geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = 0.12, linewidth = 0) +
     geom_line(linewidth = 1.0) +
     facet_wrap(~ outcome, scales = "free_y", ncol = 2) +
     labs(
-      title = "Photoperiod Main Effect",
-      subtitle = "Marginal predictions across observed photoperiod range",
-      x = "Photoperiod",
+      title = "Deviation Main Effect",
+      subtitle = "Marginal predictions across observed deviation range",
+      x = "Deviation",
       y = "Predicted value",
       color = "Batch",
       fill = "Batch"
     ) +
     theme_classic(base_size = 13)
 
-  save_plot(p_photo, "photoperiod_main_effect.png", width = 13, height = 8)
+  save_plot(p_dev, "deviation_main_effect.png", width = 13, height = 8)
 }
 
 duration_cov_main <- predictions_all %>% filter(analysis == "duration_covariate_main")
@@ -675,7 +687,7 @@ age_x_employment_duration <- primary_predictions %>% filter(analysis == "age_x_e
 if (nrow(age_x_employment_duration) > 0 && require_cols(age_x_employment_duration, c("age_at_sleep", "employment_status", "batch", "estimate", "conf.low", "conf.high"), "age_x_employment_duration")) {
   age_x_employment_duration <- age_x_employment_duration %>%
     mutate(
-      employment_clean = clean_employment(employment_status),
+      employment_clean = employment_levels_ordered(employment_status),
       batch = factor(batch, levels = c("base", "dst"))
     )
 
@@ -744,7 +756,7 @@ if (nrow(emmeans_marginalized) > 0 && require_cols(emmeans_marginalized, c("anal
   if (nrow(emm_emp_wk) > 0 && require_cols(emm_emp_wk, c("employment_status", "is_weekend_factor", "outcome"), "emm_employment_x_weekend")) {
     emm_emp_wk <- emm_emp_wk %>%
       mutate(
-        employment_clean = clean_employment(employment_status),
+        employment_clean = employment_levels_ordered(employment_status),
         employment_clean = str_wrap(employment_clean, width = 25),
         day_type = factor(normalize_weekend_level(is_weekend_factor), levels = c("Weekday", "Weekend"))
       )
@@ -832,7 +844,7 @@ if (nrow(emmeans_marginalized) > 0 && require_cols(emmeans_marginalized, c("anal
 
   emm_age_emp <- emm %>% filter(analysis == "emm_age_x_employment", outcome == "duration")
   if (nrow(emm_age_emp) > 0 && require_cols(emm_age_emp, c("age_at_sleep", "employment_status"), "emm_age_x_employment")) {
-    emm_age_emp <- emm_age_emp %>% mutate(employment_clean = clean_employment(employment_status))
+    emm_age_emp <- emm_age_emp %>% mutate(employment_clean = employment_levels_ordered(employment_status))
     write_table(emm_age_emp, "duration_age_x_employment_marginalized.csv")
 
     p_emm_age_emp <- ggplot(emm_age_emp, aes(x = age_at_sleep, y = estimate, color = employment_clean, fill = employment_clean)) +

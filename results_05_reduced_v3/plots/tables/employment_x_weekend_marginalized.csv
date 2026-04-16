@@ -1,0 +1,33 @@
+outcome,outcome_type,batch,model_method,model_file,outcome_variant,analysis,employment_status,is_weekend_factor,sex_concept,month,age_at_sleep,PhotoPeriod,duration_hours,estimate,conf.low,conf.high,SE,df,employment_clean,day_type
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekday,NA,NA,NA,NA,NA,12.0488460416079,6.60913764138622,17.4885544418296,2.73948905331059,93.4876330165828,Working,Weekday
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,10.1230509761739,3.99140274047662,16.2546992118712,3.08824981348073,94.1698298880631,Student,Weekday
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,13.547737223787,7.97153101638014,19.1239434311939,2.80873355781506,94.7824315851752,Retired,Weekday
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekday,NA,NA,NA,NA,NA,12.5000693312291,9.32490864291747,15.6752300195407,1.59433037273856,76.3321642782925,Not Working,Weekday
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Working,Weekend
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Student,Weekend
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Retired,Weekend
+duration,Duration,dst,REML,duration_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Not Working,Weekend
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekday,NA,NA,NA,NA,NA,24.8607572802329,19.1585238556512,30.5629907048146,2.87161618866817,93.2820383499376,Working,Weekday
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,23.7454925736362,17.1450967115344,30.3458884357381,3.32191276162077,89.1706390377421,Student,Weekday
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,26.0766719127056,20.2523281665232,31.901015658888,2.93371874223654,94.7783664794376,Retired,Weekday
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekday,NA,NA,NA,NA,NA,23.775547071213,20.4945489094844,27.0565452329417,1.65263087507236,94.7513381357912,Not Working,Weekday
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Working,Weekend
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Student,Weekend
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Retired,Weekend
+midpoint,ClockTime,dst,REML,midpoint_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Not Working,Weekend
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekday,NA,NA,NA,NA,NA,27.4487458655586,21.6968141639565,33.2006775671608,2.89662685270633,93.2400474780067,Working,Weekday
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,20.7016462374199,13.9684451561005,27.4348473187393,3.38868103899634,89.0345122467229,Student,Weekday
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,25.1439725626907,19.2097286371623,31.0782164882191,2.98907317281933,94.7728992091233,Retired,Weekday
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekday,NA,NA,NA,NA,NA,24.8135304144339,21.4679876659378,28.15907316293,1.68514041753727,94.7452059012603,Not Working,Weekday
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Working,Weekend
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Student,Weekend
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Retired,Weekend
+offset,ClockTime,dst,REML,offset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Not Working,Weekend
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekday,NA,NA,NA,NA,NA,25.1025998358584,20.2532839648438,29.951915706873,2.44258837785542,94.7502832994475,Working,Weekday
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekday,NA,NA,NA,NA,NA,22.9408798561985,17.4584821004502,28.4232776119468,2.76147794170585,94.770951965491,Student,Weekday
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekday,NA,NA,NA,NA,NA,24.6497208039839,19.6804987253719,29.6189428825959,2.50271369153826,93.963194395678,Retired,Weekday
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekday,NA,NA,NA,NA,NA,23.8500295117502,21.0619611816852,26.6380978418152,1.40373169297494,91.6643589742255,Not Working,Weekday
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Working,Weekend
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Student,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Student,Weekend
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Retired,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Retired,Weekend
+onset,ClockTime,dst,REML,onset_poly_interact_04_dst_REML.rds,primary,emm_employment_x_weekend,Not Working,Weekend,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Not Working,Weekend

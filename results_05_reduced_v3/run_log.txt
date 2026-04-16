@@ -1,0 +1,451 @@
+2026-04-16 00:17:05 Configuration loaded.
+2026-04-16 00:17:05 MODEL_DIR: models_04_reduced
+2026-04-16 00:17:05 SUMMARY_DIR: model_summaries_04_reduced
+2026-04-16 00:17:05 OUTPUT_DIR: results_05_reduced_v3
+2026-04-16 00:17:05 METHOD_PRIORITY: REML -> ML
+2026-04-16 00:17:05 Age sequence: 18, 85, 1
+2026-04-16 00:17:05 PRED_SCOPE: all
+2026-04-16 00:17:05 RESUME_CHECKPOINTS: FALSE
+2026-04-16 00:17:05 MEM_DIAGNOSTICS: FALSE
+2026-04-16 00:17:05 Wrote: results_05_reduced_v3/tables/model_inventory.csv
+2026-04-16 00:17:05 Models found: 12 of 12
+2026-04-16 00:17:05 Precomputing: duration_poly_interact_04 [ REML ]
+2026-04-16 00:17:06 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.27MB
+2026-04-16 00:17:06 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:06 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:06 Prediction chunk: analysis=weekend_main | rows=2 | size=0.27MB
+2026-04-16 00:17:06 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:06 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:06 Prediction chunk: analysis=sex_main | rows=7 | size=0.27MB
+2026-04-16 00:17:06 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:07 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:07 Prediction chunk: analysis=month_main | rows=12 | size=0.28MB
+2026-04-16 00:17:07 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:07 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:07 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.28MB
+2026-04-16 00:17:07 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:07 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:07 Prediction chunk: analysis=age_main | rows=68 | size=0.30MB
+2026-04-16 00:17:07 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:07 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:07 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.38MB
+2026-04-16 00:17:07 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:07 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:08 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.32MB
+2026-04-16 00:17:08 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:08 Memory cleanup: after checkpoint append duration_poly_interact_04
+2026-04-16 00:17:08 Memory cleanup: finished duration_poly_interact_04_REML.rds
+2026-04-16 00:17:08 Checkpoint complete: model__duration_poly_interact_04__REML.done
+2026-04-16 00:17:08 Precomputing: duration_poly_interact_04_dst [ REML ]
+2026-04-16 00:17:08 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.29MB
+2026-04-16 00:17:08 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:08 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:08 Prediction chunk: analysis=weekend_main | rows=2 | size=0.28MB
+2026-04-16 00:17:08 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:08 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:08 Prediction chunk: analysis=sex_main | rows=7 | size=0.29MB
+2026-04-16 00:17:08 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:08 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:09 Prediction chunk: analysis=month_main | rows=12 | size=0.29MB
+2026-04-16 00:17:09 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:09 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:09 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.30MB
+2026-04-16 00:17:09 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:09 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:09 Prediction chunk: analysis=dst_main | rows=2 | size=0.28MB
+2026-04-16 00:17:09 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:09 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:09 Prediction chunk: analysis=month_x_dst | rows=24 | size=0.29MB
+2026-04-16 00:17:09 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:09 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:09 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=0.29MB
+2026-04-16 00:17:09 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 4
+2026-04-16 00:17:10 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:10 Prediction chunk: analysis=age_main | rows=68 | size=0.31MB
+2026-04-16 00:17:10 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:10 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:10 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.39MB
+2026-04-16 00:17:10 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:10 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:10 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.34MB
+2026-04-16 00:17:10 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:10 Memory cleanup: after checkpoint append duration_poly_interact_04_dst
+2026-04-16 00:17:10 Memory cleanup: finished duration_poly_interact_04_dst_REML.rds
+2026-04-16 00:17:10 Checkpoint complete: model__duration_poly_interact_04_dst__REML.done
+2026-04-16 00:17:10 Precomputing: duration_poly_interact_midpoint_adjusted_04 [ REML ]
+2026-04-16 00:17:10 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.29MB
+2026-04-16 00:17:10 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:11 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:11 Prediction chunk: analysis=weekend_main | rows=2 | size=0.28MB
+2026-04-16 00:17:11 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:11 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:11 Prediction chunk: analysis=sex_main | rows=7 | size=0.28MB
+2026-04-16 00:17:11 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:11 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:11 Prediction chunk: analysis=month_main | rows=12 | size=0.29MB
+2026-04-16 00:17:11 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:11 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:11 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.29MB
+2026-04-16 00:17:11 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:11 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:12 Prediction chunk: analysis=age_main | rows=68 | size=0.31MB
+2026-04-16 00:17:12 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:12 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:12 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.39MB
+2026-04-16 00:17:12 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:12 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:12 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.34MB
+2026-04-16 00:17:12 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:12 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04
+2026-04-16 00:17:12 Memory cleanup: finished duration_poly_interact_midpoint_adjusted_04_REML.rds
+2026-04-16 00:17:12 Checkpoint complete: model__duration_poly_interact_midpoint_adjusted_04__REML.done
+2026-04-16 00:17:12 Precomputing: duration_poly_interact_midpoint_adjusted_04_dst [ REML ]
+2026-04-16 00:17:12 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.30MB
+2026-04-16 00:17:12 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:12 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:13 Prediction chunk: analysis=weekend_main | rows=2 | size=0.30MB
+2026-04-16 00:17:13 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:13 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:13 Prediction chunk: analysis=sex_main | rows=7 | size=0.30MB
+2026-04-16 00:17:13 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:13 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:13 Prediction chunk: analysis=month_main | rows=12 | size=0.30MB
+2026-04-16 00:17:13 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:13 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:13 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.31MB
+2026-04-16 00:17:13 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:13 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:13 Prediction chunk: analysis=dst_main | rows=2 | size=0.30MB
+2026-04-16 00:17:13 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:14 Prediction chunk: analysis=month_x_dst | rows=24 | size=0.31MB
+2026-04-16 00:17:14 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:14 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=0.30MB
+2026-04-16 00:17:14 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 4
+2026-04-16 00:17:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:14 Prediction chunk: analysis=age_main | rows=68 | size=0.32MB
+2026-04-16 00:17:14 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:14 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.41MB
+2026-04-16 00:17:14 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:14 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:15 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.35MB
+2026-04-16 00:17:15 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:15 Memory cleanup: after checkpoint append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:15 Memory cleanup: finished duration_poly_interact_midpoint_adjusted_04_dst_REML.rds
+2026-04-16 00:17:15 Checkpoint complete: model__duration_poly_interact_midpoint_adjusted_04_dst__REML.done
+2026-04-16 00:17:15 Precomputing: midpoint_poly_interact_04 [ REML ]
+2026-04-16 00:17:15 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.27MB
+2026-04-16 00:17:15 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:15 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:15 Prediction chunk: analysis=weekend_main | rows=2 | size=0.27MB
+2026-04-16 00:17:15 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:15 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:15 Prediction chunk: analysis=sex_main | rows=7 | size=0.27MB
+2026-04-16 00:17:15 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:15 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:16 Prediction chunk: analysis=month_main | rows=12 | size=0.28MB
+2026-04-16 00:17:16 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:16 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:16 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.28MB
+2026-04-16 00:17:16 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:16 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:16 Prediction chunk: analysis=age_main | rows=68 | size=0.30MB
+2026-04-16 00:17:16 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:16 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:16 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.38MB
+2026-04-16 00:17:16 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:16 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:17 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.32MB
+2026-04-16 00:17:17 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:17 Memory cleanup: after checkpoint append midpoint_poly_interact_04
+2026-04-16 00:17:17 Memory cleanup: finished midpoint_poly_interact_04_REML.rds
+2026-04-16 00:17:17 Checkpoint complete: model__midpoint_poly_interact_04__REML.done
+2026-04-16 00:17:17 Precomputing: midpoint_poly_interact_04_dst [ REML ]
+2026-04-16 00:17:17 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.29MB
+2026-04-16 00:17:17 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:17 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:17 Prediction chunk: analysis=weekend_main | rows=2 | size=0.28MB
+2026-04-16 00:17:17 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:17 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:17 Prediction chunk: analysis=sex_main | rows=7 | size=0.29MB
+2026-04-16 00:17:17 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:17 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:18 Prediction chunk: analysis=month_main | rows=12 | size=0.29MB
+2026-04-16 00:17:18 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:18 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:18 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.30MB
+2026-04-16 00:17:18 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:18 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:18 Prediction chunk: analysis=dst_main | rows=2 | size=0.28MB
+2026-04-16 00:17:18 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:18 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:18 Prediction chunk: analysis=month_x_dst | rows=24 | size=0.29MB
+2026-04-16 00:17:18 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:18 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:18 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=0.29MB
+2026-04-16 00:17:18 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 4
+2026-04-16 00:17:19 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:19 Prediction chunk: analysis=age_main | rows=68 | size=0.31MB
+2026-04-16 00:17:19 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:19 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:19 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.39MB
+2026-04-16 00:17:19 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:19 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:19 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.34MB
+2026-04-16 00:17:19 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:19 Memory cleanup: after checkpoint append midpoint_poly_interact_04_dst
+2026-04-16 00:17:19 Memory cleanup: finished midpoint_poly_interact_04_dst_REML.rds
+2026-04-16 00:17:19 Checkpoint complete: model__midpoint_poly_interact_04_dst__REML.done
+2026-04-16 00:17:19 Precomputing: midpoint_poly_interact_duration_adjusted_04 [ REML ]
+2026-04-16 00:17:20 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.29MB
+2026-04-16 00:17:20 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:20 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:20 Prediction chunk: analysis=weekend_main | rows=2 | size=0.28MB
+2026-04-16 00:17:20 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:20 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:20 Prediction chunk: analysis=sex_main | rows=7 | size=0.28MB
+2026-04-16 00:17:20 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:20 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:20 Prediction chunk: analysis=month_main | rows=12 | size=0.29MB
+2026-04-16 00:17:20 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:20 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:20 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.29MB
+2026-04-16 00:17:20 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:21 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:21 Prediction chunk: analysis=age_main | rows=68 | size=0.31MB
+2026-04-16 00:17:21 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:21 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:21 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.39MB
+2026-04-16 00:17:21 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:21 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:21 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.34MB
+2026-04-16 00:17:21 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:21 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:21 Prediction chunk: analysis=duration_covariate_main | rows=21 | size=0.29MB
+2026-04-16 00:17:21 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 21
+2026-04-16 00:17:21 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04
+2026-04-16 00:17:22 Memory cleanup: finished midpoint_poly_interact_duration_adjusted_04_REML.rds
+2026-04-16 00:17:22 Checkpoint complete: model__midpoint_poly_interact_duration_adjusted_04__REML.done
+2026-04-16 00:17:22 Precomputing: midpoint_poly_interact_duration_adjusted_04_dst [ REML ]
+2026-04-16 00:17:22 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.30MB
+2026-04-16 00:17:22 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:22 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:22 Prediction chunk: analysis=weekend_main | rows=2 | size=0.30MB
+2026-04-16 00:17:22 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:22 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:22 Prediction chunk: analysis=sex_main | rows=7 | size=0.30MB
+2026-04-16 00:17:22 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:22 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:22 Prediction chunk: analysis=month_main | rows=12 | size=0.30MB
+2026-04-16 00:17:22 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:22 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:23 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.31MB
+2026-04-16 00:17:23 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:23 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:23 Prediction chunk: analysis=dst_main | rows=2 | size=0.30MB
+2026-04-16 00:17:23 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:23 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:23 Prediction chunk: analysis=month_x_dst | rows=24 | size=0.31MB
+2026-04-16 00:17:23 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:23 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:23 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=0.30MB
+2026-04-16 00:17:23 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 4
+2026-04-16 00:17:23 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:23 Prediction chunk: analysis=age_main | rows=68 | size=0.32MB
+2026-04-16 00:17:24 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:24 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:24 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.41MB
+2026-04-16 00:17:24 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:24 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:24 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.35MB
+2026-04-16 00:17:24 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:24 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:24 Prediction chunk: analysis=duration_covariate_main | rows=21 | size=0.30MB
+2026-04-16 00:17:24 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 21
+2026-04-16 00:17:24 Memory cleanup: after checkpoint append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:24 Memory cleanup: finished midpoint_poly_interact_duration_adjusted_04_dst_REML.rds
+2026-04-16 00:17:24 Checkpoint complete: model__midpoint_poly_interact_duration_adjusted_04_dst__REML.done
+2026-04-16 00:17:24 Precomputing: offset_poly_interact_04 [ REML ]
+2026-04-16 00:17:25 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.27MB
+2026-04-16 00:17:25 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:25 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:25 Prediction chunk: analysis=weekend_main | rows=2 | size=0.27MB
+2026-04-16 00:17:25 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:25 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:25 Prediction chunk: analysis=sex_main | rows=7 | size=0.27MB
+2026-04-16 00:17:25 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:25 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:25 Prediction chunk: analysis=month_main | rows=12 | size=0.28MB
+2026-04-16 00:17:25 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:25 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:25 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.28MB
+2026-04-16 00:17:25 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:26 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:26 Prediction chunk: analysis=age_main | rows=68 | size=0.30MB
+2026-04-16 00:17:26 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:26 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:26 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.38MB
+2026-04-16 00:17:26 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:26 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:26 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.32MB
+2026-04-16 00:17:26 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:26 Memory cleanup: after checkpoint append offset_poly_interact_04
+2026-04-16 00:17:26 Memory cleanup: finished offset_poly_interact_04_REML.rds
+2026-04-16 00:17:26 Checkpoint complete: model__offset_poly_interact_04__REML.done
+2026-04-16 00:17:26 Precomputing: offset_poly_interact_04_dst [ REML ]
+2026-04-16 00:17:26 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.29MB
+2026-04-16 00:17:26 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:27 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:27 Prediction chunk: analysis=weekend_main | rows=2 | size=0.28MB
+2026-04-16 00:17:27 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:27 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:27 Prediction chunk: analysis=sex_main | rows=7 | size=0.29MB
+2026-04-16 00:17:27 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:27 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:27 Prediction chunk: analysis=month_main | rows=12 | size=0.29MB
+2026-04-16 00:17:27 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:27 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:27 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.29MB
+2026-04-16 00:17:27 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:27 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:28 Prediction chunk: analysis=dst_main | rows=2 | size=0.28MB
+2026-04-16 00:17:28 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:28 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:28 Prediction chunk: analysis=month_x_dst | rows=24 | size=0.29MB
+2026-04-16 00:17:28 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:28 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:28 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=0.29MB
+2026-04-16 00:17:28 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 4
+2026-04-16 00:17:28 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:28 Prediction chunk: analysis=age_main | rows=68 | size=0.31MB
+2026-04-16 00:17:28 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:28 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:28 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.39MB
+2026-04-16 00:17:28 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:29 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:29 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.34MB
+2026-04-16 00:17:29 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:29 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:29 Prediction chunk: analysis=age_x_dst | rows=136 | size=0.34MB
+2026-04-16 00:17:29 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:29 Memory cleanup: after checkpoint append offset_poly_interact_04_dst
+2026-04-16 00:17:29 Memory cleanup: finished offset_poly_interact_04_dst_REML.rds
+2026-04-16 00:17:29 Checkpoint complete: model__offset_poly_interact_04_dst__REML.done
+2026-04-16 00:17:29 Precomputing: onset_poly_interact_04 [ REML ]
+2026-04-16 00:17:29 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.27MB
+2026-04-16 00:17:29 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:29 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:29 Prediction chunk: analysis=weekend_main | rows=2 | size=0.27MB
+2026-04-16 00:17:29 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:30 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:30 Prediction chunk: analysis=sex_main | rows=7 | size=0.27MB
+2026-04-16 00:17:30 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:30 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:30 Prediction chunk: analysis=month_main | rows=12 | size=0.28MB
+2026-04-16 00:17:30 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:30 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:30 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.28MB
+2026-04-16 00:17:30 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:30 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:30 Prediction chunk: analysis=age_main | rows=68 | size=0.30MB
+2026-04-16 00:17:30 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:30 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:31 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.38MB
+2026-04-16 00:17:31 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:31 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:31 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.32MB
+2026-04-16 00:17:31 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:31 Memory cleanup: after checkpoint append onset_poly_interact_04
+2026-04-16 00:17:31 Memory cleanup: finished onset_poly_interact_04_REML.rds
+2026-04-16 00:17:31 Checkpoint complete: model__onset_poly_interact_04__REML.done
+2026-04-16 00:17:31 Precomputing: onset_poly_interact_04_dst [ REML ]
+2026-04-16 00:17:31 Prediction chunk: analysis=employment_x_weekend | rows=8 | size=0.29MB
+2026-04-16 00:17:31 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 8
+2026-04-16 00:17:31 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:31 Prediction chunk: analysis=weekend_main | rows=2 | size=0.28MB
+2026-04-16 00:17:31 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:31 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:32 Prediction chunk: analysis=sex_main | rows=7 | size=0.29MB
+2026-04-16 00:17:32 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 7
+2026-04-16 00:17:32 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:32 Prediction chunk: analysis=month_main | rows=12 | size=0.29MB
+2026-04-16 00:17:32 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 12
+2026-04-16 00:17:32 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:32 Prediction chunk: analysis=month_x_weekend | rows=24 | size=0.29MB
+2026-04-16 00:17:32 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:32 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:32 Prediction chunk: analysis=dst_main | rows=2 | size=0.28MB
+2026-04-16 00:17:32 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 2
+2026-04-16 00:17:32 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:33 Prediction chunk: analysis=month_x_dst | rows=24 | size=0.29MB
+2026-04-16 00:17:33 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 24
+2026-04-16 00:17:33 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:33 Prediction chunk: analysis=dst_x_weekend | rows=4 | size=0.29MB
+2026-04-16 00:17:33 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 4
+2026-04-16 00:17:33 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:33 Prediction chunk: analysis=age_main | rows=68 | size=0.31MB
+2026-04-16 00:17:33 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 68
+2026-04-16 00:17:33 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:33 Prediction chunk: analysis=age_x_employment | rows=272 | size=0.39MB
+2026-04-16 00:17:33 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 272
+2026-04-16 00:17:33 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:33 Prediction chunk: analysis=age_x_weekend | rows=136 | size=0.34MB
+2026-04-16 00:17:33 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:34 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:34 Prediction chunk: analysis=age_x_dst | rows=136 | size=0.34MB
+2026-04-16 00:17:34 Checkpoint append: results_05_reduced_v3/tables/predictions_all.csv | rows: 136
+2026-04-16 00:17:34 Memory cleanup: after checkpoint append onset_poly_interact_04_dst
+2026-04-16 00:17:34 Memory cleanup: finished onset_poly_interact_04_dst_REML.rds
+2026-04-16 00:17:34 Checkpoint complete: model__onset_poly_interact_04_dst__REML.done
+2026-04-16 00:17:34 Total prediction rows checkpointed: 6842
+2026-04-16 00:17:34 Predictions loaded from checkpoint rows: 6842
+2026-04-16 00:17:34 Wrote: results_05_reduced_v3/tables/predictions_all.csv
+2026-04-16 00:17:34 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-04-16 00:17:34 Checkpoint append: results_05_reduced_v3/tables/emmeans_marginalized.csv | rows: 57
+2026-04-16 00:17:34 Memory cleanup: after emmeans append duration_poly_interact_04_dst
+2026-04-16 00:17:34 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-04-16 00:17:34 Checkpoint append: results_05_reduced_v3/tables/emmeans_marginalized.csv | rows: 57
+2026-04-16 00:17:34 Memory cleanup: after emmeans append duration_poly_interact_midpoint_adjusted_04_dst
+2026-04-16 00:17:34 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-04-16 00:17:34 Checkpoint append: results_05_reduced_v3/tables/emmeans_marginalized.csv | rows: 57
+2026-04-16 00:17:34 Memory cleanup: after emmeans append midpoint_poly_interact_04_dst
+2026-04-16 00:17:34 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-04-16 00:17:34 Checkpoint append: results_05_reduced_v3/tables/emmeans_marginalized.csv | rows: 57
+2026-04-16 00:17:34 Memory cleanup: after emmeans append midpoint_poly_interact_duration_adjusted_04_dst
+2026-04-16 00:17:34 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-04-16 00:17:34 Checkpoint append: results_05_reduced_v3/tables/emmeans_marginalized.csv | rows: 57
+2026-04-16 00:17:35 Memory cleanup: after emmeans append offset_poly_interact_04_dst
+2026-04-16 00:17:35 Checkpoint schema has unexpected columns for emmeans_marginalized.csv : SE, df
+2026-04-16 00:17:35 Checkpoint append: results_05_reduced_v3/tables/emmeans_marginalized.csv | rows: 57
+2026-04-16 00:17:35 Memory cleanup: after emmeans append onset_poly_interact_04_dst
+2026-04-16 00:17:35 Wrote: results_05_reduced_v3/tables/emmeans_marginalized.csv
+2026-04-16 00:17:35 Checkpoint append: results_05_reduced_v3/tables/derived_duration_midpoint_main_grid.csv | rows: 8
+2026-04-16 00:17:35 Checkpoint append: results_05_reduced_v3/tables/derived_duration_midpoint_age.csv | rows: 68
+2026-04-16 00:17:35 Memory cleanup: released onset/offset models for base
+2026-04-16 00:17:35 Memory cleanup: duration compare cleanup for base
+2026-04-16 00:17:36 Memory cleanup: duration adjusted compare cleanup for base
+2026-04-16 00:17:36 Memory cleanup: midpoint compare cleanup for base
+2026-04-16 00:17:36 Memory cleanup: midpoint adjusted compare cleanup for base
+2026-04-16 00:17:36 Checkpoint append: results_05_reduced_v3/tables/derived_vs_direct_main_grid.csv | rows: 8
+2026-04-16 00:17:36 Checkpoint append: results_05_reduced_v3/tables/derived_vs_direct_age.csv | rows: 68
+2026-04-16 00:17:36 Memory cleanup: derived section finished for base
+2026-04-16 00:17:36 Checkpoint complete: derived__base.done
+2026-04-16 00:17:37 Checkpoint append: results_05_reduced_v3/tables/derived_duration_midpoint_main_grid.csv | rows: 16
+2026-04-16 00:17:37 Checkpoint append: results_05_reduced_v3/tables/derived_duration_midpoint_age.csv | rows: 68
+2026-04-16 00:17:37 Memory cleanup: released onset/offset models for dst
+2026-04-16 00:17:37 Memory cleanup: duration compare cleanup for dst
+2026-04-16 00:17:37 Memory cleanup: duration adjusted compare cleanup for dst
+2026-04-16 00:17:37 Memory cleanup: midpoint compare cleanup for dst
+2026-04-16 00:17:38 Memory cleanup: midpoint adjusted compare cleanup for dst
+2026-04-16 00:17:38 Checkpoint append: results_05_reduced_v3/tables/derived_vs_direct_main_grid.csv | rows: 16
+2026-04-16 00:17:38 Checkpoint append: results_05_reduced_v3/tables/derived_vs_direct_age.csv | rows: 68
+2026-04-16 00:17:38 Memory cleanup: derived section finished for dst
+2026-04-16 00:17:38 Checkpoint complete: derived__dst.done
+2026-04-16 00:17:38 Wrote: results_05_reduced_v3/tables/derived_duration_midpoint_main_grid.csv
+2026-04-16 00:17:38 Wrote: results_05_reduced_v3/tables/derived_vs_direct_main_grid.csv
+2026-04-16 00:17:38 Wrote: results_05_reduced_v3/tables/derived_duration_midpoint_age.csv
+2026-04-16 00:17:38 Wrote: results_05_reduced_v3/tables/derived_vs_direct_age.csv
+2026-04-16 00:17:38 Wrote: results_05_reduced_v3/tables/weekend_contrasts.csv
+2026-04-16 00:17:38 Wrote: results_05_reduced_v3/tables/dst_contrasts.csv

@@ -1,0 +1,36 @@
+"term","vif"
+"splines::ns(age_at_sleep, df = 3)1",2.98194803957831
+"splines::ns(age_at_sleep, df = 3)2",4.200333269244
+"splines::ns(age_at_sleep, df = 3)3",3.96077258979957
+"employment_statusStudent",3.78365784857412
+"employment_statusRetired",3.42550106251355
+"employment_statusNot Working",4.87843112917746
+"is_weekend_factorWeekend",15.825529507796
+"sex_conceptI prefer not to answer",2.32914556793179
+"sex_conceptIntersex",2.30218924745666
+"sex_conceptMale",2.61832648403612
+"sex_conceptNo matching concept",2.54012781079907
+"sex_conceptPMI: Skip",2.02173840471249
+"sex_conceptSex At Birth: Sex At Birth None Of These",2.22892918557504
+"month02",2.87352104028294
+"month03",3.02333448700403
+"month04",2.33527277869793
+"month05",2.15508641166617
+"month06",1.69193143849541
+"month07",2.3111390119902
+"month08",2.59830202410253
+"month09",2.9093775068646
+"month10",2.58606308996789
+"month11",3.29012247540809
+"month12",2.64185674385767
+"dst_observesNoDST",1.38617414429149
+"midpoint_linear",1.29837479636222
+"employment_statusWorking:age_centered",2.41956794374836
+"employment_statusStudent:age_centered",1.53407793716401
+"employment_statusRetired:age_centered",1.74823092203573
+"splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend",3.30439266461797
+"splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend",16.6631221385503
+"splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend",3.21326594080263
+"employment_statusStudent:is_weekend_factorWeekend",3.67422038674676
+"employment_statusRetired:is_weekend_factorWeekend",2.84700912939972
+"employment_statusNot Working:is_weekend_factorWeekend",6.50782418105502

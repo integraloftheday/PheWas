@@ -1,0 +1,61 @@
+outcome,outcome_type,outcome_variant,batch,model_method,model_file,estimate_DST,estimate_NoDST,nodst_minus_dst,contrast_scope,is_weekend_factor,month,term
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,8.682351828437811,12.26173262902893,3.579380800591119,overall,NA,NA,Overall
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,23.05349334330199,21.062649559113197,-1.9908437841887936,overall,NA,NA,Overall
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,34.95804079539907,34.19284810528327,-0.7651926901158035,overall,NA,NA,Overall
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,22.306167751728328,19.119162743884537,-3.1870050078437906,overall,NA,NA,Overall
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,3.291811043537283,6.871191844128402,3.579380800591119,by_weekend,Weekday,NA,Weekday
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,8.682351828437811,12.26173262902893,3.579380800591119,by_weekend,Weekend,NA,Weekend
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,33.118877888474856,31.128034104286066,-1.9908437841887905,by_weekend,Weekday,NA,Weekday
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,23.05349334330199,21.062649559113197,-1.9908437841887936,by_weekend,Weekend,NA,Weekend
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,16.209032233593287,15.443839543477488,-0.7651926901157999,by_weekend,Weekday,NA,Weekday
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,34.95804079539907,34.19284810528327,-0.7651926901158035,by_weekend,Weekend,NA,Weekend
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,33.543347922046635,30.356342914202845,-3.1870050078437906,by_weekend,Weekday,NA,Weekday
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,22.306167751728328,19.119162743884537,-3.1870050078437906,by_weekend,Weekend,NA,Weekend
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,7.701198018148586,11.280578818739706,3.579380800591119,by_month,NA,01,Month 01
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,8.252116482704892,11.831497283296011,3.579380800591119,by_month,NA,02,Month 02
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,7.966129380506468,11.545510181097589,3.579380800591121,by_month,NA,03,Month 03
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,10.731802151112014,14.311182951703136,3.5793808005911227,by_month,NA,04,Month 04
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,8.072243517266372,11.651624317857491,3.579380800591119,by_month,NA,05,Month 05
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,10.505234582057774,14.084615382648892,3.5793808005911174,by_month,NA,06,Month 06
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,6.753111197983614,10.332491998574731,3.5793808005911174,by_month,NA,07,Month 07
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,10.35465538868737,13.934036189278489,3.579380800591119,by_month,NA,08,Month 08
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,7.046813740543506,10.626194541134623,3.5793808005911174,by_month,NA,09,Month 09
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,8.59648713435552,12.17586793494664,3.579380800591119,by_month,NA,10,Month 10
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,8.682351828437811,12.26173262902893,3.579380800591119,by_month,NA,11,Month 11
+duration,Duration,primary,dst,REML,duration_poly_interact_04_dst_REML.rds,4.021433831472726,7.600814632063846,3.57938080059112,by_month,NA,12,Month 12
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,16.696558040341895,14.705714256153096,-1.9908437841887991,by_month,NA,01,Month 01
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,16.57235337328785,14.58150958909906,-1.9908437841887905,by_month,NA,02,Month 02
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,21.38566499692132,19.394821212732523,-1.9908437841887976,by_month,NA,03,Month 03
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,18.078536451919504,16.087692667730703,-1.990843784188801,by_month,NA,04,Month 04
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,17.993800786910818,16.002957002722017,-1.990843784188801,by_month,NA,05,Month 05
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,20.287275910446898,18.296432126258097,-1.990843784188801,by_month,NA,06,Month 06
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,19.14408291463178,17.15323913044298,-1.990843784188801,by_month,NA,07,Month 07
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,20.383693784659812,18.392850000471014,-1.9908437841887976,by_month,NA,08,Month 08
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,20.17967948151376,18.18883569732496,-1.9908437841887976,by_month,NA,09,Month 09
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,19.67030111510992,17.679457330921124,-1.9908437841887936,by_month,NA,10,Month 10
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,23.05349334330199,21.062649559113197,-1.9908437841887936,by_month,NA,11,Month 11
+midpoint,ClockTime,primary,dst,REML,midpoint_poly_interact_04_dst_REML.rds,22.08066498050625,20.089821196317452,-1.9908437841887976,by_month,NA,12,Month 12
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,33.97218735323928,33.206994663123474,-0.7651926901158035,by_month,NA,01,Month 01
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,36.08806930142505,35.322876611309255,-0.7651926901157964,by_month,NA,02,Month 02
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,32.760312547444,31.99511985732821,-0.7651926901157928,by_month,NA,03,Month 03
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,35.49896259440004,34.73376990428424,-0.7651926901158035,by_month,NA,04,Month 04
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,33.003153321207215,32.23796063109142,-0.7651926901157964,by_month,NA,05,Month 05
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,34.49407404498994,33.72888135487413,-0.7651926901158035,by_month,NA,06,Month 06
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,29.26012514983901,28.4949324597232,-0.7651926901158106,by_month,NA,07,Month 07
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,33.1373144902113,32.372121800095506,-0.7651926901157964,by_month,NA,08,Month 08
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,35.71570745050174,34.950514760385936,-0.7651926901158035,by_month,NA,09,Month 09
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,30.834701711043444,30.069509020927647,-0.7651926901157964,by_month,NA,10,Month 10
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,34.95804079539907,34.19284810528327,-0.7651926901158035,by_month,NA,11,Month 11
+offset,ClockTime,primary,dst,REML,offset_poly_interact_04_dst_REML.rds,33.07114292411212,32.30595023399631,-0.7651926901158035,by_month,NA,12,Month 12
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,20.361741453322512,17.17473644547872,-3.1870050078437906,by_month,NA,01,Month 01
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,21.505668097060976,18.318663089217186,-3.1870050078437906,by_month,NA,02,Month 02
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,21.3595256552323,18.17252064738851,-3.1870050078437906,by_month,NA,03,Month 03
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,20.106788017243257,16.919783009399467,-3.1870050078437906,by_month,NA,04,Month 04
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,22.35867814632331,19.17167313847952,-3.1870050078437906,by_month,NA,05,Month 05
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,15.442963123876185,12.255958116032392,-3.1870050078437924,by_month,NA,06,Month 06
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,20.38438613470538,17.19738112686159,-3.1870050078437906,by_month,NA,07,Month 07
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,16.845523935072745,13.658518927228954,-3.1870050078437906,by_month,NA,08,Month 08
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,20.557969142404083,17.370964134560293,-3.1870050078437906,by_month,NA,09,Month 09
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,19.826122294499054,16.639117286655264,-3.1870050078437906,by_month,NA,10,Month 10
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,22.306167751728328,19.119162743884537,-3.1870050078437906,by_month,NA,11,Month 11
+onset,ClockTime,primary,dst,REML,onset_poly_interact_04_dst_REML.rds,18.067999490422338,14.880994482578547,-3.1870050078437906,by_month,NA,12,Month 12

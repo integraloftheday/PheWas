@@ -1,0 +1,143 @@
+[1] "Model: offset_poly_interact_04_dst"
+[1] "Method: ML (for model comparison)"
+offset_linear ~ splines::ns(age_at_sleep, df = 3) + employment_status + 
+    is_weekend_factor + age_centered:employment_status + splines::ns(age_at_sleep, 
+    df = 3):is_weekend_factor + is_weekend_factor:employment_status + 
+    sex_concept + month + dst_observes + is_weekend_factor:dst_observes + 
+    (1 | person_id)
+<environment: 0x10c58ad90>
+Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite's
+  method [lmerModLmerTest]
+Formula: formula_obj
+   Data: df
+Control: lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05))
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+    868.0     974.1    -397.0     794.0        93 
+
+Scaled residuals: 
+       Min         1Q     Median         3Q        Max 
+-2.701e-06 -1.373e-06 -1.600e-08  1.191e-06  4.451e-06 
+
+Random effects:
+ Groups    Name        Variance  Std.Dev. 
+ person_id (Intercept) 3.927e+01 6.266e+00
+ Residual              9.733e-11 9.866e-06
+Number of obs: 130, groups:  person_id, 128
+
+Fixed effects:
+                                                            Estimate Std. Error
+(Intercept)                                                  23.3438     4.1535
+splines::ns(age_at_sleep, df = 3)1                            7.1443     3.6903
+splines::ns(age_at_sleep, df = 3)2                            4.2560     8.2425
+splines::ns(age_at_sleep, df = 3)3                           -3.3397     3.7177
+employment_statusStudent                                     -6.7761     3.2077
+employment_statusRetired                                     -2.3259     3.1283
+employment_statusNot Working                                 -2.6683     2.4029
+is_weekend_factorWeekend                                      0.3630     4.1745
+sex_conceptI prefer not to answer                            -1.4544     2.0156
+sex_conceptIntersex                                          -2.2576     1.8609
+sex_conceptMale                                               0.4292     0.2295
+sex_conceptNo matching concept                               -0.4460     1.9500
+sex_conceptPMI: Skip                                         -2.2883     2.5112
+sex_conceptSex At Birth: Sex At Birth None Of These          -0.7222     2.1744
+month02                                                       2.0949     2.9855
+month03                                                      -1.2136     2.9666
+month04                                                       1.5245     3.1211
+month05                                                      -0.9715     3.5584
+month06                                                       0.5114     3.6992
+month07                                                      -4.7232     3.1207
+month08                                                      -0.8431     2.7624
+month09                                                       1.7254     3.0834
+month10                                                      -3.1599     2.9963
+month11                                                       0.9779     2.9649
+month12                                                      -0.9302     3.3077
+dst_observesNoDST                                            -0.7448     4.2081
+employment_statusWorking:age_centered                         0.2063     0.4108
+employment_statusStudent:age_centered                         0.1554     0.4690
+employment_statusRetired:age_centered                        -0.3989     0.5333
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend  -9.6283     5.0045
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend  -2.8260    10.4254
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend   8.0814     4.4045
+employment_statusStudent:is_weekend_factorWeekend             8.4638     4.1281
+employment_statusRetired:is_weekend_factorWeekend             2.0690     4.3362
+employment_statusNot Working:is_weekend_factorWeekend         5.0676     3.1570
+                                                                  df t value
+(Intercept)                                                 285.0977   5.620
+splines::ns(age_at_sleep, df = 3)1                          285.0977   1.936
+splines::ns(age_at_sleep, df = 3)2                          285.0977   0.516
+splines::ns(age_at_sleep, df = 3)3                          285.0977  -0.898
+employment_statusStudent                                    285.0977  -2.112
+employment_statusRetired                                    285.0977  -0.744
+employment_statusNot Working                                285.0977  -1.110
+is_weekend_factorWeekend                                    285.0977   0.087
+sex_conceptI prefer not to answer                           285.0977  -0.722
+sex_conceptIntersex                                         285.0977  -1.213
+sex_conceptMale                                             285.0977   1.870
+sex_conceptNo matching concept                              285.0977  -0.229
+sex_conceptPMI: Skip                                        285.0977  -0.911
+sex_conceptSex At Birth: Sex At Birth None Of These         285.0977  -0.332
+month02                                                     285.0977   0.702
+month03                                                     285.0977  -0.409
+month04                                                     285.0977   0.488
+month05                                                     285.0977  -0.273
+month06                                                     285.0977   0.138
+month07                                                     285.0977  -1.514
+month08                                                     285.0977  -0.305
+month09                                                     285.0977   0.560
+month10                                                     285.0977  -1.055
+month11                                                     285.0977   0.330
+month12                                                     285.0977  -0.281
+dst_observesNoDST                                           285.0977  -0.177
+employment_statusWorking:age_centered                       285.0977   0.502
+employment_statusStudent:age_centered                       285.0977   0.331
+employment_statusRetired:age_centered                       285.0977  -0.748
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend 285.0977  -1.924
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend 285.0977  -0.271
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend 285.0977   1.835
+employment_statusStudent:is_weekend_factorWeekend           285.0977   2.050
+employment_statusRetired:is_weekend_factorWeekend           285.0977   0.477
+employment_statusNot Working:is_weekend_factorWeekend       285.0977   1.605
+                                                            Pr(>|t|)    
+(Intercept)                                                 4.54e-08 ***
+splines::ns(age_at_sleep, df = 3)1                            0.0539 .  
+splines::ns(age_at_sleep, df = 3)2                            0.6060    
+splines::ns(age_at_sleep, df = 3)3                            0.3698    
+employment_statusStudent                                      0.0355 *  
+employment_statusRetired                                      0.4578    
+employment_statusNot Working                                  0.2677    
+is_weekend_factorWeekend                                      0.9308    
+sex_conceptI prefer not to answer                             0.4711    
+sex_conceptIntersex                                           0.2261    
+sex_conceptMale                                               0.0626 .  
+sex_conceptNo matching concept                                0.8192    
+sex_conceptPMI: Skip                                          0.3629    
+sex_conceptSex At Birth: Sex At Birth None Of These           0.7400    
+month02                                                       0.4834    
+month03                                                       0.6828    
+month04                                                       0.6256    
+month05                                                       0.7850    
+month06                                                       0.8901    
+month07                                                       0.1313    
+month08                                                       0.7604    
+month09                                                       0.5762    
+month10                                                       0.2925    
+month11                                                       0.7418    
+month12                                                       0.7787    
+dst_observesNoDST                                             0.8596    
+employment_statusWorking:age_centered                         0.6160    
+employment_statusStudent:age_centered                         0.7407    
+employment_statusRetired:age_centered                         0.4550    
+splines::ns(age_at_sleep, df = 3)1:is_weekend_factorWeekend   0.0554 .  
+splines::ns(age_at_sleep, df = 3)2:is_weekend_factorWeekend   0.7865    
+splines::ns(age_at_sleep, df = 3)3:is_weekend_factorWeekend   0.0676 .  
+employment_statusStudent:is_weekend_factorWeekend             0.0412 *  
+employment_statusRetired:is_weekend_factorWeekend             0.6336    
+employment_statusNot Working:is_weekend_factorWeekend         0.1096    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+fit warnings:
+fixed-effect model matrix is rank deficient so dropping 2 columns / coefficients
+optimizer (bobyqa) convergence code: 0 (OK)
+Model failed to converge with max|grad| = 0.023555 (tol = 0.002, component 1)
+

@@ -35,6 +35,9 @@ import numpy as np
 SLEEP_DATA_PATH = "processed_data/daily_sleep_metrics_enhanced.parquet"
 COVARIATES_PATH = "processed_data/fitbit_cohort_covariates.parquet"
 OUTPUT_PATH = "processed_data/ready_for_analysis.parquet"
+PHOTO_INFO_PATH = "environmental_data/photo_info/all_photo_info.parquet"
+LMM_OUTPUT_PATH = "processed_data/LMM_analysis.parquet"
+RUN_DATA_PREP_QC_PLOTS = os.getenv("RUN_DATA_PREP_QC_PLOTS", "false").lower() in ("1", "true", "yes")
 
 # Load data
 try:
@@ -234,6 +237,26 @@ elif "daily_duration_mins" in q_schema_names:
 else:
     raise ValueError("ready_for_analysis.parquet must contain either 'daily_sleep_window_mins' or 'daily_duration_mins'.")
 
+photo_info_available = os.path.exists(PHOTO_INFO_PATH)
+if photo_info_available:
+    photo_lf = (
+        pl.scan_parquet(PHOTO_INFO_PATH)
+        .with_columns(
+            zip3 = (
+                pl.col("ZIP3")
+                .cast(pl.Utf8)
+                .str.replace_all(r"[^0-9]", "")
+                .str.slice(0, 3)
+                .str.zfill(3)
+            ),
+            DayOfYear = pl.col("DayOfYear").cast(pl.Int32)
+        )
+        .select(["zip3", "DayOfYear", "deviation"])
+    )
+else:
+    print(f"Warning: {PHOTO_INFO_PATH} not found. 'deviation' will be null in LMM_analysis.parquet.")
+    photo_lf = None
+
 # 2. Process (Filter, Clean, Linearize & Select)
 df_clean = (
     q.filter(
@@ -241,6 +264,8 @@ df_clean = (
         pl.col("sex_concept").is_not_null()
     )
     .with_columns(
+        sleep_date = pl.col("sleep_date").cast(pl.Date),
+        day_of_year_lmm = pl.col("sleep_date").cast(pl.Date).dt.ordinal_day().cast(pl.Int32),
         month = pl.col("sleep_date").cast(pl.Date).dt.strftime("%m"),
         person_id = pl.col("person_id").cast(pl.String).cast(pl.Categorical),
         sex_concept = pl.col("sex_concept").cast(pl.String).cast(pl.Categorical),
@@ -295,150 +320,103 @@ df_clean = (
                   .otherwise(pl.col("daily_end_hour")),
         daily_sleep_window_mins = sleep_window_expr
     )
-    .select([
-        "midpoint_sin", "midpoint_cos", 
-        "onset_sin", "onset_cos", 
-        "offset_sin", "offset_cos", 
-        "onset_linear", "offset_linear", "midpoint_linear",
-        "daily_sleep_window_mins", "is_postmenopausal",
-        "person_id", "sex_concept", "age_at_sleep", "month", "is_weekend", "employment_status", "zip3"
-    ])
 )
 
-df_clean.sink_parquet("processed_data/LMM_analysis.parquet")
-
-
-# ## Validate Linearlization
-
-# In[ ]:
-
-
-df = pl.read_parquet("processed_data/LMM_analysis.parquet")
-
-print("--- 1. Summary Statistics for Linear Variables ---")
-stats = df.select([
-    pl.col("onset_linear"),
-    pl.col("midpoint_linear"),
-    pl.col("offset_linear")
-]).describe()
-print(stats)
-
-print("\n--- 2. Logic Check: Raw vs Linear (Midnight Crossover) ---")
-# To do this, we need to infer what the 'raw' value was approximately 
-# (since we didn't save the raw columns in the final file, we reconstruct logic for display)
-
-# We define a helper to reverse-engineer the display for verification
-# If linear >= 24, it means raw was (linear - 24). If linear < 24, raw was same.
-check_df = df.select([
-    "onset_linear",
-    "midpoint_linear",
-    "offset_linear"
-]).with_columns(
-    inferred_raw_onset = pl.when(pl.col("onset_linear") >= 24)
-                           .then(pl.col("onset_linear") - 24)
-                           .otherwise(pl.col("onset_linear")),
-    label = pl.when(pl.col("onset_linear") >= 24).then(pl.lit("Post-Midnight (shifted +24)"))
-              .otherwise(pl.lit("Evening/Pre-Midnight"))
-)
-
-# Show examples of evening vs post-midnight rows in noon-to-noon encoding.
-print("\nSample of Post-Midnight Onsets (Shifted to >=24):")
-print(check_df.filter(pl.col("onset_linear") >= 24).head(5))
-
-print("\nSample of Evening Onsets (<24):")
-print(check_df.filter(pl.col("onset_linear") < 24).head(5))
-
-print("\n--- 3. Range Sanity Check ---")
-# Check for strange outliers for noon-to-noon representation
-outliers = df.filter(
-    (pl.col("onset_linear") < 12) | (pl.col("onset_linear") > 36)
-)
-
-if outliers.height > 0:
-    print(f"WARNING: Found {outliers.height} rows with potentially weird linear values outside [12, 36].")
-    print(outliers.select(["person_id", "onset_linear", "midpoint_linear"]).head())
+if photo_lf is not None:
+    df_clean = df_clean.join(
+        photo_lf,
+        left_on=["zip3", "day_of_year_lmm"],
+        right_on=["zip3", "DayOfYear"],
+        how="left"
+    )
 else:
-    print("SUCCESS: All onset_linear values are within [12, 36] for noon-to-noon encoding.")
+    df_clean = df_clean.with_columns(pl.lit(None, dtype=pl.Float64).alias("deviation"))
+
+df_clean = df_clean.select([
+    "midpoint_sin", "midpoint_cos",
+    "onset_sin", "onset_cos",
+    "offset_sin", "offset_cos",
+    "onset_linear", "offset_linear", "midpoint_linear",
+    "daily_sleep_window_mins", "is_postmenopausal",
+    "person_id", "sex_concept", "age_at_sleep", "sleep_date", "month", "is_weekend", "employment_status", "zip3",
+    "deviation"
+])
+
+df_clean.sink_parquet(LMM_OUTPUT_PATH)
+
+
+if RUN_DATA_PREP_QC_PLOTS:
+    # ## Validate Linearization
+    df = pl.read_parquet(LMM_OUTPUT_PATH)
+
+    print("--- 1. Summary Statistics for Linear Variables ---")
+    stats = df.select([
+        pl.col("onset_linear"),
+        pl.col("midpoint_linear"),
+        pl.col("offset_linear")
+    ]).describe()
+    print(stats)
+
+    print("\n--- 2. Logic Check: Raw vs Linear (Midnight Crossover) ---")
+    check_df = df.select([
+        "onset_linear",
+        "midpoint_linear",
+        "offset_linear"
+    ]).with_columns(
+        inferred_raw_onset = pl.when(pl.col("onset_linear") >= 24)
+                               .then(pl.col("onset_linear") - 24)
+                               .otherwise(pl.col("onset_linear")),
+        label = pl.when(pl.col("onset_linear") >= 24).then(pl.lit("Post-Midnight (shifted +24)"))
+                  .otherwise(pl.lit("Evening/Pre-Midnight"))
+    )
+
+    print("\nSample of Post-Midnight Onsets (Shifted to >=24):")
+    print(check_df.filter(pl.col("onset_linear") >= 24).head(5))
+    print("\nSample of Evening Onsets (<24):")
+    print(check_df.filter(pl.col("onset_linear") < 24).head(5))
+
+    print("\n--- 3. Range Sanity Check ---")
+    outliers = df.filter((pl.col("onset_linear") < 12) | (pl.col("onset_linear") > 36))
+    if outliers.height > 0:
+        print(f"WARNING: Found {outliers.height} rows with potentially weird linear values outside [12, 36].")
+        print(outliers.select(["person_id", "onset_linear", "midpoint_linear"]).head())
+    else:
+        print("SUCCESS: All onset_linear values are within [12, 36] for noon-to-noon encoding.")
+
+    print("Loading data...")
+    df = pl.read_parquet(LMM_OUTPUT_PATH)
+
+    SAMPLE_SIZE = 500_000
+    if df.height > SAMPLE_SIZE:
+        print(f"Subsampling {SAMPLE_SIZE} rows from {df.height} total rows...")
+        df_plot = df.sample(n=SAMPLE_SIZE, seed=42)
+    else:
+        df_plot = df
+
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+    variables = [
+        {"col": "onset_linear", "title": "Sleep Onset (Linearized)", "cutoff_low": 12, "cutoff_high": 36},
+        {"col": "midpoint_linear", "title": "Sleep Midpoint (Linearized)", "cutoff_low": 12, "cutoff_high": 36},
+        {"col": "offset_linear", "title": "Wake Up / Offset (Linearized)", "cutoff_low": 12, "cutoff_high": 36},
+    ]
+
+    for i, var in enumerate(variables):
+        ax = axes[i]
+        data = df_plot[var["col"]].to_numpy()
+        ax.hist(data, bins=100, color="skyblue", edgecolor="black", alpha=0.7)
+        ax.axvline(24, color="red", linestyle="--", linewidth=1.5, label="Midnight (24.0)")
+        ax.axvline(var["cutoff_low"], color="green", linestyle=":", linewidth=2, label="Wrap Boundary")
+        ax.axvline(var["cutoff_high"], color="green", linestyle=":", linewidth=2)
+        ax.set_title(var["title"], fontsize=12, fontweight="bold")
+        ax.set_xlabel("Linearized Hour (Noon-to-Noon)")
+        ax.set_ylabel("Frequency (Sampled)")
+        if i == 0:
+            ax.legend()
+
+    plt.suptitle("Distribution Check: Are the shapes Bell-like? (Ensure no cliffs at Green lines)", fontsize=14)
+    plt.tight_layout()
+    plt.show()
 
 
 # In[ ]:
-
-
-import polars as pl
-import matplotlib.pyplot as plt
-import numpy as np
-
-# 1. Load the data
-print("Loading data...")
-df = pl.read_parquet("processed_data/LMM_analysis.parquet")
-
-# 2. Subsample
-# Plotting 20 million points is slow and unnecessary for checking shape.
-# 500,000 points is statistically sufficient to see the distribution shape clearly.
-SAMPLE_SIZE = 500_000
-
-if df.height > SAMPLE_SIZE:
-    print(f"Subsampling {SAMPLE_SIZE} rows from {df.height} total rows...")
-    df_plot = df.sample(n=SAMPLE_SIZE, seed=42)
-else:
-    df_plot = df
-
-# 3. Plotting
-fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-
-# Define the columns and their "Cutoff" points (where we wrapped the data)
-# We want to check the wrap boundary near 12/36 and continuity near midnight (24).
-variables = [
-    {
-        "col": "onset_linear", 
-        "title": "Sleep Onset (Linearized)", 
-        "cutoff_low": 12,
-        "cutoff_high": 36
-    },
-    {
-        "col": "midpoint_linear", 
-        "title": "Sleep Midpoint (Linearized)", 
-        "cutoff_low": 12,
-        "cutoff_high": 36
-    },
-    {
-        "col": "offset_linear", 
-        "title": "Wake Up / Offset (Linearized)", 
-        "cutoff_low": 12,
-        "cutoff_high": 36
-    }
-]
-
-for i, var in enumerate(variables):
-    ax = axes[i]
-    col_name = var["col"]
-    data = df_plot[col_name].to_numpy()
-    
-    # Plot Histogram
-    # FIXED: Changed 'slatebytes' (typo) to 'black'
-    ax.hist(data, bins=100, color='skyblue', edgecolor='black', alpha=0.7)
-    
-    # Add Midnight Reference Line (24.0 in noon-to-noon scale)
-    ax.axvline(24, color='red', linestyle='--', linewidth=1.5, label='Midnight (24.0)')
-    
-    # Add Cutoff Lines (Where the wrap-around logic happens)
-    # Ideally, the bars should be empty/flat near these green lines.
-    ax.axvline(var["cutoff_low"], color='green', linestyle=':', linewidth=2, label='Wrap Boundary')
-    ax.axvline(var["cutoff_high"], color='green', linestyle=':', linewidth=2)
-    
-    # Formatting
-    ax.set_title(var["title"], fontsize=12, fontweight='bold')
-    ax.set_xlabel("Linearized Hour (Noon-to-Noon)")
-    ax.set_ylabel("Frequency (Sampled)")
-    
-    if i == 0:
-        ax.legend()
-
-plt.suptitle("Distribution Check: Are the shapes Bell-like? (Ensure no cliffs at Green lines)", fontsize=14)
-plt.tight_layout()
-plt.show()
-
-
-# In[ ]:
-
 

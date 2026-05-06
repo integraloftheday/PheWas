@@ -374,8 +374,31 @@ update_rsid_for_chr <- function(chr) {
   return(rsid_file)
 }
 
-# Build per-chromosome filtered files once
+# Build per-chromosome filtered files once.
+# Validate that an existing reference was built for the same cohort by comparing
+# .fam row count to the current patient list. Rebuild if they differ.
 shared_reference_exists <- file.exists(paste0(all_prefix, ".bed"))
+if (shared_reference_exists) {
+  existing_fam <- tryCatch(
+    read_table(paste0(all_prefix, ".fam"), col_names = FALSE, show_col_types = FALSE),
+    error = function(e) NULL
+  )
+  existing_n <- if (!is.null(existing_fam)) nrow(existing_fam) else -1L
+  if (existing_n != nrow(patient_list)) {
+    cat(sprintf(
+      "⚠ Existing shared reference has %d participants but current patient list has %d — rebuilding.\n",
+      existing_n, nrow(patient_list)
+    ))
+    shared_reference_exists <- FALSE
+    # Remove stale reference files so the build branch runs cleanly
+    for (ext in c(".bed", ".bim", ".fam")) {
+      f <- paste0(all_prefix, ext)
+      if (file.exists(f)) file.remove(f)
+    }
+  } else {
+    cat(sprintf("✓ Existing shared reference matches patient list (%d participants) — reusing.\n", existing_n))
+  }
+}
 if (shared_reference_exists) {
   log_progress_event(
     "shared_reference",

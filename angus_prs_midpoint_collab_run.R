@@ -138,7 +138,7 @@ tryCatch({
   # ---- Step 1: Score PRS ----
   append_progress_event("notebook", "score_phase_started",
                         details = list(score_pattern = score_pattern))
-  score_status <- system2("python", "02_plink_PGRS_Generator_all.py")
+  score_status <- system2("Rscript", "02_plink_PGRS_Generator_all.py")
   if (score_status != 0) stop("PRS scoring failed.")
 
   score_file <- file.path(

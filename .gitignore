@@ -14,9 +14,11 @@ processed_data/
 results/
 venv/
 .venv/
+wandb/
 
 # Local R package library (do not commit binaries)
 .r_libs/
+plink_mac_20250819/
 
 # Generated model artifacts and reports
 model_comparison_aic*.md

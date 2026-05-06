@@ -1,54 +1,62 @@
 # Copilot Instructions for PheWas
 
-Purpose and Scope
-- Focus: Phenome-wide analyses on All of Us (AoU) data, extracting Fitbit sleep metrics and building PGRS/PGS-driven PheWAS tables.
-- Primary workflow is R-based and organized as three notebooks executed in order: `00_`, `01_`, `02_`.
+## Build, test, and lint commands
 
-Repo Structure and Flow
-- Notebooks:
-  - `00_sleep_level_extractor.ipynb`: Query AoU BigQuery CDR for Fitbit sleep levels/daily summary; derive sleep features.
-  - `01_data_accumulation.ipynb`: Join AoU EHR/measurement/concepts with sleep features; build analysis tables.
-  - `02_plink_PGRS_Generator.ipynb`: Integrate PGS/PGRS resources and ancestry filters; prepare PGRS tables for downstream PheWAS.
-- Data dirs:
-  - `aou_raw_data/`, `raw_data/`: external inputs or dumps (never commit PHI).
-  - `processed_data/avg_duration/`, `processed_data/midpoint/`: notebook outputs (Parquet/TSV/CSV).
-  - `analysis_inputs/`: static inputs (e.g., `ICD_to_Phecode_mapping.csv`, `PGS002196-average.txt`, `PGS002209_hmPOS_GRCh38.txt`, `chronotype_meta_PRS_model.txt`).
-  - `results/`: figures/tables produced by notebooks.
+- There is no package build system, no centralized lint configuration, and no formal unit-test framework checked into this repository.
+- The main runnable pipeline entry points are script-based:
 
-Execution Environment
-- Language: R (R kernel in .ipynb). Ensure IRkernel is available in VS Code/Jupyter.
-- R packages frequently used: `bigrquery`, `data.table`, `readr`, `stringr`, `dplyr`, `tidyr`, `tidyverse`, `lubridate`, `nanoparquet`, `ggplot2`, `ggrepel`, `viridis`, `ggsci`, `rms`, `ggpubr`, `jsonlite`, `furrr`, `purrr`, `speedglm`, `progressr`, `circular`, `lutz`, `usa`, `Hmisc`.
-- External services: Google BigQuery (AoU CDR). Auth and billing required.
+```bash
+python3 00_Sleep_Level_Extractor.py
+python3 01b_Fitbit_Cohort_Covariates.py
+python3 02_Data_Preparation.py
+Rscript main.r
+```
 
-Required Environment Variables
-- `GOOGLE_PROJECT`: GCP billing project for BigQuery jobs (used by `bq_project_query(...)` and as `billing` in `bq_dataset_query(...)`).
-- `WORKSPACE_CDR`: Full AoU CDR dataset id (e.g., `fc-aou-XXXX.C2024Q2R3`), used to format queries like ``FROM `{dataset}.table` ``.
+- You can also run the model/report stages directly when the expected parquet inputs and model directories already exist:
 
-Critical Patterns and Conventions
-- BigQuery access:
-  - Queries are built as strings with `{dataset}` placeholders; executed via `bigrquery::bq_project_query(Sys.getenv("GOOGLE_PROJECT"), query)` or `bq_dataset_query(dataset, query, billing=...)`.
-  - Expect long-running queries; code batches reads and sometimes uses intermediate Parquet via `nanoparquet`.
-- Data I/O:
-  - Prefer Parquet for large intermediates (`nanoparquet::read_parquet`/`write_parquet`), TSV/CSV for compatibility.
-  - Outputs organized under `processed_data/` by metric (e.g., `avg_duration`, `midpoint`).
-- PGS/PGRS integration:
-  - `02_` notebook reads precomputed PGRS/PGS artifacts (e.g., under `PGRS_Average/plinkfiles/...` and `analysis_inputs/`).
-  - PLINK execution is assumed external; the repo consumes its outputs rather than invoking PLINK directly.
+```bash
+Rscript 04_LMM_Regression.r
+Rscript 05_Precompute_Predictions.r
+Rscript 05_LMM_Results.r
+```
 
-Running the Workflow (local, minimal)
-- Configure GCP auth and env vars, then run notebooks in order: `00_` → `01_` → `02_`.
-- Example shell (zsh):
-  - `export GOOGLE_PROJECT="your-gcp-project"`
-  - `export WORKSPACE_CDR="your-project.your_dataset"`
-- In VS Code, open each notebook and use the R kernel; install missing R packages as prompted.
+- Fast smoke-style runs use the repo's built-in subset/test switches rather than a separate test suite:
 
-Key Files to Reference
-- Notebooks: `00_sleep_level_extractor.ipynb`, `01_data_accumulation.ipynb`, `02_plink_PGRS_Generator.ipynb`
-- Inputs: `analysis_inputs/ICD_to_Phecode_mapping.csv`, `analysis_inputs/PGS002196-average.txt`, `analysis_inputs/PGS002209_hmPOS_GRCh38.txt`, `analysis_inputs/chronotype_meta_PRS_model.txt`
-- Data roots: `processed_data/`, `raw_data/`, `aou_raw_data/`, `results/`
+```bash
+TEST_MODE_04=true N_TEST_IDS_04=25 Rscript 04_LMM_Regression.r
+python3 02b_Create_Analysis_Subset.py config.yaml results/tmp_run
+Rscript 02b_Create_Analysis_Subset.r config.yaml results/tmp_run
+```
 
-Guardrails for Agents
-- Do not commit or print PHI/PII or AoU-restricted data.
-- Avoid hardcoding CDR ids; always read `WORKSPACE_CDR`/`GOOGLE_PROJECT` from the environment.
-- Maintain R-first workflow; do not introduce Python unless explicitly requested.
-- Keep intermediate files under `processed_data/` and large static mappings under `analysis_inputs/`.
+- The closest thing to a targeted validation command is the precompute-output validator. It checks one result bundle at a time:
+
+```bash
+python3 07_Validate_Precompute_Outputs.py results_05_5
+```
+
+## High-level architecture
+
+- The repository is a mixed Python/R pipeline for Fitbit sleep, EHR, environment, and PGRS/PheWAS analysis on All of Us data.
+- `00_Sleep_Level_Extractor.py` is the Fitbit sleep extraction layer. It queries AoU BigQuery tables, de-duplicates/merges sleep episodes, computes nightly sleep metrics, and writes `processed_data/daily_sleep_metrics_enhanced.parquet`.
+- `01b_Fitbit_Cohort_Covariates.py` builds Fitbit-cohort covariates only and writes `processed_data/fitbit_cohort_covariates.parquet`.
+- `01_Data_Accumulation_py.py` is the broader EHR/PheWAS accumulation path. It produces `processed_data/master/master_phewas_wide.parquet`, `processed_data/master/master_covariates_only.parquet`, and `processed_data/person_ids.parquet`.
+- `02_Data_Preparation.py` is the bridge into analysis. It joins nightly sleep with cohort covariates, creates analysis features, writes `processed_data/ready_for_analysis.parquet`, then derives the reduced mixed-model input `processed_data/LMM_analysis.parquet`.
+- `main.r` is the orchestrator for the modeling/report pipeline. It reads `config.yaml`, creates a timestamped `results/run_*` directory, optionally calls `02b_Create_Analysis_Subset.py` or `02b_Create_Analysis_Subset.r`, exports environment variables for downstream scripts, then sources the configured run steps.
+- `04_LMM_Regression.r` fits the mixed-effects models and writes `.rds` model objects plus summary/VIF/emmeans artifacts.
+- `05_Precompute_Predictions.r` turns model objects into cached CSV/RDS/parquet tables for plotting, and `05_LMM_Results.r` consumes those cached tables to render final tables and plots without reopening every model.
+- `03_Descriptive_Analysis.py` and `03_Descriptive_Analysis.r` operate on `processed_data/ready_for_analysis.parquet` for descriptive outputs outside the main orchestrated model pipeline.
+- `02_plink_PGRS_Generator_all.py` is part of the genetics branch, but despite the `.py` suffix it contains R code and behaves like an R notebook export. Treat it accordingly.
+
+## Key conventions
+
+- Always read AoU dataset identifiers from the environment. The core variables are `GOOGLE_PROJECT` and `WORKSPACE_CDR`; do not hardcode CDR/project IDs in code or docs.
+- Prefer Parquet for large intermediates and keep them under `processed_data/`. Static mappings and score files live under `analysis_inputs/`. Results and model artifacts live under `results*/`, `models_*`, and `model_summaries_*`.
+- The Python ETL scripts are notebook exports and often keep notebook-style cells plus inline package install commands such as `get_ipython().system(...)`. Preserve that style when editing those files instead of refactoring them into a package structure.
+- `main.r` and `02b_Create_Analysis_Subset.r` prefer a project-local `.r_libs` when present. Avoid assuming only system-wide R libraries are available.
+- Sleep timing is standardized to a noon-to-noon linearized scale in `02_Data_Preparation.py`: values before noon are shifted by +24, and downstream R/Python analysis expects `onset_linear`, `midpoint_linear`, and `offset_linear` on roughly the `[12, 36)` scale.
+- The "weekend" flag used downstream is really free-day logic: `00_Sleep_Level_Extractor.py` builds `is_weekend_or_holiday`, and `02_Data_Preparation.py` casts that into the modeling `is_weekend` field.
+- Environmental seasonality for the mixed-model pipeline uses month as the main seasonal control. `02_Data_Preparation.py` can join `environmental_data/photo_info/all_photo_info.parquet` to add `deviation`, and `04_LMM_Regression.r` explicitly uses month and may include `deviation` when available.
+- In the LMM workflow, ML fits are for model comparison/AIC and REML fits are for coefficient interpretation and downstream marginal summaries. Preserve both outputs when changing `04_LMM_Regression.r`.
+- Employment and ZIP3 normalization logic is duplicated across Python and R paths (`02b_*`, `04_LMM_Regression.r`, `05_LMM_Results.r`). Keep those transformations aligned when modifying one side.
+- `02_Data_Preparation.py` falls back to `processed_data/master/master_covariates_only.parquet` when `processed_data/fitbit_cohort_covariates.parquet` is absent. Do not remove that fallback unless you also update the broader pipeline assumptions.
+- Do not commit, print, or summarize PHI/PII or AoU-restricted row-level data. Shared outputs should stay aggregated/masked.

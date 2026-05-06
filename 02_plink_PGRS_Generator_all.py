@@ -38,6 +38,8 @@ if (!requireNamespace("BSgenome.Hsapiens.NCBI.GRCh38", quietly = TRUE))
     BiocManager::install("BSgenome.Hsapiens.NCBI.GRCh38")
 if (!requireNamespace("nanoparquet", quietly = TRUE))
     install.packages("nanoparquet")
+if (!requireNamespace("jsonlite", quietly = TRUE))
+    install.packages("jsonlite")
 
 library(readr)
 library(dplyr)
@@ -46,6 +48,7 @@ library(MungeSumstats)
 library(GWASBrewer)
 library(janitor)
 library(nanoparquet)
+library(jsonlite)
 
 cat("✓ All libraries loaded successfully\n")
 
@@ -69,15 +72,51 @@ for (d in c("processed_data", output_base_dir, analysis_inputs_dir)) {
 # GCS paths - update these if dataset version changes
 gcs_plink_base <- "gs://fc-aou-datasets-controlled/v8/wgs/short_read/snpindel/clinvar/plink_bed"
 gcs_ancestry_path <- "gs://fc-aou-datasets-controlled/v8/wgs/short_read/snpindel/aux/ancestry/ancestry_preds.tsv"
+ancestry_filter <- tolower(Sys.getenv("PGRS_ANCESTRY_FILTER", "all"))
+if (!ancestry_filter %in% c("all", "eur")) {
+  stop("PGRS_ANCESTRY_FILTER must be one of: all, eur")
+}
+ancestry_filter_label <- if (ancestry_filter == "eur") "EUR-only" else "all-ancestry"
+shared_ref_tag <- paste0("plink_ref_", ancestry_filter)
+file_pattern <- Sys.getenv("PGRS_FILE_PATTERN", "")
+wandb_progress_file <- Sys.getenv("WANDB_PROGRESS_FILE", "")
+
+log_progress_event <- function(stage, event, status = "running", metrics = list(), details = list()) {
+  if (!nzchar(wandb_progress_file)) return(invisible(NULL))
+  payload <- c(
+    list(
+      timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
+      stage = stage,
+      event = event,
+      status = status
+    ),
+    if (length(metrics) > 0) list(metrics = metrics) else list(),
+    if (length(details) > 0) list(details = details) else list()
+  )
+  dir.create(dirname(wandb_progress_file), recursive = TRUE, showWarnings = FALSE)
+  cat(
+    jsonlite::toJSON(payload, auto_unbox = TRUE, null = "null"),
+    "\n",
+    file = wandb_progress_file,
+    append = TRUE
+  )
+}
 
 cat("Output directory:", output_base_dir, "\n")
 cat("GCS PLINK base:", gcs_plink_base, "\n")
+cat("Participant filter:", ancestry_filter_label, "\n")
 
 # Discover all PGRS files in analysis_inputs (exclude ICD mapping)
 pgrs_files <- list.files(analysis_inputs_dir,
                         pattern = "\\.(txt|txt\\.gz)$",
                         full.names = TRUE)
 pgrs_files <- pgrs_files[!grepl("ICD_to_Phecode", pgrs_files)]
+if (nzchar(file_pattern)) {
+  pgrs_files <- pgrs_files[grepl(file_pattern, basename(pgrs_files))]
+}
+if (length(pgrs_files) == 0) {
+  stop("No PGRS files matched the current selection in analysis_inputs/.")
+}
 
 cat("\n✓ Found", length(pgrs_files), "PGRS files to process:\n")
 for (f in pgrs_files) {
@@ -89,6 +128,18 @@ chromosomes <- c("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9",
                  "chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19",
                  "chr20","chr21","chr22","chrX","chrY")
 cat("\n✓ Will process", length(chromosomes), "chromosomes\n")
+log_progress_event(
+  "pgrs_scoring",
+  "configuration_loaded",
+  metrics = list(
+    pgrs_files_total = length(pgrs_files),
+    chromosomes_total = length(chromosomes)
+  ),
+  details = list(
+    ancestry_filter = ancestry_filter,
+    file_pattern = file_pattern
+  )
+)
 
 
 # ## Helper Functions
@@ -187,7 +238,8 @@ prepare_pgrs_file <- function(pgrs_path, output_dir) {
   
   return(list(
     prepared_file = prepared_file,
-    format_info = format_info
+    format_info = format_info,
+    variant_count = length(data_lines)
   ))
 }
 
@@ -248,37 +300,47 @@ if (!file.exists(chr21_fam_path)) {
   cat("  ✓ chr21.fam already exists\n")
 }
 
-# Create filtered patient list (EUR ancestry only)
-cat("\nCreating EUR patient list...\n")
+# Create filtered patient list
+cat("\nCreating patient list...\n")
 fam_data <- read_table(chr21_fam_path, col_names = FALSE, show_col_types = FALSE)
 colnames(fam_data) <- c("FID", "IID", "PID", "MID", "SEX", "PHENOTYPE")
 
 ancestry <- read_tsv(ancestry_dest_path, show_col_types = FALSE)
-eur_ids <- ancestry %>% filter(ancestry_pred == "eur") %>% pull(research_id)
+eligible_ids <- if (ancestry_filter == "eur") {
+  ancestry %>% filter(ancestry_pred == "eur") %>% pull(research_id)
+} else {
+  ancestry %>% pull(research_id)
+}
 
-filtered_fam <- fam_data[fam_data$IID %in% eur_ids & fam_data$IID %in% person_ids_df$person_id, ]
+filtered_fam <- fam_data[fam_data$IID %in% eligible_ids & fam_data$IID %in% person_ids_df$person_id, ]
 patient_list <- filtered_fam[, c("FID", "IID")]
 
-patient_list_file <- file.path(ancestry_dir, "patient_list_eur.txt")
+patient_list_file <- file.path(ancestry_dir, paste0("patient_list_", ancestry_filter, ".txt"))
 write_tsv(patient_list, patient_list_file, col_names = FALSE)
 
-cat("✓ Patient list created:", nrow(patient_list), "EUR individuals\n")
+cat("✓ Patient list created:", nrow(patient_list), ancestry_filter_label, "individuals\n")
 cat("  File saved:", patient_list_file, "\n")
+log_progress_event(
+  "pgrs_scoring",
+  "patient_list_created",
+  metrics = list(participants_targeted = nrow(patient_list)),
+  details = list(ancestry_filter = ancestry_filter)
+)
 
-rm(fam_data, ancestry, eur_ids, filtered_fam)
+rm(fam_data, ancestry, eligible_ids, filtered_fam)
 gc()
 
 
 # ## Chromosome Processing Functions
 
 # ## Build Shared PLINK Reference (once)
-# Build per-chromosome filtered PLINK files for the EUR cohort and merge into a shared `all_chromosomes` reference to reuse across all PGRS scoring runs.
+# Build per-chromosome filtered PLINK files for the selected participant set and merge into a shared `all_chromosomes` reference to reuse across all PGRS scoring runs.
 
 # In[ ]:
 
 
-# Build shared reference under processed_data/PGRS/shared/plink_ref
-shared_ref_dir <- file.path(output_base_dir, "shared", "plink_ref")
+# Build shared reference under processed_data/PGRS/shared/plink_ref_<filter>
+shared_ref_dir <- file.path(output_base_dir, "shared", shared_ref_tag)
 raw_dir <- file.path(shared_ref_dir, "plink_raw")
 filtered_dir <- file.path(shared_ref_dir, "filtered")
 all_prefix <- file.path(shared_ref_dir, "all_chromosomes")
@@ -311,32 +373,60 @@ update_rsid_for_chr <- function(chr) {
 }
 
 # Build per-chromosome filtered files once
-for (chr in chromosomes) {
-  cat("\n[Shared] Processing", chr, "\n")
-  # Download once if needed
-  for (ext in c("bim","bed","fam")) {
-    dest <- file.path(raw_dir, paste0(chr, ".", ext))
-    if (!file.exists(dest)) {
-      src <- paste0(gcs_plink_base, "/", chr, ".", ext)
-      res <- system2("gsutil", args = c("-m","-u", Sys.getenv("GOOGLE_PROJECT"), "cp", src, dest), stdout = TRUE, stderr = TRUE)
+shared_reference_exists <- file.exists(paste0(all_prefix, ".bed"))
+if (shared_reference_exists) {
+  log_progress_event(
+    "shared_reference",
+    "reused_existing_reference",
+    status = "completed",
+    metrics = list(chromosomes_total = length(chromosomes))
+  )
+} else {
+  log_progress_event(
+    "shared_reference",
+    "build_started",
+    metrics = list(chromosomes_total = length(chromosomes))
+  )
+  shared_chr_completed <- 0L
+  for (chr in chromosomes) {
+    cat("\n[Shared] Processing", chr, "\n")
+    # Download once if needed
+    for (ext in c("bim","bed","fam")) {
+      dest <- file.path(raw_dir, paste0(chr, ".", ext))
+      if (!file.exists(dest)) {
+        src <- paste0(gcs_plink_base, "/", chr, ".", ext)
+        res <- system2("gsutil", args = c("-m","-u", Sys.getenv("GOOGLE_PROJECT"), "cp", src, dest), stdout = TRUE, stderr = TRUE)
+      }
+      if (!file.exists(dest)) stop("Failed to obtain ", dest)
     }
-    if (!file.exists(dest)) stop("Failed to obtain ", dest)
-  }
-  # Filter to EUR keep list and update rsIDs once
-  rsid_file <- update_rsid_for_chr(chr)
-  out_prefix <- file.path(filtered_dir, chr)
-  plink2_args <- c("--bfile", file.path(raw_dir, chr),
-                   "--keep", patient_list_file,
-                   "--geno", "0.05", "--snps-only", "just-acgt", "--rm-dup", "exclude-all",
-                   if (!is.null(rsid_file)) c("--update-name", rsid_file) else NULL,
-                   "--keep-allele-order", "--make-bed", "--out", out_prefix)
-  res <- system2("plink2", args = plink2_args, stdout = TRUE, stderr = TRUE)
-  if (!file.exists(paste0(out_prefix, ".bed"))) stop("plink2 failed for shared ", chr)
-  
-  # Cleanup: delete raw chromosome files immediately after filtering
-  for (ext in c(".bed", ".bim", ".fam")) {
-    raw_file <- paste0(file.path(raw_dir, chr), ext)
-    if (file.exists(raw_file)) file.remove(raw_file)
+    # Filter to selected participant list and update rsIDs once
+    rsid_file <- update_rsid_for_chr(chr)
+    out_prefix <- file.path(filtered_dir, chr)
+    plink2_args <- c("--bfile", file.path(raw_dir, chr),
+                     "--keep", patient_list_file,
+                     "--geno", "0.05", "--snps-only", "just-acgt", "--rm-dup", "exclude-all",
+                     if (!is.null(rsid_file)) c("--update-name", rsid_file) else NULL,
+                     "--keep-allele-order", "--make-bed", "--out", out_prefix)
+    res <- system2("plink2", args = plink2_args, stdout = TRUE, stderr = TRUE)
+    if (!file.exists(paste0(out_prefix, ".bed"))) stop("plink2 failed for shared ", chr)
+
+    shared_chr_completed <- shared_chr_completed + 1L
+    log_progress_event(
+      "shared_reference",
+      "chromosome_completed",
+      metrics = list(
+        chromosomes_completed = shared_chr_completed,
+        chromosomes_total = length(chromosomes),
+        progress_pct = round(100 * shared_chr_completed / length(chromosomes), 2)
+      ),
+      details = list(chromosome = chr)
+    )
+
+    # Cleanup: delete raw chromosome files immediately after filtering
+    for (ext in c(".bed", ".bim", ".fam")) {
+      raw_file <- paste0(file.path(raw_dir, chr), ext)
+      if (file.exists(raw_file)) file.remove(raw_file)
+    }
   }
 }
 
@@ -386,6 +476,13 @@ if (!file.exists(paste0(all_prefix, ".bed"))) {
 }
 
 cat("\n✓ Shared PLINK reference ready:", all_prefix, "\n")
+log_progress_event(
+  "shared_reference",
+  "reference_ready",
+  status = "completed",
+  metrics = list(chromosomes_total = length(chromosomes)),
+  details = list(shared_reference = all_prefix)
+)
 
 
 # In[ ]:
@@ -552,11 +649,12 @@ cat("✓ clean_up_files() defined\n")
 
 cat("\n=== STARTING MAIN PGRS PROCESSING LOOP ===\n\n")
 
-shared_all_prefix <- file.path(output_base_dir, "shared", "plink_ref", "all_chromosomes")
+shared_all_prefix <- file.path(output_base_dir, "shared", shared_ref_tag, "all_chromosomes")
 if (!file.exists(paste0(shared_all_prefix, ".bed"))) {
   stop("Shared reference not found: ", shared_all_prefix, ".bed — run the shared build cell above.")
 }
 
+completed_pgrs_files <- 0L
 for (pgrs_file in pgrs_files) {
   pgrs_name <- tools::file_path_sans_ext(basename(pgrs_file))
   if (grepl("\\.gz$", pgrs_name)) pgrs_name <- tools::file_path_sans_ext(pgrs_name)
@@ -584,6 +682,18 @@ for (pgrs_file in pgrs_files) {
   }
   pgrs_prep_file <- prep_result$prepared_file
   format_info <- prep_result$format_info
+  variant_count <- prep_result$variant_count
+  log_progress_event(
+    "pgrs_scoring",
+    "score_started",
+    metrics = list(
+      files_completed = completed_pgrs_files,
+      files_total = length(pgrs_files),
+      participants_targeted = nrow(patient_list),
+      variant_count = variant_count
+    ),
+    details = list(pgrs_name = pgrs_name)
+  )
 
   # Calculate PGRS
   cat("\n--- Calculating PGRS Score ---\n")
@@ -602,18 +712,57 @@ for (pgrs_file in pgrs_files) {
   if (file.exists(profile_file)) {
     file.rename(profile_file, pgrs_output_file)
     cat("✓ PGRS calculated successfully:", pgrs_output_file, "\n")
+    completed_pgrs_files <- completed_pgrs_files + 1L
+    log_progress_event(
+      "pgrs_scoring",
+      "score_completed",
+      status = "completed",
+      metrics = list(
+        files_completed = completed_pgrs_files,
+        files_total = length(pgrs_files),
+        participants_targeted = nrow(patient_list),
+        variant_count = variant_count,
+        progress_pct = round(100 * completed_pgrs_files / length(pgrs_files), 2)
+      ),
+      details = list(
+        pgrs_name = pgrs_name,
+        score_file = pgrs_output_file
+      )
+    )
     for (ext in c(".log", ".nosex")) {
       f <- paste0(file.path(temp_dir, paste0(pgrs_name, "_PGRS_temp")), ext)
       if (file.exists(f)) file.remove(f)
     }
   } else {
     cat("✗ PGRS calculation failed\n")
+    log_progress_event(
+      "pgrs_scoring",
+      "score_failed",
+      status = "failed",
+      metrics = list(
+        files_completed = completed_pgrs_files,
+        files_total = length(pgrs_files),
+        participants_targeted = nrow(patient_list),
+        variant_count = variant_count
+      ),
+      details = list(pgrs_name = pgrs_name)
+    )
   }
   
   cat("\n✓ Finished processing:", pgrs_name, "\n")
 }
 
 cat("\n=== ALL PGRS FILES PROCESSED ===\n")
+log_progress_event(
+  "pgrs_scoring",
+  "all_scores_completed",
+  status = "completed",
+  metrics = list(
+    files_completed = completed_pgrs_files,
+    files_total = length(pgrs_files),
+    participants_targeted = nrow(patient_list)
+  )
+)
 
 
 # ## Summary

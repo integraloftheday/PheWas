@@ -107,11 +107,12 @@ parse_args <- function(args) {
 }
 
 format_clock <- function(x) {
-  ifelse(
-    is.na(x),
-    NA_character_,
-    sprintf("%02d:%02d", floor(x %% 24), round(((x %% 24) - floor(x %% 24)) * 60))
-  )
+  vals <- suppressWarnings(as.numeric(x))
+  out <- rep(NA_character_, length(vals))
+  ok <- is.finite(vals)
+  total_minutes <- round((vals[ok] %% 24) * 60) %% (24 * 60)
+  out[ok] <- sprintf("%02d:%02d", total_minutes %/% 60, total_minutes %% 60)
+  out
 }
 
 clock_to_linear <- function(x) {
@@ -326,7 +327,7 @@ prepare_analysis_base <- function(phenotypes, covariates, scores, ancestry) {
       } else {
         NA_real_
       },
-      sex_concept = as.character(sex_concept %||% NA_character_),
+      sex_concept = if ("sex_concept" %in% names(.)) as.character(sex_concept) else NA_character_,
       sex_concept = dplyr::case_when(
         is.na(sex_concept) ~ NA_character_,
         str_detect(str_to_lower(sex_concept), "female|woman|girl") ~ "Female",
@@ -337,6 +338,188 @@ prepare_analysis_base <- function(phenotypes, covariates, scores, ancestry) {
     )
 
   out
+}
+
+prepare_phewas_base_data <- function(
+  phewas_parquet,
+  scores,
+  ancestry,
+  phenotypes,
+  pc_cols
+) {
+  if (!file.exists(phewas_parquet)) stop("PheWAS parquet not found: ", phewas_parquet)
+
+  raw <- arrow::read_parquet(phewas_parquet) %>%
+    as_tibble() %>%
+    mutate(person_id = as.character(person_id)) %>%
+    left_join(scores, by = "person_id") %>%
+    left_join(ancestry, by = "person_id") %>%
+    left_join(phenotypes %>% select(person_id, mean_sleep_date), by = "person_id") %>%
+    mutate(
+      date_of_birth = if ("date_of_birth" %in% names(.)) as.Date(date_of_birth) else as.Date(NA),
+      age = if ("date_of_birth" %in% names(.)) {
+        as.numeric(mean_sleep_date - date_of_birth) / 365.25
+      } else {
+        NA_real_
+      },
+      sex_concept = if ("sex_concept" %in% names(.)) as.character(sex_concept) else NA_character_,
+      sex_concept = dplyr::case_when(
+        is.na(sex_concept) ~ NA_character_,
+        str_detect(str_to_lower(sex_concept), "female|woman|girl") ~ "Female",
+        str_detect(str_to_lower(sex_concept), "male|man|boy") ~ "Male",
+        TRUE ~ "Other/Unknown"
+      ),
+      sex_concept = factor(sex_concept, levels = c("Female", "Male", "Other/Unknown"))
+    )
+
+  base_required <- c("score_raw", "age", "sex_concept", pc_cols)
+  eligible <- raw %>%
+    filter(complete.cases(across(all_of(intersect(base_required, names(.)))))) %>%
+    mutate(score_z = as.numeric(scale(score_raw)))
+
+  list(raw = raw, eligible = eligible)
+}
+
+build_cohort_flow_data <- function(
+  phenotypes,
+  scores,
+  analysis_df,
+  pc_cols,
+  phewas_base = NULL
+) {
+  assoc_required <- c("score_raw", "age", "sex_concept", pc_cols)
+
+  association_complete_n <- analysis_df %>%
+    filter(complete.cases(across(all_of(intersect(assoc_required, names(.)))))) %>%
+    distinct(person_id) %>%
+    nrow()
+
+  association_outcome_n <- function(outcome_col) {
+    analysis_df %>%
+      filter(complete.cases(across(all_of(intersect(c(assoc_required, outcome_col), names(.)))))) %>%
+      distinct(person_id) %>%
+      nrow()
+  }
+
+  flow_rows <- tibble(
+    step_id = c(
+      "sleep_cohort",
+      "sleep_genetics",
+      "association_complete",
+      "assoc_weekend",
+      "assoc_msf",
+      "assoc_msfsc"
+    ),
+    parent_step_id = c(NA, "sleep_cohort", "sleep_genetics", "association_complete", "association_complete", "association_complete"),
+    branch = c("Sleep", "Sleep", "Association", "Association", "Association", "Association"),
+    step_label = c(
+      "Sleep phenotype cohort",
+      "Sleep + scored genetics",
+      "Association covariate-complete",
+      "Weekend midpoint model",
+      "MSF model",
+      "MSFsc model"
+    ),
+    n = c(
+      nrow(phenotypes),
+      analysis_df %>% filter(!is.na(score_raw)) %>% distinct(person_id) %>% nrow(),
+      association_complete_n,
+      association_outcome_n("person_weekend_avg_midpoint"),
+      association_outcome_n("MSF"),
+      association_outcome_n("MSFsc")
+    ),
+    x = c(1, 2, 3, 4, 4, 4),
+    y = c(2.2, 2.2, 2.2, 3.2, 2.2, 1.2)
+  )
+
+  if (!is.null(phewas_base)) {
+    phewas_rows <- tibble(
+      step_id = c("phewas_cohort", "sleep_genetics_phewas", "phewas_complete"),
+      parent_step_id = c(NA, "phewas_cohort", "sleep_genetics_phewas"),
+      branch = c("PheWAS", "PheWAS", "PheWAS"),
+      step_label = c(
+        "PheWAS cohort",
+        "Sleep + genetics + PheWAS",
+        "PheWAS covariate-complete"
+      ),
+      n = c(
+        phewas_base$raw %>% distinct(person_id) %>% nrow(),
+        phewas_base$raw %>% filter(!is.na(score_raw), !is.na(mean_sleep_date)) %>% distinct(person_id) %>% nrow(),
+        phewas_base$eligible %>% distinct(person_id) %>% nrow()
+      ),
+      x = c(1, 3, 4),
+      y = c(0.4, 0.4, 0.4)
+    )
+    flow_rows <- bind_rows(flow_rows, phewas_rows)
+  }
+
+  flow_rows %>%
+    rowwise() %>%
+    mutate(
+      pct_of_sleep = round(100 * n / max(flow_rows$n[flow_rows$step_id == "sleep_cohort"], 1), 2),
+      pct_of_parent = if (is.na(parent_step_id)) {
+        NA_real_
+      } else {
+        round(100 * n / max(flow_rows$n[flow_rows$step_id == parent_step_id], 1), 2)
+      },
+      label = sprintf("%s\nn = %s", step_label, format(n, big.mark = ","))
+    ) %>%
+    ungroup()
+}
+
+write_cohort_flow_outputs <- function(out_dir, flow_df) {
+  tables_dir <- file.path(out_dir, "tables")
+  plots_dir <- file.path(out_dir, "plots")
+
+  readr::write_csv(flow_df, file.path(tables_dir, "cohort_flow_counts.csv"))
+
+  edge_df <- flow_df %>%
+    filter(!is.na(parent_step_id)) %>%
+    left_join(
+      flow_df %>% select(step_id, x_parent = x, y_parent = y),
+      by = c("parent_step_id" = "step_id")
+    )
+
+  p <- ggplot() +
+    geom_segment(
+      data = edge_df,
+      aes(x = x_parent + 0.18, y = y_parent, xend = x - 0.18, yend = y, color = branch),
+      arrow = grid::arrow(length = grid::unit(0.18, "cm")),
+      linewidth = 0.7,
+      lineend = "round"
+    ) +
+    geom_label(
+      data = flow_df,
+      aes(x = x, y = y, label = label, fill = branch),
+      linewidth = 0.25,
+      size = 3.4,
+      label.padding = grid::unit(0.18, "lines")
+    ) +
+    scale_fill_manual(values = c("Sleep" = "#d9edf7", "Association" = "#d5e8d4", "PheWAS" = "#fce5cd")) +
+    scale_color_manual(values = c("Sleep" = "#2c7fb8", "Association" = "#238b45", "PheWAS" = "#d95f0e")) +
+    coord_cartesian(xlim = c(0.7, 4.35), ylim = c(0, 3.6), clip = "off") +
+    labs(
+      title = "Participant flow for Angus midpoint PRS analysis",
+      subtitle = "Largest available sleep-genetics cohort is used for association; PheWAS uses the sleep-genetics-EHR overlap",
+      caption = "Source table: tables/cohort_flow_counts.csv"
+    ) +
+    theme_void() +
+    theme(
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(size = 11, color = "gray30"),
+      plot.caption = element_text(size = 9, color = "gray35"),
+      legend.position = "none",
+      plot.margin = margin(15, 25, 15, 25)
+    )
+
+  ggsave(
+    filename = file.path(plots_dir, "cohort_flow.png"),
+    plot = p,
+    width = 12,
+    height = 6,
+    dpi = 320,
+    bg = "white"
+  )
 }
 
 make_score_tertiles <- function(x) {
@@ -581,45 +764,14 @@ run_association_models <- function(analysis_df, out_dir, pc_cols) {
 }
 
 run_phewas <- function(
-  phewas_parquet,
-  scores,
-  ancestry,
-  phenotypes,
+  phewas_base,
   phecode_map_csv,
   out_dir,
   pc_cols,
   min_case_count = 20L
 ) {
-  if (!file.exists(phewas_parquet)) stop("PheWAS parquet not found: ", phewas_parquet)
   if (!file.exists(phecode_map_csv)) stop("Phecode map not found: ", phecode_map_csv)
-
-  phe_df <- arrow::read_parquet(phewas_parquet) %>%
-    as_tibble() %>%
-    mutate(person_id = as.character(person_id)) %>%
-    left_join(scores, by = "person_id") %>%
-    left_join(ancestry, by = "person_id") %>%
-    left_join(phenotypes %>% select(person_id, mean_sleep_date), by = "person_id") %>%
-    mutate(
-      date_of_birth = if ("date_of_birth" %in% names(.)) as.Date(date_of_birth) else as.Date(NA),
-      age = if ("date_of_birth" %in% names(.)) {
-        as.numeric(mean_sleep_date - date_of_birth) / 365.25
-      } else {
-        NA_real_
-      },
-      sex_concept = as.character(sex_concept %||% NA_character_),
-      sex_concept = dplyr::case_when(
-        is.na(sex_concept) ~ NA_character_,
-        str_detect(str_to_lower(sex_concept), "female|woman|girl") ~ "Female",
-        str_detect(str_to_lower(sex_concept), "male|man|boy") ~ "Male",
-        TRUE ~ "Other/Unknown"
-      ),
-      sex_concept = factor(sex_concept, levels = c("Female", "Male", "Other/Unknown"))
-    )
-
-  base_required <- c("score_raw", "age", "sex_concept", pc_cols)
-  phe_df <- phe_df %>%
-    filter(complete.cases(across(all_of(intersect(base_required, names(.)))))) %>%
-    mutate(score_z = as.numeric(scale(score_raw)))
+  phe_df <- phewas_base$eligible
 
   phe_cols <- grep("^has_phe_", names(phe_df), value = TRUE)
   results <- vector("list", length(phe_cols))
@@ -691,7 +843,7 @@ run_phewas <- function(
         metrics = list(
           phecodes_processed = processed_phecodes,
           total_phecodes = total_phecodes,
-          retained_results = length(results),
+          retained_results = idx - 1L,
           progress_pct = round(100 * processed_phecodes / max(total_phecodes, 1L), 2)
         )
       )
@@ -712,7 +864,8 @@ run_phewas <- function(
     left_join(phemap, by = "phecode") %>%
     mutate(
       fdr = p.adjust(p_value, method = "BH"),
-      minus_log10_p = -log10(p_value)
+      minus_log10_p = -log10(p_value),
+      concept_name = if_else(is.na(concept_name) | !nzchar(concept_name), paste("Phecode", phecode), concept_name)
     ) %>%
     arrange(p_value) %>%
     mutate(phecode_index = row_number())
@@ -722,6 +875,21 @@ run_phewas <- function(
 
   readr::write_csv(results_df, file.path(tables_dir, "phewas_results.csv"))
   readr::write_csv(results_df, file.path(tables_dir, "phewas_manhattan_plot_data.csv"))
+
+  volcano_plot_df <- results_df %>%
+    mutate(
+      label = if_else(p_value < 0.001, str_replace(concept_name, ",.*$", ""), NA_character_),
+      siglevel = case_when(
+        p_value < 1e-5 ~ "p < .00001",
+        p_value < 1e-4 ~ "p < .0001",
+        p_value < 1e-3 ~ "p < .001",
+        TRUE ~ NA_character_
+      ),
+      siglevel = factor(siglevel, levels = c("p < .00001", "p < .0001", "p < .001"))
+    ) %>%
+    filter(is.finite(odds_ratio))
+
+  readr::write_csv(volcano_plot_df, file.path(tables_dir, "phewas_volcano_plot_data.csv"))
   log_progress_event(
     "phewas",
     "results_written",
@@ -759,6 +927,55 @@ run_phewas <- function(
     bg = "white"
   )
 
+  if (nrow(volcano_plot_df) > 0) {
+    p_volcano <- ggplot(volcano_plot_df, aes(x = odds_ratio, y = minus_log10_p)) +
+      geom_point(color = "grey70", size = 1.8, alpha = 0.85) +
+      geom_point(
+        data = volcano_plot_df %>% filter(!is.na(siglevel)),
+        aes(color = siglevel),
+        size = 2.2,
+        alpha = 0.95
+      ) +
+      geom_vline(xintercept = 1, color = "gray35", linewidth = 0.6) +
+      geom_hline(yintercept = -log10(0.05), color = "#b2182b", linetype = "dashed", linewidth = 0.6) +
+      geom_hline(
+        yintercept = -log10(0.05 / max(nrow(results_df), 1)),
+        color = "#2166ac",
+        linetype = "dashed",
+        linewidth = 0.6
+      ) +
+      geom_text(
+        data = volcano_plot_df %>% filter(!is.na(label)),
+        aes(label = label),
+        check_overlap = TRUE,
+        nudge_y = 0.1,
+        size = 3
+      ) +
+      scale_color_manual(
+        values = c("p < .00001" = "#7f0000", "p < .0001" = "#cb181d", "p < .001" = "#fb6a4a"),
+        na.translate = FALSE,
+        drop = FALSE
+      ) +
+      labs(
+        title = "PheWAS volcano plot for continuous PRS",
+        subtitle = "Legacy-style odds-ratio display; labels shown for p < 0.001; all finite ORs plotted",
+        x = "Odds ratio per 1 SD higher PRS",
+        y = expression(-log[10](p)),
+        color = "Sig. level",
+        caption = "Source table: tables/phewas_volcano_plot_data.csv"
+      ) +
+      theme_research()
+
+    ggsave(
+      filename = file.path(plots_dir, "phewas_volcano.png"),
+      plot = p_volcano,
+      width = 10,
+      height = 8,
+      dpi = 320,
+      bg = "white"
+    )
+  }
+
   results_df
 }
 
@@ -767,7 +984,8 @@ write_summary_md <- function(
   association_results,
   phewas_results,
   analysis_df,
-  pc_cols
+  pc_cols,
+  flow_df
 ) {
   summary_path <- file.path(out_dir, "summary.md")
 
@@ -775,9 +993,19 @@ write_summary_md <- function(
     arrange(p_value) %>%
     slice_head(n = 6)
 
+  primary_assoc <- association_results$continuous %>%
+    filter(model == "PRS + age + sex + PC1-PC10") %>%
+    arrange(match(phenotype, c("person_weekend_avg_midpoint", "MSF", "MSFsc")))
+
   top_phewas <- phewas_results %>%
     arrange(p_value) %>%
     slice_head(n = 10)
+
+  flow_lookup <- function(step_id) {
+    out <- flow_df$n[match(step_id, flow_df$step_id)]
+    if (length(out) == 0 || is.na(out)) return(NA_integer_)
+    as.integer(out)
+  }
 
   lines <- c(
     "# PRS midpoint collaborator summary",
@@ -785,6 +1013,13 @@ write_summary_md <- function(
     "## Cohort summary",
     "",
     sprintf("- Participants with PRS and phenotype data: %d", nrow(analysis_df)),
+    sprintf("- Sleep + scored genetics overlap: %d", flow_lookup("sleep_genetics")),
+    sprintf("- Primary association covariate-complete cohort: %d", flow_lookup("association_complete")),
+    if (!is.na(flow_lookup("sleep_genetics_phewas"))) {
+      sprintf("- Sleep + genetics + PheWAS overlap: %d", flow_lookup("sleep_genetics_phewas"))
+    } else {
+      character(0)
+    },
     sprintf("- Available ancestry PCs in primary adjusted models: %d", length(pc_cols)),
     sprintf(
       "- Midpoint phenotypes compared: %s",
@@ -796,10 +1031,29 @@ write_summary_md <- function(
     "- Continuous per-SD model table: `tables/association_continuous_models.csv`",
     "- Tertile model table: `tables/association_tertile_models.csv`",
     "- Tertile descriptive table: `tables/association_tertile_summary.csv`",
+    "- Cohort flow table: `tables/cohort_flow_counts.csv`",
     "- Tertile plot: `plots/midpoint_by_prs_tertile.png`",
     "- Forest plot: `plots/association_forest_per_sd.png`",
+    "- Cohort flow figure: `plots/cohort_flow.png`",
     ""
   )
+
+  if (nrow(primary_assoc) > 0) {
+    lines <- c(lines, "## Primary adjusted association rows", "")
+    for (i in seq_len(nrow(primary_assoc))) {
+      row <- primary_assoc[i, ]
+      lines <- c(
+        lines,
+        sprintf(
+          "- %s | beta = %.2f minutes per SD | p = %.3g",
+          row$phenotype,
+          row$estimate_minutes,
+          row$p_value
+        )
+      )
+    }
+    lines <- c(lines, "")
+  }
 
   if (nrow(top_assoc) > 0) {
     lines <- c(lines, "## Top association rows", "")
@@ -826,6 +1080,8 @@ write_summary_md <- function(
       "",
       "- Results table: `tables/phewas_results.csv`",
       "- Manhattan-style plot: `plots/phewas_manhattan.png`",
+      "- Volcano plot data: `tables/phewas_volcano_plot_data.csv`",
+      "- Volcano plot: `plots/phewas_volcano.png`",
       ""
     )
     lines <- c(lines, "## Top PheWAS rows", "")
@@ -886,14 +1142,22 @@ main <- function() {
     )
   )
 
-  association_results <- run_association_models(analysis_df, out_dir, pc_cols)
-  phewas_results <- tibble()
+  phewas_base <- NULL
   if (!isTRUE(args$skip_phewas)) {
-    phewas_results <- run_phewas(
+    phewas_base <- prepare_phewas_base_data(
       phewas_parquet = args$phewas_parquet,
       scores = scores,
       ancestry = ancestry,
       phenotypes = phenotypes,
+      pc_cols = pc_cols
+    )
+  }
+
+  association_results <- run_association_models(analysis_df, out_dir, pc_cols)
+  phewas_results <- tibble()
+  if (!isTRUE(args$skip_phewas)) {
+    phewas_results <- run_phewas(
+      phewas_base = phewas_base,
       phecode_map_csv = args$phecode_map_csv,
       out_dir = out_dir,
       pc_cols = pc_cols,
@@ -901,7 +1165,15 @@ main <- function() {
     )
   }
 
-  write_summary_md(out_dir, association_results, phewas_results, analysis_df, pc_cols)
+  flow_df <- build_cohort_flow_data(
+    phenotypes = phenotypes,
+    scores = scores,
+    analysis_df = analysis_df,
+    pc_cols = pc_cols,
+    phewas_base = phewas_base
+  )
+  write_cohort_flow_outputs(out_dir, flow_df)
+  write_summary_md(out_dir, association_results, phewas_results, analysis_df, pc_cols, flow_df)
   log_progress_event(
     "analysis",
     "completed",

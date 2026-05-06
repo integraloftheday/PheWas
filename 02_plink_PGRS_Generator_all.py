@@ -60,7 +60,7 @@ cat("✓ All libraries loaded successfully\n")
 
 # --- Configuration ---
 # Define input/output paths
-parquet_file <- "processed_data/person_ids.parquet"
+parquet_file <- Sys.getenv("PGRS_ID_SOURCE_PARQUET", "processed_data/person_ids.parquet")
 analysis_inputs_dir <- "analysis_inputs"
 output_base_dir <- "processed_data/PGRS"
 
@@ -103,6 +103,7 @@ log_progress_event <- function(stage, event, status = "running", metrics = list(
 }
 
 cat("Output directory:", output_base_dir, "\n")
+cat("ID source parquet:", parquet_file, "\n")
 cat("GCS PLINK base:", gcs_plink_base, "\n")
 cat("Participant filter:", ancestry_filter_label, "\n")
 
@@ -137,7 +138,8 @@ log_progress_event(
   ),
   details = list(
     ancestry_filter = ancestry_filter,
-    file_pattern = file_pattern
+    file_pattern = file_pattern,
+    id_source_parquet = parquet_file
   )
 )
 

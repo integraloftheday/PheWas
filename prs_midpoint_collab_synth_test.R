@@ -145,9 +145,13 @@ expected_outputs <- c(
   file.path(out_dir, "tables", "association_continuous_models.csv"),
   file.path(out_dir, "tables", "association_tertile_models.csv"),
   file.path(out_dir, "tables", "phewas_results.csv"),
+  file.path(out_dir, "tables", "cohort_flow_counts.csv"),
+  file.path(out_dir, "tables", "phewas_volcano_plot_data.csv"),
   file.path(out_dir, "plots", "association_forest_per_sd.png"),
   file.path(out_dir, "plots", "midpoint_by_prs_tertile.png"),
-  file.path(out_dir, "plots", "phewas_manhattan.png")
+  file.path(out_dir, "plots", "phewas_manhattan.png"),
+  file.path(out_dir, "plots", "phewas_volcano.png"),
+  file.path(out_dir, "plots", "cohort_flow.png")
 )
 
 missing_outputs <- expected_outputs[!file.exists(expected_outputs)]

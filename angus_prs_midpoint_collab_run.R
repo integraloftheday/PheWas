@@ -22,7 +22,8 @@ ancestry_filter  <- "all"
 score_ids_parquet <- "processed_data/ready_for_analysis.parquet"
 nightly_parquet  <- "processed_data/ready_for_analysis.parquet"
 phewas_parquet   <- "processed_data/master/master_phewas_wide.parquet"
-covariates_parquet <- "processed_data/master/master_covariates_only.parquet"
+covariates_parquet <- "processed_data/fitbit_cohort_covariates.parquet"
+reuse_existing_score <- TRUE
 
 enable_wandb   <- TRUE
 wandb_project  <- "aou-prs-midpoint"
@@ -41,13 +42,23 @@ required_paths <- c(
   phewas_parquet,
   "prs_midpoint_collab_analysis.R",
   "wandb_progress_logger.py",
-  "02_plink_PGRS_Generator_all.py",
-  file.path("analysis_inputs", paste0(score_pattern, ".txt"))
+  "02_plink_PGRS_Generator_all.py"
 )
 
 missing_paths <- required_paths[!file.exists(required_paths)]
 if (length(missing_paths) > 0) {
   stop("Missing required files: ", paste(missing_paths, collapse = ", "))
+}
+
+score_file <- file.path(
+  "processed_data", "PGRS", score_pattern,
+  paste0(score_pattern, "_PGRS.txt")
+)
+weights_file <- file.path("analysis_inputs", paste0(score_pattern, ".txt"))
+if (!reuse_existing_score || !file.exists(score_file)) {
+  if (!file.exists(weights_file)) {
+    stop("Missing weight file required for scoring: ", weights_file)
+  }
 }
 
 if (!requireNamespace("jsonlite", quietly = TRUE)) install.packages("jsonlite")
@@ -136,17 +147,20 @@ Sys.setenv(
 tryCatch({
 
   # ---- Step 1: Score PRS ----
-  append_progress_event("notebook", "score_phase_started",
-                        details = list(score_pattern = score_pattern))
-  score_status <- system2("Rscript", "02_plink_PGRS_Generator_all.py")
-  if (score_status != 0) stop("PRS scoring failed.")
-
-  score_file <- file.path(
-    "processed_data", "PGRS", score_pattern,
-    paste0(score_pattern, "_PGRS.txt")
-  )
-  append_progress_event("notebook", "score_phase_completed", status = "completed",
-                        details = list(score_file = score_file))
+  if (reuse_existing_score && file.exists(score_file)) {
+    message("Reusing existing score file: ", score_file)
+    append_progress_event(
+      "notebook", "score_phase_skipped", status = "completed",
+      details = list(score_file = score_file, reason = "existing_score_file_reused")
+    )
+  } else {
+    append_progress_event("notebook", "score_phase_started",
+                          details = list(score_pattern = score_pattern))
+    score_status <- system2("Rscript", "02_plink_PGRS_Generator_all.py")
+    if (score_status != 0) stop("PRS scoring failed.")
+    append_progress_event("notebook", "score_phase_completed", status = "completed",
+                          details = list(score_file = score_file))
+  }
 
   # ---- Step 2: Association + PheWAS ----
   analysis_args <- c(
@@ -179,3 +193,24 @@ tryCatch({
 summary_path <- file.path(output_dir, "summary.md")
 if (!file.exists(summary_path)) stop("Expected summary.md not found at ", summary_path)
 cat(readLines(summary_path), sep = "\n")
+
+show_png_inline <- function(path) {
+  if (!file.exists(path)) return(invisible(FALSE))
+  if (!interactive() && !nzchar(Sys.getenv("JPY_PARENT_PID"))) return(invisible(FALSE))
+  if (!requireNamespace("IRdisplay", quietly = TRUE)) return(invisible(FALSE))
+  IRdisplay::display_png(file = path)
+  invisible(TRUE)
+}
+
+plot_paths <- c(
+  file.path(output_dir, "plots", "cohort_flow.png"),
+  file.path(output_dir, "plots", "association_forest_per_sd.png"),
+  file.path(output_dir, "plots", "midpoint_by_prs_tertile.png"),
+  file.path(output_dir, "plots", "phewas_manhattan.png"),
+  file.path(output_dir, "plots", "phewas_volcano.png")
+)
+
+for (plot_path in plot_paths) {
+  shown <- show_png_inline(plot_path)
+  if (!shown) message("Plot written: ", plot_path)
+}

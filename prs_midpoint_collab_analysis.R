@@ -166,9 +166,9 @@ theme_research <- function() {
 resolve_covariates_path <- function(explicit_path = "") {
   candidates <- c(
     explicit_path,
+    "processed_data/fitbit_cohort_covariates.parquet",
     "processed_data/master/master_covariates_only.parquet",
-    "processed_data/master/master_phewas_wide.parquet",
-    "processed_data/fitbit_cohort_covariates.parquet"
+    "processed_data/master/master_phewas_wide.parquet"
   )
   candidates <- candidates[nzchar(candidates)]
   hit <- candidates[file.exists(candidates)]

@@ -70,6 +70,88 @@ if (!file.exists(covariates_parquet)) {
   )
 }
 
+resolve_covariates_path_runner <- function(explicit_path = "") {
+  candidates <- c(
+    explicit_path,
+    "processed_data/fitbit_cohort_covariates.parquet",
+    "processed_data/master/master_covariates_only.parquet",
+    "processed_data/master/master_phewas_wide.parquet"
+  )
+  candidates <- candidates[nzchar(candidates)]
+  hit <- candidates[file.exists(candidates)]
+  if (length(hit) == 0) {
+    stop("No covariates parquet found. Checked: ", paste(candidates, collapse = ", "))
+  }
+  hit[[1]]
+}
+
+read_parquet_ids <- function(path) {
+  as.character(unique(as.data.frame(arrow::read_parquet(path, col_select = "person_id"))$person_id))
+}
+
+read_score_ids <- function(path) {
+  score_df <- read.table(path, header = TRUE, stringsAsFactors = FALSE, check.names = FALSE)
+  if ("IID" %in% names(score_df)) return(as.character(unique(score_df$IID)))
+  if ("person_id" %in% names(score_df)) return(as.character(unique(score_df$person_id)))
+  stop("Score file must contain IID or person_id column: ", path)
+}
+
+print_cohort_preview <- function(nightly_parquet, score_file, covariates_path, phewas_parquet) {
+  if (!requireNamespace("arrow", quietly = TRUE)) install.packages("arrow")
+
+  sleep_ids <- read_parquet_ids(nightly_parquet)
+  score_ids <- read_score_ids(score_file)
+  cov_ids <- read_parquet_ids(covariates_path)
+  phewas_ids <- read_parquet_ids(phewas_parquet)
+
+  sleep_genetics_ids <- intersect(sleep_ids, score_ids)
+  association_ids <- intersect(sleep_genetics_ids, cov_ids)
+  phewas_overlap_ids <- intersect(sleep_genetics_ids, phewas_ids)
+
+  preview_df <- data.frame(
+    step = c(
+      "Sleep phenotype cohort",
+      "Scored genetics cohort",
+      "Selected association covariates cohort",
+      "PheWAS cohort",
+      "Sleep + scored genetics",
+      "Sleep + scored genetics + association covariates",
+      "Sleep + scored genetics + PheWAS"
+    ),
+    n = c(
+      length(sleep_ids),
+      length(score_ids),
+      length(cov_ids),
+      length(phewas_ids),
+      length(sleep_genetics_ids),
+      length(association_ids),
+      length(phewas_overlap_ids)
+    )
+  )
+
+  cat("\n============================================================\n")
+  cat("Quick cohort preview\n")
+  cat("============================================================\n")
+  cat("Association covariates source: ", covariates_path, "\n", sep = "")
+  print(preview_df, row.names = FALSE)
+  cat("============================================================\n\n")
+
+  append_progress_event(
+    "notebook",
+    "cohort_preview",
+    status = "completed",
+    metrics = list(
+      sleep_cohort = length(sleep_ids),
+      scored_genetics = length(score_ids),
+      association_covariates = length(cov_ids),
+      sleep_scored_genetics = length(sleep_genetics_ids),
+      association_overlap = length(association_ids),
+      phewas_overlap = length(phewas_overlap_ids)
+    ),
+    details = list(covariates_path = covariates_path)
+  )
+}
+
 # ==============================================================================
 # PROGRESS FILE SETUP
 # ==============================================================================
@@ -163,11 +245,19 @@ tryCatch({
   }
 
   # ---- Step 2: Association + PheWAS ----
+  selected_covariates_path <- resolve_covariates_path_runner(covariates_parquet)
+  print_cohort_preview(
+    nightly_parquet = nightly_parquet,
+    score_file = score_file,
+    covariates_path = selected_covariates_path,
+    phewas_parquet = phewas_parquet
+  )
+
   analysis_args <- c(
     "prs_midpoint_collab_analysis.R",
     paste0("--nightly_parquet=",    nightly_parquet),
     paste0("--phewas_parquet=",     phewas_parquet),
-    paste0("--covariates_parquet=", covariates_parquet),
+    paste0("--covariates_parquet=", selected_covariates_path),
     paste0("--score_file=",         score_file),
     paste0("--ancestry_tsv=",       file.path("processed_data", "PGRS", "shared", "ancestry_preds.tsv")),
     paste0("--out_dir=",            output_dir)

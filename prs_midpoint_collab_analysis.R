@@ -291,7 +291,7 @@ build_midpoint_phenotypes <- function(nightly_df) {
       n_total_nights = n(),
       n_free_nights = sum(free_day %in% TRUE, na.rm = TRUE),
       n_work_nights = sum(free_day %in% FALSE, na.rm = TRUE),
-      person_weekend_avg_midpoint = circular_mean_time(daily_midpoint_hour[free_day %in% TRUE]),
+      person_weekend_avg_midpoint_clock = circular_mean_time(daily_midpoint_hour[free_day %in% TRUE]),
       SO_f = safe_mean(daily_start_linear[free_day %in% TRUE]),
       SO_w = safe_mean(daily_start_linear[free_day %in% FALSE]),
       SD_f = safe_mean(daily_duration_hours[free_day %in% TRUE]),
@@ -299,6 +299,11 @@ build_midpoint_phenotypes <- function(nightly_df) {
       .groups = "drop"
     ) %>%
     mutate(
+      person_weekend_avg_midpoint = if_else(
+        n_free_nights > 0 & is.finite(person_weekend_avg_midpoint_clock),
+        clock_to_linear(person_weekend_avg_midpoint_clock),
+        NA_real_
+      ),
       MSF_linear = if_else(
         n_free_nights > 0 & is.finite(SO_f) & is.finite(SD_f),
         ((SO_f + (SD_f / 2) - 12) %% 24) + 12,
@@ -314,8 +319,8 @@ build_midpoint_phenotypes <- function(nightly_df) {
         if_else(SD_f > SD_w, ((SO_f + (SD_week / 2) - 12) %% 24) + 12, MSF_linear),
         NA_real_
       ),
-      MSF = linear_to_clock(MSF_linear),
-      MSFsc = linear_to_clock(MSFsc_linear)
+      MSF = MSF_linear,
+      MSFsc = MSFsc_linear
     ) %>%
     select(
       person_id, mean_sleep_date, n_total_nights, n_free_nights, n_work_nights,
@@ -718,7 +723,7 @@ run_association_models <- function(analysis_df, out_dir, pc_cols) {
         title = "Midpoint phenotypes by PRS tertile",
         subtitle = "Boxes show the interquartile range; diamonds mark phenotype means",
         x = "PRS tertile",
-        y = "Midpoint (decimal hours)",
+        y = "Midpoint (linearized decimal hours)",
         caption = "Source table: tables/midpoint_by_prs_tertile_plot_data.csv"
       ) +
       theme_research() +
@@ -1200,4 +1205,6 @@ main <- function() {
   message("Done. Outputs written to ", normalizePath(out_dir))
 }
 
-main()
+if (sys.nframe() == 0L) {
+  main()
+}

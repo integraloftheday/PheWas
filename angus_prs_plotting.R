@@ -222,7 +222,7 @@ write_tertile_plot <- function(tertile_df, plots_dir) {
       title = "Midpoint phenotypes by PRS tertile",
       subtitle = "Boxes show the interquartile range; diamonds mark phenotype means",
       x = "PRS tertile",
-      y = "Midpoint (decimal hours)",
+      y = "Midpoint (linearized decimal hours)",
       caption = "Source table: tables/midpoint_by_prs_tertile_plot_data.csv"
     ) +
     theme_research() +
@@ -465,7 +465,7 @@ write_tertile_plot_by_cohort <- function(tertile_df, plots_dir, cohort_name = "A
       title = paste0("Midpoint phenotypes by PRS tertile", if (nzchar(suffix)) paste0(" (", cohort_name, ")") else ""),
       subtitle = "Boxes show the interquartile range; diamonds mark phenotype means",
       x = "PRS tertile",
-      y = "Midpoint (decimal hours)",
+      y = "Midpoint (linearized decimal hours)",
       caption = "Source table: tables/midpoint_by_prs_tertile_plot_data_by_cohort.csv"
     ) +
     theme_research() +
@@ -488,7 +488,7 @@ write_regression_line_plot_by_cohort <- function(regression_df, plots_dir, cohor
       title = paste0("PRS-midpoint regression lines", if (nzchar(suffix)) paste0(" (", cohort_name, ")") else ""),
       subtitle = "Unadjusted linear fit shown for each midpoint phenotype",
       x = "PRS score (z-scored)",
-      y = "Midpoint (decimal hours)",
+      y = "Midpoint (linearized decimal hours)",
       caption = "Source table: tables/midpoint_regression_plot_data_by_cohort.csv"
     ) +
     theme_research()

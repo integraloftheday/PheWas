@@ -149,6 +149,14 @@ phenotype_label <- function(x) {
   unname(phenotype_label_map[x] %||% x)
 }
 
+normalize_phecode <- function(x) {
+  out <- as.character(x)
+  out <- str_trim(out)
+  out <- str_replace(out, "(\\.\\d*?[1-9])0+$", "\\1")
+  out <- str_replace(out, "\\.0+$", "")
+  out
+}
+
 theme_research <- function() {
   theme_minimal(base_size = 12) +
     theme(
@@ -855,18 +863,21 @@ run_phewas <- function(
 
   phemap <- readr::read_csv(phecode_map_csv, show_col_types = FALSE) %>%
     transmute(
-      phecode = as.character(PHECODE),
+      phecode_raw = as.character(PHECODE),
+      phecode_join = normalize_phecode(PHECODE),
       concept_name = PHENOTYPE
     ) %>%
-    distinct(phecode, .keep_all = TRUE)
+    distinct(phecode_join, .keep_all = TRUE)
 
   results_df <- results_df %>%
-    left_join(phemap, by = "phecode") %>%
+    mutate(phecode_join = normalize_phecode(phecode)) %>%
+    left_join(phemap %>% select(-phecode_raw), by = "phecode_join") %>%
     mutate(
       fdr = p.adjust(p_value, method = "BH"),
       minus_log10_p = -log10(p_value),
       concept_name = if_else(is.na(concept_name) | !nzchar(concept_name), paste("Phecode", phecode), concept_name)
     ) %>%
+    select(-phecode_join) %>%
     arrange(p_value) %>%
     mutate(phecode_index = row_number())
 

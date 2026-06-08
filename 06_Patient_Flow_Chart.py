@@ -111,7 +111,15 @@ def source_bigquery_stages() -> list[FlowStage]:
 
     queries = [
         (
-            "Participants with Fitbit sleep records",
+            "All of Us data size",
+            "Participants in the registered CDR",
+            """
+            SELECT COUNT(*) AS rows, COUNT(DISTINCT person_id) AS persons
+            FROM `{dataset}.person`
+            """,
+        ),
+        (
+            "Fitbit sleep participants",
             "Fitbit daily sleep summaries available",
             """
             SELECT COUNT(*) AS rows, COUNT(DISTINCT person_id) AS persons
@@ -119,7 +127,7 @@ def source_bigquery_stages() -> list[FlowStage]:
             """,
         ),
         (
-            "Participants with positive sleep duration",
+            "Fitbit participants with sleep duration",
             "Daily sleep duration >0 minutes",
             """
             SELECT COUNT(*) AS rows, COUNT(DISTINCT person_id) AS persons
@@ -128,8 +136,8 @@ def source_bigquery_stages() -> list[FlowStage]:
             """,
         ),
         (
-            "Eligible sleep episodes",
-            "Main sleep episodes with plausible duration",
+            "Night-level filtering",
+            "Main sleep episodes with plausible nightly duration",
             """
             SELECT COUNT(*) AS rows, COUNT(DISTINCT sl.person_id) AS persons
             FROM `{dataset}.sleep_level` sl

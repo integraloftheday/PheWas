@@ -9,6 +9,7 @@
 \usepackage{hyperref}
 \usepackage[scaled=0.96]{helvet}
 
+\usetikzlibrary{positioning}
 \renewcommand{\familydefault}{\sfdefault}
 \graphicspath{{../Observations/}}
 
@@ -16,7 +17,7 @@
 \definecolor{DeepBlue}{HTML}{17324D}
 \definecolor{SleepTeal}{HTML}{0E6F73}
 \definecolor{WakeGold}{HTML}{E6A23C}
-\definecolor{PaperCream}{HTML}{F7F1E4}
+\definecolor{PaperCream}{HTML}{FFFFFF}
 \definecolor{SoftBlue}{HTML}{D8E7EA}
 \definecolor{SoftGold}{HTML}{F6E4B9}
 \definecolor{MutedText}{HTML}{50606A}
@@ -28,7 +29,7 @@
 \setbeamercolor{subtitle}{fg=SleepTeal,bg=PaperCream}
 \setbeamercolor{structure}{fg=SleepTeal}
 \setbeamercolor{footline}{fg=MutedText,bg=PaperCream}
-\setbeamercolor{block title}{fg=NightInk,bg=SoftGold}
+\setbeamercolor{block title}{fg=NightInk,bg=SoftBlue}
 \setbeamercolor{block body}{fg=NightInk,bg=white}
 
 \setbeamertemplate{navigation symbols}{}
@@ -88,8 +89,8 @@
 
 \newcommand{\slidecite}[1]{{\fontsize{6.8}{8}\selectfont\color{MutedText}#1}}
 
-\title{Longitudinal Modeling of Sleep Timing, Duration, and Social Jetlag Across the Adult Lifespan}
-\subtitle{High-resolution wearable sleep data from the All of Us Research Program}
+\title{Longitudinal Modeling of Sleep Timing, Duration, and Social Jetlag Across the Adult Lifespan Using High-Resolution Wearable Data}
+\subtitle{All of Us Research Program Fitbit sleep phenotyping}
 \author{Mason Manetta\textsuperscript{1} \and Angus Burns\textsuperscript{2} \and Shea Andrews\textsuperscript{1} \and Yue Leng\textsuperscript{1} \and Diego Mazzotti\textsuperscript{3}}
 \institute{\textsuperscript{1}University of California, San Francisco \quad \textsuperscript{2}Harvard Medical School \quad \textsuperscript{3}University of Kansas Medical Center}
 \date{SLEEP 2026}
@@ -101,50 +102,82 @@
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
     \fill[PaperCream] (current page.south west) rectangle (current page.north east);
-    \fill[DeepBlue] (current page.south west) rectangle ([xshift=4.55cm]current page.north west);
-    \fill[SleepTeal] ([xshift=4.25cm]current page.south west) rectangle ([xshift=4.55cm]current page.north west);
-    \draw[WakeGold,line width=2.5pt] ([xshift=0.7cm,yshift=1.0cm]current page.south west) -- ([xshift=3.55cm,yshift=1.0cm]current page.south west);
+    \fill[DeepBlue] (current page.north west) rectangle ([yshift=-0.28cm]current page.north east);
+    \fill[SleepTeal] ([yshift=-0.28cm]current page.north west) rectangle ([yshift=-0.38cm]current page.north east);
+    \draw[WakeGold,line width=2.5pt] ([xshift=0.9cm,yshift=0.9cm]current page.south west) -- ([xshift=15.0cm,yshift=0.9cm]current page.south west);
   \end{tikzpicture}
-  \begin{columns}[T,totalwidth=\textwidth]
-    \begin{column}{0.28\textwidth}
-      \vspace{1.0cm}
-      {\color{white}\fontsize{9}{11}\selectfont SLEEP 2026}\\[0.55cm]
-      {\color{SoftGold}\fontsize{24}{26}\selectfont\bfseries AoU}\\[-2pt]
-      {\color{white}\fontsize{9}{11}\selectfont Fitbit sleep phenotyping}\\[4.15cm]
-      {\color{white}\fontsize{7.5}{9}\selectfont Support: All of Us Research Program, Office of the Director, NIH}
-    \end{column}
-    \begin{column}{0.67\textwidth}
-      \vspace{0.85cm}
-      {\fontsize{24}{28}\selectfont\bfseries\color{NightInk}\inserttitle}\\[0.22cm]
-      {\fontsize{12}{14}\selectfont\color{SleepTeal}\insertsubtitle}\\[0.55cm]
-      {\fontsize{9.2}{11}\selectfont\color{NightInk}\insertauthor}\\[0.18cm]
-      {\fontsize{7.5}{9}\selectfont\color{MutedText}\insertinstitute}\\[0.95cm]
+  \vspace{0.7cm}
+  {\fontsize{9}{11}\selectfont\color{SleepTeal}\bfseries SLEEP 2026}\\[0.42cm]
+  {\fontsize{23}{27}\selectfont\bfseries\color{NightInk}\inserttitle}\\[0.24cm]
+  {\fontsize{12}{14}\selectfont\color{SleepTeal}\insertsubtitle}\\[0.5cm]
+  {\fontsize{9.2}{11}\selectfont\color{NightInk}\insertauthor}\\[0.16cm]
+  {\fontsize{7.6}{9}\selectfont\color{MutedText}\insertinstitute}\\[0.4cm]
+  {\fontsize{8.8}{10.5}\selectfont\color{DeepBlue}\textbf{Presenter:} Diego R. Mazzotti, Ph.D. (on behalf of Mason Manetta)}\\[0.62cm]
       \begin{columns}[T,totalwidth=0.94\linewidth]
         \begin{column}{0.33\linewidth}\kpi{42,290}{participants}{SoftBlue}\end{column}
         \begin{column}{0.33\linewidth}\kpi{22.4M}{filtered nights}{SoftGold}\end{column}
         \begin{column}{0.33\linewidth}\kpi{530}{mean nights / participant}{SoftBlue}\end{column}
       \end{columns}
-    \end{column}
-  \end{columns}
+  \vfill
+  {\fontsize{7.4}{9}\selectfont\color{MutedText}Support: All of Us Research Program, Office of the Director, NIH}
 \end{frame}
 }
 
-\begin{frame}{Why Longitudinal Wearable Sleep?}
+\begin{frame}{Disclosure Information}
+  \vspace{0.6cm}
+  \begin{tikzpicture}
+    \node[
+      rounded corners=8pt,
+      fill=white,
+      draw=SleepTeal,
+      line width=1.0pt,
+      inner xsep=14pt,
+      inner ysep=14pt,
+      text width=0.88\linewidth,
+      align=center
+    ] {
+      {\Large\bfseries To review this speaker's disclosure information, please visit}\\[0.25cm]
+      {\Large\color{SleepTeal}\bfseries sleepmeeting.org}
+    };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{SLEEP 2026 Photography Policy}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.18\textwidth}
+      \vspace{0.45cm}
+      \begin{tikzpicture}
+        \node[circle,draw=SleepTeal,line width=1.2pt,minimum width=1.8cm] {\fontsize{24}{24}\selectfont\color{SleepTeal}\bfseries \checkmark};
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.76\textwidth}
+      \begin{itemize}
+        \item Photography is permitted during this lecture unless a no-photography icon is shown.
+        \item Photographs are allowed for personal, social, or non-commercial use.
+        \item Attendees may not use flash photography or otherwise distract presenters or attendees.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Wearables and Longitudinal Monitoring of Sleep and Circadian Traits}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.48\textwidth}
-      \begin{block}{Problem}
+      \begin{block}{Why this matters}
         \begin{itemize}
-          \item Chrono-epidemiology needs reliable long-term phenotypes.
-          \item Self-report and short monitoring windows miss variability, seasonal structure, and work/free-day differences.
-          \item Sleep timing is circular, behaviorally constrained, and environmentally patterned.
+          \item Sleep is important to health and chronic disease risk.
+          \item Most large epidemiologic studies rely on self-report or short-term monitoring.
+          \item Wearables create scalable, repeated measurements of sleep timing, duration, and variability.
         \end{itemize}
       \end{block}
       \vspace{0.18cm}
       \vspace{-0.05cm}
-      \takeaway{Aim: model age, sex, work/free-day status, and seasonality as contributors to onset, offset, midpoint, and duration.}
+      \takeaway{Longitudinal Fitbit data move sleep phenotyping from sparse recall to repeated behavioral measurement.}
     \end{column}
     \begin{column}{0.47\textwidth}
-      \takeaway{Device-measured longitudinal sleep enables population-scale modeling of sleep timing, duration, and social jetlag.}
+      \begin{block}{Published context}
+        Prior All of Us Fitbit analyses have linked wearable-derived sleep measures to clinical phenotypes, motivating higher-resolution longitudinal modeling of sleep behavior.
+      \end{block}
       \vspace{0.35cm}
       \begin{tikzpicture}
         \node[rounded corners=10pt,fill=white,draw=NightInk!15,inner sep=10pt,text width=\linewidth] {
@@ -161,20 +194,108 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Cohort and Data Scale}
+\begin{frame}{Sources of Variability}
   \begin{columns}[T,totalwidth=\textwidth]
-    \begin{column}{0.35\textwidth}
-      \begin{itemize}
-        \item All of Us participants with filtered Fitbit sleep records.
-        \item 22,428,610 filtered nights from 42,290 participants.
-        \item Cohort: 71\% White, 67\% Female, age 52 $\pm$ 17 years.
-        \item Median 109 nights; mean 530 nights per participant.
-        \item Mean sleep duration 7.45h; median 7.53h.
-      \end{itemize}
-      \vspace{0.22cm}
-      \takeaway{This is a deeply longitudinal cohort, not a cross-sectional sleep snapshot.}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Extrinsic}
+        \begin{itemize}
+          \item Weekdays vs. weekends / free days
+          \item Seasonality and holidays
+          \item Environmental exposures: photoperiod, temperature, humidity, daylight saving time
+        \end{itemize}
+      \end{block}
     \end{column}
-    \begin{column}{0.62\textwidth}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Intrinsic and social}
+        \begin{itemize}
+          \item Age and sex
+          \item Employment status and social scheduling constraints
+          \item Stable participant-level differences captured by repeated measures
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.32cm}
+  \takeaway{These factors are established individually, but longitudinal wearable data allow them to be modeled together within the same participants.}
+\end{frame}
+
+\begin{frame}{Study Aim}
+  \vspace{0.5cm}
+  \begin{tikzpicture}
+    \node[
+      rounded corners=10pt,
+      fill=SoftBlue,
+      draw=SleepTeal,
+      line width=0.8pt,
+      inner xsep=15pt,
+      inner ysep=16pt,
+      text width=0.88\linewidth,
+      align=center
+    ] {
+      {\Large\bfseries Characterize demographic and environmental contributors to longitudinal variability in sleep patterns}\\[0.28cm]
+      {\large using device-measured Fitbit sleep data from the All of Us Research Program.}
+    };
+  \end{tikzpicture}
+  \vspace{0.4cm}
+  \begin{columns}[T,totalwidth=0.9\textwidth]
+    \begin{column}{0.33\linewidth}\kpi{Onset}{sleep start}{SoftGold}\end{column}
+    \begin{column}{0.33\linewidth}\kpi{Midpoint}{sleep timing}{SoftBlue}\end{column}
+    \begin{column}{0.33\linewidth}\kpi{Duration}{sleep amount}{SoftGold}\end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{All of Us Research Program and Fitbit Sleep}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.46\textwidth}
+      \begin{block}{All of Us}
+        \begin{itemize}
+          \item National longitudinal cohort with EHR, survey, genomic, and wearable data.
+          \item Participant-level covariates include demographics, employment, BMI, ZIP3 geography, and socioeconomic context.
+        \end{itemize}
+      \end{block}
+      \begin{block}{Fitbit measurements}
+        \begin{itemize}
+          \item Sleep daily summaries provide nightly sleep duration.
+          \item Sleep-level records provide high-resolution onset/offset information.
+          \item Repeated nights allow within-person modeling over age, season, and social schedule.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \includegraphics[width=\linewidth,height=0.70\textheight,keepaspectratio]{image36.png}\\[-2pt]
+      \slidecite{Filtered person-night onset and duration density.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Participant Characteristics}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.42\textwidth}
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.66\linewidth}r@{}}
+        \toprule
+        Characteristic & Value\\
+        \midrule
+        Included participants & 42,290\\
+        Filtered sleep nights & 22,428,610\\
+        Age & 52 $\pm$ 17 y\\
+        Female & 67.4\%\\
+        Male & 32.3\%\\
+        Nights recorded & 530 $\pm$ 730\\
+        Nightly duration & 447 $\pm$ 65 min\\
+        Nightly duration & 7.5 $\pm$ 1.1 h\\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.18cm}
+      {\fontsize{7.3}{8.5}\selectfont
+      \begin{tikzpicture}[node distance=0.18cm]
+        \node[rounded corners=5pt,fill=SoftBlue,draw=SleepTeal,align=center,text width=0.84\linewidth,inner ysep=4pt] (a) {AoU participants with Fitbit sleep};
+        \node[rounded corners=5pt,fill=SoftGold,draw=WakeGold,align=center,text width=0.84\linewidth,inner ysep=4pt,below=of a] (b) {valid primary sleep episodes};
+        \node[rounded corners=5pt,fill=SoftBlue,draw=SleepTeal,align=center,text width=0.84\linewidth,inner ysep=4pt,below=of b] (c) {\textbf{42,290 participants} with \textbf{22.4M filtered nights}};
+        \draw[->,SleepTeal,line width=0.7pt] (a) -- (b);
+        \draw[->,SleepTeal,line width=0.7pt] (b) -- (c);
+      \end{tikzpicture}}
+    \end{column}
+    \begin{column}{0.55\textwidth}
       \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{image37.png}\\[-2pt]
       \slidecite{Distribution of nights per participant.}
     \end{column}
@@ -231,7 +352,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Result 1: Sleep Timing Advances Non-linearly With Age}
+\begin{frame}{Sleep and Circadian Traits x Age and Sex}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.36\textwidth}
       \begin{itemize}
@@ -248,7 +369,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Result 2: Sleep Duration Lengthens Across Adulthood}
+\begin{frame}{Sleep Duration Across the Adult Lifespan}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.38\textwidth}
       \begin{itemize}
@@ -267,7 +388,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Result 3: Weekends Reveal Social Jetlag}
+\begin{frame}{Sleep and Circadian Traits x Other Sociodemographics}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.37\textwidth}
       \begin{itemize}
@@ -285,7 +406,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Result 4: Sleep Is Seasonal}
+\begin{frame}{Sleep and Circadian Traits x Environmental Variables}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.44\textwidth}
       \includegraphics[width=\linewidth,height=0.64\textheight,keepaspectratio]{image21.png}
@@ -350,7 +471,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Conclusions}
+\begin{frame}{Conclusions and Future Directions}
   \begin{enumerate}
     \item Sleep timing and duration are dynamically structured by non-linear age effects.
     \item Employment and weekend status reveal strong social timing constraints, including measurable social jetlag.
@@ -370,20 +491,40 @@
   \end{tikzpicture}
 \end{frame}
 
-{
-\setbeamertemplate{footline}{}
-\begin{frame}[plain]
-  \begin{tikzpicture}[remember picture,overlay]
-    \fill[DeepBlue] (current page.south west) rectangle (current page.north east);
-    \draw[WakeGold,line width=2.2pt] ([xshift=1.0cm,yshift=1.3cm]current page.south west) -- ([xshift=15.0cm,yshift=1.3cm]current page.south west);
-  \end{tikzpicture}
-  \vspace{1.45cm}
-  {\color{white}\fontsize{25}{28}\selectfont\bfseries Thank you}\\[0.45cm]
-  {\color{SoftGold}\fontsize{13}{16}\selectfont Questions and discussion}\\[1.1cm]
-  {\color{white}\fontsize{10}{12}\selectfont Mason Manetta \quad \textbar \quad University of California, San Francisco}\\[0.2cm]
-  {\color{white!75}\fontsize{8}{10}\selectfont Support: All of Us Research Program, Office of the Director, NIH}
+\begin{frame}{Acknowledgements}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{University of California, San Francisco}
+        \begin{itemize}
+          \item Mason Manetta
+          \item Yue Leng, Ph.D.
+          \item Shea Andrews, Ph.D.
+        \end{itemize}
+      \end{block}
+      \begin{block}{Harvard Medical School / Brigham and Women's Hospital}
+        \begin{itemize}
+          \item Angus Burns, Ph.D.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{University of Kansas Medical Center}
+        \begin{itemize}
+          \item Diego R. Mazzotti, Ph.D.
+        \end{itemize}
+      \end{block}
+      \begin{block}{Funding and support}
+        \begin{itemize}
+          \item All of Us Research Scholars Program
+          \item RTI International All of Us Researcher Academy
+          \item National Institutes of Health, Office of the Director
+        \end{itemize}
+      \end{block}
+      \vspace{0.1cm}
+      \takeaway{Questions and discussion}
+    \end{column}
+  \end{columns}
 \end{frame}
-}
 
 \appendix
 

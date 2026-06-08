@@ -29,7 +29,7 @@ os.environ.setdefault("XDG_CACHE_HOME", str(Path("/private/tmp/font-cache")))
 import matplotlib.pyplot as plt
 import pandas as pd
 import pyarrow.parquet as pq
-from matplotlib.patches import FancyBboxPatch
+from matplotlib.patches import Rectangle
 
 
 OUTPUT_DIR = Path(os.getenv("PATIENT_FLOW_OUTPUT_DIR", "results/patient_flow"))
@@ -48,8 +48,9 @@ class FlowStage:
 
 
 def mask_small_n(value: int | None) -> str:
-    if value is None:
+    if value is None or pd.isna(value):
         return "not available"
+    value = int(value)
     if value < 20:
         return "<20"
     return f"{value:,}"
@@ -110,16 +111,16 @@ def source_bigquery_stages() -> list[FlowStage]:
 
     queries = [
         (
-            "AoU Fitbit sleep_daily_summary",
-            "Source table; no local row-level filter",
+            "Participants with Fitbit sleep records",
+            "Fitbit daily sleep summaries available",
             """
             SELECT COUNT(*) AS rows, COUNT(DISTINCT person_id) AS persons
             FROM `{dataset}.sleep_daily_summary`
             """,
         ),
         (
-            "Fitbit baseline-positive sleep",
-            "sleep_daily_summary minute_asleep > 0",
+            "Participants with positive sleep duration",
+            "Daily sleep duration >0 minutes",
             """
             SELECT COUNT(*) AS rows, COUNT(DISTINCT person_id) AS persons
             FROM `{dataset}.sleep_daily_summary`
@@ -127,8 +128,8 @@ def source_bigquery_stages() -> list[FlowStage]:
             """,
         ),
         (
-            "Sleep-level rows eligible for clustering",
-            "Joined sleep_level to daily summary; minute_asleep > 90, main sleep, duration >0, <18h, !=960",
+            "Eligible sleep episodes",
+            "Main sleep episodes with plausible duration",
             """
             SELECT COUNT(*) AS rows, COUNT(DISTINCT sl.person_id) AS persons
             FROM `{dataset}.sleep_level` sl
@@ -143,8 +144,8 @@ def source_bigquery_stages() -> list[FlowStage]:
             """,
         ),
         (
-            "AoU EHR cohort",
-            "Any EHR-sourced OMOP record across measured domains",
+            "Participants with EHR data",
+            "At least one EHR-sourced clinical record",
             """
             WITH ehr AS (
               SELECT DISTINCT person_id FROM `{dataset}.measurement` m
@@ -200,28 +201,28 @@ def source_bigquery_stages() -> list[FlowStage]:
 def local_stages() -> list[FlowStage]:
     specs = [
         (
-            "Valid nightly Fitbit sleep metrics",
-            "Cluster-level extraction: main sleep, >3h nightly candidate, largest cluster per logical night, daily duration <15.5h",
+            "Valid nightly sleep observations",
+            "Main sleep, >3 hours, largest nightly episode, and <15.5 total hours",
             "processed_data/daily_sleep_metrics_enhanced.parquet",
         ),
         (
-            "Fitbit covariate cohort",
-            "Distinct sleep_daily_summary persons joined to demographics, ZIP3 SES, survey covariates, latest sensible BMI",
+            "Participants with baseline covariates",
+            "Linked demographic, socioeconomic, survey, and BMI covariates",
             "processed_data/fitbit_cohort_covariates.parquet",
         ),
         (
-            "Analysis-ready sleep dataset",
-            "Sleep metrics left-joined to covariates; rows with missing date_of_birth or sex_concept removed",
+            "Sleep observations with required demographics",
+            "Nonmissing date of birth and sex at birth",
             "processed_data/ready_for_analysis.parquet",
         ),
         (
-            "LMM analytic dataset",
-            "Analysis-ready data with age/sex present, normalized ZIP3, linearized sleep timing, selected model columns",
+            "Analytic sample for sleep models",
+            "Required model variables after sleep timing and geographic preparation",
             "processed_data/LMM_analysis.parquet",
         ),
         (
-            "EHR/PheWAS covariate-only dataset",
-            "Participants with mapped ICD phecode data and Fitbit baseline, plus covariates",
+            "Analytic sample for EHR outcomes",
+            "Fitbit baseline, covariates, and mapped phecode outcomes",
             "processed_data/master/master_covariates_only.parquet",
         ),
     ]
@@ -245,8 +246,8 @@ def local_stages() -> list[FlowStage]:
     stages.append(
         FlowStage(
             source="local text",
-            stage="PGRS scoring cohort",
-            filter_step="person_ids.parquet intersected with PLINK .fam and optional ancestry filter; see 02_plink_PGRS_Generator_all.py",
+            stage="Participants with genetic scores",
+            filter_step="Overlap with genotype data and scoring eligibility criteria",
             rows=None,
             persons=pgrs_persons,
             status="ok" if pgrs_persons is not None else "missing",
@@ -276,97 +277,86 @@ def write_counts(stages: list[FlowStage], path: Path) -> pd.DataFrame:
     return df
 
 
-def box_color(row: pd.Series) -> str:
-    if row["source"] == "bigquery":
-        return "#CFE7D3"
-    if row["status"] == "ok":
-        return "#F4E8C1"
-    return "#E8DDD4"
-
-
 def build_label(row: pd.Series) -> str:
     parts = [
-        textwrap.fill(str(row["stage"]), width=34),
-        f"Patients: {mask_small_n(row['persons'] if pd.notna(row['persons']) else None)}",
+        textwrap.fill(str(row["stage"]), width=27),
+        f"Participants: {mask_small_n(row['persons'])}",
     ]
     if pd.notna(row["rows"]):
-        parts.append(f"Rows/nights: {mask_small_n(int(row['rows']))}")
-    parts.append(textwrap.fill(str(row["filter_step"]), width=48))
+        parts.append(f"Records: {mask_small_n(int(row['rows']))}")
+    parts.append(textwrap.fill(str(row["filter_step"]), width=28))
     return "\n".join(parts)
 
 
 def draw_flow_chart(df: pd.DataFrame, png_path: Path, pdf_path: Path) -> None:
     n = len(df)
-    fig_height = max(7.0, n * 1.25)
-    fig, ax = plt.subplots(figsize=(9.5, fig_height))
-    fig.patch.set_facecolor("#FBF8EF")
-    ax.set_facecolor("#FBF8EF")
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, n + 1.4)
+    box_width = 2.35
+    box_height = 1.2
+    gap = 0.6
+    left_margin = 0.35
+    right_margin = 0.35
+    x_extent = left_margin + n * box_width + (n - 1) * gap + right_margin
+
+    fig_width = max(11.0, n * 2.85)
+    fig, ax = plt.subplots(figsize=(fig_width, 3.0))
+    fig.patch.set_facecolor("white")
+    ax.set_facecolor("white")
+    ax.set_xlim(0, x_extent)
+    ax.set_ylim(0, 2.15)
     ax.axis("off")
 
     ax.text(
-        5,
-        n + 1.1,
-        "Patient Flow for Fitbit Sleep Analysis Dataset",
-        ha="center",
+        left_margin,
+        1.95,
+        "Participant flow for analytic cohort construction",
+        ha="left",
         va="center",
-        fontsize=18,
-        fontweight="bold",
-        color="#18211D",
-        family="serif",
-    )
-    ax.text(
-        5,
-        n + 0.72,
-        "Aggregated counts only. Missing upstream source counts can be filled with RUN_BIGQUERY_COUNTS=true.",
-        ha="center",
-        va="center",
-        fontsize=10.5,
-        color="#4E5A52",
+        fontsize=11,
+        fontweight="normal",
+        color="black",
         family="serif",
     )
 
     for idx, (_, row) in enumerate(df.iterrows()):
-        y = n - idx
-        rect = FancyBboxPatch(
-            (1.0, y - 0.43),
-            8.0,
-            0.86,
-            boxstyle="round,pad=0.04,rounding_size=0.08",
-            linewidth=0.75,
-            edgecolor="#27312C",
-            facecolor=box_color(row),
+        x = left_margin + idx * (box_width + gap)
+        y = 0.55
+        rect = Rectangle(
+            (x, y),
+            box_width,
+            box_height,
+            linewidth=0.8,
+            edgecolor="black",
+            facecolor="white",
         )
         ax.add_patch(rect)
         ax.text(
-            5.0,
-            y,
+            x + box_width / 2,
+            y + box_height / 2,
             build_label(row),
             ha="center",
             va="center",
-            fontsize=9.3,
-            color="#18211D",
+            fontsize=7.1,
+            color="black",
             family="serif",
-            linespacing=0.95,
+            linespacing=1.05,
         )
 
         if idx < n - 1:
             ax.annotate(
                 "",
-                xy=(5, y - 0.86),
-                xytext=(5, y - 0.48),
-                arrowprops=dict(arrowstyle="-|>", color="#34403A", linewidth=0.9),
+                xy=(x + box_width + gap - 0.08, y + box_height / 2),
+                xytext=(x + box_width + 0.08, y + box_height / 2),
+                arrowprops=dict(arrowstyle="->", color="black", linewidth=0.8),
             )
 
     ax.text(
-        5,
-        0.25,
-        "Generated from local repository outputs. Counts <20 are masked.",
-        ha="center",
+        left_margin,
+        0.2,
+        "Counts are aggregate participant and record counts; values <20 are masked.",
+        ha="left",
         va="center",
-        fontsize=8.5,
-        color="#667067",
+        fontsize=7.5,
+        color="black",
         family="serif",
     )
 

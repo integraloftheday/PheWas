@@ -10,6 +10,9 @@ Outputs:
 Optional BigQuery source counts:
   RUN_BIGQUERY_COUNTS=true python 06_Patient_Flow_Chart.py
 
+BigQuery counts use the default Google Cloud project configured in the AoU
+runtime. The only required dataset variable is WORKSPACE_CDR.
+
 This script reports aggregate counts only. Counts below 20 are masked in figure
 labels to avoid presenting small-cell participant counts.
 """
@@ -94,12 +97,11 @@ def pgrs_patient_list_count() -> tuple[int | None, str | None]:
 def run_bigquery_count(sql: str) -> dict[str, Any]:
     from google.cloud import bigquery
 
-    project = os.getenv("GOOGLE_PROJECT")
     dataset = os.getenv("WORKSPACE_CDR")
-    if not project or not dataset:
-        raise RuntimeError("GOOGLE_PROJECT and WORKSPACE_CDR are required for BigQuery counts.")
+    if not dataset:
+        raise RuntimeError("WORKSPACE_CDR is required for BigQuery counts.")
 
-    client = bigquery.Client(project=project)
+    client = bigquery.Client()
     query = sql.format(dataset=dataset)
     rows = list(client.query(query).result())
     return dict(rows[0])

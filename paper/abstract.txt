@@ -1,0 +1,48 @@
+LONGITUDINAL MODELING OF SLEEP TIMING,
+DURATION, AND SOCIAL JETLAG ACROSS THE
+ADULT LIFESPAN USING HIGH-RESOLUTION
+WEARABLE DATA
+Mason Manetta1, Angus Burns2, Shea Andrews1, Yue Leng1,
+Diego Mazzotti3
+1University of California, San Francisco, 2Harvard Medical School,
+3University of Kansas Medical Center
+Introduction: Reliable longitudinal sleep measurements are crit-
+ical for chrono-epidemiology, as misalignment and variability are
+strongly associated with chronic diseases. Self-reporting methods
+or short-term monitoring can fail to capture longer term pat-
+terns required for risk stratification. Therefore, we used device-
+measured sleep data from the All of Us (AoU) research program
+to characterize age, sex, and environmental contributors to sleep
+patterns.
+Methods: We analyzed 22,428,610 nights of filtered Fitbit sleep
+data from 42,290 AoU participants. We calculated nightly onset,
+offset, and duration, excluding non-primary sleep and episodes
+>18h. Linear Mixed-Effects Models (LMMs) with person as random
+effects were used to control for employment, weekend status,
+sex, seasonality, and age incorporating quadratic age terms and
+employment weekend interactions.
+Results: The cohort (71% White, 67% Female, 52 ± 17y) con-
+tributed a median of 109 nights (mean: 530) of recorded sleep
+(mean duration 7.45h, median 7.53h). All reported associations
+were significant (p< 0.001). Age showed a quadratic trend in sleep
+timing across the lifespan. Sleep midpoint showed a maximum
+advance of ∼42 minutes between young adulthood (age 18, 2:37
+AM) and older age (age 57, 1:54 AM). Sleep duration increased
+with age gaining over 34 minutes between ages 18 (7.45h) and
+85 (8.02h). Furthermore, the employment-weekend interaction
+showed a delay in midpoint, onset, and offset and increased dura-
+tion across all groups. Participants "Employed for Wages" showed
+the greatest social jetlag (average midpoint delay) of ∼42 minutes
+on weekends (4:08 AM) compared to weekdays (3:26 AM). This
+shift was accompanied by a duration extension of ∼28 minutes
+on weekends (7.95h) vs. weekdays (7.48h). Finally, seasonality
+analysis revealed an 11-minute decrease in sleep duration in June
+compared to the maximum observed in January.
+Conclusion: This large-scale analysis confirms that sleep tim-
+ing and duration are dynamically determined by non-linear age
+effects, strong social constraints, temporal effects, and measur-
+able environmental factors. Our findings provide population-level
+characterization essential for future genetic and clinical studies
+targeting personalized interventions for circadian misalignment.
+Support (if any): All of Us Research Program, Office of the Director,
+NIH

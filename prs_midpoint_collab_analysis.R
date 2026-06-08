@@ -723,7 +723,7 @@ run_association_models <- function(analysis_df, out_dir, pc_cols) {
         title = "Midpoint phenotypes by PRS tertile",
         subtitle = "Boxes show the interquartile range; diamonds mark phenotype means",
         x = "PRS tertile",
-        y = "Midpoint (linearized decimal hours)",
+        y = "Midpoint (clock time, HH:MM)",
         caption = "Source table: tables/midpoint_by_prs_tertile_plot_data.csv"
       ) +
       theme_research() +
@@ -995,6 +995,348 @@ run_phewas <- function(
   results_df
 }
 
+summary_flow_lookup <- function(flow_df, step_id) {
+  out <- flow_df$n[match(step_id, flow_df$step_id)]
+  if (length(out) == 0 || is.na(out)) return(NA_integer_)
+  as.integer(out)
+}
+
+existing_summary_figures <- function(out_dir) {
+  figure_specs <- tribble(
+    ~path, ~heading, ~caption,
+    "plots/cohort_flow.png", "Cohort flow", "Participant flow from the raw sleep cohort into the association and PheWAS branches.",
+    "plots/association_forest_per_sd.png", "Primary association forest plot", "Continuous PRS associations for the all-ancestry analysis.",
+    "plots/association_forest_per_sd_eur.png", "EUR association forest plot", "Continuous PRS associations for the EUR-restricted sensitivity analysis.",
+    "plots/midpoint_by_prs_tertile.png", "PRS tertile boxplots", "All-ancestry tertile distributions for the three midpoint phenotypes, with y-axis labels shown as clock time.",
+    "plots/midpoint_by_prs_tertile_no_outliers.png", "PRS tertile boxplots without outlier points", "All-ancestry tertile distributions with outlier points hidden for display and the y-axis cropped to the non-outlier whisker range.",
+    "plots/midpoint_regression_lines.png", "PRS regression lines", "Unadjusted regression-line views of the three midpoint phenotypes, with y-axis labels shown as clock time.",
+    "plots/phewas_manhattan.png", "PheWAS Manhattan plot", "Phenome-wide signal strength across tested phecodes.",
+    "plots/phewas_volcano.png", "PheWAS volcano plot", "Odds-ratio view of the phenome-wide scan."
+  )
+
+  figure_specs %>%
+    filter(file.exists(file.path(out_dir, path)))
+}
+
+read_summary_tertile_trends <- function(out_dir) {
+  tertile_path <- file.path(out_dir, "tables", "midpoint_by_prs_tertile_plot_data_by_cohort.csv")
+  if (!file.exists(tertile_path)) return(tibble())
+
+  readr::read_csv(tertile_path, show_col_types = FALSE) %>%
+    filter(cohort == "All") %>%
+    mutate(score_tertile = factor(score_tertile, levels = c("Low", "Medium", "High"))) %>%
+    group_by(phenotype, phenotype_label, score_tertile) %>%
+    summarise(
+      n = n(),
+      mean_midpoint = mean(midpoint_hours, na.rm = TRUE),
+      median_midpoint = median(midpoint_hours, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    tidyr::pivot_wider(
+      names_from = score_tertile,
+      values_from = c(n, mean_midpoint, median_midpoint),
+      names_glue = "{.value}_{score_tertile}"
+    ) %>%
+    mutate(
+      low_to_high_minutes = (mean_midpoint_High - mean_midpoint_Low) * 60,
+      direction = dplyr::case_when(
+        mean_midpoint_High > mean_midpoint_Low ~ "increase",
+        mean_midpoint_High < mean_midpoint_Low ~ "decrease",
+        TRUE ~ "flat"
+      ),
+      mean_clock_Low = format_clock(mean_midpoint_Low),
+      mean_clock_Medium = format_clock(mean_midpoint_Medium),
+      mean_clock_High = format_clock(mean_midpoint_High)
+    ) %>%
+    arrange(match(phenotype, c("person_weekend_avg_midpoint", "MSF", "MSFsc")))
+}
+
+build_summary_md_lines <- function(
+  out_dir,
+  association_continuous,
+  phewas_results,
+  pc_count,
+  flow_df
+) {
+  top_assoc <- association_continuous %>%
+    arrange(p_value) %>%
+    slice_head(n = 6)
+
+  primary_assoc <- association_continuous %>%
+    filter(model == "PRS + age + sex + PC1-PC10") %>%
+    arrange(match(phenotype, c("person_weekend_avg_midpoint", "MSF", "MSFsc")))
+
+  if (nrow(primary_assoc) == 0) {
+    primary_assoc <- association_continuous %>%
+      arrange(match(phenotype, c("person_weekend_avg_midpoint", "MSF", "MSFsc")), p_value)
+  }
+
+  strongest_primary <- primary_assoc %>%
+    arrange(p_value) %>%
+    slice_head(n = 1)
+
+  top_phewas <- phewas_results %>%
+    arrange(p_value) %>%
+    slice_head(n = 10)
+
+  best_phewas <- top_phewas %>%
+    slice_head(n = 1)
+
+  phewas_sig_n <- sum(!is.na(phewas_results$fdr) & phewas_results$fdr < 0.05)
+  figures <- existing_summary_figures(out_dir)
+  tertile_trends <- read_summary_tertile_trends(out_dir)
+
+  lines <- c(
+    "# PRS midpoint collaborator summary",
+    "",
+    "## Key findings",
+    ""
+  )
+
+  if (nrow(strongest_primary) > 0) {
+    row <- strongest_primary[1, ]
+    lines <- c(
+      lines,
+      sprintf(
+        "- The strongest primary adjusted association was **%s**: **%.2f minutes later per 1 SD higher PRS** (`p = %.3g`, `n = %s`).",
+        phenotype_label(row$phenotype),
+        row$estimate_minutes,
+        row$p_value,
+        format(row$n, big.mark = ",", trim = TRUE)
+      )
+    )
+  }
+
+  if (nrow(primary_assoc) > 0 && all(primary_assoc$estimate_minutes > 0, na.rm = TRUE)) {
+    lines <- c(
+      lines,
+      "- All three midpoint phenotypes moved in the same direction: higher PRS corresponded to later sleep timing, with the clearest signal for weekend average midpoint."
+    )
+  }
+
+  if (nrow(tertile_trends) > 0 && all(tertile_trends$direction == "increase", na.rm = TRUE)) {
+    lines <- c(
+      lines,
+      sprintf(
+        "- The tertile plots showed the same overall pattern: **Low < Medium < High** for all three midpoint phenotypes, with mean Low-to-High shifts ranging from **%.2f to %.2f minutes**.",
+        min(tertile_trends$low_to_high_minutes, na.rm = TRUE),
+        max(tertile_trends$low_to_high_minutes, na.rm = TRUE)
+      )
+    )
+  }
+
+  if (nrow(best_phewas) > 0) {
+    phe <- best_phewas[1, ]
+    if (phewas_sig_n == 0) {
+      lines <- c(
+        lines,
+        sprintf(
+          "- The PheWAS produced **no FDR-significant hits** across %s tested phecodes; the smallest p-value was for **%s (%s)** with **OR %.2f** (`p = %.3g`, `FDR = %.3g`).",
+          format(nrow(phewas_results), big.mark = ",", trim = TRUE),
+          phe$phecode,
+          phe$concept_name %||% "Unknown phenotype",
+          phe$odds_ratio,
+          phe$p_value,
+          phe$fdr
+        )
+      )
+    } else {
+      lines <- c(
+        lines,
+        sprintf(
+          "- The PheWAS produced **%d FDR-significant hits** across %s tested phecodes; the top signal was **%s (%s)** with **OR %.2f** (`p = %.3g`, `FDR = %.3g`).",
+          phewas_sig_n,
+          format(nrow(phewas_results), big.mark = ",", trim = TRUE),
+          phe$phecode,
+          phe$concept_name %||% "Unknown phenotype",
+          phe$odds_ratio,
+          phe$p_value,
+          phe$fdr
+        )
+      )
+    }
+  }
+
+  lines <- c(
+    lines,
+    "",
+    "## Cohort summary",
+    "",
+    sprintf("- Sleep phenotype cohort: %s", format(summary_flow_lookup(flow_df, "sleep_cohort"), big.mark = ",", trim = TRUE)),
+    sprintf("- Sleep + scored genetics overlap: %s", format(summary_flow_lookup(flow_df, "sleep_genetics"), big.mark = ",", trim = TRUE)),
+    sprintf("- Association covariate-complete cohort: %s", format(summary_flow_lookup(flow_df, "association_complete"), big.mark = ",", trim = TRUE)),
+    sprintf("- Weekend midpoint model n: %s", format(summary_flow_lookup(flow_df, "assoc_weekend"), big.mark = ",", trim = TRUE)),
+    sprintf("- MSF model n: %s", format(summary_flow_lookup(flow_df, "assoc_msf"), big.mark = ",", trim = TRUE)),
+    sprintf("- MSFsc model n: %s", format(summary_flow_lookup(flow_df, "assoc_msfsc"), big.mark = ",", trim = TRUE)),
+    if (!is.na(summary_flow_lookup(flow_df, "sleep_genetics_phewas"))) {
+      sprintf("- Sleep + genetics + PheWAS overlap: %s", format(summary_flow_lookup(flow_df, "sleep_genetics_phewas"), big.mark = ",", trim = TRUE))
+    } else {
+      character(0)
+    },
+    sprintf("- Available ancestry PCs in primary adjusted models: %d", pc_count),
+    "- Midpoint phenotypes compared: `person_weekend_avg_midpoint`, `MSF`, `MSFsc`",
+    "",
+    "## Phenotype definitions",
+    "",
+    "- `person_weekend_avg_midpoint`: participant-level circular mean of free-day sleep midpoints, then converted to the noon-to-noon linearized scale used downstream.",
+    "- `MSF`: midpoint of sleep on free days, calculated as `SO_f + SD_f / 2`, where `SO_f` is mean free-day sleep onset and `SD_f` is mean free-day sleep duration.",
+    "- `MSFsc`: sleep-corrected midpoint of sleep on free days. This uses `SO_f + SD_week / 2`, where `SD_week = (5 * SD_w + 2 * SD_f) / 7`, and applies the correction when free-day sleep duration exceeds work-day sleep duration.",
+    "",
+    "## Methods",
+    "",
+    "- **Association models:** linear regression of each midpoint phenotype on PRS. The report includes PRS-only, PRS + age + sex, and the primary adjusted model PRS + age + sex + PC1-PC10; the PRS exposure is analyzed per 1 SD higher score.",
+    "- **PheWAS models:** logistic regression of each phecode outcome on the continuous PRS, adjusted for age, sex, and PC1-PC10, using the sleep + genetics + PheWAS overlap cohort. Only phecodes meeting the configured minimum case count are tested.",
+    "",
+    "## Main figures",
+    ""
+  )
+
+  if (nrow(figures) > 0) {
+    for (i in seq_len(nrow(figures))) {
+      fig <- figures[i, ]
+      lines <- c(
+        lines,
+        paste0("### ", fig$heading),
+        "",
+        fig$caption,
+        "",
+        sprintf("![%s](%s)", fig$heading, fig$path),
+        ""
+      )
+    }
+  } else {
+    lines <- c(lines, "_No figures were found in `plots/` at summary-generation time._", "")
+  }
+
+  lines <- c(
+    lines,
+    "## Output files",
+    "",
+    "- Continuous per-SD model table: `tables/association_continuous_models.csv`",
+    "- Tertile model table: `tables/association_tertile_models.csv`",
+    "- Tertile descriptive table: `tables/association_tertile_summary.csv`",
+    "- Cohort flow table: `tables/cohort_flow_counts.csv`"
+  )
+
+  if (file.exists(file.path(out_dir, "regenerate_figures.R"))) {
+    lines <- c(lines, "- Figure regeneration script: `regenerate_figures.R`")
+  }
+  if (file.exists(file.path(out_dir, "tables", "association_forest_plot_data_by_cohort.csv"))) {
+    lines <- c(lines, "- Cohort-specific association plot data: `tables/association_forest_plot_data_by_cohort.csv`")
+  }
+  if (file.exists(file.path(out_dir, "tables", "midpoint_by_prs_tertile_plot_data_by_cohort.csv"))) {
+    lines <- c(lines, "- Cohort-specific tertile plot data: `tables/midpoint_by_prs_tertile_plot_data_by_cohort.csv`")
+  }
+  if (file.exists(file.path(out_dir, "tables", "midpoint_by_prs_tertile_plot_data_by_cohort_no_outliers.csv"))) {
+    lines <- c(lines, "- No-outlier tertile plot data: `tables/midpoint_by_prs_tertile_plot_data_by_cohort_no_outliers.csv`")
+  }
+  if (file.exists(file.path(out_dir, "tables", "midpoint_regression_equations_by_cohort.csv"))) {
+    lines <- c(lines, "- Regression equation table: `tables/midpoint_regression_equations_by_cohort.csv`")
+  }
+  if (nrow(phewas_results) > 0) {
+    lines <- c(
+      lines,
+      "- PheWAS results table: `tables/phewas_results.csv`",
+      "- PheWAS volcano plot data: `tables/phewas_volcano_plot_data.csv`"
+    )
+  }
+
+  if (nrow(primary_assoc) > 0) {
+    lines <- c(lines, "", "## Primary adjusted association results", "")
+    for (i in seq_len(nrow(primary_assoc))) {
+      row <- primary_assoc[i, ]
+      lines <- c(
+        lines,
+        sprintf(
+          "- %s | beta = %.2f minutes per SD | p = %.3g | n = %s",
+          row$phenotype,
+          row$estimate_minutes,
+          row$p_value,
+          format(row$n, big.mark = ",", trim = TRUE)
+        )
+      )
+    }
+  }
+
+  if (nrow(top_assoc) > 0) {
+    lines <- c(lines, "", "## Top association rows", "")
+    for (i in seq_len(nrow(top_assoc))) {
+      row <- top_assoc[i, ]
+      lines <- c(
+        lines,
+        sprintf(
+          "- %s | %s | beta = %.2f minutes per SD | p = %.3g | n = %s",
+          row$phenotype,
+          row$model,
+          row$estimate_minutes,
+          row$p_value,
+          format(row$n, big.mark = ",", trim = TRUE)
+        )
+      )
+    }
+  }
+
+  if (nrow(tertile_trends) > 0) {
+    lines <- c(lines, "", "## Tertile trend check", "", "| Phenotype | Low mean | Medium mean | High mean | Low-to-High shift (min) | Direction |", "| --- | --- | --- | --- | ---: | --- |")
+    for (i in seq_len(nrow(tertile_trends))) {
+      row <- tertile_trends[i, ]
+      lines <- c(
+        lines,
+        sprintf(
+          "| %s | %s | %s | %s | %.2f | %s |",
+          row$phenotype_label,
+          row$mean_clock_Low,
+          row$mean_clock_Medium,
+          row$mean_clock_High,
+          row$low_to_high_minutes,
+          row$direction
+        )
+      )
+    }
+  }
+
+  if (nrow(top_phewas) > 0) {
+    lines <- c(lines, "", "## Top PheWAS rows", "", "| Phecode | Phenotype | OR per SD | p | FDR | Cases |", "| --- | --- | ---: | ---: | ---: | ---: |")
+    for (i in seq_len(nrow(top_phewas))) {
+      row <- top_phewas[i, ]
+      lines <- c(
+        lines,
+        sprintf(
+          "| %s | %s | %.2f | %.3g | %.3g | %s |",
+          row$phecode,
+          row$concept_name %||% "Unknown phenotype",
+          row$odds_ratio,
+          row$p_value,
+          row$fdr,
+          format(row$n_events, big.mark = ",", trim = TRUE)
+        )
+      )
+    }
+  }
+
+  lines
+}
+
+write_summary_md_from_tables <- function(
+  out_dir,
+  association_continuous,
+  phewas_results,
+  pc_count,
+  flow_df
+) {
+  summary_path <- file.path(out_dir, "summary.md")
+  writeLines(
+    build_summary_md_lines(
+      out_dir = out_dir,
+      association_continuous = association_continuous,
+      phewas_results = phewas_results,
+      pc_count = pc_count,
+      flow_df = flow_df
+    ),
+    summary_path
+  )
+}
+
 write_summary_md <- function(
   out_dir,
   association_results,
@@ -1003,121 +1345,13 @@ write_summary_md <- function(
   pc_cols,
   flow_df
 ) {
-  summary_path <- file.path(out_dir, "summary.md")
-
-  top_assoc <- association_results$continuous %>%
-    arrange(p_value) %>%
-    slice_head(n = 6)
-
-  primary_assoc <- association_results$continuous %>%
-    filter(model == "PRS + age + sex + PC1-PC10") %>%
-    arrange(match(phenotype, c("person_weekend_avg_midpoint", "MSF", "MSFsc")))
-
-  top_phewas <- phewas_results %>%
-    arrange(p_value) %>%
-    slice_head(n = 10)
-
-  flow_lookup <- function(step_id) {
-    out <- flow_df$n[match(step_id, flow_df$step_id)]
-    if (length(out) == 0 || is.na(out)) return(NA_integer_)
-    as.integer(out)
-  }
-
-  lines <- c(
-    "# PRS midpoint collaborator summary",
-    "",
-    "## Cohort summary",
-    "",
-    sprintf("- Participants with PRS and phenotype data: %d", nrow(analysis_df)),
-    sprintf("- Sleep + scored genetics overlap: %d", flow_lookup("sleep_genetics")),
-    sprintf("- Primary association covariate-complete cohort: %d", flow_lookup("association_complete")),
-    if (!is.na(flow_lookup("sleep_genetics_phewas"))) {
-      sprintf("- Sleep + genetics + PheWAS overlap: %d", flow_lookup("sleep_genetics_phewas"))
-    } else {
-      character(0)
-    },
-    sprintf("- Available ancestry PCs in primary adjusted models: %d", length(pc_cols)),
-    sprintf(
-      "- Midpoint phenotypes compared: %s",
-      paste(c("person_weekend_avg_midpoint", "MSF", "MSFsc"), collapse = ", ")
-    ),
-    "",
-    "## Association outputs",
-    "",
-    "- Continuous per-SD model table: `tables/association_continuous_models.csv`",
-    "- Tertile model table: `tables/association_tertile_models.csv`",
-    "- Tertile descriptive table: `tables/association_tertile_summary.csv`",
-    "- Cohort flow table: `tables/cohort_flow_counts.csv`",
-    "- Tertile plot: `plots/midpoint_by_prs_tertile.png`",
-    "- Forest plot: `plots/association_forest_per_sd.png`",
-    "- Cohort flow figure: `plots/cohort_flow.png`",
-    ""
+  write_summary_md_from_tables(
+    out_dir = out_dir,
+    association_continuous = association_results$continuous,
+    phewas_results = phewas_results,
+    pc_count = length(pc_cols),
+    flow_df = flow_df
   )
-
-  if (nrow(primary_assoc) > 0) {
-    lines <- c(lines, "## Primary adjusted association rows", "")
-    for (i in seq_len(nrow(primary_assoc))) {
-      row <- primary_assoc[i, ]
-      lines <- c(
-        lines,
-        sprintf(
-          "- %s | beta = %.2f minutes per SD | p = %.3g",
-          row$phenotype,
-          row$estimate_minutes,
-          row$p_value
-        )
-      )
-    }
-    lines <- c(lines, "")
-  }
-
-  if (nrow(top_assoc) > 0) {
-    lines <- c(lines, "## Top association rows", "")
-    for (i in seq_len(nrow(top_assoc))) {
-      row <- top_assoc[i, ]
-      lines <- c(
-        lines,
-        sprintf(
-          "- %s | %s | beta = %.2f minutes per SD | p = %.3g",
-          row$phenotype,
-          row$model,
-          row$estimate_minutes,
-          row$p_value
-        )
-      )
-    }
-    lines <- c(lines, "")
-  }
-
-  if (nrow(phewas_results) > 0) {
-    lines <- c(
-      lines,
-      "## PheWAS outputs",
-      "",
-      "- Results table: `tables/phewas_results.csv`",
-      "- Manhattan-style plot: `plots/phewas_manhattan.png`",
-      "- Volcano plot data: `tables/phewas_volcano_plot_data.csv`",
-      "- Volcano plot: `plots/phewas_volcano.png`",
-      ""
-    )
-    lines <- c(lines, "## Top PheWAS rows", "")
-    for (i in seq_len(nrow(top_phewas))) {
-      row <- top_phewas[i, ]
-      lines <- c(
-        lines,
-        sprintf(
-          "- %s (%s) | OR = %.2f per SD | p = %.3g | FDR = %.3g",
-          row$phecode,
-          row$concept_name %||% "Unknown phenotype",
-          row$odds_ratio,
-          row$p_value,
-          row$fdr
-        )
-      )
-    }
-  }
-
-  writeLines(lines, summary_path)
 }
 
 main <- function() {

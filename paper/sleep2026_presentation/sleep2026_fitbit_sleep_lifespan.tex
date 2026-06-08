@@ -1,0 +1,430 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage[scaled=0.96]{helvet}
+
+\renewcommand{\familydefault}{\sfdefault}
+\graphicspath{{../Observations/}}
+
+\definecolor{NightInk}{HTML}{11212B}
+\definecolor{DeepBlue}{HTML}{17324D}
+\definecolor{SleepTeal}{HTML}{0E6F73}
+\definecolor{WakeGold}{HTML}{E6A23C}
+\definecolor{PaperCream}{HTML}{F7F1E4}
+\definecolor{SoftBlue}{HTML}{D8E7EA}
+\definecolor{SoftGold}{HTML}{F6E4B9}
+\definecolor{MutedText}{HTML}{50606A}
+\definecolor{SignalRed}{HTML}{A94442}
+
+\setbeamercolor{normal text}{fg=NightInk,bg=PaperCream}
+\setbeamercolor{frametitle}{fg=NightInk,bg=PaperCream}
+\setbeamercolor{title}{fg=NightInk,bg=PaperCream}
+\setbeamercolor{subtitle}{fg=SleepTeal,bg=PaperCream}
+\setbeamercolor{structure}{fg=SleepTeal}
+\setbeamercolor{footline}{fg=MutedText,bg=PaperCream}
+\setbeamercolor{block title}{fg=NightInk,bg=SoftGold}
+\setbeamercolor{block body}{fg=NightInk,bg=white}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{SleepTeal}\scriptsize$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{WakeGold}\tiny$\bullet$}
+\setbeamertemplate{frametitle}{
+  \vspace{0.25cm}
+  \begin{beamercolorbox}[wd=\paperwidth,leftskip=0.55cm,rightskip=0.55cm]{frametitle}
+    \usebeamerfont{frametitle}\insertframetitle
+  \end{beamercolorbox}
+  \vspace{-0.05cm}
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[SleepTeal,line width=1.2pt] (0.55,-0.03) -- (15.45,-0.03);
+  \end{tikzpicture}
+}
+\setbeamertemplate{footline}{
+  \leavevmode
+  \hbox{
+    \begin{beamercolorbox}[wd=.74\paperwidth,ht=2.6ex,dp=1.2ex,leftskip=0.55cm]{footline}
+      Longitudinal wearable sleep phenotyping in All of Us
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[wd=.26\paperwidth,ht=2.6ex,dp=1.2ex,rightskip=0.55cm plus1fil]{footline}
+      \hfill\insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}
+  }
+}
+
+\newcommand{\kpi}[3]{
+  \begin{tikzpicture}
+    \node[
+      rounded corners=7pt,
+      fill=#3,
+      draw=NightInk!18,
+      line width=0.4pt,
+      inner xsep=9pt,
+      inner ysep=7pt,
+      text width=0.92\linewidth,
+      align=center
+    ] {
+      {\fontsize{20}{22}\selectfont\bfseries #1}\\[-1pt]
+      {\fontsize{7.8}{9}\selectfont\color{MutedText}#2}
+    };
+  \end{tikzpicture}
+}
+
+\newcommand{\takeaway}[1]{
+  \begin{tikzpicture}
+    \node[
+      rounded corners=6pt,
+      fill=NightInk,
+      inner xsep=8pt,
+      inner ysep=5pt,
+      text width=0.96\linewidth
+    ] {\color{white}\bfseries #1};
+  \end{tikzpicture}
+}
+
+\newcommand{\slidecite}[1]{{\fontsize{6.8}{8}\selectfont\color{MutedText}#1}}
+
+\title{Longitudinal Modeling of Sleep Timing, Duration, and Social Jetlag Across the Adult Lifespan}
+\subtitle{High-resolution wearable sleep data from the All of Us Research Program}
+\author{Mason Manetta\textsuperscript{1} \and Angus Burns\textsuperscript{2} \and Shea Andrews\textsuperscript{1} \and Yue Leng\textsuperscript{1} \and Diego Mazzotti\textsuperscript{3}}
+\institute{\textsuperscript{1}University of California, San Francisco \quad \textsuperscript{2}Harvard Medical School \quad \textsuperscript{3}University of Kansas Medical Center}
+\date{SLEEP 2026}
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[PaperCream] (current page.south west) rectangle (current page.north east);
+    \fill[DeepBlue] (current page.south west) rectangle ([xshift=4.55cm]current page.north west);
+    \fill[SleepTeal] ([xshift=4.25cm]current page.south west) rectangle ([xshift=4.55cm]current page.north west);
+    \draw[WakeGold,line width=2.5pt] ([xshift=0.7cm,yshift=1.0cm]current page.south west) -- ([xshift=3.55cm,yshift=1.0cm]current page.south west);
+  \end{tikzpicture}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.28\textwidth}
+      \vspace{1.0cm}
+      {\color{white}\fontsize{9}{11}\selectfont SLEEP 2026}\\[0.55cm]
+      {\color{SoftGold}\fontsize{24}{26}\selectfont\bfseries AoU}\\[-2pt]
+      {\color{white}\fontsize{9}{11}\selectfont Fitbit sleep phenotyping}\\[4.15cm]
+      {\color{white}\fontsize{7.5}{9}\selectfont Support: All of Us Research Program, Office of the Director, NIH}
+    \end{column}
+    \begin{column}{0.67\textwidth}
+      \vspace{0.85cm}
+      {\fontsize{24}{28}\selectfont\bfseries\color{NightInk}\inserttitle}\\[0.22cm]
+      {\fontsize{12}{14}\selectfont\color{SleepTeal}\insertsubtitle}\\[0.55cm]
+      {\fontsize{9.2}{11}\selectfont\color{NightInk}\insertauthor}\\[0.18cm]
+      {\fontsize{7.5}{9}\selectfont\color{MutedText}\insertinstitute}\\[0.95cm]
+      \begin{columns}[T,totalwidth=0.94\linewidth]
+        \begin{column}{0.33\linewidth}\kpi{42,290}{participants}{SoftBlue}\end{column}
+        \begin{column}{0.33\linewidth}\kpi{22.4M}{filtered nights}{SoftGold}\end{column}
+        \begin{column}{0.33\linewidth}\kpi{530}{mean nights / participant}{SoftBlue}\end{column}
+      \end{columns}
+    \end{column}
+  \end{columns}
+\end{frame}
+}
+
+\begin{frame}{Why Longitudinal Wearable Sleep?}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Problem}
+        \begin{itemize}
+          \item Chrono-epidemiology needs reliable long-term phenotypes.
+          \item Self-report and short monitoring windows miss variability, seasonal structure, and work/free-day differences.
+          \item Sleep timing is circular, behaviorally constrained, and environmentally patterned.
+        \end{itemize}
+      \end{block}
+      \vspace{0.18cm}
+      \vspace{-0.05cm}
+      \takeaway{Aim: model age, sex, work/free-day status, and seasonality as contributors to onset, offset, midpoint, and duration.}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \takeaway{Device-measured longitudinal sleep enables population-scale modeling of sleep timing, duration, and social jetlag.}
+      \vspace{0.35cm}
+      \begin{tikzpicture}
+        \node[rounded corners=10pt,fill=white,draw=NightInk!15,inner sep=10pt,text width=\linewidth] {
+          \textbf{Core outputs}\\[3pt]
+          \begin{tabular}{@{}ll@{}}
+            \textcolor{SleepTeal}{\bfseries Onset} & sleep start time\\
+            \textcolor{SleepTeal}{\bfseries Offset} & wake time\\
+            \textcolor{SleepTeal}{\bfseries Midpoint} & center of sleep episode\\
+            \textcolor{SleepTeal}{\bfseries Duration} & sleep window / time asleep\\
+          \end{tabular}
+        };
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Cohort and Data Scale}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.35\textwidth}
+      \begin{itemize}
+        \item All of Us participants with filtered Fitbit sleep records.
+        \item 22,428,610 filtered nights from 42,290 participants.
+        \item Cohort: 71\% White, 67\% Female, age 52 $\pm$ 17 years.
+        \item Median 109 nights; mean 530 nights per participant.
+        \item Mean sleep duration 7.45h; median 7.53h.
+      \end{itemize}
+      \vspace{0.22cm}
+      \takeaway{This is a deeply longitudinal cohort, not a cross-sectional sleep snapshot.}
+    \end{column}
+    \begin{column}{0.62\textwidth}
+      \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{image37.png}\\[-2pt]
+      \slidecite{Distribution of nights per participant.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{From Fitbit Records to Nightly Sleep Episodes}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.46\textwidth}
+      \begin{block}{Filtering and episode construction}
+        \begin{itemize}
+          \item Sleep-level records linked to daily summaries.
+          \item Non-primary sleep excluded.
+          \item Implausible raw durations excluded: $>18$h, zero/negative, common sensor artifact values.
+          \item Segments clustered into nightly episodes; largest main sleep cluster retained per logical night.
+          \item Sleep date assigned using a 6-hour backward shift.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{image36.png}\\[-2pt]
+      \slidecite{Onset-duration density after filtering shows expected overnight sleep structure.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Modeling Strategy}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.53\textwidth}
+      \begin{block}{Linear mixed-effects models}
+        \[
+          Y_{ij} \sim \mathrm{poly}(\mathrm{age}_{ij},2) + 
+          \mathrm{weekend}_{ij} \times \mathrm{employment}_{i}
+          + \mathrm{sex}_{i} + \mathrm{month}_{ij} + (1|\mathrm{person}_i)
+        \]
+      \end{block}
+      \begin{itemize}
+        \item Outcomes: onset, offset, midpoint, duration.
+        \item Person random intercept controls stable between-person differences.
+        \item Quadratic age captures non-linear lifespan trends.
+        \item Employment-by-weekend interaction estimates social constraint/social jetlag patterns.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Time handling}
+        \begin{itemize}
+          \item Timing variables were linearized because distributions were primarily unimodal.
+          \item Clock times before noon shifted forward by 24h.
+          \item Example: 1:00 AM $\rightarrow$ 25.0; 11:00 PM $\rightarrow$ 23.0.
+        \end{itemize}
+      \end{block}
+      \includegraphics[width=\linewidth,height=0.31\textheight,keepaspectratio]{image9.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Result 1: Sleep Timing Advances Non-linearly With Age}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.36\textwidth}
+      \begin{itemize}
+        \item Age showed a quadratic association with sleep timing across the adult lifespan.
+        \item Model-estimated sleep midpoint advanced by approximately 42 minutes from age 18 to age 57.
+        \item Midpoint: 2:37 AM at age 18 vs. 1:54 AM at age 57.
+      \end{itemize}
+      \vspace{0.15cm}
+      \takeaway{A simple linear age term would miss the lifespan shape of sleep timing.}
+    \end{column}
+    \begin{column}{0.61\textwidth}
+      \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{image14.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Result 2: Sleep Duration Lengthens Across Adulthood}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.38\textwidth}
+      \begin{itemize}
+        \item Duration increased with age in adjusted models.
+        \item Estimated gain: $>$34 minutes between ages 18 and 85.
+        \item Age 18: 7.45h; age 85: 8.02h.
+      \end{itemize}
+      \vspace{0.15cm}
+      \begin{block}{Why it matters}
+        Timing and duration change together, so future analyses should consider mutually adjusted timing-duration phenotypes.
+      \end{block}
+    \end{column}
+    \begin{column}{0.58\textwidth}
+      \includegraphics[width=\linewidth,height=0.73\textheight,keepaspectratio]{image46.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Result 3: Weekends Reveal Social Jetlag}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.37\textwidth}
+      \begin{itemize}
+        \item Weekend status delayed midpoint, onset, and offset across employment groups.
+        \item Participants employed for wages showed the largest midpoint delay.
+        \item Employed for wages: weekday midpoint 3:26 AM vs. weekend midpoint 4:08 AM.
+        \item Weekend sleep duration extended by approximately 28 minutes.
+      \end{itemize}
+      \vspace{0.12cm}
+      \takeaway{Social timing constraints are visible in wearable sleep at population scale.}
+    \end{column}
+    \begin{column}{0.60\textwidth}
+      \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{image22.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Result 4: Sleep Is Seasonal}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.44\textwidth}
+      \includegraphics[width=\linewidth,height=0.64\textheight,keepaspectratio]{image21.png}
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}
+        \item Month terms indicated seasonal differences in sleep behavior.
+        \item Sleep duration was approximately 11 minutes lower in June than the January maximum.
+        \item Unadjusted weekly trends suggest non-sinusoidal structure, likely mixing photoperiod, calendar behavior, holidays, and DST.
+      \end{itemize}
+      \vspace{0.18cm}
+      \includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{image52.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{What This Adds}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Population-level characterization}
+        \begin{itemize}
+          \item Quantifies non-linear age effects in device-measured sleep.
+          \item Separates workday/free-day structure from participant-level baselines.
+          \item Provides adjusted estimates across employment categories.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Foundation for next-stage analyses}
+        \begin{itemize}
+          \item Genetic studies of sleep timing and chronotype.
+          \item Clinical risk stratification using longitudinal sleep phenotypes.
+          \item Environmental extensions: photoperiod, temperature, humidity, DST.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.35cm}
+  \takeaway{Large-scale wearable data can turn sleep timing from a sparse self-report phenotype into a longitudinal, model-ready exposure.}
+\end{frame}
+
+\begin{frame}{Limitations and Interpretation Guardrails}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Measurement}
+        \begin{itemize}
+          \item Fitbit-derived sleep depends on device classification of main sleep.
+          \item Shift work is not directly measured; employment status is a proxy for social schedule constraints.
+          \item Linearization works for the observed distribution but may under-represent true night-shift phenotypes.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Cohort and covariates}
+        \begin{itemize}
+          \item AoU Fitbit participants are not a probability sample of U.S. adults.
+          \item Pregnancy episode exclusion was not feasible in the V8 data context.
+          \item ZIP3 geography is coarse for environmental and DST classification.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Conclusions}
+  \begin{enumerate}
+    \item Sleep timing and duration are dynamically structured by non-linear age effects.
+    \item Employment and weekend status reveal strong social timing constraints, including measurable social jetlag.
+    \item Seasonal patterns persist at population scale and motivate environmental modeling.
+  \end{enumerate}
+  \vspace{0.35cm}
+  \begin{tikzpicture}
+    \node[
+      rounded corners=9pt,
+      fill=SleepTeal,
+      text=white,
+      inner xsep=12pt,
+      inner ysep=10pt,
+      text width=0.92\linewidth,
+      align=center
+    ] {\Large\bfseries Longitudinal wearable sleep data provide a scalable foundation for personalized circadian epidemiology.};
+  \end{tikzpicture}
+\end{frame}
+
+{
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[DeepBlue] (current page.south west) rectangle (current page.north east);
+    \draw[WakeGold,line width=2.2pt] ([xshift=1.0cm,yshift=1.3cm]current page.south west) -- ([xshift=15.0cm,yshift=1.3cm]current page.south west);
+  \end{tikzpicture}
+  \vspace{1.45cm}
+  {\color{white}\fontsize{25}{28}\selectfont\bfseries Thank you}\\[0.45cm]
+  {\color{SoftGold}\fontsize{13}{16}\selectfont Questions and discussion}\\[1.1cm]
+  {\color{white}\fontsize{10}{12}\selectfont Mason Manetta \quad \textbar \quad University of California, San Francisco}\\[0.2cm]
+  {\color{white!75}\fontsize{8}{10}\selectfont Support: All of Us Research Program, Office of the Director, NIH}
+\end{frame}
+}
+
+\appendix
+
+\begin{frame}{Backup: Validation Against Published AoU Sleep Structure}
+  \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{image23.png}
+  \vspace{-0.05cm}
+  \slidecite{Reference comparison with published All of Us Fitbit sleep structure; used during extraction validation.}
+\end{frame}
+
+\begin{frame}{Backup: Geographic and Environmental Extensions}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.50\textwidth}
+      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image39.png}\\[-2pt]
+      \slidecite{Participant counts by ZIP3.}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{itemize}
+        \item ZIP3 enables coarse geography for SES, DST, photoperiod, and PRISM weather linkage.
+        \item Future models can estimate temperature, vapor pressure deficit, precipitation, and photoperiod effects.
+        \item Environmental analyses should account for ZIP3 population weighting and non-random participant geography.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Backup: Daylight Saving Time Design}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{image42.png}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{DST contrast}
+        \begin{itemize}
+          \item Classify ZIP3 as DST-observing vs. non-DST control.
+          \item Center each person-year using pre-transition baseline days -14 to -7.
+          \item Estimate event-day differences around spring/fall transitions.
+        \end{itemize}
+      \end{block}
+      \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{image46.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}

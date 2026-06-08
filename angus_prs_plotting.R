@@ -43,7 +43,8 @@ theme_research <- function() {
       axis.title = element_text(face = "bold"),
       legend.title = element_text(face = "bold"),
       strip.text = element_text(face = "bold"),
-      legend.position = "bottom"
+      legend.position = "bottom",
+      plot.caption = element_text(size = 9, color = "gray35")
     )
 }
 
@@ -53,6 +54,67 @@ normalize_phecode <- function(x) {
   out <- str_replace(out, "(\\.\\d*?[1-9])0+$", "\\1")
   out <- str_replace(out, "\\.0+$", "")
   out
+}
+
+midpoint_y_scale <- function() {
+  scale_y_continuous(
+    breaks = function(x) pretty(x, n = 6),
+    labels = function(x) format_clock(x)
+  )
+}
+
+build_boxplot_stats <- function(df) {
+  df %>%
+    group_by(cohort, phenotype, phenotype_label, score_tertile) %>%
+    group_modify(~{
+      stats <- boxplot.stats(.x$midpoint_hours)$stats
+      tibble(
+        ymin = stats[[1]],
+        lower = stats[[2]],
+        middle = stats[[3]],
+        upper = stats[[4]],
+        ymax = stats[[5]],
+        mean_midpoint = mean(.x$midpoint_hours, na.rm = TRUE)
+      )
+    }) %>%
+    ungroup()
+}
+
+drop_boxplot_outliers <- function(df) {
+  df %>%
+    group_by(cohort, phenotype, score_tertile) %>%
+    mutate(
+      q1 = quantile(midpoint_hours, 0.25, na.rm = TRUE),
+      q3 = quantile(midpoint_hours, 0.75, na.rm = TRUE),
+      iqr = q3 - q1,
+      lower = q1 - 1.5 * iqr,
+      upper = q3 + 1.5 * iqr
+    ) %>%
+    filter(midpoint_hours >= lower, midpoint_hours <= upper) %>%
+    ungroup() %>%
+    select(-q1, -q3, -iqr, -lower, -upper)
+}
+
+build_regression_annotations <- function(regression_df) {
+  regression_df %>%
+    group_by(cohort, phenotype, phenotype_label) %>%
+    group_modify(~{
+      fit <- stats::lm(midpoint_hours ~ score_z, data = .x)
+      intercept <- unname(coef(fit)[["(Intercept)"]])
+      slope <- unname(coef(fit)[["score_z"]])
+      r2 <- summary(fit)$r.squared
+      x_rng <- range(.x$score_z, na.rm = TRUE)
+      y_rng <- range(.x$midpoint_hours, na.rm = TRUE)
+      tibble(
+        annotation_x = x_rng[[1]] + 0.03 * diff(x_rng),
+        annotation_y = y_rng[[2]] - 0.05 * diff(y_rng),
+        intercept = intercept,
+        slope = slope,
+        r_squared = r2,
+        equation_label = sprintf("y = %.2f %s %.2f*x\nR^2 = %.3f", intercept, ifelse(slope < 0, "-", "+"), abs(slope), r2)
+      )
+    }) %>%
+    ungroup()
 }
 
 show_png_inline <- function(path) {
@@ -222,7 +284,7 @@ write_tertile_plot <- function(tertile_df, plots_dir) {
       title = "Midpoint phenotypes by PRS tertile",
       subtitle = "Boxes show the interquartile range; diamonds mark phenotype means",
       x = "PRS tertile",
-      y = "Midpoint (linearized decimal hours)",
+      y = "Midpoint (clock time, HH:MM)",
       caption = "Source table: tables/midpoint_by_prs_tertile_plot_data.csv"
     ) +
     theme_research() +
@@ -463,38 +525,82 @@ write_tertile_plot_by_cohort <- function(tertile_df, plots_dir, cohort_name = "A
     scale_fill_manual(values = c("Low" = "#c6dbef", "Medium" = "#6baed6", "High" = "#2171b5")) +
     labs(
       title = paste0("Midpoint phenotypes by PRS tertile", if (nzchar(suffix)) paste0(" (", cohort_name, ")") else ""),
-      subtitle = "Boxes show the interquartile range; diamonds mark phenotype means",
+      subtitle = "Boxes show the interquartile range; diamonds mark phenotype means; y-axis labels are shown as clock time",
       x = "PRS tertile",
-      y = "Midpoint (linearized decimal hours)",
+      y = "Midpoint (clock time, HH:MM)",
       caption = "Source table: tables/midpoint_by_prs_tertile_plot_data_by_cohort.csv"
     ) +
+    midpoint_y_scale() +
     theme_research() +
     theme(legend.position = "none")
 
   out <- file.path(plots_dir, paste0("midpoint_by_prs_tertile", suffix, ".png"))
-  ggsave(out, plot = p, width = 11, height = 6, dpi = 320, bg = "white")
+  ggsave(out, plot = p, width = 12, height = 6.5, dpi = 320, bg = "white")
   out
 }
 
-write_regression_line_plot_by_cohort <- function(regression_df, plots_dir, cohort_name = "All", suffix = "") {
+write_tertile_plot_no_outliers_by_cohort <- function(tertile_df, plots_dir, cohort_name = "All", suffix = "") {
+  df <- tertile_df %>% filter(cohort == cohort_name)
+  if (nrow(df) == 0) return(character(0))
+  box_stats <- build_boxplot_stats(df)
+
+  p <- ggplot(box_stats, aes(x = score_tertile, fill = score_tertile)) +
+    geom_boxplot(
+      aes(ymin = ymin, lower = lower, middle = middle, upper = upper, ymax = ymax),
+      stat = "identity",
+      width = 0.68,
+      color = "gray25"
+    ) +
+    geom_point(aes(y = mean_midpoint), shape = 23, size = 2.5, fill = "gold", color = "black") +
+    facet_wrap(~ phenotype_label, scales = "free_y") +
+    scale_fill_manual(values = c("Low" = "#c6dbef", "Medium" = "#6baed6", "High" = "#2171b5")) +
+    labs(
+      title = paste0("Midpoint phenotypes by PRS tertile (outlier points hidden)", if (nzchar(suffix)) paste0(" (", cohort_name, ")") else ""),
+      subtitle = "Tertiles and boxplot statistics use the full cohort; y-axis is cropped to the non-outlier whisker range and labels are shown as clock time",
+      x = "PRS tertile",
+      y = "Midpoint (clock time, HH:MM)",
+      caption = "Source table: tables/midpoint_by_prs_tertile_plot_data_by_cohort.csv"
+    ) +
+    midpoint_y_scale() +
+    theme_research() +
+    theme(legend.position = "none")
+
+  out <- file.path(plots_dir, paste0("midpoint_by_prs_tertile_no_outliers", suffix, ".png"))
+  ggsave(out, plot = p, width = 12, height = 6.5, dpi = 320, bg = "white")
+  out
+}
+
+write_regression_line_plot_by_cohort <- function(regression_df, annotation_df, plots_dir, cohort_name = "All", suffix = "") {
   df <- regression_df %>% filter(cohort == cohort_name)
   if (nrow(df) == 0) return(character(0))
+  ann <- annotation_df %>% filter(cohort == cohort_name)
 
   p <- ggplot(df, aes(x = score_z, y = midpoint_hours)) +
-    geom_point(alpha = 0.08, size = 0.5, color = "#2c7fb8") +
+    geom_point(alpha = 0.08, size = 0.55, color = "#2c7fb8") +
     geom_smooth(method = "lm", se = TRUE, color = "#cb181d", linewidth = 0.9) +
+    geom_text(
+      data = ann,
+      aes(x = annotation_x, y = annotation_y, label = equation_label),
+      inherit.aes = FALSE,
+      hjust = 0,
+      vjust = 1,
+      size = 3.3,
+      lineheight = 1.1,
+      color = "gray15"
+    ) +
     facet_wrap(~ phenotype_label, scales = "free_y") +
     labs(
       title = paste0("PRS-midpoint regression lines", if (nzchar(suffix)) paste0(" (", cohort_name, ")") else ""),
-      subtitle = "Unadjusted linear fit shown for each midpoint phenotype",
+      subtitle = "Unadjusted linear fit shown for each midpoint phenotype; y-axis labels are shown as clock time",
       x = "PRS score (z-scored)",
-      y = "Midpoint (linearized decimal hours)",
-      caption = "Source table: tables/midpoint_regression_plot_data_by_cohort.csv"
+      y = "Midpoint (clock time, HH:MM)",
+      caption = "Source tables: tables/midpoint_regression_plot_data_by_cohort.csv and tables/midpoint_regression_equations_by_cohort.csv"
     ) +
+    midpoint_y_scale() +
     theme_research()
 
   out <- file.path(plots_dir, paste0("midpoint_regression_lines", suffix, ".png"))
-  ggsave(out, plot = p, width = 12, height = 6, dpi = 320, bg = "white")
+  ggsave(out, plot = p, width = 13, height = 6.75, dpi = 320, bg = "white")
   out
 }
 
@@ -529,6 +635,7 @@ main <- function(
   dir.create(plots_dir, recursive = TRUE, showWarnings = FALSE)
 
   flow_df <- readr::read_csv(file.path(tables_dir, "cohort_flow_counts.csv"), show_col_types = FALSE)
+  association_continuous <- readr::read_csv(file.path(tables_dir, "association_continuous_models.csv"), show_col_types = FALSE)
   forest_df <- readr::read_csv(file.path(tables_dir, "association_forest_plot_data.csv"), show_col_types = FALSE)
   tertile_df <- readr::read_csv(file.path(tables_dir, "midpoint_by_prs_tertile_plot_data.csv"), show_col_types = FALSE)
   phewas_df <- readr::read_csv(file.path(tables_dir, "phewas_results.csv"), show_col_types = FALSE)
@@ -548,13 +655,25 @@ main <- function(
     ancestry_tsv = ancestry_tsv,
     pc_count = pc_count
   )
+  regression_annotations <- build_regression_annotations(association_plot_data$regression)
+  tertile_no_outliers <- drop_boxplot_outliers(association_plot_data$tertile)
 
   readr::write_csv(phewas_df, file.path(tables_dir, "phewas_results.csv"))
   readr::write_csv(phewas_df, file.path(tables_dir, "phewas_manhattan_plot_data.csv"))
   readr::write_csv(phewas_df %>% filter(is.finite(odds_ratio)), file.path(tables_dir, "phewas_volcano_plot_data.csv"))
+  readr::write_csv(
+    association_plot_data$forest %>% filter(cohort == "All") %>% select(-cohort),
+    file.path(tables_dir, "association_forest_plot_data.csv")
+  )
+  readr::write_csv(
+    association_plot_data$tertile %>% filter(cohort == "All") %>% select(-cohort),
+    file.path(tables_dir, "midpoint_by_prs_tertile_plot_data.csv")
+  )
   readr::write_csv(association_plot_data$forest, file.path(tables_dir, "association_forest_plot_data_by_cohort.csv"))
   readr::write_csv(association_plot_data$regression, file.path(tables_dir, "midpoint_regression_plot_data_by_cohort.csv"))
   readr::write_csv(association_plot_data$tertile, file.path(tables_dir, "midpoint_by_prs_tertile_plot_data_by_cohort.csv"))
+  readr::write_csv(tertile_no_outliers, file.path(tables_dir, "midpoint_by_prs_tertile_plot_data_by_cohort_no_outliers.csv"))
+  readr::write_csv(regression_annotations, file.path(tables_dir, "midpoint_regression_equations_by_cohort.csv"))
 
   plot_paths <- c(
     write_cohort_flow_plot(flow_df, plots_dir),
@@ -562,19 +681,35 @@ main <- function(
     write_association_forest_plot_by_cohort(association_plot_data$forest, plots_dir, cohort_name = "EUR", suffix = "_eur"),
     write_tertile_plot_by_cohort(association_plot_data$tertile, plots_dir, cohort_name = "All", suffix = ""),
     write_tertile_plot_by_cohort(association_plot_data$tertile, plots_dir, cohort_name = "EUR", suffix = "_eur"),
-    write_regression_line_plot_by_cohort(association_plot_data$regression, plots_dir, cohort_name = "All", suffix = ""),
-    write_regression_line_plot_by_cohort(association_plot_data$regression, plots_dir, cohort_name = "EUR", suffix = "_eur"),
+    write_tertile_plot_no_outliers_by_cohort(association_plot_data$tertile, plots_dir, cohort_name = "All", suffix = ""),
+    write_tertile_plot_no_outliers_by_cohort(association_plot_data$tertile, plots_dir, cohort_name = "EUR", suffix = "_eur"),
+    write_regression_line_plot_by_cohort(association_plot_data$regression, regression_annotations, plots_dir, cohort_name = "All", suffix = ""),
+    write_regression_line_plot_by_cohort(association_plot_data$regression, regression_annotations, plots_dir, cohort_name = "EUR", suffix = "_eur"),
     write_phewas_plots(phewas_df, plots_dir)
+  )
+
+  pc_count_available <- if (any(association_continuous$model == "PRS + age + sex + PC1-PC10")) pc_count else 0L
+  write_summary_md_from_tables(
+    out_dir = chosen_results_dir,
+    association_continuous = association_continuous,
+    phewas_results = phewas_df,
+    pc_count = pc_count_available,
+    flow_df = flow_df
   )
 
   cat("Using results directory:", chosen_results_dir, "\n")
   cat("Updated labels and rewrote:\n")
+  cat(" -", file.path(chosen_results_dir, "summary.md"), "\n")
   cat(" -", file.path(tables_dir, "phewas_results.csv"), "\n")
   cat(" -", file.path(tables_dir, "phewas_manhattan_plot_data.csv"), "\n")
   cat(" -", file.path(tables_dir, "phewas_volcano_plot_data.csv"), "\n")
+  cat(" -", file.path(tables_dir, "association_forest_plot_data.csv"), "\n")
+  cat(" -", file.path(tables_dir, "midpoint_by_prs_tertile_plot_data.csv"), "\n")
   cat(" -", file.path(tables_dir, "association_forest_plot_data_by_cohort.csv"), "\n")
   cat(" -", file.path(tables_dir, "midpoint_regression_plot_data_by_cohort.csv"), "\n")
   cat(" -", file.path(tables_dir, "midpoint_by_prs_tertile_plot_data_by_cohort.csv"), "\n")
+  cat(" -", file.path(tables_dir, "midpoint_by_prs_tertile_plot_data_by_cohort_no_outliers.csv"), "\n")
+  cat(" -", file.path(tables_dir, "midpoint_regression_equations_by_cohort.csv"), "\n")
   cat("Plots regenerated:\n")
   for (plot_path in plot_paths) {
     if (file.exists(plot_path)) cat(" -", plot_path, "\n")
